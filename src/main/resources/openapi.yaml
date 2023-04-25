@@ -1,0 +1,194 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: User Management API
+  description: API for managing user accounts
+servers:
+  - url: http://localhost:8085
+paths:
+  /users:
+    get:
+      summary: Get a list of all users
+      description: Retrieves a list of all users in the system
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new user
+      description: Creates a new user account in the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      description: Retrieves a specific user by ID
+      parameters:
+        - in: path
+          name: id
+          description: ID of the user to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    put:
+      summary: Update user by ID
+      description: Updates an existing user account
+      parameters:
+        - in: path
+          name: id
+          description: ID of the user to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    delete:
+      summary: Delete user by ID
+      description: Deletes an existing user account
+      parameters:
+        - in: path
+          name: id
+          description: ID of the user to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the user
+        username:
+          type: string
+          description: User's username
+        password:
+          type: string
+          format: password
+          description: User's password
+        email:
+          type: string
+          format: email
+          description: User's email address
+        phone:
+          type: string
+          description: User's phone number
+        imageUrl:
+          type: string
+          description: URL for the user's profile image
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRole'
+          description: List of roles assigned to the user
+      required:
+        - id
+        - username
+        - password
+        - email
+
+    UserInput:
+      type: object
+      properties:
+        username:
+          type: string
+          description: User's username
+        password:
+          type: string
+          format: password
+          description: User's password
+        email:
+          type: string
+          format: email
+          description: User's email address
+        phone:
+          type: string
+          description: User's phone number
+        imageUrl:
+          type: string
+          description: URL for the user's profile image
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRoleInput'
+          description: List of roles to assign to the user
+      required:
+        - username
+        - password
+        - email
+
+    UserRole:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the role
+        name:
+          type: string
+          description: Name of the role
+        description:
+          type: string
+          description: Description of the role
+      required:
+        - id
+        - name
+
+    UserRoleInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the role
+        description:
+          type: string
+          description: Description of the role
+      required:
+        - name
+
