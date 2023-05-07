@@ -55,10 +55,48 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-clean-plugin</artifactId>-->
+<!--				<version>4.0.0</version>-->
+<!--				<configuration>-->
+<!--					<filesets>-->
+<!--						<fileset>-->
+<!--							<directory>src/main/java/generated</directory>-->
+<!--							<includes>-->
+<!--								<include>**/*.java</include>-->
+<!--							</includes>-->
+<!--						</fileset>-->
+<!--					</filesets>-->
+<!--				</configuration>-->
+<!--			</plugin>-->
+
 			<plugin>
 				<groupId>io.swagger.codegen.v3</groupId>
 				<artifactId>swagger-codegen-maven-plugin</artifactId>
 				<version>3.0.42</version>
+
+				<configuration>
+					<language>spring</language>
+					<output>${project.basedir}</output>
+
+					<generateSupportingFiles>false</generateSupportingFiles>
+					<generateModelTests>false</generateModelTests>
+					<generateModelDocumentation>false</generateModelDocumentation>
+					<generateApiTests>false</generateApiTests>
+					<generateApiDocumentation>false</generateApiDocumentation>
+					<generateModelDocumentation>false</generateModelDocumentation>
+					<generateApiTests>false</generateApiTests>
+
+					<configOptions>
+						<library>spring-boot</library>
+						<java8>true</java8>
+					</configOptions>
+
+					<inputSpec/>
+					<language/>
+				</configuration>
+
 				<executions>
 					<execution>
 						<id>generate-user-spring-controllers</id>
@@ -68,25 +106,16 @@
 						</goals>
 						<configuration>
 							<inputSpec>src/main/resources/user.yaml</inputSpec>
-							<language>spring</language>
-							<configOptions>
-								<library>spring-boot</library>
-								<java8>true</java8>
-								<sourceFolder>user</sourceFolder>
-								<modelPackage>model</modelPackage>
-								<apiPackage>api</apiPackage>
-							</configOptions>
-							<output>${project.basedir}/src/main/java/generated/</output>
 
-							<generateSupportingFiles>false</generateSupportingFiles>
-							<generateModelTests>false</generateModelTests>
-							<generateModelDocumentation>false</generateModelDocumentation>
-							<generateApiTests>false</generateApiTests>
-							<generateApiDocumentation>false</generateApiDocumentation>
-							<generateModelDocumentation>false</generateModelDocumentation>
-							<generateApiTests>false</generateApiTests>
+							<configOptions>
+								<modelPackage>generated.user.model</modelPackage>
+								<apiPackage>generated.user.api</apiPackage>
+							</configOptions>
+
+							<language/>
 						</configuration>
 					</execution>
+
 					<execution>
 						<id>generate-board-game-spring-controllers</id>
 						<phase>generate-sources</phase>
@@ -95,30 +124,18 @@
 						</goals>
 						<configuration>
 							<inputSpec>src/main/resources/boardGame.yaml</inputSpec>
-							<language>spring</language>
+
 							<configOptions>
-								<library>spring-boot</library>
-								<java8>true</java8>
-								<sourceFolder>boardGame</sourceFolder>
-								<modelPackage>model</modelPackage>
-								<apiPackage>api</apiPackage>
+								<modelPackage>generated.boardGame.model</modelPackage>
+								<apiPackage>generated.boardGame.api</apiPackage>
 							</configOptions>
 
-							<output>${project.basedir}/src/main/java/generated/</output>
-
-
-
-							<generateSupportingFiles>false</generateSupportingFiles>
-							<generateModelTests>false</generateModelTests>
-							<generateModelDocumentation>false</generateModelDocumentation>
-							<generateApiTests>false</generateApiTests>
-							<generateApiDocumentation>false</generateApiDocumentation>
-							<generateModelDocumentation>false</generateModelDocumentation>
-							<generateApiTests>false</generateApiTests>
+							<language/>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
 
 
 
