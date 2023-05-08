@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.security;
+package ua.rivnegray.boardgames_shop.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
