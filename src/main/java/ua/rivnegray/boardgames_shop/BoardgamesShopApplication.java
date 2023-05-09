@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ua.rivnegray.boardgames_shop.config.ControllerConfig;
 import ua.rivnegray.boardgames_shop.model.user.User;
 import ua.rivnegray.boardgames_shop.model.user.UserBuilder;
 import ua.rivnegray.boardgames_shop.model.user.UserPermission;
@@ -15,8 +14,7 @@ import ua.rivnegray.boardgames_shop.model.user.UserRole;
 import ua.rivnegray.boardgames_shop.repository.UserRepository;
 
 @SpringBootApplication
-@Import(ControllerConfig.class)
-@ComponentScan(basePackages = {"generated", "ua.rivnegray.boardgames_shop"})
+@ComponentScan({"ua.rivnegray.boardgames_shop", "generated"})
 public class BoardgamesShopApplication {
 
 	public static void main(String[] args) {
