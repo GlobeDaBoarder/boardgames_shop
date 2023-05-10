@@ -5,9 +5,7 @@
  */
 package generated.user.api;
 
-import generated.user.model.User;
-import generated.user.model.UserInput;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import ua.rivnegray.boardgames_shop.model.user.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -17,9 +15,6 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,141 +27,65 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.CookieValue;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-05-10T01:15:25.711826441+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-05-10T08:27:26.037548317+03:00[Europe/Kiev]")
 @Validated
 public interface UsersApi {
 
-    Logger log = LoggerFactory.getLogger(UsersApi.class);
+    UsersApiDelegate getDelegate();
 
-    default Optional<ObjectMapper> getObjectMapper(){
-        return Optional.empty();
-    }
-
-    default Optional<HttpServletRequest> getRequest(){
-        return Optional.empty();
-    }
-
-    default Optional<String> getAcceptHeader() {
-        return getRequest().map(r -> r.getHeader("Accept"));
-    }
-
-    @Operation(summary = "Get a list of all users", description = "Retrieves a list of all users in the system", tags={  })
+    @Operation(summary = "Delete user", description = "", tags={  })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = User.class)))) })
+        @ApiResponse(responseCode = "204", description = "User deleted", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+        
+        @ApiResponse(responseCode = "404", description = "User not found") })
+    @RequestMapping(value = "/users/{id}",
+        produces = { "application/json" }, 
+        method = RequestMethod.DELETE)
+    default ResponseEntity<User> deleteUser(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("id") Long id) {
+        return getDelegate().deleteUser(id);
+    }
+
+
+    @Operation(summary = "Get all users", description = "", tags={  })
+    @ApiResponses(value = { 
+        @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = User.class)))) })
     @RequestMapping(value = "/users",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<List<User>> usersGet() {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-            if (getAcceptHeader().get().contains("application/json")) {
-                try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("[ {\n  \"password\" : \"\",\n  \"phone\" : \"phone\",\n  \"imageUrl\" : \"imageUrl\",\n  \"roles\" : [ {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"id\" : 6\n  }, {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"id\" : 6\n  } ],\n  \"id\" : 0,\n  \"email\" : \"\",\n  \"username\" : \"username\"\n}, {\n  \"password\" : \"\",\n  \"phone\" : \"phone\",\n  \"imageUrl\" : \"imageUrl\",\n  \"roles\" : [ {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"id\" : 6\n  }, {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"id\" : 6\n  } ],\n  \"id\" : 0,\n  \"email\" : \"\",\n  \"username\" : \"username\"\n} ]", List.class), HttpStatus.NOT_IMPLEMENTED);
-                } catch (IOException e) {
-                    log.error("Couldn't serialize response for content type application/json", e);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default UsersApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    default ResponseEntity<List<User>> getAllUsers() {
+        return getDelegate().getAllUsers();
     }
 
 
-    @Operation(summary = "Delete user by ID", description = "Deletes an existing user account", tags={  })
+    @Operation(summary = "Get user by ID", description = "", tags={  })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "204", description = "No Content") })
-    @RequestMapping(value = "/users/{id}",
-        method = RequestMethod.DELETE)
-    default ResponseEntity<Void> usersIdDelete(@Parameter(in = ParameterIn.PATH, description = "ID of the user to delete", required=true, schema=@Schema()) @PathVariable("id") Long id) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default UsersApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-
-    @Operation(summary = "Get user by ID", description = "Retrieves a specific user by ID", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
         
         @ApiResponse(responseCode = "404", description = "User not found") })
     @RequestMapping(value = "/users/{id}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    default ResponseEntity<User> usersIdGet(@Parameter(in = ParameterIn.PATH, description = "ID of the user to retrieve", required=true, schema=@Schema()) @PathVariable("id") Long id) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-            if (getAcceptHeader().get().contains("application/json")) {
-                try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{\n  \"password\" : \"\",\n  \"phone\" : \"phone\",\n  \"imageUrl\" : \"imageUrl\",\n  \"roles\" : [ {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"id\" : 6\n  }, {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"id\" : 6\n  } ],\n  \"id\" : 0,\n  \"email\" : \"\",\n  \"username\" : \"username\"\n}", User.class), HttpStatus.NOT_IMPLEMENTED);
-                } catch (IOException e) {
-                    log.error("Couldn't serialize response for content type application/json", e);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default UsersApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    default ResponseEntity<User> getUserById(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("id") Long id) {
+        return getDelegate().getUserById(id);
     }
 
 
-    @Operation(summary = "Update user by ID", description = "Updates an existing user account", tags={  })
+    @Operation(summary = "Update user", description = "", tags={  })
     @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+        @ApiResponse(responseCode = "200", description = "User updated", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
         
         @ApiResponse(responseCode = "404", description = "User not found") })
     @RequestMapping(value = "/users/{id}",
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.PUT)
-    default ResponseEntity<User> usersIdPut(@Parameter(in = ParameterIn.PATH, description = "ID of the user to update", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody UserInput body) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-            if (getAcceptHeader().get().contains("application/json")) {
-                try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{\n  \"password\" : \"\",\n  \"phone\" : \"phone\",\n  \"imageUrl\" : \"imageUrl\",\n  \"roles\" : [ {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"id\" : 6\n  }, {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"id\" : 6\n  } ],\n  \"id\" : 0,\n  \"email\" : \"\",\n  \"username\" : \"username\"\n}", User.class), HttpStatus.NOT_IMPLEMENTED);
-                } catch (IOException e) {
-                    log.error("Couldn't serialize response for content type application/json", e);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default UsersApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-
-    @Operation(summary = "Create a new user", description = "Creates a new user account in the system", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "201", description = "Created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))) })
-    @RequestMapping(value = "/users",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    default ResponseEntity<User> usersPost(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody UserInput body) {
-        if(getObjectMapper().isPresent() && getAcceptHeader().isPresent()) {
-            if (getAcceptHeader().get().contains("application/json")) {
-                try {
-                    return new ResponseEntity<>(getObjectMapper().get().readValue("{\n  \"password\" : \"\",\n  \"phone\" : \"phone\",\n  \"imageUrl\" : \"imageUrl\",\n  \"roles\" : [ {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"id\" : 6\n  }, {\n    \"name\" : \"name\",\n    \"description\" : \"description\",\n    \"id\" : 6\n  } ],\n  \"id\" : 0,\n  \"email\" : \"\",\n  \"username\" : \"username\"\n}", User.class), HttpStatus.NOT_IMPLEMENTED);
-                } catch (IOException e) {
-                    log.error("Couldn't serialize response for content type application/json", e);
-                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-        } else {
-            log.warn("ObjectMapper or HttpServletRequest not configured in default UsersApi interface so no example is generated");
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    default ResponseEntity<User> updateUser(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody User body) {
+        return getDelegate().updateUser(id, body);
     }
 
 }

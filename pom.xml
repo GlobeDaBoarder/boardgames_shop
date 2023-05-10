@@ -116,6 +116,7 @@
 					<output>${project.basedir}</output>
 <!--					<output>${project.build.directory}</output>-->
 
+					<generateModels>false</generateModels>
 					<generateModelTests>false</generateModelTests>
 					<generateModelDocumentation>false</generateModelDocumentation>
 					<generateApiTests>false</generateApiTests>
@@ -125,6 +126,8 @@
 					<configOptions>
 						<library>spring-boot</library>
 						<java8>true</java8>
+<!--						<interfaceOnly>true</interfaceOnly>-->
+						<delegatePattern>true</delegatePattern>
 					</configOptions>
 
 					<inputSpec/>
@@ -140,6 +143,12 @@
 						<configuration>
 							<inputSpec>src/main/resources/user.yaml</inputSpec>
 
+							<importMappings>
+								<importMapping>User=ua.rivnegray.boardgames_shop.model.user.User</importMapping>
+								<importMapping>UserRole=ua.rivnegray.boardgames_shop.model.user.UserRole</importMapping>
+								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.user.UserPermission</importMapping>
+							</importMappings>
+
 							<configOptions>
 								<modelPackage>generated.user.model</modelPackage>
 								<apiPackage>generated.user.api</apiPackage>
@@ -149,23 +158,23 @@
 						</configuration>
 					</execution>
 
-					<execution>
-						<id>generate-board-game-spring-controllers</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<inputSpec>src/main/resources/boardGame.yaml</inputSpec>
+<!--					<execution>-->
+<!--						<id>generate-board-game-spring-controllers</id>-->
+<!--						<phase>generate-sources</phase>-->
+<!--						<goals>-->
+<!--							<goal>generate</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<inputSpec>src/main/resources/boardGame.yaml</inputSpec>-->
 
-							<configOptions>
-								<modelPackage>generated.boardGame.model</modelPackage>
-								<apiPackage>generated.boardGame.api</apiPackage>
-							</configOptions>
+<!--							<configOptions>-->
+<!--								<modelPackage>generated.boardGame.model</modelPackage>-->
+<!--								<apiPackage>generated.boardGame.api</apiPackage>-->
+<!--							</configOptions>-->
 
-							<language/>
-						</configuration>
-					</execution>
+<!--							<language/>-->
+<!--						</configuration>-->
+<!--					</execution>-->
 				</executions>
 			</plugin>
 
