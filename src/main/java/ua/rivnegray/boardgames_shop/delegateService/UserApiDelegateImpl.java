@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.service;
+package ua.rivnegray.boardgames_shop.delegateService;
 
 import generated.user.api.UsersApiDelegate;
 
@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.model.user.User;
+import ua.rivnegray.boardgames_shop.service.UserService;
 
 import java.util.List;
 

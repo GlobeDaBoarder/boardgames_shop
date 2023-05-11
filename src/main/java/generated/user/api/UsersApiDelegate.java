@@ -26,7 +26,7 @@ import java.util.Optional;
  * A delegate to be called by the {@link UsersApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-05-10T08:27:26.037548317+03:00[Europe/Kiev]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2023-05-10T09:58:52.279836093+03:00[Europe/Kiev]")
 public interface UsersApiDelegate {
 
     Logger log = LoggerFactory.getLogger(UsersApi.class);
