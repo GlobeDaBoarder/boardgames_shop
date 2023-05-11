@@ -47,7 +47,7 @@
 			<scope>test</scope>
 		</dependency>
 
-<!--		openapi generated sources dependencies-->
+<!--		swagger generated sources dependencies-->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -73,16 +73,6 @@
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>2.0.1.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
-		</dependency>
-		<dependency>
-			<groupId>io.swagger</groupId>
-			<artifactId>swagger-jaxrs</artifactId>
-			<version>1.5.24</version>
 		</dependency>
 
 
@@ -117,81 +107,81 @@
 				</executions>
 			</plugin>
 
-			<plugin>
-				<groupId>io.swagger.codegen.v3</groupId>
-				<artifactId>swagger-codegen-maven-plugin</artifactId>
-				<version>3.0.42</version>
+<!--			<plugin>-->
+<!--				<groupId>io.swagger.codegen.v3</groupId>-->
+<!--				<artifactId>swagger-codegen-maven-plugin</artifactId>-->
+<!--				<version>3.0.42</version>-->
 
-				<configuration>
-					<language>spring</language>
-					<output>${project.basedir}</output>
-<!--					<output>${project.build.directory}</output>-->
+<!--				<configuration>-->
+<!--					<language>spring</language>-->
+<!--					<output>${project.basedir}</output>-->
+<!--&lt;!&ndash;					<output>${project.build.directory}</output>&ndash;&gt;-->
 
-					<generateModels>false</generateModels>
-					<generateModelTests>false</generateModelTests>
-					<generateModelDocumentation>false</generateModelDocumentation>
-					<generateApiTests>false</generateApiTests>
-					<generateApiDocumentation>false</generateApiDocumentation>
-					<generateSupportingFiles>false</generateSupportingFiles>
+<!--					<generateModels>false</generateModels>-->
+<!--					<generateModelTests>false</generateModelTests>-->
+<!--					<generateModelDocumentation>false</generateModelDocumentation>-->
+<!--					<generateApiTests>false</generateApiTests>-->
+<!--					<generateApiDocumentation>false</generateApiDocumentation>-->
+<!--					<generateSupportingFiles>false</generateSupportingFiles>-->
 
-<!--					<templateDirectory>-->
-<!--						${project.basedir}/src/main/resources/templates-->
-<!--					</templateDirectory>-->
+<!--&lt;!&ndash;					<templateDirectory>&ndash;&gt;-->
+<!--&lt;!&ndash;						${project.basedir}/src/main/resources/templates&ndash;&gt;-->
+<!--&lt;!&ndash;					</templateDirectory>&ndash;&gt;-->
 
-					<configOptions>
-						<library>spring-boot</library>
-						<java8>true</java8>
-<!--						<interfaceOnly>true</interfaceOnly>-->
-						<delegatePattern>true</delegatePattern>
-					</configOptions>
+<!--					<configOptions>-->
+<!--						<library>spring-boot</library>-->
+<!--						<java8>true</java8>-->
+<!--&lt;!&ndash;						<interfaceOnly>true</interfaceOnly>&ndash;&gt;-->
+<!--						<delegatePattern>true</delegatePattern>-->
+<!--					</configOptions>-->
 
-					<inputSpec/>
-				</configuration>
+<!--					<inputSpec/>-->
+<!--				</configuration>-->
 
-				<executions>
-					<execution>
-						<id>generate-user-spring-controllers</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<inputSpec>src/main/resources/user.yaml</inputSpec>
-
-							<importMappings>
-								<importMapping>User=ua.rivnegray.boardgames_shop.model.user.User</importMapping>
-								<importMapping>UserRole=ua.rivnegray.boardgames_shop.model.user.UserRole</importMapping>
-								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.user.UserPermission</importMapping>
-							</importMappings>
-
-							<configOptions>
-								<modelPackage>generated.user.model</modelPackage>
-								<apiPackage>generated.user.api</apiPackage>
-							</configOptions>
-
-							<language/>
-						</configuration>
-					</execution>
-
+<!--				<executions>-->
 <!--					<execution>-->
-<!--						<id>generate-board-game-spring-controllers</id>-->
+<!--						<id>generate-user-spring-controllers</id>-->
 <!--						<phase>generate-sources</phase>-->
 <!--						<goals>-->
 <!--							<goal>generate</goal>-->
 <!--						</goals>-->
 <!--						<configuration>-->
-<!--							<inputSpec>src/main/resources/boardGame.yaml</inputSpec>-->
+<!--							<inputSpec>src/main/resources/user.yaml</inputSpec>-->
+
+<!--							<importMappings>-->
+<!--								<importMapping>User=ua.rivnegray.boardgames_shop.model.user.User</importMapping>-->
+<!--								<importMapping>UserRole=ua.rivnegray.boardgames_shop.model.user.UserRole</importMapping>-->
+<!--								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.user.UserPermission</importMapping>-->
+<!--							</importMappings>-->
 
 <!--							<configOptions>-->
-<!--								<modelPackage>generated.boardGame.model</modelPackage>-->
-<!--								<apiPackage>generated.boardGame.api</apiPackage>-->
+<!--								<modelPackage>generated.user.model</modelPackage>-->
+<!--								<apiPackage>generated.user.api</apiPackage>-->
 <!--							</configOptions>-->
 
 <!--							<language/>-->
 <!--						</configuration>-->
 <!--					</execution>-->
-				</executions>
-			</plugin>
+
+<!--&lt;!&ndash;					<execution>&ndash;&gt;-->
+<!--&lt;!&ndash;						<id>generate-board-game-spring-controllers</id>&ndash;&gt;-->
+<!--&lt;!&ndash;						<phase>generate-sources</phase>&ndash;&gt;-->
+<!--&lt;!&ndash;						<goals>&ndash;&gt;-->
+<!--&lt;!&ndash;							<goal>generate</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;						</goals>&ndash;&gt;-->
+<!--&lt;!&ndash;						<configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;							<inputSpec>src/main/resources/boardGame.yaml</inputSpec>&ndash;&gt;-->
+
+<!--&lt;!&ndash;							<configOptions>&ndash;&gt;-->
+<!--&lt;!&ndash;								<modelPackage>generated.boardGame.model</modelPackage>&ndash;&gt;-->
+<!--&lt;!&ndash;								<apiPackage>generated.boardGame.api</apiPackage>&ndash;&gt;-->
+<!--&lt;!&ndash;							</configOptions>&ndash;&gt;-->
+
+<!--&lt;!&ndash;							<language/>&ndash;&gt;-->
+<!--&lt;!&ndash;						</configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;					</execution>&ndash;&gt;-->
+<!--				</executions>-->
+<!--			</plugin>-->
 
 
 <!--			<plugin>-->
@@ -234,6 +224,58 @@
 <!--					</execution>-->
 <!--				</executions>-->
 <!--			</plugin>-->
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>6.3.0</version>
+
+				<configuration>
+					<generatorName>spring</generatorName>
+					<output>${project.basedir}</output>
+					<generateModels>false</generateModels>
+					<generateModelTests>false</generateModelTests>
+					<generateModelDocumentation>false</generateModelDocumentation>
+					<generateApiTests>false</generateApiTests>
+					<generateApiDocumentation>false</generateApiDocumentation>
+<!--					<generateSupportingFiles>false</generateSupportingFiles>-->
+					<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+
+
+					<configOptions>
+						<library>spring-boot</library>
+						<java8>true</java8>
+						<delegatePattern>true</delegatePattern>
+					</configOptions>
+
+					<inputSpec/>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>generate-user-spring-controllers</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>src/main/resources/user.yaml</inputSpec>
+
+							<importMappings>
+								<importMapping>User=ua.rivnegray.boardgames_shop.model.user.User</importMapping>
+								<importMapping>UserRole=ua.rivnegray.boardgames_shop.model.user.UserRole</importMapping>
+								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.user.UserPermission</importMapping>
+							</importMappings>
+
+							<configOptions>
+								<modelPackage>generated.user.model</modelPackage>
+								<apiPackage>generated.user.api</apiPackage>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+
+			</plugin>
+
 		</plugins>
 	</build>
 

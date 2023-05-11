@@ -16,6 +16,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid input
+
   /users/{id}:
     get:
       summary: Get user by ID
@@ -74,10 +93,6 @@ paths:
       responses:
         '204':
           description: User deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
         '404':
           description: User not found
 components:

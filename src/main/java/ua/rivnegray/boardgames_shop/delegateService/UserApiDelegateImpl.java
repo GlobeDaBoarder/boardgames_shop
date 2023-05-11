@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.model.user.User;
 import ua.rivnegray.boardgames_shop.service.UserService;
 
+import java.net.URI;
 import java.util.List;
 
 @Service
@@ -21,9 +23,23 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
         this.userService = userService;
     }
 
+
     @Override
-    public ResponseEntity<User> deleteUser(Long id) {
-        return UsersApiDelegate.super.deleteUser(id);
+    public ResponseEntity<User> createUser(User user) {
+        User newUser = this.userService.createUser(user);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(newUser.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(newUser);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteUser(Long id) {
+        this.userService.deleteUser(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @Override
@@ -33,7 +49,10 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<User> getUserById(Long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+        return userService.getUserById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound()
+                        .build());
     }
 
     @Override

@@ -6,6 +6,7 @@ import ua.rivnegray.boardgames_shop.model.user.User;
 import ua.rivnegray.boardgames_shop.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -24,8 +25,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
     }
 
     @Override
