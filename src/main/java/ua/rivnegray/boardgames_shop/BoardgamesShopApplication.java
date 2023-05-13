@@ -12,6 +12,10 @@ import ua.rivnegray.boardgames_shop.model.user.UserBuilder;
 import ua.rivnegray.boardgames_shop.model.user.UserPermission;
 import ua.rivnegray.boardgames_shop.model.user.UserRole;
 import ua.rivnegray.boardgames_shop.repository.UserRepository;
+import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @SpringBootApplication
 @ComponentScan({"ua.rivnegray.boardgames_shop", "generated"})
@@ -22,10 +26,48 @@ public class BoardgamesShopApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(UserRepository userRepository, PasswordEncoder encoder) {
+	public CommandLineRunner commandLineRunner(UserRepository userRepository, UserRoleRepository roleRepository,
+											   PasswordEncoder encoder) {
 		return args -> {
 
-//			UserRole userRole = new UserRole("ROLE_USER");
+			UserRole roleAdmin = new UserRole("ROLE_ADMIN");
+			Set<UserPermission> adminPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE,
+					UserPermission.ADMIN_READ, UserPermission.ADMIN_WRITE);
+			roleAdmin.setPermissions(adminPermissions);
+			roleRepository.save(roleAdmin);
+
+			UserRole roleUser = new UserRole("ROLE_USER");
+			Set<UserPermission> userPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE);
+			roleUser.setPermissions(userPermissions);
+			roleRepository.save(roleUser);
+
+
+			User admin = new User(
+					"admin",
+					encoder.encode("admin"),
+					"email",
+					"phone",
+					"url",
+					Set.of(roleAdmin)
+			);
+
+			userRepository.save(admin);
+
+			User user = new User(
+					"user",
+					encoder.encode("user"),
+					"email",
+					"phone",
+					"url",
+					Set.of(roleUser)
+			);
+
+			userRepository.save(user);
+
+
+
+
+//			roleRepository.save(userRole);
 //
 //			User user1 = new UserBuilder()
 //					.username("admin")

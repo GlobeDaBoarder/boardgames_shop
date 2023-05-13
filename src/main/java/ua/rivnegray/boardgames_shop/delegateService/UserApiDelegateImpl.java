@@ -7,32 +7,43 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ua.rivnegray.boardgames_shop.DTO.UserDto;
+import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.user.User;
 import ua.rivnegray.boardgames_shop.service.UserService;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Primary
 public class UserApiDelegateImpl implements UsersApiDelegate {
     UserService userService;
+    UserMapper userMapper;
 
     @Autowired
-    public UserApiDelegateImpl(UserService userService) {
+    public UserApiDelegateImpl(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
 
     @Override
-    public ResponseEntity<User> createUser(User user) {
-        User newUser = this.userService.createUser(user);
+    public ResponseEntity<UserDto> createUser(UserDto userDto) {
+        User tempUser = this.userMapper.userDtoToUser(userDto);
+        User persistedUser = this.userService.createUser(tempUser);
+        UserDto persistedUserDto = this.userMapper.userToUserDto(persistedUser);
+
+
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newUser.getId())
+                .buildAndExpand(persistedUserDto.id())
                 .toUri();
-        return ResponseEntity.created(location).body(newUser);
+
+
+        return ResponseEntity.created(location).body(persistedUserDto);
     }
 
     @Override
@@ -43,20 +54,20 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        return ResponseEntity.ok(this.userService.getAllUsers()
+                .stream().map(userMapper::userToUserDto).toList());
     }
 
     @Override
-    public ResponseEntity<User> getUserById(Long id) {
-        return userService.getUserById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound()
-                        .build());
+    public ResponseEntity<UserDto> getUserById(Long id) {
+        return this.userService.getUserById(id).map(user -> ResponseEntity.ok(this.userMapper.userToUserDto(user)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override
-    public ResponseEntity<User> updateUser(Long id, User body) {
-        return ResponseEntity.ok(userService.updateUser(id, body));
+    public ResponseEntity<UserDto> updateUser(Long id, UserDto userDto) {
+        return ResponseEntity.ok(this.userMapper.
+                userToUserDto(this.userService.updateUser(id, userMapper.userDtoToUser(userDto))));
     }
 }

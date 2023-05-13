@@ -26,19 +26,11 @@ public class User {
     private String phone;
     private String imageUrl;
 
-//    @ElementCollection(fetch = FetchType.EAGER)
-//    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-//    @Column(name = "role")
-//    @Enumerated(EnumType.STRING)
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-//    @JoinTable(
-//            name = "user_roles",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id")
-//    )
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     private Set<UserRole> roles;
 
     public User() {
+        this.roles = new HashSet<>();
     }
 
     public User(String username, String password, String email, String phone,
@@ -100,8 +92,9 @@ public class User {
     }
 
     public void setRoles(Set<UserRole> roles) {
-        this.roles.addAll(roles);
+        this.roles = new HashSet<>(roles);
     }
+
     public void addRole(UserRole role) {
         if (this.roles == null) {
             this.roles = new HashSet<>();

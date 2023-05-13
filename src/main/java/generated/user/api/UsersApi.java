@@ -5,7 +5,7 @@
  */
 package generated.user.api;
 
-import ua.rivnegray.boardgames_shop.model.user.User;
+import ua.rivnegray.boardgames_shop.DTO.UserDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-11T17:59:18.370788181+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-13T17:18:03.400573575+03:00[Europe/Kiev]")
 @Validated
 @Tag(name = "users", description = "the users API")
 public interface UsersApi {
@@ -40,7 +40,7 @@ public interface UsersApi {
     /**
      * POST /users : Create a new user
      *
-     * @param user  (required)
+     * @param userDto  (required)
      * @return User created (status code 201)
      *         or Invalid input (status code 400)
      */
@@ -49,7 +49,7 @@ public interface UsersApi {
         summary = "Create a new user",
         responses = {
             @ApiResponse(responseCode = "201", description = "User created", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid input")
         }
@@ -60,10 +60,10 @@ public interface UsersApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<User> createUser(
-        @Parameter(name = "User", description = "", required = true) @Valid @RequestBody User user
+    default ResponseEntity<UserDto> createUser(
+        @Parameter(name = "UserDto", description = "", required = true) @Valid @RequestBody UserDto userDto
     ) {
-        return getDelegate().createUser(user);
+        return getDelegate().createUser(userDto);
     }
 
 
@@ -103,7 +103,7 @@ public interface UsersApi {
         summary = "Get all users",
         responses = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = User.class)))
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))
             })
         }
     )
@@ -112,7 +112,7 @@ public interface UsersApi {
         value = "/users",
         produces = { "application/json" }
     )
-    default ResponseEntity<List<User>> getAllUsers(
+    default ResponseEntity<List<UserDto>> getAllUsers(
         
     ) {
         return getDelegate().getAllUsers();
@@ -131,7 +131,7 @@ public interface UsersApi {
         summary = "Get user by ID",
         responses = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))
             }),
             @ApiResponse(responseCode = "404", description = "User not found")
         }
@@ -141,7 +141,7 @@ public interface UsersApi {
         value = "/users/{id}",
         produces = { "application/json" }
     )
-    default ResponseEntity<User> getUserById(
+    default ResponseEntity<UserDto> getUserById(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
     ) {
         return getDelegate().getUserById(id);
@@ -152,7 +152,7 @@ public interface UsersApi {
      * PUT /users/{id} : Update user
      *
      * @param id  (required)
-     * @param user  (required)
+     * @param userDto  (required)
      * @return User updated (status code 200)
      *         or User not found (status code 404)
      */
@@ -161,7 +161,7 @@ public interface UsersApi {
         summary = "Update user",
         responses = {
             @ApiResponse(responseCode = "200", description = "User updated", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))
             }),
             @ApiResponse(responseCode = "404", description = "User not found")
         }
@@ -172,11 +172,11 @@ public interface UsersApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<User> updateUser(
+    default ResponseEntity<UserDto> updateUser(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
-        @Parameter(name = "User", description = "", required = true) @Valid @RequestBody User user
+        @Parameter(name = "UserDto", description = "", required = true) @Valid @RequestBody UserDto userDto
     ) {
-        return getDelegate().updateUser(id, user);
+        return getDelegate().updateUser(id, userDto);
     }
 
 }

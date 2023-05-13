@@ -15,7 +15,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/UserDto'
     post:
       summary: Create a new user
       operationId: createUser
@@ -24,14 +24,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserDto'
       responses:
         '201':
           description: User created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserDto'
         '400':
           description: Invalid input
 
@@ -52,7 +52,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserDto'
         '404':
           description: User not found
     put:
@@ -70,14 +70,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserDto'
       responses:
         '200':
           description: User updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserDto'
         '404':
           description: User not found
     delete:
@@ -97,8 +97,8 @@ paths:
           description: User not found
 components:
   schemas:
-    User:
-      x-java-type: ua.rivnegray.boardgames_shop.model.user.User
+    UserDto:
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.UserDto
       type: object
       properties:
         id:
@@ -117,9 +117,9 @@ components:
         roles:
           type: array
           items:
-            $ref: '#/components/schemas/UserRole'
-    UserRole:
-      x-java-type: ua.rivnegray.boardgames_shop.model.user.UserRole
+            $ref: '#/components/schemas/UserRoleDto'
+    UserRoleDto:
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.UserRoleDto
       type: object
       properties:
         id:
