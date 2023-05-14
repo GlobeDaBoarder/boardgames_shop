@@ -35,23 +35,42 @@ public class UserServiceImpl implements UserService{
         return userRepository.findById(id);
     }
 
-    @Override
-    public User createUser(User user) {
+    private Set<UserRole>  getPersistedRolesIntoSession(User user){
         Set<UserRole> persistentRoles = new HashSet<>();
         for (UserRole role : user.getRoles()) {
             UserRole persistentRole = roleRepository.findById(role.getId())
                     .orElseThrow(() -> new RuntimeException("Role not found"));
             persistentRoles.add(persistentRole);
         }
-        user.setRoles(persistentRoles);
+        return persistentRoles;
+    }
+
+    @Override
+    public User createUser(User user) {
+        user.setRoles(getPersistedRolesIntoSession(user));
         return userRepository.save(user);
     }
 
 
 
     @Override
-    public User updateUser(Long id, User user) {
-        return userRepository.save(user);
+    public Optional<User> updateUser(Long id, User user) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if(optionalUser.isPresent()){
+            User updateUser = optionalUser.get();
+
+            updateUser.setUsername(user.getUsername());
+            updateUser.setPassword(user.getPassword());
+            updateUser.setEmail(user.getEmail());
+            updateUser.setImageUrl(user.getImageUrl());
+
+            updateUser.setRoles(getPersistedRolesIntoSession(user));
+
+            return Optional.of(userRepository.save(updateUser));
+        }
+
+        return Optional.empty();
     }
 
     @Override
