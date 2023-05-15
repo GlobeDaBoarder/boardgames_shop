@@ -36,8 +36,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(JpaDetailsService)
-//                .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults())
                 .build();
     }
 

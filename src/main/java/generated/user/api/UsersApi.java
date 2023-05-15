@@ -27,8 +27,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
+import org.springframework.security.access.prepost.PreAuthorize;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-15T07:37:47.099710385+03:00[Europe/Kiev]")
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-15T08:55:32.700658460+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "users", description = "the users API")
     public interface UsersApi {
@@ -54,6 +56,7 @@ import javax.annotation.Generated;
                     @ApiResponse(responseCode = "400", description = "Invalid input")
                 }
                 )
+            @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/users",
@@ -82,6 +85,7 @@ import javax.annotation.Generated;
                     @ApiResponse(responseCode = "404", description = "User not found")
                 }
                 )
+            @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/users/{id}"
@@ -107,6 +111,7 @@ import javax.annotation.Generated;
                     })
                 }
                 )
+            @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users",
@@ -136,6 +141,7 @@ import javax.annotation.Generated;
                     @ApiResponse(responseCode = "404", description = "User not found")
                 }
                 )
+            @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/{id}",
@@ -166,6 +172,7 @@ import javax.annotation.Generated;
                     @ApiResponse(responseCode = "404", description = "User not found")
                 }
                 )
+            @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/users/{id}",

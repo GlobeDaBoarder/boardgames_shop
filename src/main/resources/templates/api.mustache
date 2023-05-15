@@ -80,6 +80,8 @@ import java.util.Map;
     import java.util.concurrent.CompletableFuture;
 {{/async}}
 import {{javaxPackage}}.annotation.Generated;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 
 {{>generatedAnnotation}}
 {{#useBeanValidation}}
@@ -227,6 +229,7 @@ import {{javaxPackage}}.annotation.Generated;
                     })
             {{/swagger1AnnotationLibrary}}
         {{/implicitHeadersParams.0}}
+            @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.{{httpMethod}},
             value = "{{{path}}}"{{#singleContentTypes}}{{#hasProduces}},
