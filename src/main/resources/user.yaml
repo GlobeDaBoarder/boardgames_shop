@@ -7,6 +7,7 @@ paths:
     get:
       summary: Get all users
       operationId: getAllUsers
+      x-acess-permission: ADMIN_READ
       responses:
         '200':
           description: successful operation
@@ -19,6 +20,7 @@ paths:
     post:
       summary: Create a new user
       operationId: createUser
+      x-acess-permission: ADMIN_WRITE
       requestBody:
         required: true
         content:
@@ -39,6 +41,7 @@ paths:
     get:
       summary: Get user by ID
       operationId: getUserById
+      x-acess-permission: ADMIN_READ
       parameters:
         - name: id
           in: path
@@ -58,6 +61,7 @@ paths:
     put:
       summary: Update user
       operationId: updateUser
+      x-acess-permission: ADMIN_WRITE
       parameters:
         - name: id
           in: path
@@ -83,6 +87,7 @@ paths:
     delete:
       summary: Delete user
       operationId: deleteUser
+      x-acess-permission: ADMIN_WRITE
       parameters:
         - name: id
           in: path

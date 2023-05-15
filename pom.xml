@@ -82,6 +82,15 @@
 			<version>1.5.3.Final</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.openapitools/openapi-generator-maven-plugin -->
+<!--		<dependency>-->
+<!--			<groupId>org.openapitools</groupId>-->
+<!--			<artifactId>openapi-generator-maven-plugin</artifactId>-->
+<!--			<version>6.6.0</version>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
+
+
 
 	</dependencies>
 
@@ -134,7 +143,7 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>6.3.0</version>
+				<version>6.6.0</version>
 
 				<configuration>
 					<generatorName>spring</generatorName>
@@ -146,6 +155,10 @@
 					<generateApiDocumentation>false</generateApiDocumentation>
 <!--					<generateSupportingFiles>false</generateSupportingFiles>-->
 					<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+
+					<templateDirectory>
+						src/main/resources/templates
+					</templateDirectory>
 
 
 					<configOptions>
