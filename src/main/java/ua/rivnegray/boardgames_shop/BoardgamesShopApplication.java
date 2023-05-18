@@ -5,16 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ua.rivnegray.boardgames_shop.model.user.User;
-import ua.rivnegray.boardgames_shop.model.user.UserBuilder;
-import ua.rivnegray.boardgames_shop.model.user.UserPermission;
-import ua.rivnegray.boardgames_shop.model.user.UserRole;
+import ua.rivnegray.boardgames_shop.model.User;
+import ua.rivnegray.boardgames_shop.model.UserPermission;
+import ua.rivnegray.boardgames_shop.model.UserRole;
 import ua.rivnegray.boardgames_shop.repository.UserRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @SpringBootApplication
@@ -65,7 +62,7 @@ public class BoardgamesShopApplication {
 			userRepository.save(user);
 
 
-
+//			HashMap
 
 //			roleRepository.save(userRole);
 //

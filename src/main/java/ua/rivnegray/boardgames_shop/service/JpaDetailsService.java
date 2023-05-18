@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ua.rivnegray.boardgames_shop.model.user.SecurityUser;
+import ua.rivnegray.boardgames_shop.model.SecurityUser;
 import ua.rivnegray.boardgames_shop.repository.UserRepository;
 
 @Service

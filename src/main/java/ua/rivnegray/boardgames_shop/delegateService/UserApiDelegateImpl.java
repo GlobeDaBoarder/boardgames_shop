@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ua.rivnegray.boardgames_shop.DTO.UserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.UserDto;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
-import ua.rivnegray.boardgames_shop.model.user.User;
+import ua.rivnegray.boardgames_shop.model.User;
 import ua.rivnegray.boardgames_shop.service.UserService;
 
 import java.net.URI;

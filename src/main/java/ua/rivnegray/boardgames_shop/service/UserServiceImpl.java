@@ -2,8 +2,8 @@ package ua.rivnegray.boardgames_shop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.rivnegray.boardgames_shop.model.user.User;
-import ua.rivnegray.boardgames_shop.model.user.UserRole;
+import ua.rivnegray.boardgames_shop.model.User;
+import ua.rivnegray.boardgames_shop.model.UserRole;
 import ua.rivnegray.boardgames_shop.repository.UserRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 

@@ -103,7 +103,7 @@ paths:
 components:
   schemas:
     UserDto:
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.UserDto
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.UserDto
       type: object
       properties:
         id:
@@ -124,7 +124,7 @@ components:
           items:
             $ref: '#/components/schemas/UserRoleDto'
     UserRoleDto:
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.UserRoleDto
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.UserRoleDto
       type: object
       properties:
         id:

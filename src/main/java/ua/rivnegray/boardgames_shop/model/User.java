@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.model.user;
+package ua.rivnegray.boardgames_shop.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

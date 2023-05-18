@@ -181,9 +181,9 @@
 							<inputSpec>src/main/resources/user.yaml</inputSpec>
 
 							<importMappings>
-								<importMapping>UserDto=ua.rivnegray.boardgames_shop.DTO.UserDto</importMapping>
-								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.UserRoleDto</importMapping>
-								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.user.UserPermission</importMapping>
+								<importMapping>UserDto=ua.rivnegray.boardgames_shop.DTO.request.UserDto</importMapping>
+								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.request.UserRoleDto</importMapping>
+								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.UserPermission</importMapping>
 							</importMappings>
 
 							<configOptions>

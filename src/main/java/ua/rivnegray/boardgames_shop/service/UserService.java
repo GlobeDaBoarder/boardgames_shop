@@ -1,6 +1,6 @@
 package ua.rivnegray.boardgames_shop.service;
 
-import ua.rivnegray.boardgames_shop.model.user.User;
+import ua.rivnegray.boardgames_shop.model.User;
 
 import java.util.List;
 import java.util.Optional;
