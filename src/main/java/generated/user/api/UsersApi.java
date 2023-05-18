@@ -6,25 +6,31 @@
 package generated.user.api;
 
 import ua.rivnegray.boardgames_shop.DTO.request.UserDto;
-import io.swagger.v3.oas.annotations.Operation;
+    import io.swagger.v3.oas.annotations.ExternalDocumentation;
+    import io.swagger.v3.oas.annotations.Operation;
     import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
+    import io.swagger.v3.oas.annotations.Parameters;
+    import io.swagger.v3.oas.annotations.media.ArraySchema;
     import io.swagger.v3.oas.annotations.media.Content;
     import io.swagger.v3.oas.annotations.media.Schema;
     import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
+    import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+    import io.swagger.v3.oas.annotations.tags.Tag;
     import io.swagger.v3.oas.annotations.enums.ParameterIn;
     import org.springframework.http.ResponseEntity;
     import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
+    import javax.validation.Valid;
+    import javax.validation.constraints.*;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-15T08:55:32.700658460+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-18T12:56:30.887766278+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "users", description = "the users API")
     public interface UsersApi {
@@ -50,7 +56,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "400", description = "Invalid input")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+            @PreAuthorize("hasAuthority('ADMIN_WRITE')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/users",
@@ -79,7 +85,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "User not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+            @PreAuthorize("hasAuthority('ADMIN_WRITE')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/users/{id}"
@@ -105,7 +111,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+            @PreAuthorize("hasAuthority('ADMIN_READ')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users",
@@ -135,7 +141,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "User not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+            @PreAuthorize("hasAuthority('ADMIN_READ')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/{id}",
@@ -166,7 +172,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "User not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+            @PreAuthorize("hasAuthority('ADMIN_WRITE')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/users/{id}",

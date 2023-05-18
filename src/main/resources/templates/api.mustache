@@ -229,7 +229,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
             {{/swagger1AnnotationLibrary}}
         {{/implicitHeadersParams.0}}
-            @PreAuthorize("hasAuthority('admin:read')")
+            @PreAuthorize("hasAuthority('{{vendorExtensions.x-acess-permission}}')")
             @RequestMapping(
             method = RequestMethod.{{httpMethod}},
             value = "{{{path}}}"{{#singleContentTypes}}{{#hasProduces}},
