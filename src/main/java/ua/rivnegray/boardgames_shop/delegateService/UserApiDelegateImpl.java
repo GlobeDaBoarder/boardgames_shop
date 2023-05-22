@@ -72,12 +72,11 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<UserDto> updateUser(Long id, CreateAndUpdateUserDto createAndUpdateUserDto) {
-        User updateInfoUser = this.userMapper.createAndUpdateUserDtoToUser(createAndUpdateUserDto, this.roleService);
-        Optional<User> updatedUser = this.userService.updateUser(id, updateInfoUser);
-        if(updatedUser.isPresent()){
-            UserDto updatedUserDto = this.userMapper.userToUserDto(updatedUser.get());
-            return ResponseEntity.ok(updatedUserDto);
-        }
-        return ResponseEntity.notFound().build();
+        User infoUserToUpdate = this.userMapper.createAndUpdateUserDtoToUser(createAndUpdateUserDto, this.roleService);
+        infoUserToUpdate.setId(id);
+
+        User updatedUser = this.userService.updateUser(infoUserToUpdate);
+        UserDto updatedUserDto = this.userMapper.userToUserDto(updatedUser);
+        return ResponseEntity.ok(updatedUserDto);
     }
 }

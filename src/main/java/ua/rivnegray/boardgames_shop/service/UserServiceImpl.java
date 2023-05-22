@@ -54,23 +54,8 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public Optional<User> updateUser(Long id, User user) {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if(optionalUser.isPresent()){
-            User updateUser = optionalUser.get();
-
-            updateUser.setUsername(user.getUsername());
-            updateUser.setPassword(user.getPassword());
-            updateUser.setEmail(user.getEmail());
-            updateUser.setImageUrl(user.getImageUrl());
-
-            updateUser.setRoles(getPersistedRolesIntoSession(user));
-
-            return Optional.of(userRepository.save(updateUser));
-        }
-
-        return Optional.empty();
+    public User updateUser(User user) {
+        return this.userRepository.save(user);
     }
 
     @Override
