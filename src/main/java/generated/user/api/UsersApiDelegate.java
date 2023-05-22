@@ -1,6 +1,7 @@
 package generated.user.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.UserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.CreateAndUpdateUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link UsersApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-18T13:28:05.802492081+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-22T09:30:53.598617247+03:00[Europe/Kiev]")
 public interface UsersApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -26,12 +27,12 @@ public interface UsersApiDelegate {
     /**
      * POST /users : Create a new user
      *
-     * @param userDto  (required)
+     * @param createAndUpdateUserDto  (required)
      * @return User created (status code 201)
      *         or Invalid input (status code 400)
      * @see UsersApi#createUser
      */
-    default ResponseEntity<UserDto> createUser(UserDto userDto) {
+    default ResponseEntity<UserDto> createUser(CreateAndUpdateUserDto createAndUpdateUserDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -104,13 +105,13 @@ public interface UsersApiDelegate {
      * PUT /users/{id} : Update user
      *
      * @param id  (required)
-     * @param userDto  (required)
+     * @param createAndUpdateUserDto  (required)
      * @return User updated (status code 200)
      *         or User not found (status code 404)
      * @see UsersApi#updateUser
      */
     default ResponseEntity<UserDto> updateUser(Long id,
-        UserDto userDto) {
+        CreateAndUpdateUserDto createAndUpdateUserDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

@@ -5,7 +5,8 @@
 */
 package generated.user.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.UserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.CreateAndUpdateUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserDto;
     import io.swagger.v3.oas.annotations.ExternalDocumentation;
     import io.swagger.v3.oas.annotations.Operation;
     import io.swagger.v3.oas.annotations.Parameter;
@@ -30,7 +31,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-18T13:28:05.802492081+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-22T09:30:53.598617247+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "users", description = "the users API")
     public interface UsersApi {
@@ -42,7 +43,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             /**
             * POST /users : Create a new user
             *
-                * @param userDto  (required)
+                * @param createAndUpdateUserDto  (required)
             * @return User created (status code 201)
                 *         or Invalid input (status code 400)
             */
@@ -64,9 +65,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
             consumes = { "application/json" }
             )
         default ResponseEntity<UserDto> createUser(
-        @Parameter(name = "UserDto", description = "", required = true) @Valid @RequestBody UserDto userDto
+        @Parameter(name = "CreateAndUpdateUserDto", description = "", required = true) @Valid @RequestBody CreateAndUpdateUserDto createAndUpdateUserDto
             ) {
-            return getDelegate().createUser(userDto);
+            return getDelegate().createUser(createAndUpdateUserDto);
             }
 
 
@@ -158,7 +159,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             * PUT /users/{id} : Update user
             *
                 * @param id  (required)
-                * @param userDto  (required)
+                * @param createAndUpdateUserDto  (required)
             * @return User updated (status code 200)
                 *         or User not found (status code 404)
             */
@@ -181,9 +182,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
             )
         default ResponseEntity<UserDto> updateUser(
         @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
-        @Parameter(name = "UserDto", description = "", required = true) @Valid @RequestBody UserDto userDto
+        @Parameter(name = "CreateAndUpdateUserDto", description = "", required = true) @Valid @RequestBody CreateAndUpdateUserDto createAndUpdateUserDto
             ) {
-            return getDelegate().updateUser(id, userDto);
+            return getDelegate().updateUser(id, createAndUpdateUserDto);
             }
 
         }

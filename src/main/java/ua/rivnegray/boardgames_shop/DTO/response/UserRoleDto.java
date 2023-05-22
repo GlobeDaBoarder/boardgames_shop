@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.DTO.request;
+package ua.rivnegray.boardgames_shop.DTO.response;
 
 import ua.rivnegray.boardgames_shop.model.UserPermission;
 import ua.rivnegray.boardgames_shop.model.UserRole;

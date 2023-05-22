@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.User;
 import ua.rivnegray.boardgames_shop.model.UserPermission;
 import ua.rivnegray.boardgames_shop.model.UserRole;
@@ -93,6 +94,8 @@ public class BoardgamesShopApplication {
 //					.build();
 //
 //			userRepository.save(user2);
+
+
 
 
 		};

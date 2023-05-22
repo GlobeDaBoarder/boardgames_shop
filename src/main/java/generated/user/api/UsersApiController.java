@@ -1,6 +1,7 @@
 package generated.user.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.UserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.CreateAndUpdateUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-18T13:28:05.802492081+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-22T09:30:53.598617247+03:00[Europe/Kiev]")
 @Controller
 @RequestMapping("${openapi.user.base-path:}")
 public class UsersApiController implements UsersApi {

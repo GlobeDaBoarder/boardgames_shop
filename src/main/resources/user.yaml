@@ -26,7 +26,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserDto'
+              $ref: '#/components/schemas/CreateAndUpdateUserDto'
       responses:
         '201':
           description: User created
@@ -74,7 +74,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserDto'
+              $ref: '#/components/schemas/CreateAndUpdateUserDto'
       responses:
         '200':
           description: User updated
@@ -103,7 +103,7 @@ paths:
 components:
   schemas:
     UserDto:
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.UserDto
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.UserDto
       type: object
       properties:
         id:
@@ -124,7 +124,7 @@ components:
           items:
             $ref: '#/components/schemas/UserRoleDto'
     UserRoleDto:
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.UserRoleDto
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto
       type: object
       properties:
         id:
@@ -144,3 +144,38 @@ components:
         - user:write
         - admin:read
         - admin:write
+
+    CreateAndUpdateUserDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.CreateAndUpdateUserDto
+      properties:
+        username:
+          type: string
+          example: "myUsername"
+        password:
+          type: string
+          example: "myPassword"
+        email:
+          type: string
+          format: email
+          example: "email@example.com"
+        phone:
+          type: string
+          format: phone
+          example: "+11234567890"
+        imageUrl:
+          type: string
+          format: uri
+          example: "https://example.com/myImage.jpg"
+        roleIds:
+          type: array
+          items:
+            type: integer
+          example: [ 1, 2, 3 ]
+      required:
+        - username
+        - password
+        - email
+        - phone
+        - imageUrl
+        - roleIds

@@ -7,9 +7,11 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ua.rivnegray.boardgames_shop.DTO.request.UserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.CreateAndUpdateUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserDto;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.User;
+import ua.rivnegray.boardgames_shop.service.UserRoleService;
 import ua.rivnegray.boardgames_shop.service.UserService;
 
 import java.net.URI;
@@ -22,16 +24,19 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     UserService userService;
     UserMapper userMapper;
 
+    UserRoleService roleService;
+
     @Autowired
-    public UserApiDelegateImpl(UserService userService, UserMapper userMapper) {
+    public UserApiDelegateImpl(UserService userService, UserMapper userMapper, UserRoleService roleService) {
         this.userService = userService;
         this.userMapper = userMapper;
+        this.roleService = roleService;
     }
 
 
     @Override
-    public ResponseEntity<UserDto> createUser(UserDto userDto) {
-        User tempUser = this.userMapper.userDtoToUser(userDto);
+    public ResponseEntity<UserDto> createUser(CreateAndUpdateUserDto createAndUpdateUserDto) {
+        User tempUser = this.userMapper.createAndUpdateUserDtoToUser(createAndUpdateUserDto, this.roleService);
         User persistedUser = this.userService.createUser(tempUser);
         UserDto persistedUserDto = this.userMapper.userToUserDto(persistedUser);
 
@@ -66,8 +71,8 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<UserDto> updateUser(Long id, UserDto userDto) {
-        User updateInfoUser = this.userMapper.userDtoToUser(userDto);
+    public ResponseEntity<UserDto> updateUser(Long id, CreateAndUpdateUserDto createAndUpdateUserDto) {
+        User updateInfoUser = this.userMapper.createAndUpdateUserDtoToUser(createAndUpdateUserDto, this.roleService);
         Optional<User> updatedUser = this.userService.updateUser(id, updateInfoUser);
         if(updatedUser.isPresent()){
             UserDto updatedUserDto = this.userMapper.userToUserDto(updatedUser.get());
