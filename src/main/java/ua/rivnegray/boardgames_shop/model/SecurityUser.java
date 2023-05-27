@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 
 public class SecurityUser implements UserDetails {
 
-    private final User user;
+    private final UserCredentials user;
 
-    public SecurityUser(User user) {
+    public SecurityUser(UserCredentials user) {
         this.user = user;
     }
 

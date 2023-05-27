@@ -6,26 +6,28 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ua.rivnegray.boardgames_shop.mapper.UserMapper;
-import ua.rivnegray.boardgames_shop.model.User;
+import ua.rivnegray.boardgames_shop.model.UserCredentials;
 import ua.rivnegray.boardgames_shop.model.UserPermission;
+import ua.rivnegray.boardgames_shop.model.UserProfile;
 import ua.rivnegray.boardgames_shop.model.UserRole;
-import ua.rivnegray.boardgames_shop.repository.UserRepository;
+import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
+import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
 import java.util.Set;
 
 @SpringBootApplication
-@ComponentScan({"ua.rivnegray.boardgames_shop", "generated"})
+//@ComponentScan({"ua.rivnegray.boardgames_shop", "generated"})
 public class BoardgamesShopApplication {
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(BoardgamesShopApplication.class, args);
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(UserRepository userRepository, UserRoleRepository roleRepository,
-											   PasswordEncoder encoder) {
+	public CommandLineRunner commandLineRunner(UserCredentialsRepository userCredentialsRepository, UserProfileRepository userProfileRepository,
+											   UserRoleRepository roleRepository, PasswordEncoder encoder) {
 		return args -> {
 
 			UserRole roleAdmin = new UserRole("ROLE_ADMIN");
@@ -39,65 +41,13 @@ public class BoardgamesShopApplication {
 			roleUser.setPermissions(userPermissions);
 			roleRepository.save(roleUser);
 
+			UserCredentials userCredentials = new UserCredentials("admin", "admin", Set.of(roleAdmin));
+			userCredentialsRepository.save(userCredentials);
 
-			User admin = new User(
-					"admin",
-					encoder.encode("admin"),
-					"email",
-					"phone",
-					"url",
-					Set.of(roleAdmin)
-			);
-
-			userRepository.save(admin);
-
-			User user = new User(
-					"user",
-					encoder.encode("user"),
-					"email",
-					"phone",
-					"url",
-					Set.of(roleUser)
-			);
-
-			userRepository.save(user);
-
-
-//			HashMap
-
-//			roleRepository.save(userRole);
-//
-//			User user1 = new UserBuilder()
-//					.username("admin")
-//					.password(encoder.encode("admin"))
-//					.email("email")
-//					.phone("phone")
-//					.imageUrl("url")
-//					.permission(UserRole.instanceOf("ROLE_ADMIN"), UserPermission.USER_READ)
-//					.permission(UserRole.instanceOf("ROLE_ADMIN"), UserPermission.USER_WRITE)
-//					.permission(UserRole.instanceOf("ROLE_ADMIN"), UserPermission.ADMIN_READ)
-//					.permission(UserRole.instanceOf("ROLE_ADMIN"), UserPermission.ADMIN_WRITE)
-//					.build();
-//
-//			userRepository.save(user1);
-//
-//
-//			User user2
-//					= new UserBuilder()
-//					.username("user")
-//					.password(encoder.encode("user"))
-//					.email("email")
-//					.phone("phone")
-//					.imageUrl("url")
-//					.permission(userRole, UserPermission.USER_READ)
-//					.permission(userRole, UserPermission.USER_WRITE)
-//					.build();
-//
-//			userRepository.save(user2);
-
-
-
-
+			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn");
+			userProfile.setUserCredentials(userCredentials);
+			userCredentials.setUserProfile(userProfile);
+			userCredentialsRepository.save(userCredentials);
 		};
 	}
 }

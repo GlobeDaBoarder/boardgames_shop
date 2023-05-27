@@ -47,6 +47,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.28</version>
+			<scope>provided</scope>
+		</dependency>
+
 <!--		swagger generated sources dependencies-->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -181,7 +188,7 @@
 							<inputSpec>src/main/resources/user.yaml</inputSpec>
 
 							<importMappings>
-								<importMapping>UserDto=ua.rivnegray.boardgames_shop.DTO.response.UserDto</importMapping>
+								<importMapping>UserDto=ua.rivnegray.boardgames_shop.DTO.response.UserFullDto</importMapping>
 								<importMapping>CreateAndUpdateUserDto=ua.rivnegray.boardgames_shop.DTO.request.CreateAndUpdateUserDto</importMapping>
 								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto</importMapping>
 								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.UserPermission</importMapping>
