@@ -27,11 +27,12 @@ import java.util.Set;
 @Setter
 @ToString(exclude = "password")
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserCredentials {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
+    @Column(nullable = false, unique = true)
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -43,9 +44,7 @@ public class UserCredentials {
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     private Set<UserRole> roles = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-//    @MapsId
-//    @JoinColumn(name = "id")
+    @OneToOne(mappedBy = "userCredentials", cascade = CascadeType.ALL)
     private UserProfile userProfile;
 
     @Override

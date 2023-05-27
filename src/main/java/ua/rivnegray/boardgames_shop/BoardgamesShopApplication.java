@@ -41,13 +41,12 @@ public class BoardgamesShopApplication {
 			roleUser.setPermissions(userPermissions);
 			roleRepository.save(roleUser);
 
-			UserCredentials userCredentials = new UserCredentials("admin", "admin", Set.of(roleAdmin));
-			userCredentialsRepository.save(userCredentials);
+			UserCredentials userCredentials = new UserCredentials("admin", encoder.encode("admin"), Set.of(roleAdmin));
 
 			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn");
 			userProfile.setUserCredentials(userCredentials);
-			userCredentials.setUserProfile(userProfile);
-			userCredentialsRepository.save(userCredentials);
+
+			userProfileRepository.save(userProfile);
 		};
 	}
 }
