@@ -1,74 +1,134 @@
-//package ua.rivnegray.boardgames_shop.service;
+package ua.rivnegray.boardgames_shop.service;
+
+import org.springframework.stereotype.Service;
+import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateFullUserProfileDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class UserServiceImpl implements UserService{
+    @Override
+    public List<UserPublicDto> getAllUsersPublicInfo() {
+        return null;
+    }
+
+    @Override
+    public Optional<UserPublicDto> getUserPublicInfoById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public UserPublicDto createSpecifiedUser(CreateAnyUserDto user) {
+        return null;
+    }
+
+    @Override
+    public UserPublicDto createCustomerUser(CreateCustomerUserDto user) {
+        return null;
+    }
+
+    @Override
+    public UserPublicDto updateFullUserProfile(UpdateFullUserProfileDto updateFullUserProfileDto) {
+        return null;
+    }
+
+    @Override
+    public void updateUsername(UpdateUsernameDto updateUsernameDto) {
+
+    }
+
+    @Override
+    public void updatePassword(UpdatePasswordDto updatePasswordDto) {
+
+    }
+
+    @Override
+    public void updateEmail(UpdateEmailDto updateEmailDto) {
+
+    }
+
+    @Override
+    public void updatePhone(UpdatePhoneDto updatePhoneDto) {
+
+    }
+
+    @Override
+    public void updateAddress(AddAndUpdateAddressDto updateAddressDto) {
+
+    }
+
+    @Override
+    public void addAddress(AddAndUpdateAddressDto addAddressDto) {
+
+    }
+
+    @Override
+    public void removeAddress(Long userId, Long addressId) {
+
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+
+    }
+
+//    private final UserRepository userRepository;
+//    private final UserRoleRepository roleRepository;
 //
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//import ua.rivnegray.boardgames_shop.DTO.request.CreateAndUpdateUserDto;
-//import ua.rivnegray.boardgames_shop.DTO.response.UserFullDto;
-//import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
-//import ua.rivnegray.boardgames_shop.DTO.response.UserProfileDto;
-//import ua.rivnegray.boardgames_shop.model.User;
-//import ua.rivnegray.boardgames_shop.model.UserProfile;
-//import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
-//import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
-//import ua.rivnegray.boardgames_shop.repository.UserRepository;
-//import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 //
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Optional;
-//import java.util.stream.Collectors;
+//    @Autowired
+//    public UserServiceImpl(UserRepository userRepository, UserRoleRepository roleRepository) {
+//        this.userRepository = userRepository;
+//        this.roleRepository = roleRepository;
+//    }
 //
-//@Service
-//public class UserServiceImpl implements UserService{
+//    @Override
+//    public List<User> getAllSecureUsers() {
+//        return userRepository.findAll();
+//    }
 //
-////    private final UserRepository userRepository;
-////    private final UserRoleRepository roleRepository;
-////
-////
-////    @Autowired
-////    public UserServiceImpl(UserRepository userRepository, UserRoleRepository roleRepository) {
-////        this.userRepository = userRepository;
-////        this.roleRepository = roleRepository;
-////    }
-////
-////    @Override
-////    public List<User> getAllSecureUsers() {
-////        return userRepository.findAll();
-////    }
-////
-////    @Override
-////    public Optional<User> getSecureUserById(Long id) {
-////        return userRepository.findById(id);
-////    }
-////
-////    private Set<UserRole>  getPersistedRolesIntoSession(User user){
-////        Set<UserRole> persistentRoles = new HashSet<>();
-////        for (UserRole role : user.getRoles()) {
-////            UserRole persistentRole = roleRepository.findById(role.getId())
-////                    .orElseThrow(() -> new RuntimeException("Role not found"));
-////            persistentRoles.add(persistentRole);
-////        }
-////        return persistentRoles;
-////    }
-////
-////    @Override
-////    public User createUser(User user) {
-////        user.setRoles(getPersistedRolesIntoSession(user));
-////        return userRepository.save(user);
-////    }
-////
-////
-////
-////    @Override
-////    public User updateUser(User user) {
-////        return this.userRepository.save(user);
-////    }
-////
-////    @Override
-////    public void deleteUser(Long id) {
-////        userRepository.deleteById(id);
-////    }
+//    @Override
+//    public Optional<User> getSecureUserById(Long id) {
+//        return userRepository.findById(id);
+//    }
 //
+//    private Set<UserRole>  getPersistedRolesIntoSession(User user){
+//        Set<UserRole> persistentRoles = new HashSet<>();
+//        for (UserRole role : user.getRoles()) {
+//            UserRole persistentRole = roleRepository.findById(role.getId())
+//                    .orElseThrow(() -> new RuntimeException("Role not found"));
+//            persistentRoles.add(persistentRole);
+//        }
+//        return persistentRoles;
+//    }
+//
+//    @Override
+//    public User createUser(User user) {
+//        user.setRoles(getPersistedRolesIntoSession(user));
+//        return userRepository.save(user);
+//    }
+//
+//
+//
+//    @Override
+//    public User updateUser(User user) {
+//        return this.userRepository.save(user);
+//    }
+//
+//    @Override
+//    public void deleteUser(Long id) {
+//        userRepository.deleteById(id);
+//    }
+
 //    UserCredentialsRepository userCredentialsRepository;
 //    UserProfileRepository userProfileRepository;
 //    UserRoleRepository roleRepository;
@@ -146,4 +206,4 @@
 //                .roles(userProfile.getUserCredentials().getRoles())
 //                .build();
 //    }
-//}
+}

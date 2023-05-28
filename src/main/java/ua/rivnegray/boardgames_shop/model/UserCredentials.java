@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class UserCredentials {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -42,6 +44,7 @@ public class UserCredentials {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @Setter(AccessLevel.NONE)
     private Set<UserRole> roles = new HashSet<>();
 
     @OneToOne(mappedBy = "userCredentials", cascade = CascadeType.ALL)

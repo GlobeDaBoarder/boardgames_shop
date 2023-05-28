@@ -189,8 +189,18 @@
 							<inputSpec>src/main/resources/user.yaml</inputSpec>
 
 							<importMappings>
-								<importMapping>UserDto=ua.rivnegray.boardgames_shop.DTO.response.UserFullDto</importMapping>
-								<importMapping>CreateAndUpdateUserDto=ua.rivnegray.boardgames_shop.DTO.request.CreateAndUpdateUserDto</importMapping>
+								<importMapping>AddAndUpdateAddressDto=ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto</importMapping>
+								<importMapping>CreateAnyUserDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto</importMapping>
+								<importMapping>CreateCustomerUserDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto</importMapping>
+								<importMapping>UpdateEmailDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto</importMapping>
+								<importMapping>UpdateFullUserProfileDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateFullUserProfileDto</importMapping>
+								<importMapping>UpdatePasswordDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto</importMapping>
+								<importMapping>UpdatePhoneDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto</importMapping>
+								<importMapping>UpdateRolesDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateRolesDto</importMapping>
+								<importMapping>UpdateUsernameDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto</importMapping>
+								<importMapping>AddressDto=ua.rivnegray.boardgames_shop.DTO.response.AddressDto</importMapping>
+								<importMapping>UserProfileDto=ua.rivnegray.boardgames_shop.DTO.response.UserProfileDto</importMapping>
+								<importMapping>UserPublicDto=ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto</importMapping>
 								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto</importMapping>
 								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.UserPermission</importMapping>
 							</importMappings>

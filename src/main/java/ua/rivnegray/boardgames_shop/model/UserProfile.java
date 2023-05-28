@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,8 +33,8 @@ import java.util.Set;
 public class UserProfile {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "user_credentials_id", nullable = false, unique = true)
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @Column( unique = true, nullable = false)
@@ -48,6 +49,7 @@ public class UserProfile {
 
     @OneToMany(cascade = CascadeType.ALL)
     @ToString.Exclude
+    @Setter(AccessLevel.NONE)
     private Set<Address> addresses;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -60,6 +62,7 @@ public class UserProfile {
 
     @OneToMany
     @ToString.Exclude
+    @Setter(AccessLevel.NONE)
     private Set<Order> orders;
 
     @Override
