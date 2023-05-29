@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
@@ -73,6 +74,11 @@ public class BoardgamesShopApplication {
 					"email", "+111", "user", "user");
 
 			System.out.println(userService.createSpecifiedUser(createAnyUserDto));
+
+			CreateCustomerUserDto createCustomerUserDto= new CreateCustomerUserDto("customer1", "customer1",
+					"customer1@email", "+111", "customer1", "customer1");
+
+			System.out.println(userService.createCustomerUser(createCustomerUserDto));
 		};
 	}
 }

@@ -15,9 +15,9 @@ import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
+import ua.rivnegray.boardgames_shop.model.UserRole;
 import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
-import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,20 +59,25 @@ public class UserServiceImpl implements UserService{
     // or should DTO already have an encrypted password
     @Override
     public UserPublicDto createSpecifiedUser(CreateAnyUserDto createAnyUserDto) {
-        UserProfile newUserProfile = this.userMapper.toUserProfile(createAnyUserDto, this.userRoleService);
-        UserCredentials newUserCredentials = this.userMapper.toUserCredentials(createAnyUserDto);
-        newUserCredentials.setPassword(this.passwordEncoder.encode(newUserCredentials.getPassword()));
-        newUserCredentials.setUserProfile(newUserProfile);
-        newUserProfile.setUserCredentials(newUserCredentials);
-
-        this.userProfileRepository.save(newUserProfile);
-
-        return this.userMapper.toUserPublicDto(newUserProfile);
+        return doUserSaveOperations(this.userMapper.toUserProfile(createAnyUserDto, this.userRoleService), this.userMapper.toUserCredentials(createAnyUserDto));
     }
 
     @Override
-    public UserPublicDto createCustomerUser(CreateCustomerUserDto user) {
-        return null;
+    public UserPublicDto createCustomerUser(CreateCustomerUserDto createCustomerUserDto) {
+        UserProfile newUserProfile = this.userMapper.toUserProfile(createCustomerUserDto, this.userRoleService);
+        UserRole roleUser = this.userRoleService.findRoleById(2L);
+        newUserProfile.getRoles().add(roleUser);
+        return doUserSaveOperations(newUserProfile, this.userMapper.toUserCredentials(createCustomerUserDto));
+    }
+
+    private UserPublicDto doUserSaveOperations(UserProfile userProfile, UserCredentials userCredentials) {
+        userCredentials.setPassword(this.passwordEncoder.encode(userCredentials.getPassword()));
+        userCredentials.setUserProfile(userProfile);
+        userProfile.setUserCredentials(userCredentials);
+
+        this.userProfileRepository.save(userProfile);
+
+        return this.userMapper.toUserPublicDto(userProfile);
     }
 
     @Override
