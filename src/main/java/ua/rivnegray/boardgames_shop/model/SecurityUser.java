@@ -17,7 +17,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.user.getRoles().stream().flatMap(userRole -> userRole.getPermissions().stream())
+        return this.user.getUserProfile().getRoles().stream().flatMap(userRole -> userRole.getPermissions().stream())
                 .collect(Collectors.toCollection(HashSet::new));
     }
 

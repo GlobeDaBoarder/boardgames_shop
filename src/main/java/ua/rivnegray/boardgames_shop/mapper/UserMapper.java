@@ -6,6 +6,7 @@ import ua.rivnegray.boardgames_shop.service.UserRoleService;
 @Mapper(componentModel = "spring", uses = {UserRoleService.class})
 public interface UserMapper {
 
+
 //    UserFullDto userToUserDto(User user);
 //
 //    User userDtoToUser(UserFullDto userFullDto);

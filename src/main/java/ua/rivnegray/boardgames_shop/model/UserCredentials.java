@@ -3,25 +3,18 @@ package ua.rivnegray.boardgames_shop.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -29,11 +22,11 @@ import java.util.Set;
 @ToString(exclude = "password")
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class UserCredentials {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(nullable = false, unique = true)
+    @Column(name = "user_profile_id", nullable = false, unique = true)
     @Setter(AccessLevel.NONE)
     private Long id;
 
@@ -43,11 +36,9 @@ public class UserCredentials {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.REFRESH })
-    @Setter(AccessLevel.NONE)
-    private Set<UserRole> roles = new HashSet<>();
-
-    @OneToOne(mappedBy = "userCredentials", cascade = CascadeType.ALL)
+    @OneToOne( cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_profile_id")
+    @MapsId
     private UserProfile userProfile;
 
     @Override
@@ -62,10 +53,9 @@ public class UserCredentials {
         return Objects.hash(getId());
     }
 
-    public UserCredentials(String username, String password, Set<UserRole> roles) {
+    public UserCredentials(String username, String password) {
         this.username = username;
         this.password = password;
-        this.roles = roles;
     }
 }
 

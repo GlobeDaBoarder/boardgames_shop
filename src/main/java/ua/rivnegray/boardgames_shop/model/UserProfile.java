@@ -7,20 +7,17 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,10 +27,12 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+//@Inheritance(strategy = )
 public class UserProfile {
 
     @Id
-    @Column(name = "user_credentials_id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(nullable = false, unique = true)
     @Setter(AccessLevel.NONE)
     private Long id;
 
@@ -47,14 +46,16 @@ public class UserProfile {
 
     private String lastName;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @Setter(AccessLevel.NONE)
+    private Set<UserRole> roles = new HashSet<>();
+
     @OneToMany(cascade = CascadeType.ALL)
     @ToString.Exclude
     @Setter(AccessLevel.NONE)
     private Set<Address> addresses;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_credentials_id")
-    @MapsId
+    @OneToOne(mappedBy = "userProfile", cascade = CascadeType.ALL)
     private UserCredentials userCredentials;
 
     @OneToOne
@@ -77,10 +78,12 @@ public class UserProfile {
         return Objects.hash(getId());
     }
 
-    public UserProfile(String email, String phone, String firstName, String lastName) {
+    public UserProfile(String email, String phone, String firstName, String lastName,
+                       Set<UserRole> userRoles) {
         this.email = email;
         this.phone = phone;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.roles = userRoles;
     }
 }

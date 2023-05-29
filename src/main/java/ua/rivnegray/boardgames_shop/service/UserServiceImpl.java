@@ -1,5 +1,6 @@
 package ua.rivnegray.boardgames_shop.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
@@ -10,12 +11,27 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
+import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
+import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
+
+    UserCredentialsRepository userCredentialsRepository;
+    UserProfileRepository userProfileRepository;
+    UserRoleRepository userRoleRepository;
+    @Autowired
+    public UserServiceImpl(UserCredentialsRepository userCredentialsRepository, UserProfileRepository userProfileRepository
+            , UserRoleRepository userRoleRepository) {
+        this.userCredentialsRepository = userCredentialsRepository;
+        this.userProfileRepository = userProfileRepository;
+        this.userRoleRepository = userRoleRepository;
+    }
+
     @Override
     public List<UserPublicDto> getAllUsersPublicInfo() {
         return null;
