@@ -19,7 +19,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@ToString(exclude = "password")
+@ToString(exclude = {"password", "userProfile"})
 @NoArgsConstructor
 @AllArgsConstructor
 

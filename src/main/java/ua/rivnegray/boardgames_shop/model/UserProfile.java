@@ -50,10 +50,12 @@ public class UserProfile {
     @Setter(AccessLevel.NONE)
     private Set<UserRole> roles = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
+    // todo figure out how to properly deal with LazyInitializationException;
+    //  possibly will need to use @Transactional to specify loading
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ToString.Exclude
     @Setter(AccessLevel.NONE)
-    private Set<Address> addresses;
+    private Set<Address> addresses = new HashSet<>();
 
     @OneToOne(mappedBy = "userProfile", cascade = CascadeType.ALL)
     private UserCredentials userCredentials;
@@ -61,10 +63,10 @@ public class UserProfile {
     @OneToOne
     private ShoppingCart shoppingCart;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ToString.Exclude
     @Setter(AccessLevel.NONE)
-    private Set<Order> orders;
+    private Set<Order> orders = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

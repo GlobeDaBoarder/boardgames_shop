@@ -1,6 +1,7 @@
 package ua.rivnegray.boardgames_shop.delegateService;
 
 import generated.user.api.UsersApiDelegate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,13 @@ import java.util.Optional;
 @Service
 @Primary
 public class UserApiDelegateImpl implements UsersApiDelegate {
+    UserService userService;
+
+    @Autowired
+    public UserApiDelegateImpl(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return UsersApiDelegate.super.getRequest();
@@ -48,7 +57,7 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<List<UserPublicDto>> getAllUsersPublicInfo() {
-        return UsersApiDelegate.super.getAllUsersPublicInfo();
+        return ResponseEntity.ok(this.userService.getAllUsersPublicInfo());
     }
 
     @Override

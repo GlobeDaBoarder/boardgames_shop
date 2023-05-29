@@ -1,6 +1,7 @@
 package ua.rivnegray.boardgames_shop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
@@ -11,40 +12,62 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.mapper.UserMapper;
+import ua.rivnegray.boardgames_shop.model.UserCredentials;
+import ua.rivnegray.boardgames_shop.model.UserProfile;
 import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
 
     UserCredentialsRepository userCredentialsRepository;
     UserProfileRepository userProfileRepository;
-    UserRoleRepository userRoleRepository;
+    UserRoleService userRoleService;
+    UserMapper userMapper;
+    PasswordEncoder passwordEncoder;
     @Autowired
     public UserServiceImpl(UserCredentialsRepository userCredentialsRepository, UserProfileRepository userProfileRepository
-            , UserRoleRepository userRoleRepository) {
+            , UserRoleService userRoleService, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userCredentialsRepository = userCredentialsRepository;
         this.userProfileRepository = userProfileRepository;
-        this.userRoleRepository = userRoleRepository;
+        this.userRoleService = userRoleService;
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public List<UserPublicDto> getAllUsersPublicInfo() {
-        return null;
+        return this.userProfileRepository.findAll().stream()
+                .map(userProfile -> this.userMapper.toUserPublicDto(userProfile))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
     public Optional<UserPublicDto> getUserPublicInfoById(Long id) {
-        return Optional.empty();
+        return this.userProfileRepository.findById(id).map(userProfile -> this.userMapper.toUserPublicDto(userProfile));
     }
 
+
+    //todo figure out on which level the encryption of password should occur. Is it service layer, mapper,
+    // or should DTO already have an encrypted password
     @Override
-    public UserPublicDto createSpecifiedUser(CreateAnyUserDto user) {
-        return null;
+    public UserPublicDto createSpecifiedUser(CreateAnyUserDto createAnyUserDto) {
+        UserProfile newUserProfile = this.userMapper.toUserProfile(createAnyUserDto, this.userRoleService);
+        UserCredentials newUserCredentials = this.userMapper.toUserCredentials(createAnyUserDto);
+        newUserCredentials.setPassword(this.passwordEncoder.encode(newUserCredentials.getPassword()));
+        newUserCredentials.setUserProfile(newUserProfile);
+        newUserProfile.setUserCredentials(newUserCredentials);
+
+        this.userProfileRepository.save(newUserProfile);
+
+        return this.userMapper.toUserPublicDto(newUserProfile);
     }
 
     @Override

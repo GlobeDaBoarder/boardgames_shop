@@ -17,9 +17,9 @@ public interface UserService {
     List<UserPublicDto> getAllUsersPublicInfo();
     Optional<UserPublicDto> getUserPublicInfoById(Long id);
 
-    UserPublicDto createSpecifiedUser(CreateAnyUserDto user);
+    UserPublicDto createSpecifiedUser(CreateAnyUserDto createAnyUserDto);
 
-    UserPublicDto createCustomerUser(CreateCustomerUserDto user);
+    UserPublicDto createCustomerUser(CreateCustomerUserDto createCustomerUserDto);
 
     UserPublicDto updateFullUserProfile(final UpdateFullUserProfileDto updateFullUserProfileDto);
 

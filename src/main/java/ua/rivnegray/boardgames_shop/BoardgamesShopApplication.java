@@ -6,6 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
 import ua.rivnegray.boardgames_shop.model.UserPermission;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
@@ -13,6 +16,8 @@ import ua.rivnegray.boardgames_shop.model.UserRole;
 import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
+import ua.rivnegray.boardgames_shop.service.UserService;
+import ua.rivnegray.boardgames_shop.service.UserServiceImpl;
 
 import java.util.Set;
 
@@ -26,8 +31,9 @@ public class BoardgamesShopApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(UserCredentialsRepository userCredentialsRepository, UserProfileRepository userProfileRepository,
-											   UserRoleRepository roleRepository, PasswordEncoder encoder) {
+	public CommandLineRunner commandLineRunner( UserProfileRepository userProfileRepository, UserService userService,
+											   UserRoleRepository roleRepository, PasswordEncoder encoder,
+												UserMapper userMapper) {
 		return args -> {
 
 			UserRole roleAdmin = new UserRole("ROLE_ADMIN");
@@ -48,11 +54,25 @@ public class BoardgamesShopApplication {
 //
 //			userProfileRepository.save(userProfile);
 
-			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn", Set.of(roleAdmin));
+			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn", Set.of(roleAdmin, roleUser));
 			UserCredentials userCredentials = new UserCredentials("admin", encoder.encode("admin"));
 			userCredentials.setUserProfile(userProfile);
+			userProfile.setUserCredentials(userCredentials);
 
-			userCredentialsRepository.save(userCredentials);
+//			userCredentialsRepository.save(userCredentials);
+			userProfileRepository.save(userProfile);
+
+
+			//UserPublicDto userPublicDto = userMapper.toUserPublicDto(userProfile);
+
+			//testing user service
+
+			System.out.println(userService.getAllUsersPublicInfo());
+
+			CreateAnyUserDto createAnyUserDto = new CreateAnyUserDto("user", "user", Set.of(1L, 2L),
+					"email", "+111", "user", "user");
+
+			System.out.println(userService.createSpecifiedUser(createAnyUserDto));
 		};
 	}
 }
