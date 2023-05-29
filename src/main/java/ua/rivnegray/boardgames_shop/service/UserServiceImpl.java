@@ -7,7 +7,6 @@ import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
-import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateFullUserProfileDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
@@ -80,10 +79,6 @@ public class UserServiceImpl implements UserService{
         return this.userMapper.toUserPublicDto(userProfile);
     }
 
-    @Override
-    public UserPublicDto updateFullUserProfile(UpdateFullUserProfileDto updateFullUserProfileDto) {
-        return null;
-    }
 
     @Override
     public void updateUsername(UpdateUsernameDto updateUsernameDto) {

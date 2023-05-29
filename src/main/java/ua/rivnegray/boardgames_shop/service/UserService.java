@@ -21,8 +21,6 @@ public interface UserService {
 
     UserPublicDto createCustomerUser(CreateCustomerUserDto createCustomerUserDto);
 
-    UserPublicDto updateFullUserProfile(final UpdateFullUserProfileDto updateFullUserProfileDto);
-
     void updateUsername(final UpdateUsernameDto updateUsernameDto);
 
     void updatePassword(final UpdatePasswordDto updatePasswordDto);

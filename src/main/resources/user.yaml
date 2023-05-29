@@ -73,32 +73,6 @@ paths:
                 $ref: '#/components/schemas/UserPublicDto'
         '404':
           description: User not found
-    put:
-      summary: Update a user's full profile
-      operationId: updateFullUserProfile
-      x-acess-permission: user:write
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateFullUserProfileDto'
-      responses:
-        '200':
-          description: User updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserPublicDto'
-        '404':
-          description: User not found
     delete:
       summary: Delete a user by ID
       operationId: deleteUser
