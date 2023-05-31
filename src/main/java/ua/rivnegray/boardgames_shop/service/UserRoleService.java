@@ -2,6 +2,8 @@ package ua.rivnegray.boardgames_shop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.rivnegray.boardgames_shop.exceptions.RoleIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.RoleNameNotFoundException;
 import ua.rivnegray.boardgames_shop.model.UserRole;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
@@ -17,6 +19,11 @@ public class UserRoleService {
 
     public UserRole findRoleById(Long id){
         return roleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+                .orElseThrow(() -> new RoleIdNotFoundException(id));
+    }
+
+    public UserRole findRoleByName(String name){
+        return roleRepository.findUserRoleByRoleName(name)
+                .orElseThrow(() -> new RoleNameNotFoundException(name));
     }
 }

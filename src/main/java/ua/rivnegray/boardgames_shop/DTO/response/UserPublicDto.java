@@ -6,7 +6,7 @@ import java.util.Set;
 /**
  * DTO for {@link ua.rivnegray.boardgames_shop.model.UserCredentials}
  */
-public record UserPublicDto(String username, Set<UserRoleDto> roles, String email, String phone,
+public record UserPublicDto(Long id, String username, Set<UserRoleDto> roles, String email, String phone,
                             String firstName, String lastName,
                             Set<AddressDto> addresses) implements Serializable {
 }

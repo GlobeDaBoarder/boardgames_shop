@@ -6,10 +6,10 @@
 package generated.user.api;
 
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
+import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
-import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateFullUserProfileDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
@@ -38,7 +38,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-29T20:45:23.799553978+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-31T09:56:47.512554541+02:00[Europe/Warsaw]")
     @Validated
     @Tag(name = "users", description = "the users API")
     public interface UsersApi {
@@ -52,22 +52,25 @@ import org.springframework.security.access.prepost.PreAuthorize;
             *
                 * @param userId  (required)
                 * @param addAndUpdateAddressDto  (required)
-            * @return address added (status code 200)
+            * @return address added (status code 201)
             */
                 @Operation(
                 operationId = "addAddress",
                     summary = "Add an address to a user",
                 responses = {
-                    @ApiResponse(responseCode = "200", description = "address added")
+                    @ApiResponse(responseCode = "201", description = "address added", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDto.class))
+                    })
                 }
                 )
             @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/users/{userId}/address",
+            produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<Void> addAddress(
+        default ResponseEntity<AddressDto> addAddress(
         @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
         @Parameter(name = "AddAndUpdateAddressDto", description = "", required = true) @Valid @RequestBody AddAndUpdateAddressDto addAndUpdateAddressDto
             ) {
@@ -247,34 +250,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * PUT /users/{userId}/address : Update a user&#39;s address
-            *
-                * @param userId  (required)
-                * @param addAndUpdateAddressDto  (required)
-            * @return address updated (status code 200)
-            */
-                @Operation(
-                operationId = "updateAddress",
-                    summary = "Update a user's address",
-                responses = {
-                    @ApiResponse(responseCode = "200", description = "address updated")
-                }
-                )
-            @PreAuthorize("hasAuthority('user:write')")
-            @RequestMapping(
-            method = RequestMethod.PUT,
-            value = "/users/{userId}/address",
-            consumes = { "application/json" }
-            )
-        default ResponseEntity<Void> updateAddress(
-        @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
-        @Parameter(name = "AddAndUpdateAddressDto", description = "", required = true) @Valid @RequestBody AddAndUpdateAddressDto addAndUpdateAddressDto
-            ) {
-            return getDelegate().updateAddress(userId, addAndUpdateAddressDto);
-            }
-
-
-            /**
             * PUT /users/{userId}/email : Update a user&#39;s email
             *
                 * @param userId  (required)
@@ -285,53 +260,23 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 operationId = "updateEmail",
                     summary = "Update a user's email",
                 responses = {
-                    @ApiResponse(responseCode = "200", description = "email updated")
+                    @ApiResponse(responseCode = "200", description = "email updated", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
+                    })
                 }
                 )
             @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/users/{userId}/email",
+            produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<Void> updateEmail(
+        default ResponseEntity<UserPublicDto> updateEmail(
         @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
         @Parameter(name = "UpdateEmailDto", description = "", required = true) @Valid @RequestBody UpdateEmailDto updateEmailDto
             ) {
             return getDelegate().updateEmail(userId, updateEmailDto);
-            }
-
-
-            /**
-            * PUT /users/{userId} : Update a user&#39;s full profile
-            *
-                * @param userId  (required)
-                * @param updateFullUserProfileDto  (required)
-            * @return User updated (status code 200)
-                *         or User not found (status code 404)
-            */
-                @Operation(
-                operationId = "updateFullUserProfile",
-                    summary = "Update a user's full profile",
-                responses = {
-                    @ApiResponse(responseCode = "200", description = "User updated", content = {
-                        @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
-                    }),
-                    @ApiResponse(responseCode = "404", description = "User not found")
-                }
-                )
-            @PreAuthorize("hasAuthority('user:write')")
-            @RequestMapping(
-            method = RequestMethod.PUT,
-            value = "/users/{userId}",
-            produces = { "application/json" },
-            consumes = { "application/json" }
-            )
-        default ResponseEntity<UserPublicDto> updateFullUserProfile(
-        @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
-        @Parameter(name = "UpdateFullUserProfileDto", description = "", required = true) @Valid @RequestBody UpdateFullUserProfileDto updateFullUserProfileDto
-            ) {
-            return getDelegate().updateFullUserProfile(userId, updateFullUserProfileDto);
             }
 
 
@@ -346,16 +291,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 operationId = "updatePassword",
                     summary = "Update a user's password",
                 responses = {
-                    @ApiResponse(responseCode = "200", description = "password updated")
+                    @ApiResponse(responseCode = "200", description = "password updated", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
+                    })
                 }
                 )
             @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/users/{userId}/password",
+            produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<Void> updatePassword(
+        default ResponseEntity<UserPublicDto> updatePassword(
         @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
         @Parameter(name = "UpdatePasswordDto", description = "", required = true) @Valid @RequestBody UpdatePasswordDto updatePasswordDto
             ) {
@@ -374,16 +322,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 operationId = "updatePhone",
                     summary = "Update a user's phone",
                 responses = {
-                    @ApiResponse(responseCode = "200", description = "phone number updated")
+                    @ApiResponse(responseCode = "200", description = "phone number updated", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
+                    })
                 }
                 )
             @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/users/{userId}/phone",
+            produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<Void> updatePhone(
+        default ResponseEntity<UserPublicDto> updatePhone(
         @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
         @Parameter(name = "UpdatePhoneDto", description = "", required = true) @Valid @RequestBody UpdatePhoneDto updatePhoneDto
             ) {
@@ -402,16 +353,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 operationId = "updateUsername",
                     summary = "Update a user's username",
                 responses = {
-                    @ApiResponse(responseCode = "200", description = "username updated")
+                    @ApiResponse(responseCode = "200", description = "username updated", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
+                    })
                 }
                 )
             @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/users/{userId}/username",
+            produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<Void> updateUsername(
+        default ResponseEntity<UserPublicDto> updateUsername(
         @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
         @Parameter(name = "UpdateUsernameDto", description = "", required = true) @Valid @RequestBody UpdateUsernameDto updateUsernameDto
             ) {

@@ -23,7 +23,7 @@ import ua.rivnegray.boardgames_shop.service.UserServiceImpl;
 import java.util.Set;
 
 @SpringBootApplication
-//@ComponentScan({"ua.rivnegray.boardgames_shop", "generated"})
+@ComponentScan({"ua.rivnegray.boardgames_shop", "generated"})
 public class BoardgamesShopApplication {
 	
 
@@ -43,7 +43,7 @@ public class BoardgamesShopApplication {
 			roleAdmin.setPermissions(adminPermissions);
 			roleRepository.save(roleAdmin);
 
-			UserRole roleUser = new UserRole("ROLE_USER");
+			UserRole roleUser = new UserRole("ROLE_CUSTOMER");
 			Set<UserPermission> userPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE);
 			roleUser.setPermissions(userPermissions);
 			roleRepository.save(roleUser);
