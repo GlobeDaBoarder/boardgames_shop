@@ -213,38 +213,38 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AddressDto'
+                $ref: '#/components/schemas/UserPublicDto'
   /users/{userId}/address/{addressId}:
-#    put:
-#      summary: Update a user's address
-#      operationId: updateAddress
-#      x-acess-permission: user:write
-#      parameters:
-#        - name: userId
-#          in: path
-#          required: true
-#          schema:
-#            type: integer
-#            format: int64
-#        - name: addressId
-#          in: path
-#          required: true
-#          schema:
-#            type: integer
-#            format: int64
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/AddAndUpdateAddressDto'
-#      responses:
-#        '200':
-#          description: address updated
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/AddressDto'
+    put:
+      summary: Update a user's address
+      operationId: updateAddress
+      x-acess-permission: user:write
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: addressId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAndUpdateAddressDto'
+      responses:
+        '200':
+          description: address updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPublicDto'
     delete:
       summary: Remove an address from a user
       operationId: removeAddress
@@ -267,6 +267,120 @@ paths:
           description: address deleted
         '404':
           description: address not founf
+  /users/role/{role}:
+    get:
+      summary: Get users by role
+      operationId: getUsersByRole
+      x-acess-permission: admin:read
+      parameters:
+        - in: path
+          name: role
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Users wih role found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPublicDto'
+  /users/availability/email:
+    post:
+      summary: Check if email is available
+      operationId: checkEmailAvailability
+      x-acess-permission: admin:read
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmailDto'
+      responses:
+        '204':
+          description: checked for availability of email successfully
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '409':
+          description: email already taken
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /users/availability/username:
+    post:
+      summary: Check if username is available
+      operationId: checkUsernameAvailability
+      x-acess-permission: admin:read
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUsernameDto'
+      responses:
+        '204':
+          description: checked for availability of username successfully
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '409':
+          description: username already taken
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /users/{userId}/addresses/{addressId}:
+    get:
+      summary: Get a user's address by address id
+      operationId: getAddressById
+      x-acess-permission: user:read
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: path
+          name: addressId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: The address was found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressDto'
+  /users/{userId}/addresses:
+    get:
+      summary: Get all addresses of a user
+      operationId: getAllAddresses
+      x-acess-permission: user:read
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: All addresses were retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddressDto'
 components:
   schemas:
     CreateAnyUserDto:

@@ -38,7 +38,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-05-31T09:56:47.512554541+02:00[Europe/Warsaw]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-04T23:37:42.981182282+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "users", description = "the users API")
     public interface UsersApi {
@@ -59,7 +59,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     summary = "Add an address to a user",
                 responses = {
                     @ApiResponse(responseCode = "201", description = "address added", content = {
-                        @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDto.class))
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
                     })
                 }
                 )
@@ -70,11 +70,77 @@ import org.springframework.security.access.prepost.PreAuthorize;
             produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<AddressDto> addAddress(
+        default ResponseEntity<UserPublicDto> addAddress(
         @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
         @Parameter(name = "AddAndUpdateAddressDto", description = "", required = true) @Valid @RequestBody AddAndUpdateAddressDto addAndUpdateAddressDto
             ) {
             return getDelegate().addAddress(userId, addAndUpdateAddressDto);
+            }
+
+
+            /**
+            * POST /users/availability/email : Check if email is available
+            *
+                * @param updateEmailDto  (required)
+            * @return checked for availability of email successfully (status code 204)
+                *         or email already taken (status code 409)
+            */
+                @Operation(
+                operationId = "checkEmailAvailability",
+                    summary = "Check if email is available",
+                responses = {
+                    @ApiResponse(responseCode = "204", description = "checked for availability of email successfully", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = Boolean.class))
+                    }),
+                    @ApiResponse(responseCode = "409", description = "email already taken", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = Boolean.class))
+                    })
+                }
+                )
+            @PreAuthorize("hasAuthority('admin:read')")
+            @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/users/availability/email",
+            produces = { "application/json" },
+            consumes = { "application/json" }
+            )
+        default ResponseEntity<Boolean> checkEmailAvailability(
+        @Parameter(name = "UpdateEmailDto", description = "", required = true) @Valid @RequestBody UpdateEmailDto updateEmailDto
+            ) {
+            return getDelegate().checkEmailAvailability(updateEmailDto);
+            }
+
+
+            /**
+            * POST /users/availability/username : Check if username is available
+            *
+                * @param updateUsernameDto  (required)
+            * @return checked for availability of username successfully (status code 204)
+                *         or username already taken (status code 409)
+            */
+                @Operation(
+                operationId = "checkUsernameAvailability",
+                    summary = "Check if username is available",
+                responses = {
+                    @ApiResponse(responseCode = "204", description = "checked for availability of username successfully", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = Boolean.class))
+                    }),
+                    @ApiResponse(responseCode = "409", description = "username already taken", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = Boolean.class))
+                    })
+                }
+                )
+            @PreAuthorize("hasAuthority('admin:read')")
+            @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/users/availability/username",
+            produces = { "application/json" },
+            consumes = { "application/json" }
+            )
+        default ResponseEntity<Boolean> checkUsernameAvailability(
+        @Parameter(name = "UpdateUsernameDto", description = "", required = true) @Valid @RequestBody UpdateUsernameDto updateUsernameDto
+            ) {
+            return getDelegate().checkUsernameAvailability(updateUsernameDto);
             }
 
 
@@ -164,6 +230,64 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
+            * GET /users/{userId}/addresses/{addressId} : Get a user&#39;s address by address id
+            *
+                * @param userId  (required)
+                * @param addressId  (required)
+            * @return The address was found (status code 204)
+            */
+                @Operation(
+                operationId = "getAddressById",
+                    summary = "Get a user's address by address id",
+                responses = {
+                    @ApiResponse(responseCode = "204", description = "The address was found", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDto.class))
+                    })
+                }
+                )
+            @PreAuthorize("hasAuthority('user:read')")
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/users/{userId}/addresses/{addressId}",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<AddressDto> getAddressById(
+        @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
+        @Parameter(name = "addressId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("addressId") Long addressId
+            ) {
+            return getDelegate().getAddressById(userId, addressId);
+            }
+
+
+            /**
+            * GET /users/{userId}/addresses : Get all addresses of a user
+            *
+                * @param userId  (required)
+            * @return All addresses were retrieved successfully (status code 204)
+            */
+                @Operation(
+                operationId = "getAllAddresses",
+                    summary = "Get all addresses of a user",
+                responses = {
+                    @ApiResponse(responseCode = "204", description = "All addresses were retrieved successfully", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AddressDto.class)))
+                    })
+                }
+                )
+            @PreAuthorize("hasAuthority('user:read')")
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/users/{userId}/addresses",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<List<AddressDto>> getAllAddresses(
+        @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId
+            ) {
+            return getDelegate().getAllAddresses(userId);
+            }
+
+
+            /**
             * GET /users : Get all users
             *
             * @return successful operation (status code 200)
@@ -221,6 +345,34 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
+            * GET /users/role/{role} : Get users by role
+            *
+                * @param role  (required)
+            * @return Users wih role found (status code 204)
+            */
+                @Operation(
+                operationId = "getUsersByRole",
+                    summary = "Get users by role",
+                responses = {
+                    @ApiResponse(responseCode = "204", description = "Users wih role found", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserPublicDto.class)))
+                    })
+                }
+                )
+            @PreAuthorize("hasAuthority('admin:read')")
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/users/role/{role}",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<List<UserPublicDto>> getUsersByRole(
+        @Parameter(name = "role", description = "", required = true, in = ParameterIn.PATH) @PathVariable("role") String role
+            ) {
+            return getDelegate().getUsersByRole(role);
+            }
+
+
+            /**
             * DELETE /users/{userId}/address/{addressId} : Remove an address from a user
             *
                 * @param userId  (required)
@@ -246,6 +398,39 @@ import org.springframework.security.access.prepost.PreAuthorize;
         @Parameter(name = "addressId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("addressId") Long addressId
             ) {
             return getDelegate().removeAddress(userId, addressId);
+            }
+
+
+            /**
+            * PUT /users/{userId}/address/{addressId} : Update a user&#39;s address
+            *
+                * @param userId  (required)
+                * @param addressId  (required)
+                * @param addAndUpdateAddressDto  (required)
+            * @return address updated (status code 200)
+            */
+                @Operation(
+                operationId = "updateAddress",
+                    summary = "Update a user's address",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "address updated", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
+                    })
+                }
+                )
+            @PreAuthorize("hasAuthority('user:write')")
+            @RequestMapping(
+            method = RequestMethod.PUT,
+            value = "/users/{userId}/address/{addressId}",
+            produces = { "application/json" },
+            consumes = { "application/json" }
+            )
+        default ResponseEntity<UserPublicDto> updateAddress(
+        @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId,
+        @Parameter(name = "addressId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("addressId") Long addressId,
+        @Parameter(name = "AddAndUpdateAddressDto", description = "", required = true) @Valid @RequestBody AddAndUpdateAddressDto addAndUpdateAddressDto
+            ) {
+            return getDelegate().updateAddress(userId, addressId, addAndUpdateAddressDto);
             }
 
 

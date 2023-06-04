@@ -20,10 +20,13 @@ import ua.rivnegray.boardgames_shop.model.Address;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
 import ua.rivnegray.boardgames_shop.model.UserRole;
+import ua.rivnegray.boardgames_shop.repository.AddressRepository;
 import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
+import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,20 +36,25 @@ public class UserServiceImpl implements UserService{
 
     UserCredentialsRepository userCredentialsRepository;
     UserProfileRepository userProfileRepository;
-    UserRoleService userRoleService;
 
-    AddressService addressService;
+    UserRoleRepository userRoleRepository;
+
+    AddressRepository userAddressRepository;
+
+//    UserRoleService userRoleService;
+//
+//    AddressService addressService;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
     @Autowired
     public UserServiceImpl(UserCredentialsRepository userCredentialsRepository, UserProfileRepository userProfileRepository
-            , UserRoleService userRoleService, UserMapper userMapper, PasswordEncoder passwordEncoder, AddressService addressService) {
+            , UserRoleRepository userRoleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, AddressRepository userAddressRepository) {
         this.userCredentialsRepository = userCredentialsRepository;
         this.userProfileRepository = userProfileRepository;
-        this.userRoleService = userRoleService;
+        this.userRoleRepository = userRoleRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
-        this.addressService = addressService;
+        this.userAddressRepository = userAddressRepository;
     }
 
     @Override
@@ -68,13 +76,13 @@ public class UserServiceImpl implements UserService{
     //  or should DTO already have an encrypted password
     @Override
     public UserPublicDto createSpecifiedUser(CreateAnyUserDto createAnyUserDto) {
-        return doUserSaveOperations(this.userMapper.toUserProfile(createAnyUserDto, this.userRoleService),
+        return doUserSaveOperations(this.userMapper.toUserProfile(createAnyUserDto, this.userRoleRepository),
                 this.userMapper.toUserCredentials(createAnyUserDto));
     }
 
     @Override
     public UserPublicDto createCustomerUser(CreateCustomerUserDto createCustomerUserDto) {
-        return doUserSaveOperations(this.userMapper.toUserProfile(createCustomerUserDto, this.userRoleService),
+        return doUserSaveOperations(this.userMapper.toUserProfile(createCustomerUserDto, this.userRoleRepository),
                 this.userMapper.toUserCredentials(createCustomerUserDto));
     }
 
@@ -122,23 +130,36 @@ public class UserServiceImpl implements UserService{
         return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
     }
 
-//    @Override
-//    public AddressDto updateAddress(Long userId, Long addressId, AddAndUpdateAddressDto updateAddressDto) {
-//        return this.addressService.updateAddress(addressId, updateAddressDto);
-//    }
-
     @Override
-    public AddressDto addAddress(Long userId, AddAndUpdateAddressDto addAddressDto) {
+    public UserPublicDto updateAddress(Long userId, Long addressId, AddAndUpdateAddressDto updateAddressDto) {
+        UserProfile userToUpdate = this.userProfileRepository.findById(userId)
+                .orElseThrow(() -> new UserIdNotFoundException(userId));
+
+        Address addressToUpdate = userToUpdate.getAddresses().stream()
+                .filter(address -> address.getId().equals(addressId))
+                .findFirst()
+                .orElseThrow(() -> new AddressIdNotFoundException(addressId));
+
+        this.userMapper.updateAddress(addressToUpdate, updateAddressDto);
+
+        return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
+    }
+
+    // todo is it ok to save through user repository, even though we are dealing with addresses??
+    @Override
+    public UserPublicDto addAddress(Long userId, AddAndUpdateAddressDto addAddressDto) {
         UserProfile userToUpdate = this.userProfileRepository.findById(userId)
                 .orElseThrow(() -> new UserIdNotFoundException(userId));
 
         Address addressToAdd = this.userMapper.toAddress(addAddressDto);
         userToUpdate.getAddresses().add(addressToAdd);
-        this.userProfileRepository.save(userToUpdate);
+        return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
 
-        // todo  fix returning null in id dto
-
-        return this.userMapper.toAddressDto(addressToAdd);
+//        Address addedAddress = updatedUserProfile.getAddresses().stream()
+//                        .max(Comparator.comparing(Address::getDateCreated))
+//                                .orElseThrow(AddressIdNotFoundException::new);
+//
+//        return this.userMapper.toAddressDto(addedAddress);
     }
 
     @Override
@@ -155,129 +176,36 @@ public class UserServiceImpl implements UserService{
         this.userProfileRepository.deleteById(id);
     }
 
-//    private final UserRepository userRepository;
-//    private final UserRoleRepository roleRepository;
-//
-//
-//    @Autowired
-//    public UserServiceImpl(UserRepository userRepository, UserRoleRepository roleRepository) {
-//        this.userRepository = userRepository;
-//        this.roleRepository = roleRepository;
-//    }
-//
-//    @Override
-//    public List<User> getAllSecureUsers() {
-//        return userRepository.findAll();
-//    }
-//
-//    @Override
-//    public Optional<User> getSecureUserById(Long id) {
-//        return userRepository.findById(id);
-//    }
-//
-//    private Set<UserRole>  getPersistedRolesIntoSession(User user){
-//        Set<UserRole> persistentRoles = new HashSet<>();
-//        for (UserRole role : user.getRoles()) {
-//            UserRole persistentRole = roleRepository.findById(role.getId())
-//                    .orElseThrow(() -> new RuntimeException("Role not found"));
-//            persistentRoles.add(persistentRole);
-//        }
-//        return persistentRoles;
-//    }
-//
-//    @Override
-//    public User createUser(User user) {
-//        user.setRoles(getPersistedRolesIntoSession(user));
-//        return userRepository.save(user);
-//    }
-//
-//
-//
-//    @Override
-//    public User updateUser(User user) {
-//        return this.userRepository.save(user);
-//    }
-//
-//    @Override
-//    public void deleteUser(Long id) {
-//        userRepository.deleteById(id);
-//    }
+    @Override
+    public List<UserPublicDto> getUsersPublicInfoByRole(String role) {
+        return this.userProfileRepository.findByRoles_RoleName(role).stream()
+                .map(userProfile -> this.userMapper.toUserPublicDto(userProfile))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 
-//    UserCredentialsRepository userCredentialsRepository;
-//    UserProfileRepository userProfileRepository;
-//    UserRoleRepository roleRepository;
-//
-//    @Autowired
-//    public UserServiceImpl(UserCredentialsRepository userCredentialsRepository, UserProfileRepository userProfileRepository, UserRoleRepository roleRepository) {
-//        this.userCredentialsRepository = userCredentialsRepository;
-//        this.userProfileRepository = userProfileRepository;
-//        this.roleRepository = roleRepository;
-//    }
-//
-//    @Override
-//    public List<UserFullDto> getAllSecureUsers() {
-//        List<UserProfile> userProfiles = this.userProfileRepository.findAll();
-//
-//
-//        //todo mapping sepperatly
-//        return userProfiles.stream()
-//                .map(userProfile -> UserFullDto.builder()
-//                        .id(userProfile.getId())
-//                        .username(userProfile.getUserCredentials().getUsername())
-//                        .phone(userProfile.getPhone())
-//                        .email(userProfile.getEmail())
-//                        .imageUrl(userProfile.getImageUrl())
-//                        .roles(userProfile.getUserCredentials().getRoles())
-//                        .build())
-//               .collect(Collectors.toCollection(ArrayList::new));
-//    }
-//
-//    @Override
-//    public Optional<UserFullDto> getSecureUserById(Long id) {
-//        return Optional.empty();
-//    }
-//
-//    @Override
-//    public List<UserPublicDto> getAllUnsecureUsers() {
-//        return null;
-//    }
-//
-//    @Override
-//    public Optional<UserPublicDto> getUnsecureUserById(Long id) {
-//        return Optional.empty();
-//    }
-//
-//    @Override
-//    public UserFullDto createUser(CreateAndUpdateUserDto user) {
-//        return null;
-//    }
-//
-//    @Override
-//    public UserFullDto updateUser(CreateAndUpdateUserDto user) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void deleteUser(Long id) {
-//
-//    }
-//
-//    @Override
-//    public UserFullDto updateUserProfile(final UserProfileDto userProfileDto) {
-//        final UserProfile userProfile = this.userProfileRepository.save(UserProfile.builder()
-//                .id(userProfileDto.getId())
-//                .email(userProfileDto.getEmail())
-//                .phone(userProfileDto.getPhone())
-//                .imageUrl(userProfileDto.getImageUrl())
-//                .build());
-//
-//        return  UserFullDto.builder()
-//                .id(userProfile.getId())
-//                .username(userProfile.getUserCredentials().getUsername())
-//                .phone(userProfile.getPhone())
-//                .email(userProfile.getEmail())
-//                .imageUrl(userProfile.getImageUrl())
-//                .roles(userProfile.getUserCredentials().getRoles())
-//                .build();
-//    }
+    @Override
+    public Boolean isEmailAvailable(UpdateEmailDto updateEmailDto) {
+        return this.userProfileRepository.existsByEmail(updateEmailDto.email());
+    }
+
+    @Override
+    public Boolean isUsernameAvailable(UpdateUsernameDto updateUsernameDto) {
+        return this.userProfileRepository.existsByUserCredentials_Username(updateUsernameDto.username());
+    }
+
+    @Override
+    public AddressDto getAddress(Long userId, Long addressId) {
+        return this.userMapper.toAddressDto(this.userAddressRepository.findById(addressId)
+                .orElseThrow(() -> new AddressIdNotFoundException(addressId)));
+    }
+
+    @Override
+    public List<AddressDto> getAllAddresses(Long userId) {
+        UserProfile userProfileTiGetAddressesFrom = this.userProfileRepository.findById(userId)
+                .orElseThrow(() -> new UserIdNotFoundException(userId));
+
+        return userProfileTiGetAddressesFrom.getAddresses().stream()
+                .map(address -> this.userMapper.toAddressDto(address))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
 }

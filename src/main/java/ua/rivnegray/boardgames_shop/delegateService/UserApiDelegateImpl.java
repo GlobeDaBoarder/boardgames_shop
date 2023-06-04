@@ -1,8 +1,10 @@
 package ua.rivnegray.boardgames_shop.delegateService;
 
 import generated.user.api.UsersApiDelegate;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -40,16 +42,17 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
         return UsersApiDelegate.super.getRequest();
     }
 
+    // todo change to userDto
     @Override
-    public ResponseEntity<AddressDto> addAddress(Long userId, AddAndUpdateAddressDto addAndUpdateAddressDto) {
-        AddressDto address = this.userService.addAddress(userId, addAndUpdateAddressDto);
+    public ResponseEntity<UserPublicDto> addAddress(Long userId, AddAndUpdateAddressDto addAndUpdateAddressDto) {
+        UserPublicDto userWithAddedAddress = this.userService.addAddress(userId, addAndUpdateAddressDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(address.id())
+                .buildAndExpand(userWithAddedAddress.id())
                 .toUri();
 
-        return ResponseEntity.created(location).body(address);
+        return ResponseEntity.created(location).body(userWithAddedAddress);
     }
 
     @Override
@@ -77,6 +80,7 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
         return ResponseEntity.created(location).body(createdUser);
     }
 
+    // todo return UserDto instead of voi + new repository methods for it
     @Override
     public ResponseEntity<Void> deleteUser(Long userId) {
         this.userService.deleteUser(userId);
@@ -99,10 +103,11 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
         return ResponseEntity.noContent().build();
     }
 
-//    @Override
-//    public ResponseEntity<AddressDto> updateAddress(Long userId, Long addressId, AddAndUpdateAddressDto addAndUpdateAddressDto) {
-//        return ResponseEntity.ok(this.userService.updateAddress(userId, addressId, addAndUpdateAddressDto));
-//    }
+    @Override
+    public ResponseEntity<UserPublicDto> updateAddress(Long userId, Long addressId,
+                                                       AddAndUpdateAddressDto addAndUpdateAddressDto) {
+        return ResponseEntity.ok(this.userService.updateAddress(userId, addressId, addAndUpdateAddressDto));
+    }
 
     @Override
     public ResponseEntity<UserPublicDto> updateEmail(Long userId, UpdateEmailDto updateEmailDto) {
@@ -122,5 +127,38 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     @Override
     public ResponseEntity<UserPublicDto> updateUsername(Long userId, UpdateUsernameDto updateUsernameDto) {
         return ResponseEntity.ok(this.userService.updateUsername(userId, updateUsernameDto));
+    }
+
+    @Override
+    public ResponseEntity<Boolean> checkEmailAvailability(UpdateEmailDto updateEmailDto) {
+        if (this.userService.isEmailAvailable(updateEmailDto)) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+        }
+    }
+
+    @Override
+    public ResponseEntity<Boolean> checkUsernameAvailability(UpdateUsernameDto updateUsernameDto) {
+        if (this.userService.isUsernameAvailable(updateUsernameDto)) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+        }
+    }
+
+    @Override
+    public ResponseEntity<AddressDto> getAddressById(Long userId, Long addressId) {
+        return ResponseEntity.ok(this.userService.getAddress(userId, addressId));
+    }
+
+    @Override
+    public ResponseEntity<List<AddressDto>> getAllAddresses(Long userId) {
+        return ResponseEntity.ok(this.userService.getAllAddresses(userId));
+    }
+
+    @Override
+    public ResponseEntity<List<UserPublicDto>> getUsersByRole(String role) {
+        return ResponseEntity.ok(this.userService.getUsersPublicInfoByRole(role));
     }
 }

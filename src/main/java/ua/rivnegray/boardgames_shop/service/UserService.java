@@ -24,6 +24,9 @@ public interface UserService {
     @Transactional(readOnly = true)
     UserPublicDto getUserPublicInfoById(Long id);
 
+    @Transactional(readOnly = true)
+    List<UserPublicDto> getUsersPublicInfoByRole(String role);
+
     @Transactional
     UserPublicDto createSpecifiedUser(CreateAnyUserDto createAnyUserDto);
 
@@ -42,11 +45,23 @@ public interface UserService {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     UserPublicDto updatePhone(final Long id, final UpdatePhoneDto updatePhoneDto);
 
-//    @Transactional(isolation = Isolation.REPEATABLE_READ)
-//    AddressDto updateAddress(final Long userId, final Long addressId, final AddAndUpdateAddressDto updateAddressDto);
+    @Transactional(readOnly = true)
+    Boolean isEmailAvailable(UpdateEmailDto updateEmailDto);
+
+    @Transactional(readOnly = true)
+    Boolean isUsernameAvailable(UpdateUsernameDto updateUsernameDto);
+
+    @Transactional(readOnly = true)
+    AddressDto getAddress(Long userId, Long addressId);
+
+    @Transactional(readOnly = true)
+    List<AddressDto> getAllAddresses(Long userId);
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    UserPublicDto updateAddress(final Long userId, final Long addressId, final AddAndUpdateAddressDto updateAddressDto);
 
     @Transactional
-    AddressDto addAddress(final Long userId, final AddAndUpdateAddressDto addAddressDto);
+    UserPublicDto addAddress(final Long userId, final AddAndUpdateAddressDto addAddressDto);
 
     @Transactional
     void removeAddress(final Long userId, final Long addressId);
