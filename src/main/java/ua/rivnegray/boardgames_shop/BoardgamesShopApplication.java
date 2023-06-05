@@ -10,6 +10,9 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
+import ua.rivnegray.boardgames_shop.model.BoardGame;
+import ua.rivnegray.boardgames_shop.model.Product;
+import ua.rivnegray.boardgames_shop.model.ShoppingCart;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
 import ua.rivnegray.boardgames_shop.model.UserPermission;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
@@ -63,22 +66,16 @@ public class BoardgamesShopApplication {
 //			userCredentialsRepository.save(userCredentials);
 			userProfileRepository.save(userProfile);
 
+//
+//			Product game1 = new BoardGame(
+//
+//			)
+//
+//
+//			ShoppingCart shoppingCart = new ShoppingCart();
+//			shoppingCart.setUserProfile(userProfile);
+//
 
-			//UserPublicDto userPublicDto = userMapper.toUserPublicDto(userProfile);
-
-			//testing user service
-
-			System.out.println(userService.getAllUsersPublicInfo());
-
-			CreateAnyUserDto createAnyUserDto = new CreateAnyUserDto("user", "user", Set.of(1L, 2L),
-					"email", "+111", "user", "user");
-
-			System.out.println(userService.createSpecifiedUser(createAnyUserDto));
-
-			CreateCustomerUserDto createCustomerUserDto= new CreateCustomerUserDto("customer1", "customer1",
-					"customer1@email", "+111", "customer1", "customer1");
-
-			System.out.println(userService.createCustomerUser(createCustomerUserDto));
 		};
 	}
 }
