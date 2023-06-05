@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
   title: User API
   version: 1.0.0
@@ -6,7 +6,7 @@ paths:
   /users:
     get:
       summary: Get all users
-      operationId: getAllUsers
+      operationId: getAllUsersPublicInfo
       x-acess-permission: admin:read
       responses:
         '200':
@@ -16,34 +16,49 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/UserDto'
+                  $ref: '#/components/schemas/UserPublicDto'
     post:
-      summary: Create a new user
-      operationId: createUser
+      summary: Create a new user with specified roles
+      operationId: createSpecifiedUser
       x-acess-permission: admin:write
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateAndUpdateUserDto'
+              $ref: '#/components/schemas/CreateAnyUserDto'
       responses:
         '201':
           description: User created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDto'
-        '400':
-          description: Invalid input
-
-  /users/{id}:
+                $ref: '#/components/schemas/UserPublicDto'
+  /users/customer:
+    post:
+      summary: Create a new customer user
+      operationId: createCustomerUser
+      x-acess-permission:  user:write
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerUserDto'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPublicDto'
+  /users/{userId}:
     get:
-      summary: Get user by ID
-      operationId: getUserById
+      summary: Get a user by ID
+      operationId: getUserPublicInfoById
       x-acess-permission: admin:read
       parameters:
-        - name: id
+        - name: userId
           in: path
           required: true
           schema:
@@ -55,41 +70,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDto'
-        '404':
-          description: User not found
-    put:
-      summary: Update user
-      operationId: updateUser
-      x-acess-permission: admin:write
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateAndUpdateUserDto'
-      responses:
-        '200':
-          description: User updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDto'
+                $ref: '#/components/schemas/UserPublicDto'
         '404':
           description: User not found
     delete:
-      summary: Delete user
+      summary: Delete a user by ID
       operationId: deleteUser
       x-acess-permission: admin:write
       parameters:
-        - name: id
+        - name: userId
           in: path
           required: true
           schema:
@@ -100,15 +89,325 @@ paths:
           description: User deleted
         '404':
           description: User not found
+  /users/{userId}/username:
+    put:
+      summary: Update a user's username
+      operationId: updateUsername
+      x-acess-permission: user:write
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUsernameDto'
+      responses:
+        '200':
+          description: username updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPublicDto'
+  /users/{userId}/password:
+    put:
+      summary: Update a user's password
+      operationId: updatePassword
+      x-acess-permission: user:write
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswordDto'
+      responses:
+        '200':
+          description: password updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPublicDto'
+  /users/{userId}/email:
+    put:
+      summary: Update a user's email
+      operationId: updateEmail
+      x-acess-permission: user:write
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmailDto'
+      responses:
+        '200':
+          description: email updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPublicDto'
+  /users/{userId}/phone:
+    put:
+      summary: Update a user's phone
+      operationId: updatePhone
+      x-acess-permission: user:write
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePhoneDto'
+      responses:
+        '200':
+          description: phone number updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPublicDto'
+  /users/{userId}/address:
+    post:
+      summary: Add an address to a user
+      operationId: addAddress
+      x-acess-permission: user:write
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAndUpdateAddressDto'
+      responses:
+        '201':
+          description: address added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPublicDto'
+  /users/{userId}/address/{addressId}:
+    put:
+      summary: Update a user's address
+      operationId: updateAddress
+      x-acess-permission: user:write
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: addressId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAndUpdateAddressDto'
+      responses:
+        '200':
+          description: address updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPublicDto'
+    delete:
+      summary: Remove an address from a user
+      operationId: removeAddress
+      x-acess-permission: user:write
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: addressId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: address deleted
+        '404':
+          description: address not founf
+  /users/role/{role}:
+    get:
+      summary: Get users by role
+      operationId: getUsersByRole
+      x-acess-permission: admin:read
+      parameters:
+        - in: path
+          name: role
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Users wih role found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPublicDto'
+  /users/availability/email:
+    post:
+      summary: Check if email is available
+      operationId: checkEmailAvailability
+      x-acess-permission: admin:read
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmailDto'
+      responses:
+        '204':
+          description: checked for availability of email successfully
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '409':
+          description: email already taken
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /users/availability/username:
+    post:
+      summary: Check if username is available
+      operationId: checkUsernameAvailability
+      x-acess-permission: admin:read
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUsernameDto'
+      responses:
+        '204':
+          description: checked for availability of username successfully
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '409':
+          description: username already taken
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /users/{userId}/addresses/{addressId}:
+    get:
+      summary: Get a user's address by address id
+      operationId: getAddressById
+      x-acess-permission: user:read
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: path
+          name: addressId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: The address was found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressDto'
+  /users/{userId}/addresses:
+    get:
+      summary: Get all addresses of a user
+      operationId: getAllAddresses
+      x-acess-permission: user:read
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: All addresses were retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddressDto'
 components:
   schemas:
-    UserDto:
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.UserDto
+    CreateAnyUserDto:
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
+        username:
+          type: string
+        password:
+          type: string
+        roleIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        email:
+          type: string
+        phone:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+    CreateCustomerUserDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto
+      properties:
         username:
           type: string
         password:
@@ -117,15 +416,126 @@ components:
           type: string
         phone:
           type: string
-        imageUrl:
+        firstName:
+          type: string
+        lastName:
+          type: string
+    UpdateEmailDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto
+      properties:
+        email:
+          type: string
+    UpdateFullUserProfileDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdateFullUserProfileDto
+      properties:
+        email:
+          type: string
+        phone:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+    UpdatePasswordDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto
+      properties:
+        password:
+          type: string
+    UpdatePhoneDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto
+      properties:
+        phone:
+          type: string
+    UpdateRolesDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdateRolesDto
+      properties:
+        roleIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+    UpdateUsernameDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto
+      properties:
+        username:
+          type: string
+    AddAndUpdateAddressDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto
+      properties:
+        street:
+          type: string
+        houseNumber:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+    AddressDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.AddressDto
+      properties:
+        id:
+          type: integer
+          format: int64
+        street:
+          type: string
+        houseNumber:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+    UserProfileDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.UserProfileDto
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        phone:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+    UserPublicDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto
+      properties:
+        username:
           type: string
         roles:
           type: array
           items:
             $ref: '#/components/schemas/UserRoleDto'
+        email:
+          type: string
+        phone:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDto'
     UserRoleDto:
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto
       type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto
       properties:
         id:
           type: integer
@@ -137,45 +547,12 @@ components:
           items:
             $ref: '#/components/schemas/UserPermission'
     UserPermission:
-      x-java-type: ua.rivnegray.boardgames_shop.model.user.UserPermission
       type: string
+      x-java-type: ua.rivnegray.boardgames_shop.model.user.UserPermission
       enum:
         - user:read
         - user:write
         - admin:read
         - admin:write
 
-    CreateAndUpdateUserDto:
-      type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.CreateAndUpdateUserDto
-      properties:
-        username:
-          type: string
-          example: "myUsername"
-        password:
-          type: string
-          example: "myPassword"
-        email:
-          type: string
-          format: email
-          example: "email@example.com"
-        phone:
-          type: string
-          format: phone
-          example: "+11234567890"
-        imageUrl:
-          type: string
-          format: uri
-          example: "https://example.com/myImage.jpg"
-        roleIds:
-          type: array
-          items:
-            type: integer
-          example: [ 1, 2, 3 ]
-      required:
-        - username
-        - password
-        - email
-        - phone
-        - imageUrl
-        - roleIds
+

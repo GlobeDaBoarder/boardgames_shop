@@ -9,15 +9,15 @@ import java.util.stream.Collectors;
 
 public class SecurityUser implements UserDetails {
 
-    private final User user;
+    private final UserCredentials user;
 
-    public SecurityUser(User user) {
+    public SecurityUser(UserCredentials user) {
         this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.user.getRoles().stream().flatMap(userRole -> userRole.getPermissions().stream())
+        return this.user.getUserProfile().getRoles().stream().flatMap(userRole -> userRole.getPermissions().stream())
                 .collect(Collectors.toCollection(HashSet::new));
     }
 

@@ -1,0 +1,249 @@
+{
+	"info": {
+		"_postman_id": "44f97830-e7c5-4baf-a295-915c3fcc6828",
+		"name": "new_users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26438213"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8085/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all users",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8085/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"users"
+					]
+				},
+				"description": "get all"
+			},
+			"response": []
+		},
+		{
+			"name": "get user with id 1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8085/users/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create new admin user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"username\": \"admin2\",\r\n    \"password\": \"admin2\",\r\n    \"roleIds\": [ 1 ],\r\n    \"email\": \"@2\",\r\n    \"phone\": \"12\",\r\n    \"firstName\": \"Gleb2\",\r\n    \"lastName\": \"Ivashyn2\",\r\n    \"addresses\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create new customer user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"username\": \"customer2\",\r\n    \"password\": \"customer2\",\r\n    \"email\": \"@3\",\r\n    \"phone\": \"12\",\r\n    \"firstName\": \"Gleb2\",\r\n    \"lastName\": \"Ivashyn2\",\r\n    \"addresses\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/users/customer",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"users",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update field",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"newMail\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/users/4/email",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"users",
+						"4",
+						"email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add address",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"street\": \"Yermaka\",\r\n    \"houseNumber\" : \"20\",\r\n    \"postalCode\" : \"01106\",\r\n    \"city\" : \"Lviv\",\r\n    \"country\" : \"Ukraine\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/users/4/address",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"users",
+						"4",
+						"address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete address",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8085/users/4/address/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"users",
+						"4",
+						"address",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8085/users/4",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"users",
+						"4"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -6,26 +6,35 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
-import ua.rivnegray.boardgames_shop.model.User;
+import ua.rivnegray.boardgames_shop.model.UserCredentials;
 import ua.rivnegray.boardgames_shop.model.UserPermission;
+import ua.rivnegray.boardgames_shop.model.UserProfile;
 import ua.rivnegray.boardgames_shop.model.UserRole;
-import ua.rivnegray.boardgames_shop.repository.UserRepository;
+import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
+import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
+import ua.rivnegray.boardgames_shop.service.UserService;
+import ua.rivnegray.boardgames_shop.service.UserServiceImpl;
 
 import java.util.Set;
 
 @SpringBootApplication
 @ComponentScan({"ua.rivnegray.boardgames_shop", "generated"})
 public class BoardgamesShopApplication {
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(BoardgamesShopApplication.class, args);
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(UserRepository userRepository, UserRoleRepository roleRepository,
-											   PasswordEncoder encoder) {
+	public CommandLineRunner commandLineRunner( UserProfileRepository userProfileRepository, UserService userService,
+											   UserRoleRepository roleRepository, PasswordEncoder encoder,
+												UserMapper userMapper) {
 		return args -> {
 
 			UserRole roleAdmin = new UserRole("ROLE_ADMIN");
@@ -34,70 +43,42 @@ public class BoardgamesShopApplication {
 			roleAdmin.setPermissions(adminPermissions);
 			roleRepository.save(roleAdmin);
 
-			UserRole roleUser = new UserRole("ROLE_USER");
+			UserRole roleUser = new UserRole("ROLE_CUSTOMER");
 			Set<UserPermission> userPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE);
 			roleUser.setPermissions(userPermissions);
 			roleRepository.save(roleUser);
 
-
-			User admin = new User(
-					"admin",
-					encoder.encode("admin"),
-					"email",
-					"phone",
-					"url",
-					Set.of(roleAdmin)
-			);
-
-			userRepository.save(admin);
-
-			User user = new User(
-					"user",
-					encoder.encode("user"),
-					"email",
-					"phone",
-					"url",
-					Set.of(roleUser)
-			);
-
-			userRepository.save(user);
-
-
-//			HashMap
-
-//			roleRepository.save(userRole);
+//			UserCredentials userCredentials = new UserCredentials("admin", encoder.encode("admin"), Set.of(roleAdmin));
 //
-//			User user1 = new UserBuilder()
-//					.username("admin")
-//					.password(encoder.encode("admin"))
-//					.email("email")
-//					.phone("phone")
-//					.imageUrl("url")
-//					.permission(UserRole.instanceOf("ROLE_ADMIN"), UserPermission.USER_READ)
-//					.permission(UserRole.instanceOf("ROLE_ADMIN"), UserPermission.USER_WRITE)
-//					.permission(UserRole.instanceOf("ROLE_ADMIN"), UserPermission.ADMIN_READ)
-//					.permission(UserRole.instanceOf("ROLE_ADMIN"), UserPermission.ADMIN_WRITE)
-//					.build();
+//			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn");
+//			userProfile.setUserCredentials(userCredentials);
 //
-//			userRepository.save(user1);
-//
-//
-//			User user2
-//					= new UserBuilder()
-//					.username("user")
-//					.password(encoder.encode("user"))
-//					.email("email")
-//					.phone("phone")
-//					.imageUrl("url")
-//					.permission(userRole, UserPermission.USER_READ)
-//					.permission(userRole, UserPermission.USER_WRITE)
-//					.build();
-//
-//			userRepository.save(user2);
+//			userProfileRepository.save(userProfile);
+
+			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn", Set.of(roleAdmin, roleUser));
+			UserCredentials userCredentials = new UserCredentials("admin", encoder.encode("admin"));
+			userCredentials.setUserProfile(userProfile);
+			userProfile.setUserCredentials(userCredentials);
+
+//			userCredentialsRepository.save(userCredentials);
+			userProfileRepository.save(userProfile);
 
 
+			//UserPublicDto userPublicDto = userMapper.toUserPublicDto(userProfile);
 
+			//testing user service
 
+			System.out.println(userService.getAllUsersPublicInfo());
+
+			CreateAnyUserDto createAnyUserDto = new CreateAnyUserDto("user", "user", Set.of(1L, 2L),
+					"email", "+111", "user", "user");
+
+			System.out.println(userService.createSpecifiedUser(createAnyUserDto));
+
+			CreateCustomerUserDto createCustomerUserDto= new CreateCustomerUserDto("customer1", "customer1",
+					"customer1@email", "+111", "customer1", "customer1");
+
+			System.out.println(userService.createCustomerUser(createCustomerUserDto));
 		};
 	}
 }

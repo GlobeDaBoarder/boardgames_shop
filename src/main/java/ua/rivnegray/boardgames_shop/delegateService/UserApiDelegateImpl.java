@@ -1,17 +1,24 @@
 package ua.rivnegray.boardgames_shop.delegateService;
 
 import generated.user.api.UsersApiDelegate;
-
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ua.rivnegray.boardgames_shop.DTO.request.CreateAndUpdateUserDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserDto;
-import ua.rivnegray.boardgames_shop.mapper.UserMapper;
-import ua.rivnegray.boardgames_shop.model.User;
-import ua.rivnegray.boardgames_shop.service.UserRoleService;
+import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
+import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.model.Address;
 import ua.rivnegray.boardgames_shop.service.UserService;
 
 import java.net.URI;
@@ -21,62 +28,137 @@ import java.util.Optional;
 @Service
 @Primary
 public class UserApiDelegateImpl implements UsersApiDelegate {
-    UserService userService;
-    UserMapper userMapper;
 
-    UserRoleService roleService;
+    // todo change return types for update methods from void to DTOs
+    UserService userService;
 
     @Autowired
-    public UserApiDelegateImpl(UserService userService, UserMapper userMapper, UserRoleService roleService) {
+    public UserApiDelegateImpl(UserService userService) {
         this.userService = userService;
-        this.userMapper = userMapper;
-        this.roleService = roleService;
     }
 
-
     @Override
-    public ResponseEntity<UserDto> createUser(CreateAndUpdateUserDto createAndUpdateUserDto) {
-        User tempUser = this.userMapper.createAndUpdateUserDtoToUser(createAndUpdateUserDto, this.roleService);
-        User persistedUser = this.userService.createUser(tempUser);
-        UserDto persistedUserDto = this.userMapper.userToUserDto(persistedUser);
+    public Optional<NativeWebRequest> getRequest() {
+        return UsersApiDelegate.super.getRequest();
+    }
 
+    // todo change to userDto
+    @Override
+    public ResponseEntity<UserPublicDto> addAddress(Long userId, AddAndUpdateAddressDto addAndUpdateAddressDto) {
+        UserPublicDto userWithAddedAddress = this.userService.addAddress(userId, addAndUpdateAddressDto);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(persistedUserDto.id())
+                .buildAndExpand(userWithAddedAddress.id())
                 .toUri();
 
-
-        return ResponseEntity.created(location).body(persistedUserDto);
+        return ResponseEntity.created(location).body(userWithAddedAddress);
     }
 
     @Override
-    public ResponseEntity<Void> deleteUser(Long id) {
-        this.userService.deleteUser(id);
+    public ResponseEntity<UserPublicDto> createCustomerUser(CreateCustomerUserDto createCustomerUserDto) {
 
+        UserPublicDto createdUser = this.userService.createCustomerUser(createCustomerUserDto);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdUser.id())
+                .toUri();
+
+        return ResponseEntity.created(location).body(createdUser);
+    }
+
+    @Override
+    public ResponseEntity<UserPublicDto> createSpecifiedUser(CreateAnyUserDto createAnyUserDto) {
+        UserPublicDto createdUser = this.userService.createSpecifiedUser(createAnyUserDto);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdUser.id())
+                .toUri();
+
+        return ResponseEntity.created(location).body(createdUser);
+    }
+
+    // todo return UserDto instead of voi + new repository methods for it
+    @Override
+    public ResponseEntity<Void> deleteUser(Long userId) {
+        this.userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
 
     @Override
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        return ResponseEntity.ok(this.userService.getAllUsers()
-                .stream().map(userMapper::userToUserDto).toList());
+    public ResponseEntity<List<UserPublicDto>> getAllUsersPublicInfo() {
+        return ResponseEntity.ok(this.userService.getAllUsersPublicInfo());
     }
 
     @Override
-    public ResponseEntity<UserDto> getUserById(Long id) {
-        return this.userService.getUserById(id).map(user -> ResponseEntity.ok(this.userMapper.userToUserDto(user)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<UserPublicDto> getUserPublicInfoById(Long userId) {
+        return ResponseEntity.ok(this.userService.getUserPublicInfoById(userId));
     }
 
     @Override
-    public ResponseEntity<UserDto> updateUser(Long id, CreateAndUpdateUserDto createAndUpdateUserDto) {
-        User infoUserToUpdate = this.userMapper.createAndUpdateUserDtoToUser(createAndUpdateUserDto, this.roleService);
-        infoUserToUpdate.setId(id);
+    public ResponseEntity<Void> removeAddress(Long userId, Long addressId) {
+        this.userService.removeAddress(userId, addressId);
+        return ResponseEntity.noContent().build();
+    }
 
-        User updatedUser = this.userService.updateUser(infoUserToUpdate);
-        UserDto updatedUserDto = this.userMapper.userToUserDto(updatedUser);
-        return ResponseEntity.ok(updatedUserDto);
+    @Override
+    public ResponseEntity<UserPublicDto> updateAddress(Long userId, Long addressId,
+                                                       AddAndUpdateAddressDto addAndUpdateAddressDto) {
+        return ResponseEntity.ok(this.userService.updateAddress(userId, addressId, addAndUpdateAddressDto));
+    }
+
+    @Override
+    public ResponseEntity<UserPublicDto> updateEmail(Long userId, UpdateEmailDto updateEmailDto) {
+        return ResponseEntity.ok(this.userService.updateEmail(userId, updateEmailDto));
+    }
+
+    @Override
+    public ResponseEntity<UserPublicDto> updatePassword(Long userId, UpdatePasswordDto updatePasswordDto) {
+        return ResponseEntity.ok(this.userService.updatePassword(userId, updatePasswordDto));
+    }
+
+    @Override
+    public ResponseEntity<UserPublicDto> updatePhone(Long userId, UpdatePhoneDto updatePhoneDto) {
+        return ResponseEntity.ok(this.userService.updatePhone(userId, updatePhoneDto));
+    }
+
+    @Override
+    public ResponseEntity<UserPublicDto> updateUsername(Long userId, UpdateUsernameDto updateUsernameDto) {
+        return ResponseEntity.ok(this.userService.updateUsername(userId, updateUsernameDto));
+    }
+
+    @Override
+    public ResponseEntity<Boolean> checkEmailAvailability(UpdateEmailDto updateEmailDto) {
+        if (this.userService.isEmailAvailable(updateEmailDto)) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+        }
+    }
+
+    @Override
+    public ResponseEntity<Boolean> checkUsernameAvailability(UpdateUsernameDto updateUsernameDto) {
+        if (this.userService.isUsernameAvailable(updateUsernameDto)) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+        }
+    }
+
+    @Override
+    public ResponseEntity<AddressDto> getAddressById(Long userId, Long addressId) {
+        return ResponseEntity.ok(this.userService.getAddress(userId, addressId));
+    }
+
+    @Override
+    public ResponseEntity<List<AddressDto>> getAllAddresses(Long userId) {
+        return ResponseEntity.ok(this.userService.getAllAddresses(userId));
+    }
+
+    @Override
+    public ResponseEntity<List<UserPublicDto>> getUsersByRole(String role) {
+        return ResponseEntity.ok(this.userService.getUsersPublicInfoByRole(role));
     }
 }
