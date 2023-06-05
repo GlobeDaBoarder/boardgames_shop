@@ -216,6 +216,30 @@
 							</configOptions>
 						</configuration>
 					</execution>
+
+					<execution>
+						<id>generate-board-game-spring-controllers</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>src/main/resources/boardGame.yaml</inputSpec>
+
+							<importMappings>
+								<importMapping>BoardGameDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto</importMapping>
+								<importMapping>CreateBoardGameDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateBoardGameDto</importMapping>
+								<importMapping>BoardGameLanguage=ua.rivnegray.boardgames_shop.model.BoardGameLanguage</importMapping>
+								<importMapping>ProductCategory=ua.rivnegray.boardgames_shop.model.ProductCategory</importMapping>
+
+							</importMappings>
+
+							<configOptions>
+								<modelPackage>generated.board_game.model</modelPackage>
+								<apiPackage>generated.board_game.api</apiPackage>
+							</configOptions>
+						</configuration>
+					</execution>
 				</executions>
 
 			</plugin>

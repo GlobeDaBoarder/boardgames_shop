@@ -1,4 +1,4 @@
-src/main/java/generated/user/api/ApiUtil.java
-src/main/java/generated/user/api/UsersApi.java
-src/main/java/generated/user/api/UsersApiController.java
-src/main/java/generated/user/api/UsersApiDelegate.java
+src/main/java/generated/board_game/api/ApiUtil.java
+src/main/java/generated/board_game/api/BoardgamesApi.java
+src/main/java/generated/board_game/api/BoardgamesApiController.java
+src/main/java/generated/board_game/api/BoardgamesApiDelegate.java
