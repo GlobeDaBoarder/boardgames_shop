@@ -1,0 +1,190 @@
+openapi: 3.0.3
+info:
+  title: ShoppingCart API
+  version: 1.0.0
+paths:
+  /shoppingCart/{cartId}:
+    get:
+      summary: get shopping cart info
+      operationId: getShoppingCart
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Shopping cart details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCartDto'
+  /shoppingCart/{cartId}/products:
+    post:
+      summary: Adds a product to the shopping cart
+      operationId: addProductToShoppingCart
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddProductInShoppingCartDto'
+      responses:
+        '201':
+          description: Product added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCartDto'
+        '400':
+          description: Invalid product data
+
+    get:
+      summary: Get all products in the shopping cart
+      operationId: getProductsInShoppingCart
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Products in the shopping cart
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductInShoppingCartDto'
+        '400':
+          description: Invalid shopping cart ID
+
+  /shoppingCart/{cartId}/products/{productInCartId}:
+    delete:
+      summary: Remove a product from the shopping cart
+      operationId: removeProductFromShoppingCart
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: path
+          name: productInCartId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Product removed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCartDto'
+        '400':
+          description: Invalid product or shopping cart ID
+
+    patch:
+      summary: Update the quantity of a product in the shopping cart
+      operationId: updateQuantityOfProductInShoppingCart
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: path
+          name: productInCartId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateQuantityOfProductInShoppingCartDto'
+      responses:
+        '200':
+          description: Product quantity updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCartDto'
+        '400':
+          description: Invalid product data
+
+components:
+  schemas:
+    AddProductInShoppingCartDto:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int32
+      required:
+        - productId
+        - quantity
+
+    UpdateQuantityOfProductInShoppingCartDto:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+      required:
+        - quantity
+
+    ProductInShoppingCartDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        productId:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int32
+      required:
+        - id
+        - productId
+        - quantity
+
+    ShoppingCartDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        userProfileId:
+          type: integer
+          format: int64
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductInShoppingCartDto'
+      required:
+        - id
+        - userProfileId
+        - products
+

@@ -58,7 +58,8 @@ public class BoardgamesShopApplication {
 //
 //			userProfileRepository.save(userProfile);
 
-			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn", Set.of(roleAdmin, roleUser));
+			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn",
+					Set.of(roleAdmin, roleUser));
 			UserCredentials userCredentials = new UserCredentials("admin", encoder.encode("admin"));
 			userCredentials.setUserProfile(userProfile);
 			userProfile.setUserCredentials(userCredentials);

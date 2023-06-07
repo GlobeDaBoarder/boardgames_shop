@@ -1,4 +1,4 @@
-src/main/java/generated/board_game/api/ApiUtil.java
-src/main/java/generated/board_game/api/BoardgamesApi.java
-src/main/java/generated/board_game/api/BoardgamesApiController.java
-src/main/java/generated/board_game/api/BoardgamesApiDelegate.java
+src/main/java/generated/shopping_cart/api/ApiUtil.java
+src/main/java/generated/shopping_cart/api/ShoppingCartApi.java
+src/main/java/generated/shopping_cart/api/ShoppingCartApiController.java
+src/main/java/generated/shopping_cart/api/ShoppingCartApiDelegate.java
