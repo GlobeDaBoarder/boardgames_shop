@@ -264,6 +264,33 @@
 							</configOptions>
 						</configuration>
 					</execution>
+
+					<execution>
+						<id>generate-order-spring-controllers</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>src/main/resources/order.yaml</inputSpec>
+
+							<importMappings>
+								<importMapping>AddressDto=ua.rivnegray.boardgames_shop.DTO.response.AddressDto</importMapping>
+								<importMapping>AddAndUpdateAddressDto=ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto</importMapping>
+								<importMapping>OrderDto=ua.rivnegray.boardgames_shop.DTO.response.OrderDto</importMapping>
+								<importMapping>CreateOrderDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto</importMapping>
+								<importMapping>OrderStatus=ua.rivnegray.boardgames_shop.model.OrderStatus</importMapping>
+								<importMapping>PaymentStatus=ua.rivnegray.boardgames_shop.model.PaymentStatus</importMapping>
+								<importMapping>ProductInOrderDto=ua.rivnegray.boardgames_shop.DTO.response.ProductInOrderDto</importMapping>
+
+							</importMappings>
+
+							<configOptions>
+								<modelPackage>generated.order.model</modelPackage>
+								<apiPackage>generated.order.api</apiPackage>
+							</configOptions>
+						</configuration>
+					</execution>
 				</executions>
 
 			</plugin>

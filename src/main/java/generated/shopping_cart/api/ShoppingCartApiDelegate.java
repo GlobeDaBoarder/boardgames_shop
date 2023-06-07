@@ -19,7 +19,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link ShoppingCartApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-07T09:20:06.983253091+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-07T12:17:47.423190231+03:00[Europe/Kiev]")
 public interface ShoppingCartApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -37,6 +37,28 @@ public interface ShoppingCartApiDelegate {
      */
     default ResponseEntity<ShoppingCartDto> addProductToShoppingCart(Long cartId,
         AddProductInShoppingCartDto addProductInShoppingCartDto) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"userProfileId\" : 6, \"id\" : 0, \"products\" : [ { \"quantity\" : 5, \"productId\" : 5, \"id\" : 1 }, { \"quantity\" : 5, \"productId\" : 5, \"id\" : 1 } ] }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * DELETE /shoppingCart/{cartId} : Clear all items from the shopping cart
+     *
+     * @param cartId  (required)
+     * @return Shopping cart cleared successfully (status code 200)
+     *         or Invalid shopping cart ID (status code 400)
+     * @see ShoppingCartApi#clearShoppingCart
+     */
+    default ResponseEntity<ShoppingCartDto> clearShoppingCart(Long cartId) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

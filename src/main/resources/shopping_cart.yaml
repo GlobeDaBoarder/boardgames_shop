@@ -21,6 +21,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ShoppingCartDto'
+    delete:
+      summary: Clear all items from the shopping cart
+      operationId: clearShoppingCart
+      parameters:
+        - in : path
+          name: cartId
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Shopping cart cleared successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCartDto'
+        '400':
+          description: Invalid shopping cart ID
+
   /shoppingCart/{cartId}/products:
     post:
       summary: Adds a product to the shopping cart

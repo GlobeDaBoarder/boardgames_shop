@@ -33,7 +33,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-07T09:20:06.983253091+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-07T12:17:47.423190231+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "shoppingCart", description = "the shoppingCart API")
     public interface ShoppingCartApi {
@@ -72,6 +72,36 @@ import org.springframework.security.access.prepost.PreAuthorize;
         @Parameter(name = "AddProductInShoppingCartDto", description = "", required = true) @Valid @RequestBody AddProductInShoppingCartDto addProductInShoppingCartDto
             ) {
             return getDelegate().addProductToShoppingCart(cartId, addProductInShoppingCartDto);
+            }
+
+
+            /**
+            * DELETE /shoppingCart/{cartId} : Clear all items from the shopping cart
+            *
+                * @param cartId  (required)
+            * @return Shopping cart cleared successfully (status code 200)
+                *         or Invalid shopping cart ID (status code 400)
+            */
+                @Operation(
+                operationId = "clearShoppingCart",
+                    summary = "Clear all items from the shopping cart",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "Shopping cart cleared successfully", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = ShoppingCartDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Invalid shopping cart ID")
+                }
+                )
+            @PreAuthorize("hasAuthority('')")
+            @RequestMapping(
+            method = RequestMethod.DELETE,
+            value = "/shoppingCart/{cartId}",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<ShoppingCartDto> clearShoppingCart(
+        @Parameter(name = "cartId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("cartId") Long cartId
+            ) {
+            return getDelegate().clearShoppingCart(cartId);
             }
 
 

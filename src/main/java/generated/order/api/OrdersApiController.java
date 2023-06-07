@@ -1,9 +1,8 @@
-package generated.shopping_cart.api;
+package generated.order.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.create.AddProductInShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
+import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
+import ua.rivnegray.boardgames_shop.model.OrderStatus;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +27,19 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-07T12:17:47.423190231+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-07T12:17:47.520474535+03:00[Europe/Kiev]")
 @Controller
-@RequestMapping("${openapi.shoppingCart.base-path:}")
-public class ShoppingCartApiController implements ShoppingCartApi {
+@RequestMapping("${openapi.order.base-path:}")
+public class OrdersApiController implements OrdersApi {
 
-    private final ShoppingCartApiDelegate delegate;
+    private final OrdersApiDelegate delegate;
 
-    public ShoppingCartApiController(@Autowired(required = false) ShoppingCartApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new ShoppingCartApiDelegate() {});
+    public OrdersApiController(@Autowired(required = false) OrdersApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new OrdersApiDelegate() {});
     }
 
     @Override
-    public ShoppingCartApiDelegate getDelegate() {
+    public OrdersApiDelegate getDelegate() {
         return delegate;
     }
 
