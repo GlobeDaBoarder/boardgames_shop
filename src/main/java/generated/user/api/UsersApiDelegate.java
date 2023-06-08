@@ -24,7 +24,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link UsersApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-07T12:17:46.873146611+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-08T10:33:36.893231560+03:00[Europe/Kiev]")
 public interface UsersApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
