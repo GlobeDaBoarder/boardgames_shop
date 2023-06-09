@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/api/posts/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         // /shop/** permit all -- all shop logic
                         // /club/** permit all -- all club logic
                         .anyRequest().authenticated()

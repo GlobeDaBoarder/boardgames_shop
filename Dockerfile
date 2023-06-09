@@ -3,26 +3,46 @@
 ## MySql + front end all running in the same container
 ## We expect one command to run everything
 #
-# one tomcat instance should run both backend and fromnt
-#
-# Use the base Alpine image with MariaDB
-FROM ubuntu-core:latest
-RUN apk update && \
-    apk add --no-cache mariadb mariadb-client
+# Start from Ubuntu
+FROM ubuntu:latest
 
-COPY my.cnf /etc/mysql/my.cnf
+# Update apt
+RUN apt-get update
 
-ENV MYSQL_ROOT_PASSWORD=root
+# Install MySQL
+RUN echo "mysql-server mysql-server/root_password password root" | debconf-set-selections
+RUN echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server
 
-RUN mkdir /docker-entrypoint-initdb.d
+# Install OpenJDK 17 JRE
+RUN apt-get install -y openjdk-17-jre
 
-COPY docker-entrypoint.sh /usr/local/bin/
+# Set JAVA_HOME environment variable
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64/
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# Make JAVA_HOME available to other processes
+RUN echo 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/' >> ~/.bashrc
 
-EXPOSE 3306
+# Install Tomcat
+RUN apt-get install -y tomcat9 tomcat9-admin
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+# Create a symbolic link for Tomcat's configuration files
+RUN ln -s /etc/tomcat9 /usr/share/tomcat9/conf
 
-CMD ["mysqld"]
+
+# Expose the MySQL and Tomcat ports
+EXPOSE 3306 8080
+
+# Copy the startup script into the image and set permissions
+COPY start-mysql.sh /start-mysql.sh
+RUN chmod 0755 /start-mysql.sh
+
+# Start MySQL and Tomcat when the container starts
+CMD ["/bin/bash", "/start-mysql.sh"]
+
+
+
+
+
+
 
