@@ -1,7 +1,6 @@
 package ua.rivnegray.boardgames_shop.delegateService;
 
 import generated.user.api.UsersApiDelegate;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
-import ua.rivnegray.boardgames_shop.model.Address;
 import ua.rivnegray.boardgames_shop.service.UserService;
 
 import java.net.URI;
@@ -42,7 +40,6 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
         return UsersApiDelegate.super.getRequest();
     }
 
-    // todo change to userDto
     @Override
     public ResponseEntity<UserPublicDto> addAddress(Long userId, AddAndUpdateAddressDto addAndUpdateAddressDto) {
         UserPublicDto userWithAddedAddress = this.userService.addAddress(userId, addAndUpdateAddressDto);

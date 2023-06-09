@@ -17,3 +17,12 @@ server:
   port: 8085
 
 
+  # todo profiles for dev, prod
+  # todo user startup script SQL to populate database
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/docs
+  swagger-ui:
+    path: /api/ui
+

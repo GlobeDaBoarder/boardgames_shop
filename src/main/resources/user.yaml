@@ -1,4 +1,5 @@
-openapi: 3.0.0
+# todo separate address api from user api
+openapi: 3.0.3
 info:
   title: User API
   version: 1.0.0
@@ -554,5 +555,3 @@ components:
         - user:write
         - admin:read
         - admin:write
-
-
