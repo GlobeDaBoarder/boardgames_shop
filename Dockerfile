@@ -29,6 +29,8 @@ RUN apt-get install -y tomcat9 tomcat9-admin
 # Create a symbolic link for Tomcat's configuration files
 RUN ln -s /etc/tomcat9 /usr/share/tomcat9/conf
 
+# Copy the WAR file into the Tomcat webapps directory
+COPY ./target/boardgames_shop-0.0.1-SNAPSHOT.war /var/lib/tomcat9/webapps/app.war
 
 # Expose the MySQL and Tomcat ports
 EXPOSE 3306 8080
