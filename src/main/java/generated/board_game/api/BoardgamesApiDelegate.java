@@ -17,7 +17,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link BoardgamesApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-12T09:25:16.324632494+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-12T18:44:16.955811159+03:00[Europe/Kiev]")
 public interface BoardgamesApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
