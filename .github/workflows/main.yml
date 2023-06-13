@@ -24,7 +24,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile-app
+          file: ./dockerfile-app
           push: true
           tags: ${{ secrets.ACR_LOGIN_SERVER }}/app:latest
 
