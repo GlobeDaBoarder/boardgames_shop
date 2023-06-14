@@ -13,7 +13,7 @@ services:
       - app-network
 
   app:
-    image: app:latest
+    image: rivnegraycontainers.azurecr.io/app:latest
     build:
       context: .
       dockerfile: Dockerfile-app
