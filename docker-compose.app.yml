@@ -16,7 +16,7 @@ services:
     image: rivnegraycontainers.azurecr.io/app:latest
     build:
       context: .
-      dockerfile: Dockerfile-app
+      dockerfile: dockerfile-app
     ports:
       - "8080:8080"
     networks:
