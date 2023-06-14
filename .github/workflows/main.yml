@@ -32,11 +32,11 @@ jobs:
       - name: Deploy to Azure Container Instances
         uses: azure/aci-deploy@v1
         with:
-          resource_group: containers
+          resource-group: containers
           name: rivnegraycontainers
           image: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/app:latest
-          registry_login_server: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}
-          registry_username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
-          registry_password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+          registry-login-server: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}
+          registry-username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+          registry-password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
           location: northeurope
-          credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
