@@ -34,7 +34,25 @@ jobs:
           push: true
           tags: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/app:latest
 
-      - name: Deploy to Azure Container Instances
+
+# todo - deploy db to ACI
+#      - name: Deploy MySQL to Azure Container Instances
+#        uses: azure/aci-deploy@v1
+#        with:
+#          resource-group: containers
+#          name: rivnegraydb
+#          image: mysql:8.0.33-debian
+#          environment-variables:
+#            MYSQL_ROOT_PASSWORD=root
+#            MYSQL_DATABASE=shop
+#          secure-environment-variables: MYSQL_ROOT_PASSWORD
+#          ports: 3306
+#          dns-name-label: rivnegraydb
+#          location: northeurope
+##          credentials: ${{ secrets.AZURE_CREDENTIALS }}
+
+
+      - name: Deploy App to Azure Container Instances
         uses: azure/aci-deploy@v1
         with:
           resource-group: containers
