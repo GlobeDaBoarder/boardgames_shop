@@ -14,6 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Login to ACR
         uses: docker/login-action@v1
         with:
@@ -39,4 +44,3 @@ jobs:
           registry-username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
           registry-password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
           location: northeurope
-          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
