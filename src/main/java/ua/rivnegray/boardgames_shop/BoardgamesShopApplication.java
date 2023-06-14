@@ -40,32 +40,32 @@ public class BoardgamesShopApplication {
 												UserMapper userMapper) {
 		return args -> {
 
-			UserRole roleAdmin = new UserRole("ROLE_ADMIN");
-			Set<UserPermission> adminPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE,
-					UserPermission.ADMIN_READ, UserPermission.ADMIN_WRITE);
-			roleAdmin.setPermissions(adminPermissions);
-			roleRepository.save(roleAdmin);
-
-			UserRole roleUser = new UserRole("ROLE_CUSTOMER");
-			Set<UserPermission> userPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE);
-			roleUser.setPermissions(userPermissions);
-			roleRepository.save(roleUser);
-
-//			UserCredentials userCredentials = new UserCredentials("admin", encoder.encode("admin"), Set.of(roleAdmin));
+//			UserRole roleAdmin = new UserRole("ROLE_ADMIN");
+//			Set<UserPermission> adminPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE,
+//					UserPermission.ADMIN_READ, UserPermission.ADMIN_WRITE);
+//			roleAdmin.setPermissions(adminPermissions);
+//			roleRepository.save(roleAdmin);
 //
-//			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn");
+//			UserRole roleUser = new UserRole("ROLE_CUSTOMER");
+//			Set<UserPermission> userPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE);
+//			roleUser.setPermissions(userPermissions);
+//			roleRepository.save(roleUser);
+//
+////			UserCredentials userCredentials = new UserCredentials("admin", encoder.encode("admin"), Set.of(roleAdmin));
+////
+////			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn");
+////			userProfile.setUserCredentials(userCredentials);
+////
+////			userProfileRepository.save(userProfile);
+//
+//			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn",
+//					Set.of(roleAdmin, roleUser));
+//			UserCredentials userCredentials = new UserCredentials("admin", encoder.encode("admin"));
+//			userCredentials.setUserProfile(userProfile);
 //			userProfile.setUserCredentials(userCredentials);
 //
+////			userCredentialsRepository.save(userCredentials);
 //			userProfileRepository.save(userProfile);
-
-			UserProfile userProfile = new UserProfile("@", "1", "Gleb", "Ivashyn",
-					Set.of(roleAdmin, roleUser));
-			UserCredentials userCredentials = new UserCredentials("admin", encoder.encode("admin"));
-			userCredentials.setUserProfile(userProfile);
-			userProfile.setUserCredentials(userCredentials);
-
-//			userCredentialsRepository.save(userCredentials);
-			userProfileRepository.save(userProfile);
 
 //
 //			Product game1 = new BoardGame(

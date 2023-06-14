@@ -1,0 +1,32 @@
+version: '3'
+services:
+  db:
+    image: mysql:8.0.33-debian
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: shop
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - app-network
+
+  app:
+    image: app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-app
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    environment:
+      WAIT_HOSTS: db:3306
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
