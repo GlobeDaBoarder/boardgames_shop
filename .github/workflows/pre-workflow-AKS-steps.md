@@ -83,3 +83,10 @@ cd  ~/Projects/boardgames_shop
 kompose convert -f docker-compose.app.yml -o ./k8s/
 ```
 
+### 6. attach an Azure Container Registry (ACR) to an Azure Kubernetes Service (AKS) cluster
+
+```bash
+az aks update -n rivnegray-AKS -g rivnegray-AKS-resource-group --attach-acr rivne
+graycontainers
+```
+
