@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  creationTimestamp: null
+  name: boardgames-shop-app-network
+spec:
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              io.kompose.network/boardgames-shop-app-network: "true"
+  podSelector:
+    matchLabels:
+      io.kompose.network/boardgames-shop-app-network: "true"
