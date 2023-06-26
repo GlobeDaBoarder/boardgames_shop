@@ -40,6 +40,8 @@ public class BoardgamesShopApplication {
 												UserMapper userMapper) {
 		return args -> {
 
+			System.out.println("Hello world");
+
 			UserRole roleAdmin = new UserRole("ROLE_ADMIN");
 			Set<UserPermission> adminPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE,
 					UserPermission.ADMIN_READ, UserPermission.ADMIN_WRITE);
