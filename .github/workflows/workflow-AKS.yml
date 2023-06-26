@@ -58,4 +58,9 @@ jobs:
         uses: azure/k8s-deploy@v1
         with:
           manifests: |
-            ./k8s/
+            ./k8s/app-deployment.yaml
+            ./k8s/app-service.yaml
+            ./k8s/boardgames-shop-app-network.yaml
+            ./k8s/db-data-persistentvolumeclaim.yaml
+            ./k8s/db-deployment.yaml
+            ./k8s/db-service.yaml
