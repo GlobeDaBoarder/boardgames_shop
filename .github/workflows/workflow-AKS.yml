@@ -51,6 +51,9 @@ jobs:
       - name: Install and set up kubectl
         uses: azure/setup-kubectl@v1
 
+      - name: List files in k8s directory
+        run: ls -R ./k8s
+
       - name: Deploy to Kubernetes
         uses: azure/k8s-deploy@v1
         with:
