@@ -19,7 +19,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link ShoppingCartApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-13T10:49:05.541140880+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-14T12:33:23.991414759+03:00[Europe/Kiev]")
 public interface ShoppingCartApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
