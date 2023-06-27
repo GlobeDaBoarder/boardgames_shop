@@ -90,3 +90,21 @@ az aks update -n rivnegray-AKS -g rivnegray-AKS-resource-group --attach-acr rivn
 graycontainers
 ```
 
+### 7. make a commit to master branch to trigger the buidl or do the build mannually\
+
+This sjould start the build and deploy app to AKS 
+
+#### Some other things that might be useful:\
+
+- to see pods:
+```bash
+ kubectl get pods
+```
+
+- to see logs of a pod:
+```bash
+kubectl logs <pod-name>
+```
+
+
+
