@@ -26,6 +26,8 @@ spec:
     spec:
       containers:
         - env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev-remote-AKS
             - name: WAIT_HOSTS
               value: db:3306
           image: rivnegraycontainers.azurecr.io/app:latest
