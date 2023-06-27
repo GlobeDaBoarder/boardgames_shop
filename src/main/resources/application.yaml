@@ -7,11 +7,11 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
   sql:
     init:
       mode: always
-#      schema-locations: data/init_database.sql
+      data-locations: static/startup.sql
 
 server:
   port: 8080
