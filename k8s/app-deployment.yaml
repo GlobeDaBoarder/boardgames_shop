@@ -32,6 +32,7 @@ spec:
               value: db:3306
           image: rivnegraycontainers.azurecr.io/app:latest
           name: app
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           resources: {}
