@@ -13,7 +13,8 @@ services:
       - app-network
 
   app:
-    image: rivnegraycontainers.azurecr.io/app:latest
+#    image: rivnegraycontainers.azurecr.io/app:latest
+#    image: app:latest
     build:
       context: .
       dockerfile: dockerfile-app
@@ -23,6 +24,7 @@ services:
       - app-network
     environment:
       WAIT_HOSTS: db:3306
+      SPRING_PROFILES_ACTIVE: dev-local-dockerfile
 
 networks:
   app-network:

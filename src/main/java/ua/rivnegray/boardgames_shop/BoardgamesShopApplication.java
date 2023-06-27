@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
@@ -23,6 +24,7 @@ import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 import ua.rivnegray.boardgames_shop.service.UserService;
 import ua.rivnegray.boardgames_shop.service.UserServiceImpl;
 
+import java.util.Arrays;
 import java.util.Set;
 
 @SpringBootApplication
@@ -35,12 +37,11 @@ public class BoardgamesShopApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner( UserProfileRepository userProfileRepository, UserService userService,
-											   UserRoleRepository roleRepository, PasswordEncoder encoder,
-												UserMapper userMapper) {
+	public CommandLineRunner commandLineRunner( UserProfileRepository userProfileRepository, Environment environment,
+											   UserRoleRepository roleRepository, PasswordEncoder encoder) {
 		return args -> {
 
-			System.out.println("Hello world");
+			System.out.println("Active profile: " + Arrays.toString(environment.getActiveProfiles()));
 
 			UserRole roleAdmin = new UserRole("ROLE_ADMIN");
 			Set<UserPermission> adminPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE,
