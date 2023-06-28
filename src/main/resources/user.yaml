@@ -91,7 +91,7 @@ paths:
         '404':
           description: User not found
   /users/{userId}/username:
-    put:
+    patch:
       summary: Update a user's username
       operationId: updateUsername
       x-acess-permission: user:write
@@ -116,7 +116,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserPublicDto'
   /users/{userId}/password:
-    put:
+    patch:
       summary: Update a user's password
       operationId: updatePassword
       x-acess-permission: user:write
@@ -141,7 +141,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserPublicDto'
   /users/{userId}/email:
-    put:
+    patch:
       summary: Update a user's email
       operationId: updateEmail
       x-acess-permission: user:write
@@ -166,7 +166,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserPublicDto'
   /users/{userId}/phone:
-    put:
+    patch:
       summary: Update a user's phone
       operationId: updatePhone
       x-acess-permission: user:write
@@ -216,7 +216,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserPublicDto'
   /users/{userId}/address/{addressId}:
-    put:
+    patch:
       summary: Update a user's address
       operationId: updateAddress
       x-acess-permission: user:write
