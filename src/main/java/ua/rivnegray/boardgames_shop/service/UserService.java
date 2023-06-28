@@ -11,7 +11,9 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
 import ua.rivnegray.boardgames_shop.model.Address;
+import ua.rivnegray.boardgames_shop.model.UserRole;
 
 import java.util.List;
 import java.util.Optional;
@@ -68,4 +70,7 @@ public interface UserService {
 
     @Transactional
     void deleteUser(Long id);
+
+    @Transactional
+    List<UserRoleDto> getAllUserRoles();
 }

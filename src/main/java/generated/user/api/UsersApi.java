@@ -14,6 +14,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
     import io.swagger.v3.oas.annotations.ExternalDocumentation;
     import io.swagger.v3.oas.annotations.Operation;
     import io.swagger.v3.oas.annotations.Parameter;
@@ -38,7 +39,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-27T14:20:14.312854149+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-28T15:17:57.692997067+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "users", description = "the users API")
     public interface UsersApi {
@@ -234,13 +235,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
             *
                 * @param userId  (required)
                 * @param addressId  (required)
-            * @return The address was found (status code 204)
+            * @return The address was found (status code 200)
             */
                 @Operation(
                 operationId = "getAddressById",
                     summary = "Get a user's address by address id",
                 responses = {
-                    @ApiResponse(responseCode = "204", description = "The address was found", content = {
+                    @ApiResponse(responseCode = "200", description = "The address was found", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDto.class))
                     })
                 }
@@ -263,13 +264,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
             * GET /users/{userId}/addresses : Get all addresses of a user
             *
                 * @param userId  (required)
-            * @return All addresses were retrieved successfully (status code 204)
+            * @return All addresses were retrieved successfully (status code 200)
             */
                 @Operation(
                 operationId = "getAllAddresses",
                     summary = "Get all addresses of a user",
                 responses = {
-                    @ApiResponse(responseCode = "204", description = "All addresses were retrieved successfully", content = {
+                    @ApiResponse(responseCode = "200", description = "All addresses were retrieved successfully", content = {
                         @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AddressDto.class)))
                     })
                 }
@@ -284,6 +285,33 @@ import org.springframework.security.access.prepost.PreAuthorize;
         @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId
             ) {
             return getDelegate().getAllAddresses(userId);
+            }
+
+
+            /**
+            * GET /users/roles : Get all user roles
+            *
+            * @return successful operation (status code 200)
+            */
+                @Operation(
+                operationId = "getAllUserRoles",
+                    summary = "Get all user roles",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "successful operation", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserRoleDto.class)))
+                    })
+                }
+                )
+            @PreAuthorize("hasAuthority('admin:read')")
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/users/roles",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<List<UserRoleDto>> getAllUserRoles(
+        
+            ) {
+            return getDelegate().getAllUserRoles();
             }
 
 
@@ -402,7 +430,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * PUT /users/{userId}/address/{addressId} : Update a user&#39;s address
+            * PATCH /users/{userId}/address/{addressId} : Update a user&#39;s address
             *
                 * @param userId  (required)
                 * @param addressId  (required)
@@ -420,7 +448,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 )
             @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
-            method = RequestMethod.PUT,
+            method = RequestMethod.PATCH,
             value = "/users/{userId}/address/{addressId}",
             produces = { "application/json" },
             consumes = { "application/json" }
@@ -435,7 +463,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * PUT /users/{userId}/email : Update a user&#39;s email
+            * PATCH /users/{userId}/email : Update a user&#39;s email
             *
                 * @param userId  (required)
                 * @param updateEmailDto  (required)
@@ -452,7 +480,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 )
             @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
-            method = RequestMethod.PUT,
+            method = RequestMethod.PATCH,
             value = "/users/{userId}/email",
             produces = { "application/json" },
             consumes = { "application/json" }
@@ -466,7 +494,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * PUT /users/{userId}/password : Update a user&#39;s password
+            * PATCH /users/{userId}/password : Update a user&#39;s password
             *
                 * @param userId  (required)
                 * @param updatePasswordDto  (required)
@@ -483,7 +511,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 )
             @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
-            method = RequestMethod.PUT,
+            method = RequestMethod.PATCH,
             value = "/users/{userId}/password",
             produces = { "application/json" },
             consumes = { "application/json" }
@@ -497,7 +525,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * PUT /users/{userId}/phone : Update a user&#39;s phone
+            * PATCH /users/{userId}/phone : Update a user&#39;s phone
             *
                 * @param userId  (required)
                 * @param updatePhoneDto  (required)
@@ -514,7 +542,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 )
             @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
-            method = RequestMethod.PUT,
+            method = RequestMethod.PATCH,
             value = "/users/{userId}/phone",
             produces = { "application/json" },
             consumes = { "application/json" }
@@ -528,7 +556,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * PUT /users/{userId}/username : Update a user&#39;s username
+            * PATCH /users/{userId}/username : Update a user&#39;s username
             *
                 * @param userId  (required)
                 * @param updateUsernameDto  (required)
@@ -545,7 +573,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 )
             @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
-            method = RequestMethod.PUT,
+            method = RequestMethod.PATCH,
             value = "/users/{userId}/username",
             produces = { "application/json" },
             consumes = { "application/json" }

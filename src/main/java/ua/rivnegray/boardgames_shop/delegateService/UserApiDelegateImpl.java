@@ -17,6 +17,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
 import ua.rivnegray.boardgames_shop.service.UserService;
 
 import java.net.URI;
@@ -157,5 +158,10 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     @Override
     public ResponseEntity<List<UserPublicDto>> getUsersByRole(String role) {
         return ResponseEntity.ok(this.userService.getUsersPublicInfoByRole(role));
+    }
+
+    @Override
+    public ResponseEntity<List<UserRoleDto>> getAllUserRoles() {
+        return ResponseEntity.ok(this.userService.getAllUserRoles());
     }
 }

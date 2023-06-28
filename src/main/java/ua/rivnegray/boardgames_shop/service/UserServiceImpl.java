@@ -13,6 +13,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
 import ua.rivnegray.boardgames_shop.exceptions.AddressIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.UserIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
@@ -177,6 +178,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public List<UserRoleDto> getAllUserRoles() {
+        return this.userRoleRepository.findAll().stream()
+                .map(userRole -> this.userMapper.toUserRoleDto(userRole))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
     public List<UserPublicDto> getUsersPublicInfoByRole(String role) {
         return this.userProfileRepository.findByRoles_RoleName(role).stream()
                 .map(userProfile -> this.userMapper.toUserPublicDto(userProfile))
@@ -208,4 +216,6 @@ public class UserServiceImpl implements UserService{
                 .map(address -> this.userMapper.toAddressDto(address))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
+
+
 }
