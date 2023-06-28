@@ -7,6 +7,7 @@ paths:
     get:
       summary: get shopping cart info
       operationId: getShoppingCart
+      x-access-permission: user:read
       parameters:
         - in: path
           name: cartId
@@ -24,6 +25,7 @@ paths:
     delete:
       summary: Clear all items from the shopping cart
       operationId: clearShoppingCart
+      x-access-permission: user:write
       parameters:
         - in : path
           name: cartId
@@ -45,6 +47,7 @@ paths:
     post:
       summary: Adds a product to the shopping cart
       operationId: addProductToShoppingCart
+      x-access-permission: user:write
       parameters:
         - in: path
           name: cartId
@@ -71,6 +74,7 @@ paths:
     get:
       summary: Get all products in the shopping cart
       operationId: getProductsInShoppingCart
+      x-access-permission: user:read
       parameters:
         - in: path
           name: cartId
@@ -94,6 +98,7 @@ paths:
     delete:
       summary: Remove a product from the shopping cart
       operationId: removeProductFromShoppingCart
+      x-access-permission: user:write
       parameters:
         - in: path
           name: cartId
@@ -120,6 +125,7 @@ paths:
     patch:
       summary: Update the quantity of a product in the shopping cart
       operationId: updateQuantityOfProductInShoppingCart
+      x-access-permission: user:write
       parameters:
         - in: path
           name: cartId

@@ -7,6 +7,7 @@ paths:
     get:
       summary: Get all boardgames
       operationId: getAllBoardGames
+      x-acess-permission: user:read
       responses:
         '200':
           description: OK
@@ -19,6 +20,7 @@ paths:
     post:
       summary: Add a new boardgame
       operationId: addBoardGame
+      x-acess-permission: admin:write
       requestBody:
         description: Boardgame to add
         required: true
@@ -39,6 +41,7 @@ paths:
     get:
       summary: Get a boardgame by id
       operationId: getBoardGameById
+      x-acess-permission: user:read
       parameters:
         - name: id
           in: path
@@ -58,6 +61,7 @@ paths:
     put:
       summary: Update a boardgame
       operationId: updateBoardGame
+      x-acess-permission: admin:write
       parameters:
         - name: id
           in: path
@@ -84,6 +88,7 @@ paths:
     delete:
       summary: Delete a boardgame
       operationId: deleteBoardGame
+      x-acess-permission: admin:write
       parameters:
         - name: id
           in: path

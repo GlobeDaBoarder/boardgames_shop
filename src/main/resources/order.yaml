@@ -7,6 +7,7 @@ paths:
     post:
       summary: Creates a new order
       operationId: createOrder
+      x-access-permission: user:write
       requestBody:
         required: true
         content:
@@ -38,6 +39,7 @@ paths:
     get:
       summary: Retrieves information about a specific order
       operationId: getOrderById
+      x-access-permission: user:read
       parameters:
         - in: path
           name: orderId
@@ -57,6 +59,7 @@ paths:
     patch:
       summary: Updates the status of an order
       operationId: updateOrderStatus
+      x-access-permission: admin:write
       parameters:
         - in: path
           name: orderId
@@ -84,6 +87,7 @@ paths:
     delete:
       summary: Cancels an order
       operationId: cancelOrder
+      x-access-permission: user:write
       parameters:
         - in: path
           name: orderId
