@@ -51,12 +51,6 @@ jobs:
       - name: Install and set up kubectl
         uses: azure/setup-kubectl@v1
 
-      - name: List files in k8s directory
-        run: ls -R ./k8s
-
-      - name: check for context
-        run: kubectl config current-context
-
       - name: Replace image references
         run: |
           sed -i 's/${TAG}/${{ github.sha }}/g' ./k8s/app-deployment.yaml
