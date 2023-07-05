@@ -32,7 +32,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-28T18:12:38.905750615+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-04T22:58:53.826195729+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "orders", description = "the orders API")
     public interface OrdersApi {
@@ -62,7 +62,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             value = "/orders/{orderId}"
             )
         default ResponseEntity<Void> cancelOrder(
-        @Parameter(name = "orderId", description = "The ID of the order", required = true, in = ParameterIn.PATH) @PathVariable("orderId") String orderId
+        @Parameter(name = "orderId", description = "The ID of the order", required = true, in = ParameterIn.PATH) @PathVariable("orderId") Long orderId
             ) {
             return getDelegate().cancelOrder(orderId);
             }
@@ -150,7 +150,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             produces = { "application/json" }
             )
         default ResponseEntity<OrderDto> getOrderById(
-        @Parameter(name = "orderId", description = "The ID of the order", required = true, in = ParameterIn.PATH) @PathVariable("orderId") String orderId
+        @Parameter(name = "orderId", description = "The ID of the order", required = true, in = ParameterIn.PATH) @PathVariable("orderId") Long orderId
             ) {
             return getDelegate().getOrderById(orderId);
             }
@@ -184,7 +184,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             consumes = { "application/json" }
             )
         default ResponseEntity<OrderDto> updateOrderStatus(
-        @Parameter(name = "orderId", description = "The ID of the order", required = true, in = ParameterIn.PATH) @PathVariable("orderId") String orderId,
+        @Parameter(name = "orderId", description = "The ID of the order", required = true, in = ParameterIn.PATH) @PathVariable("orderId") Long orderId,
         @Parameter(name = "OrderStatus", description = "", required = true) @Valid @RequestBody OrderStatus orderStatus
             ) {
             return getDelegate().updateOrderStatus(orderId, orderStatus);

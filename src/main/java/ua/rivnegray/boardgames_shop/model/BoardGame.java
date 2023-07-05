@@ -1,5 +1,6 @@
 package ua.rivnegray.boardgames_shop.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
@@ -23,8 +25,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class BoardGame extends Product {
 
-    public BoardGame(String Manufacturer, String productName, String productDescription, BigDecimal productPrice, Integer productQuantityInStock, String productImageURL, ProductCategory productCategory, String productCode, String gameSet, Set<BoardGameGenre> gameGenres, Set<BoardGameMechanic> gameMechanics, Integer minAge, Integer minPlayers, String gameDuration, BoardGameLanguage gameLanguage, String BGGLink) {
-        super(Manufacturer, productName, productDescription, productPrice, productQuantityInStock, productImageURL, productCategory);
+    @Builder
+    public BoardGame(String manufacturer, String productName, String productDescription, BigDecimal productPrice, Integer productQuantityInStock, String productImageURL, ProductCategory productCategory, String productCode, String gameSet, Set<BoardGameGenre> gameGenres, Set<BoardGameMechanic> gameMechanics, Integer minAge, Integer minPlayers, String gameDuration, BoardGameLanguage gameLanguage, String BGGLink) {
+        super(manufacturer, productName, productDescription, productPrice, productQuantityInStock, productImageURL, productCategory);
         this.productCode = productCode;
         this.gameSet = gameSet;
         this.gameGenres = gameGenres;
@@ -48,6 +51,7 @@ public class BoardGame extends Product {
      * Components of a board game, that come in the box, included in the package
      * <b><i>RU/UA:</i></b> Комплектация
      */
+    @Column(length = 1000)
     private String gameSet;
 
     // todo figure out of game type is needed alongside with game genre and game mechanic

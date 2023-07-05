@@ -6,7 +6,7 @@
 package generated.board_game.api;
 
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateBoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
     import io.swagger.v3.oas.annotations.ExternalDocumentation;
     import io.swagger.v3.oas.annotations.Operation;
     import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +31,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-28T18:12:38.647491348+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-04T22:58:53.584424247+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "boardgames", description = "the boardgames API")
     public interface BoardgamesApi {
@@ -43,7 +43,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             /**
             * POST /boardgames : Add a new boardgame
             *
-                * @param createBoardGameDto Boardgame to add (required)
+                * @param createAndUpdateBoardGameDto Boardgame to add (required)
             * @return Created (status code 201)
                 *         or Bad Request (status code 400)
             */
@@ -65,9 +65,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
             consumes = { "application/json" }
             )
         default ResponseEntity<BoardGameDto> addBoardGame(
-        @Parameter(name = "CreateBoardGameDto", description = "Boardgame to add", required = true) @Valid @RequestBody CreateBoardGameDto createBoardGameDto
+        @Parameter(name = "CreateAndUpdateBoardGameDto", description = "Boardgame to add", required = true) @Valid @RequestBody CreateAndUpdateBoardGameDto createAndUpdateBoardGameDto
             ) {
-            return getDelegate().addBoardGame(createBoardGameDto);
+            return getDelegate().addBoardGame(createAndUpdateBoardGameDto);
             }
 
 
@@ -92,7 +92,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             value = "/boardgames/{id}"
             )
         default ResponseEntity<Void> deleteBoardGame(
-        @Parameter(name = "id", description = "ID of the boardgame to delete", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
+        @Parameter(name = "id", description = "ID of the boardgame to delete", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
             ) {
             return getDelegate().deleteBoardGame(id);
             }
@@ -149,7 +149,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             produces = { "application/json" }
             )
         default ResponseEntity<BoardGameDto> getBoardGameById(
-        @Parameter(name = "id", description = "ID of the boardgame", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
+        @Parameter(name = "id", description = "ID of the boardgame", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
             ) {
             return getDelegate().getBoardGameById(id);
             }
@@ -159,7 +159,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             * PUT /boardgames/{id} : Update a boardgame
             *
                 * @param id ID of the boardgame to update (required)
-                * @param boardGameDto Boardgame to update (required)
+                * @param createAndUpdateBoardGameDto Boardgame to update (required)
             * @return OK (status code 200)
                 *         or Not Found (status code 404)
             */
@@ -181,10 +181,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
             consumes = { "application/json" }
             )
         default ResponseEntity<BoardGameDto> updateBoardGame(
-        @Parameter(name = "id", description = "ID of the boardgame to update", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id,
-        @Parameter(name = "BoardGameDto", description = "Boardgame to update", required = true) @Valid @RequestBody BoardGameDto boardGameDto
+        @Parameter(name = "id", description = "ID of the boardgame to update", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
+        @Parameter(name = "CreateAndUpdateBoardGameDto", description = "Boardgame to update", required = true) @Valid @RequestBody CreateAndUpdateBoardGameDto createAndUpdateBoardGameDto
             ) {
-            return getDelegate().updateBoardGame(id, boardGameDto);
+            return getDelegate().updateBoardGame(id, createAndUpdateBoardGameDto);
             }
 
         }

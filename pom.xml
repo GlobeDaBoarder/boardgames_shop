@@ -233,7 +233,7 @@
 
 							<importMappings>
 								<importMapping>BoardGameDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto</importMapping>
-								<importMapping>CreateBoardGameDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateBoardGameDto</importMapping>
+								<importMapping>CreateAndUpdateBoardGameDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto</importMapping>
 								<importMapping>BoardGameLanguage=ua.rivnegray.boardgames_shop.model.BoardGameLanguage</importMapping>
 								<importMapping>ProductCategory=ua.rivnegray.boardgames_shop.model.ProductCategory</importMapping>
 

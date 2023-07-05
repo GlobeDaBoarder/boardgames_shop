@@ -31,13 +31,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers("/").permitAll()
                         .requestMatchers("/api/**").permitAll()
-                        // /shop/** permit all -- all shop logic
-                        // /club/** permit all -- all club logic
+                        .requestMatchers("/boardgames/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(JpaDetailsService)
                 .formLogin(Customizer.withDefaults())
                 .build();
+
+        //todo add boardgames to open
+        // todo JWT token security
     }
 
     @Bean

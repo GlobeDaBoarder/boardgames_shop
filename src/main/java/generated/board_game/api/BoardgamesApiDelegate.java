@@ -1,7 +1,7 @@
 package generated.board_game.api;
 
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateBoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link BoardgamesApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-28T18:12:38.647491348+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-04T22:58:53.584424247+03:00[Europe/Kiev]")
 public interface BoardgamesApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -27,12 +27,12 @@ public interface BoardgamesApiDelegate {
     /**
      * POST /boardgames : Add a new boardgame
      *
-     * @param createBoardGameDto Boardgame to add (required)
+     * @param createAndUpdateBoardGameDto Boardgame to add (required)
      * @return Created (status code 201)
      *         or Bad Request (status code 400)
      * @see BoardgamesApi#addBoardGame
      */
-    default ResponseEntity<BoardGameDto> addBoardGame(CreateBoardGameDto createBoardGameDto) {
+    default ResponseEntity<BoardGameDto> addBoardGame(CreateAndUpdateBoardGameDto createAndUpdateBoardGameDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -54,7 +54,7 @@ public interface BoardgamesApiDelegate {
      *         or Not Found (status code 404)
      * @see BoardgamesApi#deleteBoardGame
      */
-    default ResponseEntity<Void> deleteBoardGame(Integer id) {
+    default ResponseEntity<Void> deleteBoardGame(Long id) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -87,7 +87,7 @@ public interface BoardgamesApiDelegate {
      *         or Not Found (status code 404)
      * @see BoardgamesApi#getBoardGameById
      */
-    default ResponseEntity<BoardGameDto> getBoardGameById(Integer id) {
+    default ResponseEntity<BoardGameDto> getBoardGameById(Long id) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -105,13 +105,13 @@ public interface BoardgamesApiDelegate {
      * PUT /boardgames/{id} : Update a boardgame
      *
      * @param id ID of the boardgame to update (required)
-     * @param boardGameDto Boardgame to update (required)
+     * @param createAndUpdateBoardGameDto Boardgame to update (required)
      * @return OK (status code 200)
      *         or Not Found (status code 404)
      * @see BoardgamesApi#updateBoardGame
      */
-    default ResponseEntity<BoardGameDto> updateBoardGame(Integer id,
-        BoardGameDto boardGameDto) {
+    default ResponseEntity<BoardGameDto> updateBoardGame(Long id,
+        CreateAndUpdateBoardGameDto createAndUpdateBoardGameDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

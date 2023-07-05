@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link OrdersApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-28T18:12:38.905750615+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-04T22:58:53.826195729+03:00[Europe/Kiev]")
 public interface OrdersApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -33,7 +33,7 @@ public interface OrdersApiDelegate {
      *         or Order not found (status code 404)
      * @see OrdersApi#cancelOrder
      */
-    default ResponseEntity<Void> cancelOrder(String orderId) {
+    default ResponseEntity<Void> cancelOrder(Long orderId) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -88,7 +88,7 @@ public interface OrdersApiDelegate {
      *         or Order not found (status code 404)
      * @see OrdersApi#getOrderById
      */
-    default ResponseEntity<OrderDto> getOrderById(String orderId) {
+    default ResponseEntity<OrderDto> getOrderById(Long orderId) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -112,7 +112,7 @@ public interface OrdersApiDelegate {
      *         or Order not found (status code 404)
      * @see OrdersApi#updateOrderStatus
      */
-    default ResponseEntity<OrderDto> updateOrderStatus(String orderId,
+    default ResponseEntity<OrderDto> updateOrderStatus(Long orderId,
         OrderStatus orderStatus) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {

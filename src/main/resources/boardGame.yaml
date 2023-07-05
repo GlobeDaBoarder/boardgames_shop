@@ -27,7 +27,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateBoardGameDto'
+              $ref: '#/components/schemas/CreateAndUpdateBoardGameDto'
       responses:
         '201':
           description: Created
@@ -49,6 +49,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         '200':
           description: OK
@@ -69,13 +70,14 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       requestBody:
         description: Boardgame to update
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BoardGameDto'
+              $ref: '#/components/schemas/CreateAndUpdateBoardGameDto'
       responses:
         '200':
           description: OK
@@ -96,6 +98,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         '204':
           description: No Content
@@ -169,10 +172,10 @@ components:
         - productQuantityInStock
         - productCategory
 
-    CreateBoardGameDto:
+    CreateAndUpdateBoardGameDto:
       type: object
       properties:
-        Manufacturer:
+        manufacturer:
           type: string
         productName:
           type: string
@@ -191,14 +194,18 @@ components:
           type: string
         gameSet:
           type: string
-        gameGenreGenreNames:
+        gameGenreIds:
           type: array
           items:
-            type: string
-        gameMechanicMechanicNames:
+            type: integer
+            format: int64
+          example: [ 1 ]
+        gameMechanicIds:
           type: array
           items:
-            type: string
+            type: integer
+            format: int64
+          example: [ 1 ]
         minAge:
           type: integer
         minPlayers:
@@ -210,8 +217,9 @@ components:
         BGGLink:
           type: string
           format: url
+          example: https://boardgamegeek.com/boardgame/169786/pandemic-legacy-season-1
       required:
-        - Manufacturer
+        - manufacturer
         - productName
         - productPrice
         - productQuantityInStock

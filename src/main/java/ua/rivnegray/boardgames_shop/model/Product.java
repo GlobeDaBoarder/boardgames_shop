@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
@@ -21,11 +22,12 @@ import java.math.BigDecimal;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Product extends BaseEntity{
     @Column(unique = true)
-    private String Manufacturer;
+    private String manufacturer;
 
     @Column(unique = true, nullable = false)
     private String productName;
 
+    @Column(length = 1000)
     private String productDescription;
 
     // todo add a discount system later

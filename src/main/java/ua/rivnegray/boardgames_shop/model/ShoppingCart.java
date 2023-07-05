@@ -22,5 +22,5 @@ public class ShoppingCart extends BaseEntity{
     private UserProfile userProfile;
 
     @OneToMany(mappedBy = "shoppingCart")
-    private Set<ProductInShoppingCart> products = new HashSet<>();
+    private Set<ProductInShoppingCart> productsInShoppingCart = new HashSet<>();
 }

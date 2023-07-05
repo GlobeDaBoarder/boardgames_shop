@@ -21,4 +21,5 @@ import java.util.Objects;
 public class BoardGameGenre extends BaseEntity{
     @Column(unique = true, nullable = false)
     private String genreName;
+    private String genreDescription;
 }
