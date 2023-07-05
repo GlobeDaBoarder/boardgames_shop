@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-04T22:58:53.231913740+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-05T13:19:43.466722040+03:00[Europe/Kiev]")
 @Controller
 @RequestMapping("${openapi.user.base-path:}")
 public class UsersApiController implements UsersApi {

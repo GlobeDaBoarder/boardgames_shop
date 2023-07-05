@@ -1,7 +1,11 @@
 package generated.board_game.api;
 
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-04T22:58:53.584424247+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-05T13:19:43.846267107+03:00[Europe/Kiev]")
 @Controller
 @RequestMapping("${openapi.boardgames.base-path:}")
 public class BoardgamesApiController implements BoardgamesApi {
