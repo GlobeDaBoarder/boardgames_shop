@@ -48,8 +48,7 @@ public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
 
     @Override
     public ResponseEntity<ShoppingCartDto> clearShoppingCart(Long cartId) {
-        this.shoppingCartService.clearShoppingCart(cartId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(this.shoppingCartService.clearShoppingCart(cartId));
     }
 
     @Override
@@ -64,8 +63,7 @@ public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
 
     @Override
     public ResponseEntity<ShoppingCartDto> removeProductFromShoppingCart(Long cartId, Long productInCartId) {
-        this.shoppingCartService.removeProductFromShoppingCart(cartId, productInCartId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(this.shoppingCartService.removeProductFromShoppingCart(cartId, productInCartId));
     }
 
     @Override

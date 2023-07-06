@@ -12,6 +12,7 @@ import ua.rivnegray.boardgames_shop.mapper.ShoppingCartMapper;
 import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.ShoppingCart;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
+import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.ProductInShoppingCartRepository;
 import ua.rivnegray.boardgames_shop.repository.ShoppingCartRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
@@ -25,16 +26,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     ShoppingCartRepository shoppingCartRepository;
     ProductInShoppingCartRepository productInShoppingCartRepository;
     ShoppingCartMapper shoppingCartMapper;
-
     ProductMapper productMapper;
+    BoardGameRepository boardGameRepository;
 
     @Autowired
     public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository, ShoppingCartMapper shoppingCartMapper,
-                                   ProductInShoppingCartRepository productInShoppingCartRepository, ProductMapper productMapper) {
+                                   ProductInShoppingCartRepository productInShoppingCartRepository,
+                                   ProductMapper productMapper,
+                                   BoardGameRepository boardGameRepository) {
         this.shoppingCartRepository = shoppingCartRepository;
         this.shoppingCartMapper = shoppingCartMapper;
         this.productInShoppingCartRepository = productInShoppingCartRepository;
         this.productMapper = productMapper;
+        this.boardGameRepository = boardGameRepository;
     }
 
     private ShoppingCart fetchShoppingCartFromRepo(long cartId) {
@@ -59,7 +63,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto addProductToShoppingCart(long cartId, AddProductInShoppingCartDto addProductInShoppingCartDto) {
-        ProductInShoppingCart productInShoppingCart = this.productMapper.toProductInShoppingCart(cartId, addProductInShoppingCartDto);
+        ProductInShoppingCart productInShoppingCart = this.productMapper.toProductInShoppingCart(cartId,
+                addProductInShoppingCartDto, this.boardGameRepository, this.shoppingCartRepository);
         ShoppingCart shoppingCart = fetchShoppingCartFromRepo(cartId);
         shoppingCart.getProductsInShoppingCart().add(productInShoppingCart);
         this.shoppingCartRepository.save(shoppingCart);
@@ -81,8 +86,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         productsInShoppingCart.removeIf(productInShoppingCart -> productInShoppingCart.getId() == productInCartId);
         this.shoppingCartRepository.save(shoppingCart);
         return this.shoppingCartMapper.toShoppingCartDto(shoppingCart);
-
-
     }
 
     @Override

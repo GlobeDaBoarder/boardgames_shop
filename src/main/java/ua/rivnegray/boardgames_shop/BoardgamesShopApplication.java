@@ -12,6 +12,8 @@ import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
 import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
 import ua.rivnegray.boardgames_shop.model.ProductCategory;
+import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
+import ua.rivnegray.boardgames_shop.model.ShoppingCart;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
 import ua.rivnegray.boardgames_shop.model.UserPermission;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
@@ -19,6 +21,7 @@ import ua.rivnegray.boardgames_shop.model.UserRole;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
+import ua.rivnegray.boardgames_shop.repository.ShoppingCartRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
@@ -40,7 +43,8 @@ public class BoardgamesShopApplication {
 											   UserRoleRepository roleRepository, PasswordEncoder encoder,
 												BoardGameMechanicRepository boardGameMechanicRepository,
 												BoardGameGenreRepository boardGameGenreRepository,
-												BoardGameRepository boardGameRepository) {
+												BoardGameRepository boardGameRepository,
+												ShoppingCartRepository shoppingCartRepository) {
 		return args -> {
 
 			// SAMPLE DATA
@@ -174,6 +178,13 @@ public class BoardgamesShopApplication {
 			boardGameRepository.save(boardGame3);
 
 
+			//-------------------shoppingCart-------------------
+
+			ShoppingCart cart1 = adminProfile.getShoppingCart();
+
+			cart1.getProductsInShoppingCart().add(new ProductInShoppingCart(boardGame1, cart1, 1));
+
+			shoppingCartRepository.save(cart1);
 
 
 		};
