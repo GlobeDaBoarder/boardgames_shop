@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ua.rivnegray.boardgames_shop.model.Address;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
@@ -70,6 +71,8 @@ public class BoardgamesShopApplication {
 			UserCredentials adminCredentials = new UserCredentials("admin", encoder.encode("admin"));
 			adminCredentials.setUserProfile(adminProfile);
 			adminProfile.setUserCredentials(adminCredentials);
+
+			adminProfile.getAddresses().add(new Address("Yermaka", "1", "33000","Rivne", "Ukraine"));
 
 			userProfileRepository.save(adminProfile);
 

@@ -5,7 +5,9 @@
 */
 package generated.shopping_cart.api;
 
+import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.AddProductInShoppingCartDto;
+import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
@@ -33,7 +35,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-06T15:55:17.489884682+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-07T17:52:23.535772298+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "shoppingCart", description = "the shoppingCart API")
     public interface ShoppingCartApi {
@@ -72,6 +74,75 @@ import org.springframework.security.access.prepost.PreAuthorize;
         @Parameter(name = "AddProductInShoppingCartDto", description = "", required = true) @Valid @RequestBody AddProductInShoppingCartDto addProductInShoppingCartDto
             ) {
             return getDelegate().addProductToShoppingCart(cartId, addProductInShoppingCartDto);
+            }
+
+
+            /**
+            * POST /shoppingCart/{cartId}/checkout/{addressId} : Checkout the shopping cart and create an order for registered user
+            *
+                * @param cartId  (required)
+                * @param addressId  (required)
+            * @return Order created successfully (status code 201)
+                *         or Invalid checkout request (status code 400)
+                *         or Shopping cart or address not found (status code 404)
+            */
+                @Operation(
+                operationId = "checkoutRegisteredUser",
+                    summary = "Checkout the shopping cart and create an order for registered user",
+                responses = {
+                    @ApiResponse(responseCode = "201", description = "Order created successfully", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Invalid checkout request"),
+                    @ApiResponse(responseCode = "404", description = "Shopping cart or address not found")
+                }
+                )
+            @PreAuthorize("hasAuthority('user:write')")
+            @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/shoppingCart/{cartId}/checkout/{addressId}",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<OrderDto> checkoutRegisteredUser(
+        @Parameter(name = "cartId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("cartId") Long cartId,
+        @Parameter(name = "addressId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("addressId") Long addressId
+            ) {
+            return getDelegate().checkoutRegisteredUser(cartId, addressId);
+            }
+
+
+            /**
+            * POST /shoppingCart/{cartId}/checkout : Checkout the shopping cart and create an order for unregistered user
+            *
+                * @param cartId  (required)
+                * @param addAndUpdateAddressDto  (required)
+            * @return Order created successfully (status code 201)
+                *         or Invalid checkout request (status code 400)
+                *         or Shopping cart not found (status code 404)
+            */
+                @Operation(
+                operationId = "checkoutUnregisteredUser",
+                    summary = "Checkout the shopping cart and create an order for unregistered user",
+                responses = {
+                    @ApiResponse(responseCode = "201", description = "Order created successfully", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Invalid checkout request"),
+                    @ApiResponse(responseCode = "404", description = "Shopping cart not found")
+                }
+                )
+            @PreAuthorize("hasAuthority('user:write')")
+            @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/shoppingCart/{cartId}/checkout",
+            produces = { "application/json" },
+            consumes = { "application/json" }
+            )
+        default ResponseEntity<OrderDto> checkoutUnregisteredUser(
+        @Parameter(name = "cartId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("cartId") Long cartId,
+        @Parameter(name = "AddAndUpdateAddressDto", description = "", required = true) @Valid @RequestBody AddAndUpdateAddressDto addAndUpdateAddressDto
+            ) {
+            return getDelegate().checkoutUnregisteredUser(cartId, addAndUpdateAddressDto);
             }
 
 

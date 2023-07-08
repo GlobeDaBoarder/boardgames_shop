@@ -264,6 +264,10 @@
 								<importMapping>UpdateQuantityOfProductInShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto</importMapping>
 								<importMapping>ShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto</importMapping>
 								<importmapping>ProductInShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto</importmapping>
+								<importmapping>OrderDto=ua.rivnegray.boardgames_shop.DTO.response.OrderDto</importmapping>
+								<importmapping>OrderStatus=ua.rivnegray.boardgames_shop.model.OrderStatus</importmapping>
+								<importmapping>PaymentStatus=ua.rivnegray.boardgames_shop.model.PaymentStatus</importmapping>
+								<importmapping>AddAndUpdateAddressDto=ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto</importmapping>
 
 							</importMappings>
 

@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import ua.rivnegray.boardgames_shop.DTO.request.create.AddProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
+import ua.rivnegray.boardgames_shop.DTO.response.ProductInOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserProfileDto;
 import ua.rivnegray.boardgames_shop.exceptions.BoardGameIdNotFoundException;
@@ -14,6 +15,7 @@ import ua.rivnegray.boardgames_shop.exceptions.ShoppingCartIdNotFoundException;
 import ua.rivnegray.boardgames_shop.model.Address;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.Product;
+import ua.rivnegray.boardgames_shop.model.ProductInOrder;
 import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.ShoppingCart;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
@@ -59,5 +61,12 @@ public interface ProductMapper {
 
         return new ProductInShoppingCart(boardGame, shoppingCart, addProductInShoppingCartDto.quantity());
     }
+
+
+    @Mapping(target = "order", ignore = true)
+    ProductInOrder toProductInOrder(ProductInShoppingCart productInShoppingCart);
+
+    @Mapping(target = "productId", source = "product.id")
+    ProductInOrderDto toProductInOrderDto(ProductInOrder productInOrder);
 }
 

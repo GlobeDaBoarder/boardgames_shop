@@ -7,8 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.AddProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
+import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
+import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
 import ua.rivnegray.boardgames_shop.service.ShoppingCartService;
@@ -72,5 +75,15 @@ public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
                                                                                  UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto) {
         return ResponseEntity.ok(this.shoppingCartService.updateQuantityOfProductInShoppingCart(cartId,
                 productInCartId, updateQuantityOfProductInShoppingCartDto));
+    }
+
+    @Override
+    public ResponseEntity<OrderDto> checkoutUnregisteredUser(Long cartId, AddAndUpdateAddressDto addressDto) {
+        return ResponseEntity.ok(this.shoppingCartService.checkoutUnregisteredUser(cartId, addressDto));
+    }
+
+    @Override
+    public ResponseEntity<OrderDto> checkoutRegisteredUser(Long cartId, Long addressId) {
+        return ResponseEntity.ok(this.shoppingCartService.checkoutRegisteredUser(cartId, addressId));
     }
 }

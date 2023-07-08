@@ -76,6 +76,8 @@ public interface UserMapper {
 
     UserRoleDto toUserRoleDto(UserRole userRole);
 
+    Address toAddress(AddressDto addressDto);
+
 //    UserFullDto userToUserDto(User user);
 //
 //    User userDtoToUser(UserFullDto userFullDto);
