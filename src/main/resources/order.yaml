@@ -4,27 +4,28 @@ info:
   version: 1.0.0
 paths:
   /orders:
-    post:
-      summary: Creates a new order
-      operationId: createOrder
-      x-access-permission: user:write
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateOrderDto'
-      responses:
-        '201':
-          description: Order created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderDto'
-        '400':
-          description: Invalid request
+#    post:
+#      summary: Creates a new order
+#      operationId: createOrder
+#      x-acess-permission: user:write
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/CreateOrderDto'
+#      responses:
+#        '201':
+#          description: Order created successfully
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/OrderDto'
+#        '400':
+#          description: Invalid request
     get:
       summary: Retrieves a list of all orders
+      x-acess-permission: admin:read
       operationId: getAllOrders
       responses:
         '200':
@@ -39,7 +40,7 @@ paths:
     get:
       summary: Retrieves information about a specific order
       operationId: getOrderById
-      x-access-permission: user:read
+      x-acess-permission: user:read
       parameters:
         - in: path
           name: orderId
@@ -60,7 +61,7 @@ paths:
     patch:
       summary: Updates the status of an order
       operationId: updateOrderStatus
-      x-access-permission: admin:write
+      x-acess-permission: admin:write
       parameters:
         - in: path
           name: orderId
@@ -71,6 +72,7 @@ paths:
           description: The ID of the order
       requestBody:
         required: true
+        description: PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED
         content:
           application/json:
             schema:
@@ -89,7 +91,7 @@ paths:
     delete:
       summary: Cancels an order
       operationId: cancelOrder
-      x-access-permission: user:write
+      x-acess-permission: user:write
       parameters:
         - in: path
           name: orderId

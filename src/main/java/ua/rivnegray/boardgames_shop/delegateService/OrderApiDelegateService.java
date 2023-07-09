@@ -38,18 +38,18 @@ public class OrderApiDelegateService implements OrdersApiDelegate {
         return ResponseEntity.noContent().build();
     }
 
-    @Override
-    public ResponseEntity<OrderDto> createOrder(CreateOrderDto createOrderDto) {
-        OrderDto orderDto = this.orderService.createOrder(createOrderDto);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(orderDto.id())
-                .toUri();
-
-        return ResponseEntity.created(location).body(orderDto);
-    }
+//    @Override
+//    public ResponseEntity<OrderDto> createOrder(CreateOrderDto createOrderDto) {
+//        OrderDto orderDto = this.orderService.createOrder(createOrderDto);
+//
+//        URI location = ServletUriComponentsBuilder
+//                .fromCurrentRequest()
+//                .path("/{id}")
+//                .buildAndExpand(orderDto.id())
+//                .toUri();
+//
+//        return ResponseEntity.created(location).body(orderDto);
+//    }
 
     @Override
     public ResponseEntity<List<OrderDto>> getAllOrders() {

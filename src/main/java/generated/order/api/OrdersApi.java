@@ -5,7 +5,6 @@
 */
 package generated.order.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
     import io.swagger.v3.oas.annotations.ExternalDocumentation;
@@ -32,7 +31,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-07T17:52:23.663889941+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T18:20:07.645285863+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "orders", description = "the orders API")
     public interface OrdersApi {
@@ -56,7 +55,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Order not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('')")
+            @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/orders/{orderId}"
@@ -65,37 +64,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
         @Parameter(name = "orderId", description = "The ID of the order", required = true, in = ParameterIn.PATH) @PathVariable("orderId") Long orderId
             ) {
             return getDelegate().cancelOrder(orderId);
-            }
-
-
-            /**
-            * POST /orders : Creates a new order
-            *
-                * @param createOrderDto  (required)
-            * @return Order created successfully (status code 201)
-                *         or Invalid request (status code 400)
-            */
-                @Operation(
-                operationId = "createOrder",
-                    summary = "Creates a new order",
-                responses = {
-                    @ApiResponse(responseCode = "201", description = "Order created successfully", content = {
-                        @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDto.class))
-                    }),
-                    @ApiResponse(responseCode = "400", description = "Invalid request")
-                }
-                )
-            @PreAuthorize("hasAuthority('')")
-            @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/orders",
-            produces = { "application/json" },
-            consumes = { "application/json" }
-            )
-        default ResponseEntity<OrderDto> createOrder(
-        @Parameter(name = "CreateOrderDto", description = "", required = true) @Valid @RequestBody CreateOrderDto createOrderDto
-            ) {
-            return getDelegate().createOrder(createOrderDto);
             }
 
 
@@ -113,7 +81,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('')")
+            @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/orders",
@@ -143,7 +111,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Order not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('')")
+            @PreAuthorize("hasAuthority('user:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/orders/{orderId}",
@@ -160,7 +128,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             * PATCH /orders/{orderId} : Updates the status of an order
             *
                 * @param orderId The ID of the order (required)
-                * @param orderStatus  (required)
+                * @param orderStatus PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED (required)
             * @return Order status updated successfully (status code 200)
                 *         or Invalid request (status code 400)
                 *         or Order not found (status code 404)
@@ -176,7 +144,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Order not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('')")
+            @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/orders/{orderId}",
@@ -185,7 +153,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             )
         default ResponseEntity<OrderDto> updateOrderStatus(
         @Parameter(name = "orderId", description = "The ID of the order", required = true, in = ParameterIn.PATH) @PathVariable("orderId") Long orderId,
-        @Parameter(name = "OrderStatus", description = "", required = true) @Valid @RequestBody OrderStatus orderStatus
+        @Parameter(name = "OrderStatus", description = "PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED", required = true) @Valid @RequestBody OrderStatus orderStatus
             ) {
             return getDelegate().updateOrderStatus(orderId, orderStatus);
             }

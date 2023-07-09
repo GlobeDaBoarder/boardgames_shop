@@ -1,6 +1,5 @@
 package generated.order.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
 
@@ -27,7 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-07T17:52:23.663889941+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T18:20:07.645285863+03:00[Europe/Kiev]")
 @Controller
 @RequestMapping("${openapi.order.base-path:}")
 public class OrdersApiController implements OrdersApi {
