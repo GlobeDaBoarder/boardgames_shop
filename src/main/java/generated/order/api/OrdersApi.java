@@ -31,7 +31,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T19:13:08.300843110+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T22:15:02.798354582+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "orders", description = "the orders API")
     public interface OrdersApi {
@@ -51,8 +51,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 operationId = "cancelOrder",
                     summary = "Cancels an order",
                 responses = {
-                    @ApiResponse(responseCode = "204", description = "Order cancelled successfully"),
-                    @ApiResponse(responseCode = "404", description = "Order not found")
+                    @ApiResponse(responseCode = "204", description = "Order cancelled successfully", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Order not found", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('user:write')")
@@ -108,7 +108,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "Order retrieved successfully", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Order not found")
+                    @ApiResponse(responseCode = "404", description = "Order not found", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('user:read')")
@@ -126,6 +126,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
             /**
             * PATCH /orders/{orderId} : Updates the status of an order
+                * use PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED as possible statuses
             *
                 * @param orderId The ID of the order (required)
                 * @param orderStatus PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED (required)
@@ -136,12 +137,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 @Operation(
                 operationId = "updateOrderStatus",
                     summary = "Updates the status of an order",
+                    description = "use PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED as possible statuses",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "Order status updated successfully", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDto.class))
                     }),
-                    @ApiResponse(responseCode = "400", description = "Invalid request"),
-                    @ApiResponse(responseCode = "404", description = "Order not found")
+                    @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Order not found", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:write')")

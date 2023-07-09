@@ -35,7 +35,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T19:13:07.924747808+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T22:15:02.473615025+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "boardgames", description = "the boardgames API")
     public interface BoardgamesApi {
@@ -58,7 +58,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "201", description = "Created", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameDto.class))
                     }),
-                    @ApiResponse(responseCode = "400", description = "Bad Request")
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:write')")
@@ -89,7 +89,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "201", description = "Created", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameGenreDto.class))
                     }),
-                    @ApiResponse(responseCode = "400", description = "Bad Request")
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:write')")
@@ -120,7 +120,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "201", description = "Created", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameMechanicDto.class))
                     }),
-                    @ApiResponse(responseCode = "400", description = "Bad Request")
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:write')")
@@ -148,8 +148,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 operationId = "deleteBoardGame",
                     summary = "Delete a boardgame",
                 responses = {
-                    @ApiResponse(responseCode = "204", description = "No Content"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:write')")
@@ -175,8 +175,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 operationId = "deleteGenre",
                     summary = "Delete a genre",
                 responses = {
-                    @ApiResponse(responseCode = "204", description = "No Content"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:write')")
@@ -202,8 +202,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 operationId = "deleteMechanic",
                     summary = "Delete a mechanic",
                 responses = {
-                    @ApiResponse(responseCode = "204", description = "No Content"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:write')")
@@ -313,7 +313,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
                         //allow all
@@ -343,7 +343,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameGenreDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
                         //allow all
@@ -373,7 +373,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameMechanicDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
                         //allow all
@@ -396,6 +396,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 * @param createAndUpdateBoardGameDto Boardgame to update (required)
             * @return OK (status code 200)
                 *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "updateBoardGame",
@@ -404,7 +405,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:write')")
@@ -437,7 +439,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameGenreDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:write')")
@@ -470,7 +472,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameMechanicDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:write')")

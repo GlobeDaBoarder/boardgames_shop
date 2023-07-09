@@ -39,7 +39,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T19:13:07.461925922+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T22:15:02.014073813+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "users", description = "the users API")
     public interface UsersApi {
@@ -214,8 +214,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 operationId = "deleteUser",
                     summary = "Delete a user by ID",
                 responses = {
-                    @ApiResponse(responseCode = "204", description = "User deleted"),
-                    @ApiResponse(responseCode = "404", description = "User not found")
+                    @ApiResponse(responseCode = "204", description = "User deleted", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:write')")
@@ -356,7 +356,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "User not found")
+                    @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('admin:read')")
@@ -412,8 +412,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 operationId = "removeAddress",
                     summary = "Remove an address from a user",
                 responses = {
-                    @ApiResponse(responseCode = "204", description = "address deleted"),
-                    @ApiResponse(responseCode = "404", description = "address not founf")
+                    @ApiResponse(responseCode = "204", description = "address deleted", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "address not founf", content = @Content)
                 }
                 )
                         @PreAuthorize("hasAuthority('user:write')")

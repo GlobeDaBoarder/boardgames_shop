@@ -17,7 +17,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link OrdersApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T19:13:08.300843110+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T22:15:02.798354582+03:00[Europe/Kiev]")
 public interface OrdersApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -81,6 +81,7 @@ public interface OrdersApiDelegate {
 
     /**
      * PATCH /orders/{orderId} : Updates the status of an order
+     * use PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED as possible statuses
      *
      * @param orderId The ID of the order (required)
      * @param orderStatus PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED (required)

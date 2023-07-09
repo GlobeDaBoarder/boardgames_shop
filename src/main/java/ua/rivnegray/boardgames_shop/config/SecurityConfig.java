@@ -35,6 +35,9 @@ public class SecurityConfig {
                         .requestMatchers("/shoppingCart/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                )
                 .userDetailsService(JpaDetailsService)
                 .formLogin(Customizer.withDefaults())
                 .build();
