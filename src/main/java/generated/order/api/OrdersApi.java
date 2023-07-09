@@ -31,7 +31,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T18:20:07.645285863+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T19:13:08.300843110+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "orders", description = "the orders API")
     public interface OrdersApi {
@@ -55,7 +55,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Order not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/orders/{orderId}"
@@ -81,7 +81,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+                        @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/orders",
@@ -111,7 +111,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Order not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:read')")
+                        @PreAuthorize("hasAuthority('user:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/orders/{orderId}",
@@ -144,7 +144,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Order not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/orders/{orderId}",

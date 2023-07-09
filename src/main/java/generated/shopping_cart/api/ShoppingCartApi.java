@@ -35,7 +35,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T18:20:07.528298787+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T19:13:08.137518597+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "shoppingCart", description = "the shoppingCart API")
     public interface ShoppingCartApi {
@@ -62,7 +62,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "400", description = "Invalid product data")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/shoppingCart/{cartId}/products",
@@ -97,7 +97,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Shopping cart or address not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/shoppingCart/{cartId}/checkout/{addressId}",
@@ -131,7 +131,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Shopping cart not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/shoppingCart/{cartId}/checkout",
@@ -163,7 +163,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "400", description = "Invalid shopping cart ID")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/shoppingCart/{cartId}",
@@ -193,7 +193,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "400", description = "Invalid shopping cart ID")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:read')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/shoppingCart/{cartId}/products",
@@ -221,7 +221,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:read')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/shoppingCart/{cartId}",
@@ -252,7 +252,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "400", description = "Invalid product or shopping cart ID")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/shoppingCart/{cartId}/products/{productInCartId}",
@@ -285,7 +285,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "400", description = "Invalid product data")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/shoppingCart/{cartId}/products/{productInCartId}",

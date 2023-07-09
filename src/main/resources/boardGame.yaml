@@ -7,7 +7,7 @@ paths:
     get:
       summary: Get all boardgames
       operationId: getAllBoardGames
-      x-acess-permission: user:read
+#      x-acess-permission: user:read
       responses:
         '200':
           description: OK
@@ -41,7 +41,7 @@ paths:
     get:
       summary: Get a boardgame by id
       operationId: getBoardGameById
-      x-acess-permission: user:read
+#      x-acess-permission: user:read
       parameters:
         - name: id
           in: path
@@ -108,7 +108,7 @@ paths:
     get:
       summary: Get all genres
       operationId: getAllGenres
-      x-acess-permission: user:read
+#      x-acess-permission: user:read
       responses:
         '200':
           description: OK
@@ -143,7 +143,7 @@ paths:
     get:
       summary: Get a genre by id
       operationId: getGenreById
-      x-acess-permission: user:read
+#      x-acess-permission: user:read
       parameters:
         - name: id
           in: path
@@ -211,7 +211,7 @@ paths:
     get:
       summary: Get all mechanics
       operationId: getAllMechanics
-      x-acess-permission: user:read
+#      x-acess-permission: user:read
       responses:
         '200':
           description: OK
@@ -246,7 +246,7 @@ paths:
     get:
       summary: Get a mechanic by id
       operationId: getMechanicById
-      x-acess-permission: user:read
+#      x-acess-permission: user:read
       parameters:
         - name: id
           in: path

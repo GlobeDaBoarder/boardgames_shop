@@ -29,9 +29,10 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/boardgames/**").permitAll()
+                        .requestMatchers("/shoppingCart/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(JpaDetailsService)

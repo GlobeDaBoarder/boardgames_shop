@@ -39,7 +39,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T18:20:06.970706580+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T19:13:07.461925922+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "users", description = "the users API")
     public interface UsersApi {
@@ -64,7 +64,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/users/{userId}/address",
@@ -98,7 +98,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+                        @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/users/availability/email",
@@ -131,7 +131,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+                        @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/users/availability/username",
@@ -160,7 +160,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/users/customer",
@@ -189,7 +189,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/users",
@@ -218,7 +218,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "User not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/users/{userId}"
@@ -246,7 +246,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:read')")
+                        @PreAuthorize("hasAuthority('user:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/{userId}/addresses/{addressId}",
@@ -275,7 +275,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:read')")
+                        @PreAuthorize("hasAuthority('user:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/{userId}/addresses",
@@ -302,7 +302,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+                        @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/roles",
@@ -329,7 +329,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+                        @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users",
@@ -359,7 +359,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "User not found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+                        @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/{userId}",
@@ -387,7 +387,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:read')")
+                        @PreAuthorize("hasAuthority('admin:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/role/{role}",
@@ -416,7 +416,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "address not founf")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/users/{userId}/address/{addressId}"
@@ -446,7 +446,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/users/{userId}/address/{addressId}",
@@ -478,7 +478,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/users/{userId}/email",
@@ -509,7 +509,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/users/{userId}/password",
@@ -540,7 +540,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/users/{userId}/phone",
@@ -571,7 +571,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:write')")
+                        @PreAuthorize("hasAuthority('user:write')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/users/{userId}/username",

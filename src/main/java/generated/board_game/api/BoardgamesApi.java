@@ -35,7 +35,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T18:20:07.357539489+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T19:13:07.924747808+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "boardgames", description = "the boardgames API")
     public interface BoardgamesApi {
@@ -61,7 +61,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "400", description = "Bad Request")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/boardgames",
@@ -92,7 +92,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "400", description = "Bad Request")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/boardgames/genres",
@@ -123,7 +123,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "400", description = "Bad Request")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/boardgames/mechanics",
@@ -152,7 +152,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Not Found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/boardgames/{id}"
@@ -179,7 +179,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Not Found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/boardgames/genres/{id}"
@@ -206,7 +206,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Not Found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/boardgames/mechanics/{id}"
@@ -232,7 +232,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:read')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames",
@@ -259,7 +259,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:read')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/genres",
@@ -286,7 +286,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('user:read')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/mechanics",
@@ -316,7 +316,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Not Found")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:read')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/{id}",
@@ -346,7 +346,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Not Found")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:read')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/genres/{id}",
@@ -376,7 +376,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Not Found")
                 }
                 )
-            @PreAuthorize("hasAuthority('user:read')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/mechanics/{id}",
@@ -407,7 +407,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Not Found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/boardgames/{id}",
@@ -440,7 +440,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Not Found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/boardgames/genres/{id}",
@@ -473,7 +473,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Not Found")
                 }
                 )
-            @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('admin:write')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/boardgames/mechanics/{id}",
