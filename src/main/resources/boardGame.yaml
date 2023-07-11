@@ -7,7 +7,6 @@ paths:
     get:
       summary: Get all boardgames
       operationId: getAllBoardGames
-      x-acess-permission: user:read
       responses:
         '200':
           description: OK
@@ -37,11 +36,12 @@ paths:
                 $ref: '#/components/schemas/BoardGameDto'
         '400':
           description: Bad Request
+        '401':
+          description: Unauthorized
   /boardgames/{id}:
     get:
       summary: Get a boardgame by id
       operationId: getBoardGameById
-      x-acess-permission: user:read
       parameters:
         - name: id
           in: path
@@ -87,6 +87,8 @@ paths:
                 $ref: '#/components/schemas/BoardGameDto'
         '404':
           description: Not Found
+        '401':
+          description: Unauthorized
     delete:
       summary: Delete a boardgame
       operationId: deleteBoardGame
@@ -104,11 +106,12 @@ paths:
           description: No Content
         '404':
           description: Not Found
+        '401':
+          description: Unauthorized
   /boardgames/genres:
     get:
       summary: Get all genres
       operationId: getAllGenres
-      x-acess-permission: user:read
       responses:
         '200':
           description: OK
@@ -138,12 +141,13 @@ paths:
                 $ref: '#/components/schemas/BoardGameGenreDto'
         '400':
           description: Bad Request
+        '401':
+          description: Unauthorized
 
   /boardgames/genres/{id}:
     get:
       summary: Get a genre by id
       operationId: getGenreById
-      x-acess-permission: user:read
       parameters:
         - name: id
           in: path
@@ -189,6 +193,8 @@ paths:
                 $ref: '#/components/schemas/BoardGameGenreDto'
         '404':
           description: Not Found
+        '401':
+          description: Unauthorized
     delete:
       summary: Delete a genre
       operationId: deleteGenre
@@ -206,12 +212,13 @@ paths:
           description: No Content
         '404':
           description: Not Found
+        '401':
+          description: Unauthorized
 
   /boardgames/mechanics:
     get:
       summary: Get all mechanics
       operationId: getAllMechanics
-      x-acess-permission: user:read
       responses:
         '200':
           description: OK
@@ -241,12 +248,13 @@ paths:
                 $ref: '#/components/schemas/BoardGameMechanicDto'
         '400':
           description: Bad Request
+        '401':
+          description: Unauthorized
 
   /boardgames/mechanics/{id}:
     get:
       summary: Get a mechanic by id
       operationId: getMechanicById
-      x-acess-permission: user:read
       parameters:
         - name: id
           in: path
@@ -292,6 +300,8 @@ paths:
                 $ref: '#/components/schemas/BoardGameMechanicDto'
         '404':
           description: Not Found
+        '401':
+          description: Unauthorized
     delete:
       summary: Delete a mechanic
       operationId: deleteMechanic
@@ -309,6 +319,8 @@ paths:
           description: No Content
         '404':
           description: Not Found
+        '401':
+          description: Unauthorized
 components:
   schemas:
     BoardGameDto:

@@ -172,7 +172,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 {{#produces}}
                         @Content(mediaType = "{{{mediaType}}}", {{#isArray}}array = @ArraySchema({{/isArray}}schema = @Schema(implementation = {{{baseType}}}.class){{#isArray}}){{/isArray}}){{^-last}},{{/-last}}
                 {{/produces}}
-                    }{{/baseType}}){{^-last}},{{/-last}}
+                    }{{/baseType}}{{^baseType}}, content = @Content{{/baseType}}){{^-last}},{{/-last}}
             {{/responses}}
                 }{{#hasAuthMethods}},
                 security = {
@@ -229,7 +229,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
             {{/swagger1AnnotationLibrary}}
         {{/implicitHeadersParams.0}}
-            @PreAuthorize("hasAuthority('{{vendorExtensions.x-acess-permission}}')")
+            {{#vendorExtensions}}
+                {{#x-acess-permission}}
+                        @PreAuthorize("hasAuthority('{{x-acess-permission}}')")
+                {{/x-acess-permission}}
+                {{^x-acess-permission}}
+                        //allow all
+                {{/x-acess-permission}}
+            {{/vendorExtensions}}
             @RequestMapping(
             method = RequestMethod.{{httpMethod}},
             value = "{{{path}}}"{{#singleContentTypes}}{{#hasProduces}},

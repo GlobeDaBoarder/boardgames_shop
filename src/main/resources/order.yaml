@@ -58,8 +58,11 @@ paths:
                 $ref: '#/components/schemas/OrderDto'
         '404':
           description: Order not found
+        '401':
+          description: Unauthorized
     patch:
       summary: Updates the status of an order
+      description: use PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED as possible statuses
       operationId: updateOrderStatus
       x-acess-permission: admin:write
       parameters:
@@ -88,10 +91,11 @@ paths:
           description: Invalid request
         '404':
           description: Order not found
+        '401':
+          description: Unauthorized
     delete:
       summary: Cancels an order
       operationId: cancelOrder
-      x-acess-permission: user:write
       parameters:
         - in: path
           name: orderId

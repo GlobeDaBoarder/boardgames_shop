@@ -21,7 +21,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link BoardgamesApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T18:20:07.357539489+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T22:15:02.473615025+03:00[Europe/Kiev]")
 public interface BoardgamesApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -266,6 +266,7 @@ public interface BoardgamesApiDelegate {
      * @param createAndUpdateBoardGameDto Boardgame to update (required)
      * @return OK (status code 200)
      *         or Not Found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see BoardgamesApi#updateBoardGame
      */
     default ResponseEntity<BoardGameDto> updateBoardGame(Long id,

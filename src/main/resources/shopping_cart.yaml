@@ -7,7 +7,6 @@ paths:
     get:
       summary: get shopping cart info
       operationId: getShoppingCart
-      x-acess-permission: user:read
       parameters:
         - in: path
           name: cartId
@@ -25,7 +24,6 @@ paths:
     delete:
       summary: Clear all items from the shopping cart
       operationId: clearShoppingCart
-      x-acess-permission: user:write
       parameters:
         - in : path
           name: cartId
@@ -47,7 +45,6 @@ paths:
     post:
       summary: Adds a product to the shopping cart
       operationId: addProductToShoppingCart
-      x-acess-permission: user:write
       parameters:
         - in: path
           name: cartId
@@ -74,7 +71,6 @@ paths:
     get:
       summary: Get all products in the shopping cart
       operationId: getProductsInShoppingCart
-      x-acess-permission: user:read
       parameters:
         - in: path
           name: cartId
@@ -98,7 +94,6 @@ paths:
     delete:
       summary: Remove a product from the shopping cart
       operationId: removeProductFromShoppingCart
-      x-acess-permission: user:write
       parameters:
         - in: path
           name: cartId
@@ -125,7 +120,6 @@ paths:
     patch:
       summary: Update the quantity of a product in the shopping cart
       operationId: updateQuantityOfProductInShoppingCart
-      x-acess-permission: user:write
       parameters:
         - in: path
           name: cartId
@@ -159,7 +153,6 @@ paths:
     post:
       summary: Checkout the shopping cart and create an order for unregistered user
       operationId: checkoutUnregisteredUser
-      x-acess-permission: user:write
       parameters:
         - in: path
           name: cartId
@@ -214,7 +207,8 @@ paths:
           description: Invalid checkout request
         '404':
           description: Shopping cart or address not found
-
+        '401':
+          description: Unauthorized
 
 components:
   schemas:
