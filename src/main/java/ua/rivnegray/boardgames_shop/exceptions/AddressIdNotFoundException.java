@@ -1,5 +1,7 @@
 package ua.rivnegray.boardgames_shop.exceptions;
 
+
+// todo change to ResponseStatusException
 public class AddressIdNotFoundException extends RuntimeException {
     public AddressIdNotFoundException(Long addressId) {
         super("Address with id " + addressId + " not found");

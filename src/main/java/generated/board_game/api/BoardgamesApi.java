@@ -35,7 +35,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T22:15:02.473615025+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-12T23:53:06.280437855+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "boardgames", description = "the boardgames API")
     public interface BoardgamesApi {
@@ -50,6 +50,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 * @param createAndUpdateBoardGameDto Boardgame to add (required)
             * @return Created (status code 201)
                 *         or Bad Request (status code 400)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "addBoardGame",
@@ -58,10 +59,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "201", description = "Created", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameDto.class))
                     }),
-                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/boardgames",
@@ -81,6 +83,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 * @param createAndUpdateBoardGameGenreDto Genre to add (required)
             * @return Created (status code 201)
                 *         or Bad Request (status code 400)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "addGenre",
@@ -89,10 +92,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "201", description = "Created", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameGenreDto.class))
                     }),
-                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/boardgames/genres",
@@ -112,6 +116,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 * @param createAndUpdateBoardGameMechanicDto Mechanic to add (required)
             * @return Created (status code 201)
                 *         or Bad Request (status code 400)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "addMechanic",
@@ -120,10 +125,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "201", description = "Created", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameMechanicDto.class))
                     }),
-                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/boardgames/mechanics",
@@ -143,16 +149,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 * @param id ID of the boardgame to delete (required)
             * @return No Content (status code 204)
                 *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "deleteBoardGame",
                     summary = "Delete a boardgame",
                 responses = {
                     @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
-                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/boardgames/{id}"
@@ -170,16 +178,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 * @param id ID of the genre to delete (required)
             * @return No Content (status code 204)
                 *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "deleteGenre",
                     summary = "Delete a genre",
                 responses = {
                     @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
-                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/boardgames/genres/{id}"
@@ -197,16 +207,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 * @param id ID of the mechanic to delete (required)
             * @return No Content (status code 204)
                 *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "deleteMechanic",
                     summary = "Delete a mechanic",
                 responses = {
                     @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
-                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/boardgames/mechanics/{id}"
@@ -409,7 +421,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/boardgames/{id}",
@@ -431,6 +443,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 * @param createAndUpdateBoardGameGenreDto Genre to update (required)
             * @return OK (status code 200)
                 *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "updateGenre",
@@ -439,10 +452,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameGenreDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/boardgames/genres/{id}",
@@ -464,6 +478,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 * @param createAndUpdateBoardGameMechanicDto Mechanic to update (required)
             * @return OK (status code 200)
                 *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "updateMechanic",
@@ -472,10 +487,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameMechanicDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/boardgames/mechanics/{id}",

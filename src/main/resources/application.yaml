@@ -21,6 +21,11 @@ springdoc:
     path: /api/docs
   swagger-ui:
     path: /api/ui
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
 
 ---
 spring:
@@ -41,3 +46,4 @@ spring:
     url: jdbc:mysql://db:3306/shop
 server:
   port: 8080
+

@@ -27,8 +27,6 @@ import java.util.Optional;
 @Service
 @Primary
 public class UserApiDelegateImpl implements UsersApiDelegate {
-
-    // todo change return types for update methods from void to DTOs
     UserService userService;
 
     @Autowired
@@ -78,7 +76,6 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
         return ResponseEntity.created(location).body(createdUser);
     }
 
-    // todo return UserDto instead of voi + new repository methods for it
     @Override
     public ResponseEntity<Void> deleteUser(Long userId) {
         this.userService.deleteUser(userId);

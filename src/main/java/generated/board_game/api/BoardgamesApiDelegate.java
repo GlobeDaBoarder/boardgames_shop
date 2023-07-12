@@ -21,7 +21,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link BoardgamesApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T22:15:02.473615025+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-12T23:53:06.280437855+03:00[Europe/Kiev]")
 public interface BoardgamesApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -34,6 +34,7 @@ public interface BoardgamesApiDelegate {
      * @param createAndUpdateBoardGameDto Boardgame to add (required)
      * @return Created (status code 201)
      *         or Bad Request (status code 400)
+     *         or Unauthorized (status code 401)
      * @see BoardgamesApi#addBoardGame
      */
     default ResponseEntity<BoardGameDto> addBoardGame(CreateAndUpdateBoardGameDto createAndUpdateBoardGameDto) {
@@ -56,6 +57,7 @@ public interface BoardgamesApiDelegate {
      * @param createAndUpdateBoardGameGenreDto Genre to add (required)
      * @return Created (status code 201)
      *         or Bad Request (status code 400)
+     *         or Unauthorized (status code 401)
      * @see BoardgamesApi#addGenre
      */
     default ResponseEntity<BoardGameGenreDto> addGenre(CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto) {
@@ -78,6 +80,7 @@ public interface BoardgamesApiDelegate {
      * @param createAndUpdateBoardGameMechanicDto Mechanic to add (required)
      * @return Created (status code 201)
      *         or Bad Request (status code 400)
+     *         or Unauthorized (status code 401)
      * @see BoardgamesApi#addMechanic
      */
     default ResponseEntity<BoardGameMechanicDto> addMechanic(CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto) {
@@ -100,6 +103,7 @@ public interface BoardgamesApiDelegate {
      * @param id ID of the boardgame to delete (required)
      * @return No Content (status code 204)
      *         or Not Found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see BoardgamesApi#deleteBoardGame
      */
     default ResponseEntity<Void> deleteBoardGame(Long id) {
@@ -113,6 +117,7 @@ public interface BoardgamesApiDelegate {
      * @param id ID of the genre to delete (required)
      * @return No Content (status code 204)
      *         or Not Found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see BoardgamesApi#deleteGenre
      */
     default ResponseEntity<Void> deleteGenre(Long id) {
@@ -126,6 +131,7 @@ public interface BoardgamesApiDelegate {
      * @param id ID of the mechanic to delete (required)
      * @return No Content (status code 204)
      *         or Not Found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see BoardgamesApi#deleteMechanic
      */
     default ResponseEntity<Void> deleteMechanic(Long id) {
@@ -291,6 +297,7 @@ public interface BoardgamesApiDelegate {
      * @param createAndUpdateBoardGameGenreDto Genre to update (required)
      * @return OK (status code 200)
      *         or Not Found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see BoardgamesApi#updateGenre
      */
     default ResponseEntity<BoardGameGenreDto> updateGenre(Long id,
@@ -315,6 +322,7 @@ public interface BoardgamesApiDelegate {
      * @param createAndUpdateBoardGameMechanicDto Mechanic to update (required)
      * @return OK (status code 200)
      *         or Not Found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see BoardgamesApi#updateMechanic
      */
     default ResponseEntity<BoardGameMechanicDto> updateMechanic(Long id,

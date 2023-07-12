@@ -31,7 +31,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T22:15:02.798354582+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-12T23:53:06.585924924+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "orders", description = "the orders API")
     public interface OrdersApi {
@@ -55,7 +55,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "404", description = "Order not found", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('user:write')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/orders/{orderId}"
@@ -81,7 +81,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-                        @PreAuthorize("hasAuthority('admin:read')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/orders",
@@ -100,6 +100,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 * @param orderId The ID of the order (required)
             * @return Order retrieved successfully (status code 200)
                 *         or Order not found (status code 404)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "getOrderById",
@@ -108,10 +109,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "Order retrieved successfully", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Order not found", content = @Content)
+                    @ApiResponse(responseCode = "404", description = "Order not found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('user:read')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/orders/{orderId}",
@@ -133,6 +135,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             * @return Order status updated successfully (status code 200)
                 *         or Invalid request (status code 400)
                 *         or Order not found (status code 404)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "updateOrderStatus",
@@ -143,10 +146,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
                         @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDto.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content),
-                    @ApiResponse(responseCode = "404", description = "Order not found", content = @Content)
+                    @ApiResponse(responseCode = "404", description = "Order not found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/orders/{orderId}",

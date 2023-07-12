@@ -17,7 +17,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link OrdersApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T22:15:02.798354582+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-12T23:53:06.585924924+03:00[Europe/Kiev]")
 public interface OrdersApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -63,6 +63,7 @@ public interface OrdersApiDelegate {
      * @param orderId The ID of the order (required)
      * @return Order retrieved successfully (status code 200)
      *         or Order not found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see OrdersApi#getOrderById
      */
     default ResponseEntity<OrderDto> getOrderById(Long orderId) {
@@ -88,6 +89,7 @@ public interface OrdersApiDelegate {
      * @return Order status updated successfully (status code 200)
      *         or Invalid request (status code 400)
      *         or Order not found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see OrdersApi#updateOrderStatus
      */
     default ResponseEntity<OrderDto> updateOrderStatus(Long orderId,

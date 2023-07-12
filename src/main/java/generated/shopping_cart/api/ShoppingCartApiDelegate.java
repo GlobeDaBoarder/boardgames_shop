@@ -21,7 +21,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link ShoppingCartApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T22:15:02.657396810+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-12T23:53:06.461530763+03:00[Europe/Kiev]")
 public interface ShoppingCartApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -60,6 +60,7 @@ public interface ShoppingCartApiDelegate {
      * @return Order created successfully (status code 201)
      *         or Invalid checkout request (status code 400)
      *         or Shopping cart or address not found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see ShoppingCartApi#checkoutRegisteredUser
      */
     default ResponseEntity<OrderDto> checkoutRegisteredUser(Long cartId,
