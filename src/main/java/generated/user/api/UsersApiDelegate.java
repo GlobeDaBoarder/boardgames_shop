@@ -9,6 +9,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link UsersApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-27T14:20:14.312854149+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-15T13:06:42.865406947+03:00[Europe/Kiev]")
 public interface UsersApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -140,7 +141,7 @@ public interface UsersApiDelegate {
      *
      * @param userId  (required)
      * @param addressId  (required)
-     * @return The address was found (status code 204)
+     * @return The address was found (status code 200)
      * @see UsersApi#getAddressById
      */
     default ResponseEntity<AddressDto> getAddressById(Long userId,
@@ -162,7 +163,7 @@ public interface UsersApiDelegate {
      * GET /users/{userId}/addresses : Get all addresses of a user
      *
      * @param userId  (required)
-     * @return All addresses were retrieved successfully (status code 204)
+     * @return All addresses were retrieved successfully (status code 200)
      * @see UsersApi#getAllAddresses
      */
     default ResponseEntity<List<AddressDto>> getAllAddresses(Long userId) {
@@ -170,6 +171,26 @@ public interface UsersApiDelegate {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "[ { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 }, { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /users/roles : Get all user roles
+     *
+     * @return successful operation (status code 200)
+     * @see UsersApi#getAllUserRoles
+     */
+    default ResponseEntity<List<UserRoleDto>> getAllUserRoles() {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"permissions\" : [ null, null ], \"roleName\" : \"roleName\", \"id\" : 0 }, { \"permissions\" : [ null, null ], \"roleName\" : \"roleName\", \"id\" : 0 } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -258,7 +279,7 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * PUT /users/{userId}/address/{addressId} : Update a user&#39;s address
+     * PATCH /users/{userId}/address/{addressId} : Update a user&#39;s address
      *
      * @param userId  (required)
      * @param addressId  (required)
@@ -283,7 +304,7 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * PUT /users/{userId}/email : Update a user&#39;s email
+     * PATCH /users/{userId}/email : Update a user&#39;s email
      *
      * @param userId  (required)
      * @param updateEmailDto  (required)
@@ -306,7 +327,7 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * PUT /users/{userId}/password : Update a user&#39;s password
+     * PATCH /users/{userId}/password : Update a user&#39;s password
      *
      * @param userId  (required)
      * @param updatePasswordDto  (required)
@@ -329,7 +350,7 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * PUT /users/{userId}/phone : Update a user&#39;s phone
+     * PATCH /users/{userId}/phone : Update a user&#39;s phone
      *
      * @param userId  (required)
      * @param updatePhoneDto  (required)
@@ -352,7 +373,7 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * PUT /users/{userId}/username : Update a user&#39;s username
+     * PATCH /users/{userId}/username : Update a user&#39;s username
      *
      * @param userId  (required)
      * @param updateUsernameDto  (required)

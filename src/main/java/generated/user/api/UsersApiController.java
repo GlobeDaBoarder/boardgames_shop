@@ -9,6 +9,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-27T14:20:14.312854149+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-15T13:06:42.865406947+03:00[Europe/Kiev]")
 @Controller
 @RequestMapping("${openapi.user.base-path:}")
 public class UsersApiController implements UsersApi {

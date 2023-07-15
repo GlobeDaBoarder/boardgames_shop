@@ -1,5 +1,6 @@
 package ua.rivnegray.boardgames_shop.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -21,6 +22,6 @@ public class ShoppingCart extends BaseEntity{
     @OneToOne(mappedBy = "shoppingCart")
     private UserProfile userProfile;
 
-    @OneToMany(mappedBy = "shoppingCart")
-    private Set<ProductInShoppingCart> products = new HashSet<>();
+    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProductInShoppingCart> productsInShoppingCart = new HashSet<>();
 }

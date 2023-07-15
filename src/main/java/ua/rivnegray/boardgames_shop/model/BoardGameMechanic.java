@@ -16,4 +16,6 @@ public class BoardGameMechanic extends BaseEntity{
 
     @Column(unique = true, nullable = false)
     private String mechanicName;
+
+    private String mechanicDescription;
 }

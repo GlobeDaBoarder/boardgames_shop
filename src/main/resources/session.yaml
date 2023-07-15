@@ -1,0 +1,143 @@
+openapi: 3.0.3
+info:
+  title: Title
+  description: Title
+  version: 1.0.0
+servers:
+  - url: 'https'
+paths:
+  /login:
+    post:
+      summary: Log in a user
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/LoginRequestDto'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponseDto'
+        '400':
+          description: Bad Request
+        '409':
+          description: Conflict, e.g., email already in use
+  /register:
+    post:
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerUserDto'
+      responses:
+        '201':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponseDto'
+        '400':
+          description: Bad Request
+        '409':
+          description: Conflict, e.g., email already in use
+components:
+  schemas:
+    LoginResponseDto:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserPublicDto'
+        token:
+          type: string
+    UserPublicDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto
+      properties:
+        username:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRoleDto'
+        email:
+          type: string
+        phone:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDto'
+    UserRoleDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto
+      properties:
+        id:
+          type: integer
+          format: int64
+        roleName:
+          type: string
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserPermission'
+    AddressDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.AddressDto
+      properties:
+        id:
+          type: integer
+          format: int64
+        street:
+          type: string
+        houseNumber:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+    UserPermission:
+      type: string
+      x-java-type: ua.rivnegray.boardgames_shop.model.user.UserPermission
+      enum:
+        - user:read
+        - user:write
+        - admin:read
+        - admin:write
+
+    LoginRequestDto:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    CreateCustomerUserDto:
+      type: object
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string

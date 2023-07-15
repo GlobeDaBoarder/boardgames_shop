@@ -51,10 +51,10 @@ public class UserProfile extends BaseEntity{
     @OneToOne(mappedBy = "userProfile", cascade = CascadeType.ALL)
     private UserCredentials userCredentials;
 
-    @OneToOne
-    private ShoppingCart shoppingCart;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private ShoppingCart shoppingCart = new ShoppingCart();
 
-    @OneToMany(mappedBy = "userProfile", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userProfile", cascade = CascadeType.ALL)
     @ToString.Exclude
     @Setter(AccessLevel.NONE)
     private Set<Order> orders = new HashSet<>();

@@ -17,6 +17,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
 import ua.rivnegray.boardgames_shop.service.UserService;
 
 import java.net.URI;
@@ -26,8 +27,6 @@ import java.util.Optional;
 @Service
 @Primary
 public class UserApiDelegateImpl implements UsersApiDelegate {
-
-    // todo change return types for update methods from void to DTOs
     UserService userService;
 
     @Autowired
@@ -77,7 +76,6 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
         return ResponseEntity.created(location).body(createdUser);
     }
 
-    // todo return UserDto instead of voi + new repository methods for it
     @Override
     public ResponseEntity<Void> deleteUser(Long userId) {
         this.userService.deleteUser(userId);
@@ -157,5 +155,10 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     @Override
     public ResponseEntity<List<UserPublicDto>> getUsersByRole(String role) {
         return ResponseEntity.ok(this.userService.getUsersPublicInfoByRole(role));
+    }
+
+    @Override
+    public ResponseEntity<List<UserRoleDto>> getAllUserRoles() {
+        return ResponseEntity.ok(this.userService.getAllUserRoles());
     }
 }

@@ -6,7 +6,11 @@
 package generated.board_game.api;
 
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateBoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
     import io.swagger.v3.oas.annotations.ExternalDocumentation;
     import io.swagger.v3.oas.annotations.Operation;
     import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +35,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-06-27T14:20:14.736536568+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-15T13:06:43.332934747+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "boardgames", description = "the boardgames API")
     public interface BoardgamesApi {
@@ -43,9 +47,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
             /**
             * POST /boardgames : Add a new boardgame
             *
-                * @param createBoardGameDto Boardgame to add (required)
+                * @param createAndUpdateBoardGameDto Boardgame to add (required)
             * @return Created (status code 201)
                 *         or Bad Request (status code 400)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "addBoardGame",
@@ -54,10 +59,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "201", description = "Created", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameDto.class))
                     }),
-                    @ApiResponse(responseCode = "400", description = "Bad Request")
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-            @PreAuthorize("hasAuthority('')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/boardgames",
@@ -65,9 +71,75 @@ import org.springframework.security.access.prepost.PreAuthorize;
             consumes = { "application/json" }
             )
         default ResponseEntity<BoardGameDto> addBoardGame(
-        @Parameter(name = "CreateBoardGameDto", description = "Boardgame to add", required = true) @Valid @RequestBody CreateBoardGameDto createBoardGameDto
+        @Parameter(name = "CreateAndUpdateBoardGameDto", description = "Boardgame to add", required = true) @Valid @RequestBody CreateAndUpdateBoardGameDto createAndUpdateBoardGameDto
             ) {
-            return getDelegate().addBoardGame(createBoardGameDto);
+            return getDelegate().addBoardGame(createAndUpdateBoardGameDto);
+            }
+
+
+            /**
+            * POST /boardgames/genres : Add a new genre
+            *
+                * @param createAndUpdateBoardGameGenreDto Genre to add (required)
+            * @return Created (status code 201)
+                *         or Bad Request (status code 400)
+                *         or Unauthorized (status code 401)
+            */
+                @Operation(
+                operationId = "addGenre",
+                    summary = "Add a new genre",
+                responses = {
+                    @ApiResponse(responseCode = "201", description = "Created", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameGenreDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+            @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/boardgames/genres",
+            produces = { "application/json" },
+            consumes = { "application/json" }
+            )
+        default ResponseEntity<BoardGameGenreDto> addGenre(
+        @Parameter(name = "CreateAndUpdateBoardGameGenreDto", description = "Genre to add", required = true) @Valid @RequestBody CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto
+            ) {
+            return getDelegate().addGenre(createAndUpdateBoardGameGenreDto);
+            }
+
+
+            /**
+            * POST /boardgames/mechanics : Add a new mechanic
+            *
+                * @param createAndUpdateBoardGameMechanicDto Mechanic to add (required)
+            * @return Created (status code 201)
+                *         or Bad Request (status code 400)
+                *         or Unauthorized (status code 401)
+            */
+                @Operation(
+                operationId = "addMechanic",
+                    summary = "Add a new mechanic",
+                responses = {
+                    @ApiResponse(responseCode = "201", description = "Created", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameMechanicDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+            @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/boardgames/mechanics",
+            produces = { "application/json" },
+            consumes = { "application/json" }
+            )
+        default ResponseEntity<BoardGameMechanicDto> addMechanic(
+        @Parameter(name = "CreateAndUpdateBoardGameMechanicDto", description = "Mechanic to add", required = true) @Valid @RequestBody CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto
+            ) {
+            return getDelegate().addMechanic(createAndUpdateBoardGameMechanicDto);
             }
 
 
@@ -77,24 +149,84 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 * @param id ID of the boardgame to delete (required)
             * @return No Content (status code 204)
                 *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "deleteBoardGame",
                     summary = "Delete a boardgame",
                 responses = {
-                    @ApiResponse(responseCode = "204", description = "No Content"),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-            @PreAuthorize("hasAuthority('')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/boardgames/{id}"
             )
         default ResponseEntity<Void> deleteBoardGame(
-        @Parameter(name = "id", description = "ID of the boardgame to delete", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
+        @Parameter(name = "id", description = "ID of the boardgame to delete", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
             ) {
             return getDelegate().deleteBoardGame(id);
+            }
+
+
+            /**
+            * DELETE /boardgames/genres/{id} : Delete a genre
+            *
+                * @param id ID of the genre to delete (required)
+            * @return No Content (status code 204)
+                *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
+            */
+                @Operation(
+                operationId = "deleteGenre",
+                    summary = "Delete a genre",
+                responses = {
+                    @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+            @RequestMapping(
+            method = RequestMethod.DELETE,
+            value = "/boardgames/genres/{id}"
+            )
+        default ResponseEntity<Void> deleteGenre(
+        @Parameter(name = "id", description = "ID of the genre to delete", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+            ) {
+            return getDelegate().deleteGenre(id);
+            }
+
+
+            /**
+            * DELETE /boardgames/mechanics/{id} : Delete a mechanic
+            *
+                * @param id ID of the mechanic to delete (required)
+            * @return No Content (status code 204)
+                *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
+            */
+                @Operation(
+                operationId = "deleteMechanic",
+                    summary = "Delete a mechanic",
+                responses = {
+                    @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+            @RequestMapping(
+            method = RequestMethod.DELETE,
+            value = "/boardgames/mechanics/{id}"
+            )
+        default ResponseEntity<Void> deleteMechanic(
+        @Parameter(name = "id", description = "ID of the mechanic to delete", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+            ) {
+            return getDelegate().deleteMechanic(id);
             }
 
 
@@ -112,7 +244,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     })
                 }
                 )
-            @PreAuthorize("hasAuthority('')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames",
@@ -122,6 +254,60 @@ import org.springframework.security.access.prepost.PreAuthorize;
         
             ) {
             return getDelegate().getAllBoardGames();
+            }
+
+
+            /**
+            * GET /boardgames/genres : Get all genres
+            *
+            * @return OK (status code 200)
+            */
+                @Operation(
+                operationId = "getAllGenres",
+                    summary = "Get all genres",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameGenreDto.class)))
+                    })
+                }
+                )
+                        //allow all
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/boardgames/genres",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<List<BoardGameGenreDto>> getAllGenres(
+        
+            ) {
+            return getDelegate().getAllGenres();
+            }
+
+
+            /**
+            * GET /boardgames/mechanics : Get all mechanics
+            *
+            * @return OK (status code 200)
+            */
+                @Operation(
+                operationId = "getAllMechanics",
+                    summary = "Get all mechanics",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameMechanicDto.class)))
+                    })
+                }
+                )
+                        //allow all
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/boardgames/mechanics",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<List<BoardGameMechanicDto>> getAllMechanics(
+        
+            ) {
+            return getDelegate().getAllMechanics();
             }
 
 
@@ -139,19 +325,79 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
-            @PreAuthorize("hasAuthority('')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/{id}",
             produces = { "application/json" }
             )
         default ResponseEntity<BoardGameDto> getBoardGameById(
-        @Parameter(name = "id", description = "ID of the boardgame", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
+        @Parameter(name = "id", description = "ID of the boardgame", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
             ) {
             return getDelegate().getBoardGameById(id);
+            }
+
+
+            /**
+            * GET /boardgames/genres/{id} : Get a genre by id
+            *
+                * @param id ID of the genre (required)
+            * @return OK (status code 200)
+                *         or Not Found (status code 404)
+            */
+                @Operation(
+                operationId = "getGenreById",
+                    summary = "Get a genre by id",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameGenreDto.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+                }
+                )
+                        //allow all
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/boardgames/genres/{id}",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<BoardGameGenreDto> getGenreById(
+        @Parameter(name = "id", description = "ID of the genre", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+            ) {
+            return getDelegate().getGenreById(id);
+            }
+
+
+            /**
+            * GET /boardgames/mechanics/{id} : Get a mechanic by id
+            *
+                * @param id ID of the mechanic (required)
+            * @return OK (status code 200)
+                *         or Not Found (status code 404)
+            */
+                @Operation(
+                operationId = "getMechanicById",
+                    summary = "Get a mechanic by id",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameMechanicDto.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
+                }
+                )
+                        //allow all
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/boardgames/mechanics/{id}",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<BoardGameMechanicDto> getMechanicById(
+        @Parameter(name = "id", description = "ID of the mechanic", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+            ) {
+            return getDelegate().getMechanicById(id);
             }
 
 
@@ -159,9 +405,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
             * PUT /boardgames/{id} : Update a boardgame
             *
                 * @param id ID of the boardgame to update (required)
-                * @param boardGameDto Boardgame to update (required)
+                * @param createAndUpdateBoardGameDto Boardgame to update (required)
             * @return OK (status code 200)
                 *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "updateBoardGame",
@@ -170,10 +417,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "OK", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameDto.class))
                     }),
-                    @ApiResponse(responseCode = "404", description = "Not Found")
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-            @PreAuthorize("hasAuthority('')")
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/boardgames/{id}",
@@ -181,10 +429,80 @@ import org.springframework.security.access.prepost.PreAuthorize;
             consumes = { "application/json" }
             )
         default ResponseEntity<BoardGameDto> updateBoardGame(
-        @Parameter(name = "id", description = "ID of the boardgame to update", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id,
-        @Parameter(name = "BoardGameDto", description = "Boardgame to update", required = true) @Valid @RequestBody BoardGameDto boardGameDto
+        @Parameter(name = "id", description = "ID of the boardgame to update", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
+        @Parameter(name = "CreateAndUpdateBoardGameDto", description = "Boardgame to update", required = true) @Valid @RequestBody CreateAndUpdateBoardGameDto createAndUpdateBoardGameDto
             ) {
-            return getDelegate().updateBoardGame(id, boardGameDto);
+            return getDelegate().updateBoardGame(id, createAndUpdateBoardGameDto);
+            }
+
+
+            /**
+            * PUT /boardgames/genres/{id} : Update a genre
+            *
+                * @param id ID of the genre to update (required)
+                * @param createAndUpdateBoardGameGenreDto Genre to update (required)
+            * @return OK (status code 200)
+                *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
+            */
+                @Operation(
+                operationId = "updateGenre",
+                    summary = "Update a genre",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameGenreDto.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+            @RequestMapping(
+            method = RequestMethod.PUT,
+            value = "/boardgames/genres/{id}",
+            produces = { "application/json" },
+            consumes = { "application/json" }
+            )
+        default ResponseEntity<BoardGameGenreDto> updateGenre(
+        @Parameter(name = "id", description = "ID of the genre to update", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
+        @Parameter(name = "CreateAndUpdateBoardGameGenreDto", description = "Genre to update", required = true) @Valid @RequestBody CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto
+            ) {
+            return getDelegate().updateGenre(id, createAndUpdateBoardGameGenreDto);
+            }
+
+
+            /**
+            * PUT /boardgames/mechanics/{id} : Update a mechanic
+            *
+                * @param id ID of the mechanic to update (required)
+                * @param createAndUpdateBoardGameMechanicDto Mechanic to update (required)
+            * @return OK (status code 200)
+                *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
+            */
+                @Operation(
+                operationId = "updateMechanic",
+                    summary = "Update a mechanic",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameMechanicDto.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+            @RequestMapping(
+            method = RequestMethod.PUT,
+            value = "/boardgames/mechanics/{id}",
+            produces = { "application/json" },
+            consumes = { "application/json" }
+            )
+        default ResponseEntity<BoardGameMechanicDto> updateMechanic(
+        @Parameter(name = "id", description = "ID of the mechanic to update", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
+        @Parameter(name = "CreateAndUpdateBoardGameMechanicDto", description = "Mechanic to update", required = true) @Valid @RequestBody CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto
+            ) {
+            return getDelegate().updateMechanic(id, createAndUpdateBoardGameMechanicDto);
             }
 
         }

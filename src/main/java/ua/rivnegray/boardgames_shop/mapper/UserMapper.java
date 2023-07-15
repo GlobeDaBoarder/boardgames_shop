@@ -10,6 +10,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
 import ua.rivnegray.boardgames_shop.exceptions.RoleIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.RoleNameNotFoundException;
 import ua.rivnegray.boardgames_shop.model.Address;
@@ -72,6 +73,10 @@ public interface UserMapper {
     AddressDto toAddressDto(Address addressToAdd);
 
     void updateAddress(@MappingTarget Address addressToUpdate, AddAndUpdateAddressDto updateAddressDto);
+
+    UserRoleDto toUserRoleDto(UserRole userRole);
+
+    Address toAddress(AddressDto addressDto);
 
 //    UserFullDto userToUserDto(User user);
 //

@@ -1,4 +1,7 @@
-src/main/java/generated/order/api/ApiUtil.java
-src/main/java/generated/order/api/OrdersApi.java
-src/main/java/generated/order/api/OrdersApiController.java
-src/main/java/generated/order/api/OrdersApiDelegate.java
+src/main/java/generated/session/api/ApiUtil.java
+src/main/java/generated/session/api/LoginApi.java
+src/main/java/generated/session/api/LoginApiController.java
+src/main/java/generated/session/api/LoginApiDelegate.java
+src/main/java/generated/session/api/RegisterApi.java
+src/main/java/generated/session/api/RegisterApiController.java
+src/main/java/generated/session/api/RegisterApiDelegate.java

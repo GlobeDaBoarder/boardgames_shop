@@ -4,26 +4,28 @@ info:
   version: 1.0.0
 paths:
   /orders:
-    post:
-      summary: Creates a new order
-      operationId: createOrder
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateOrderDto'
-      responses:
-        '201':
-          description: Order created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderDto'
-        '400':
-          description: Invalid request
+#    post:
+#      summary: Creates a new order
+#      operationId: createOrder
+#      x-acess-permission: user:write
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/CreateOrderDto'
+#      responses:
+#        '201':
+#          description: Order created successfully
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/OrderDto'
+#        '400':
+#          description: Invalid request
     get:
       summary: Retrieves a list of all orders
+      x-acess-permission: admin:read
       operationId: getAllOrders
       responses:
         '200':
@@ -38,12 +40,14 @@ paths:
     get:
       summary: Retrieves information about a specific order
       operationId: getOrderById
+      x-acess-permission: user:read
       parameters:
         - in: path
           name: orderId
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
           description: The ID of the order
       responses:
         '200':
@@ -54,18 +58,24 @@ paths:
                 $ref: '#/components/schemas/OrderDto'
         '404':
           description: Order not found
+        '401':
+          description: Unauthorized
     patch:
       summary: Updates the status of an order
+      description: use PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED as possible statuses
       operationId: updateOrderStatus
+      x-acess-permission: admin:write
       parameters:
         - in: path
           name: orderId
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
           description: The ID of the order
       requestBody:
         required: true
+        description: PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED
         content:
           application/json:
             schema:
@@ -81,6 +91,8 @@ paths:
           description: Invalid request
         '404':
           description: Order not found
+        '401':
+          description: Unauthorized
     delete:
       summary: Cancels an order
       operationId: cancelOrder
@@ -89,7 +101,8 @@ paths:
           name: orderId
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
           description: The ID of the order
       responses:
         '204':
