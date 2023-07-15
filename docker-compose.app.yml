@@ -13,7 +13,7 @@ services:
       - app-network
 
   app:
-#    image: rivnegraycontainers.azurecr.io/app:latest
+    image: rivnegraycontainers.azurecr.io/app:latest
 #    image: app:latest
     build:
       context: .
