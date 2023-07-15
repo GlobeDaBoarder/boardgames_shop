@@ -35,7 +35,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-09T22:15:02.657396810+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-15T13:06:43.497471985+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "shoppingCart", description = "the shoppingCart API")
     public interface ShoppingCartApi {
@@ -85,6 +85,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             * @return Order created successfully (status code 201)
                 *         or Invalid checkout request (status code 400)
                 *         or Shopping cart or address not found (status code 404)
+                *         or Unauthorized (status code 401)
             */
                 @Operation(
                 operationId = "checkoutRegisteredUser",
@@ -94,10 +95,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
                         @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDto.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Invalid checkout request", content = @Content),
-                    @ApiResponse(responseCode = "404", description = "Shopping cart or address not found", content = @Content)
+                    @ApiResponse(responseCode = "404", description = "Shopping cart or address not found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
                 }
                 )
-                        @PreAuthorize("hasAuthority('user:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:write')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/shoppingCart/{cartId}/checkout/{addressId}",

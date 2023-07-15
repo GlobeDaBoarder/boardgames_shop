@@ -23,8 +23,12 @@ public class GlobalExceptionHandler {
             BoardGameMechanicIdNotFoundException.class, OrderIdNotFoundException.class, RoleIdNotFoundException.class,
             RoleNameNotFoundException.class, ShoppingCartIdNotFoundException.class, UserIdNotFoundException.class
     })
-    public ResponseEntity<String> handleUserNotFoundException(UserIdNotFoundException ex) {
+    // todo check
+    // todo make common parrent
+    public ResponseEntity<String> handleUserNotFoundException(RuntimeException ex) {
         // todo figure out logging (log4j??)
+        // todo logging of exceptions, db requests  into file
+        // todo log into db??
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 

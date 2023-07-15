@@ -1,7 +1,7 @@
-package generated.order.api;
+package generated.session.api;
 
-import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
-import ua.rivnegray.boardgames_shop.model.OrderStatus;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,19 +26,19 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-15T13:06:43.625702627+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-15T13:06:43.725031734+03:00[Europe/Kiev]")
 @Controller
-@RequestMapping("${openapi.order.base-path:}")
-public class OrdersApiController implements OrdersApi {
+@RequestMapping("${openapi.title.base-path:}")
+public class RegisterApiController implements RegisterApi {
 
-    private final OrdersApiDelegate delegate;
+    private final RegisterApiDelegate delegate;
 
-    public OrdersApiController(@Autowired(required = false) OrdersApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new OrdersApiDelegate() {});
+    public RegisterApiController(@Autowired(required = false) RegisterApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new RegisterApiDelegate() {});
     }
 
     @Override
-    public OrdersApiDelegate getDelegate() {
+    public RegisterApiDelegate getDelegate() {
         return delegate;
     }
 
