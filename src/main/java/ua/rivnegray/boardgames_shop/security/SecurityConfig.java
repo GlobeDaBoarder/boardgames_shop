@@ -63,6 +63,8 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/register").permitAll()
                         .requestMatchers("/token").permitAll()
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/boardgames/**").permitAll()

@@ -231,6 +231,7 @@
 								<importMapping>UserPublicDto=ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto</importMapping>
 								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto</importMapping>
 								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.UserPermission</importMapping>
+
 							</importMappings>
 
 							<configOptions>
@@ -319,6 +320,33 @@
 							<configOptions>
 								<modelPackage>generated.order.model</modelPackage>
 								<apiPackage>generated.order.api</apiPackage>
+							</configOptions>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>generate-session-spring-controllers</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>src/main/resources/session.yaml</inputSpec>
+
+							<importMappings>
+
+								<importMapping>AddressDto=ua.rivnegray.boardgames_shop.DTO.response.AddressDto</importMapping>
+								<importMapping>LoginRequestDto=ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto</importMapping>
+								<importMapping>LoginResponseDto=ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto</importMapping>
+								<importMapping>CreateCustomerUserDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto</importMapping>
+								<importMapping>UserPublicDto=ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto</importMapping>
+								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto</importMapping>
+								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.UserPermission</importMapping>
+							</importMappings>
+
+							<configOptions>
+								<modelPackage>generated.session.model</modelPackage>
+								<apiPackage>generated.session.api</apiPackage>
 							</configOptions>
 						</configuration>
 					</execution>
