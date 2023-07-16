@@ -1,28 +1,18 @@
 package ua.rivnegray.boardgames_shop.mapper;
 
-import org.hibernate.annotations.Source;
-import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import ua.rivnegray.boardgames_shop.DTO.request.create.AddProductInShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserProfileDto;
-import ua.rivnegray.boardgames_shop.exceptions.BoardGameIdNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.ShoppingCartIdNotFoundException;
-import ua.rivnegray.boardgames_shop.model.Address;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.ShoppingCartIdNotFoundException;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
-import ua.rivnegray.boardgames_shop.model.Product;
 import ua.rivnegray.boardgames_shop.model.ProductInOrder;
 import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.ShoppingCart;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.ShoppingCartRepository;
-import ua.rivnegray.boardgames_shop.service.BoardGameService;
-import ua.rivnegray.boardgames_shop.service.ShoppingCartService;
-import ua.rivnegray.boardgames_shop.service.ShoppingCartServiceImpl;
 
 @Mapper(componentModel = "spring", uses = {BoardGameRepository.class, ShoppingCartRepository.class})
 public interface ProductMapper {

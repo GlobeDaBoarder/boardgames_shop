@@ -4,6 +4,7 @@ info:
   title: User API
   version: 1.0.0
 paths:
+  # admin operations
   /users:
     get:
       summary: Get all users
@@ -28,24 +29,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateAnyUserDto'
-      responses:
-        '201':
-          description: User created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserPublicDto'
-  /users/customer:
-    post:
-      summary: Create a new customer user
-      operationId: createCustomerUser
-      x-acess-permission:  user:write
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateCustomerUserDto'
       responses:
         '201':
           description: User created
@@ -90,18 +73,65 @@ paths:
           description: User deleted
         '404':
           description: User not found
-  /users/{userId}/username:
-    patch:
-      summary: Update a user's username
-      operationId: updateUsername
-      x-acess-permission: user:write
+  /users/role/{role}:
+    get:
+      summary: Get users by role
+      operationId: getUsersByRole
+      x-acess-permission: admin:read
       parameters:
-        - name: userId
+        - name: role
           in: path
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+      responses:
+        '200':
+          description: Users wih role found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPublicDto'
+  /users/roles:
+    get:
+      summary: Get all user roles
+      operationId: getAllUserRoles
+      x-acess-permission: admin:read
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserRoleDto'
+
+  # currently logged-in user operations
+  /users/me:
+    get:
+      summary: Get info of currently logged in user
+      operationId: getCurrentUserPublicInfo
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPublicDto'
+        '401':
+          description: Unauthorized
+
+  /users/me/username:
+    patch:
+      summary: Update a current user's username
+      operationId: updateUsername
+      x-acess-permission: user:write
+      security:
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -115,18 +145,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPublicDto'
-  /users/{userId}/password:
+  /users/me/password:
     patch:
       summary: Update a user's password
       operationId: updatePassword
       x-acess-permission: user:write
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+      security:
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -140,18 +165,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPublicDto'
-  /users/{userId}/email:
+  /users/me/email:
     patch:
-      summary: Update a user's email
+      summary: Update a  current user's email
       operationId: updateEmail
       x-acess-permission: user:write
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+      security:
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -165,18 +185,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPublicDto'
-  /users/{userId}/phone:
+  /users/me/phone:
     patch:
-      summary: Update a user's phone
+      summary: Update a current user's phone
       operationId: updatePhone
       x-acess-permission: user:write
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+      security:
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -190,18 +205,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPublicDto'
-  /users/{userId}/address:
+  /users/me/address:
     post:
-      summary: Add an address to a user
+      summary: Add an address to a current user
       operationId: addAddress
       x-acess-permission: user:write
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+      security:
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -215,18 +225,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPublicDto'
-  /users/{userId}/address/{addressId}:
-    patch:
-      summary: Update a user's address
-      operationId: updateAddress
-      x-acess-permission: user:write
+    get:
+      summary: Get all addresses of a user
+      operationId: getAllAddresses
+      x-acess-permission: user:read
+      security:
+        - bearerAuth: [ ]
+      responses:
+        '200':
+          description: All addresses were retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddressDto'
+  /users/me/address/{addressId}:
+    get:
+      summary: Get a user's address by address id
+      operationId: getAddressById
+      x-acess-permission: user:read
+      security:
+        - bearerAuth: [ ]
       parameters:
-        - name: userId
-          in: path
+        - in: path
+          name: addressId
           required: true
           schema:
             type: integer
             format: int64
+      responses:
+        '200':
+          description: The address was found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressDto'
+    patch:
+      summary: Update a user's address
+      operationId: updateAddress
+      x-acess-permission: user:write
+      security:
+        - bearerAuth: [ ]
+      parameters:
         - name: addressId
           in: path
           required: true
@@ -250,13 +291,9 @@ paths:
       summary: Remove an address from a user
       operationId: removeAddress
       x-acess-permission: user:write
+      security:
+        - bearerAuth: [ ]
       parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
         - name: addressId
           in: path
           required: true
@@ -267,136 +304,56 @@ paths:
         '204':
           description: address deleted
         '404':
-          description: address not founf
-  /users/role/{role}:
-    get:
-      summary: Get users by role
-      operationId: getUsersByRole
-      x-acess-permission: admin:read
-      parameters:
-        - in: path
-          name: role
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Users wih role found
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserPublicDto'
-  /users/roles:
-    get:
-      summary: Get all user roles
-      operationId: getAllUserRoles
-      x-acess-permission: admin:read
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserRoleDto'
+          description: address not found
+  #  /users/availability/email:
+#    post:
+#      summary: Check if email is available
+#      operationId: checkEmailAvailability
+#      x-acess-permission: admin:read
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/UpdateEmailDto'
+#      responses:
+#        '204':
+#          description: checked for availability of email successfully
+#          content:
+#            application/json:
+#              schema:
+#                type: boolean
+#        '409':
+#          description: email already taken
+#          content:
+#            application/json:
+#              schema:
+#                type: boolean
+#  /users/availability/username:
+#    post:
+#      summary: Check if username is available
+#      operationId: checkUsernameAvailability
+#      x-acess-permission: admin:read
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/UpdateUsernameDto'
+#      responses:
+#        '204':
+#          description: checked for availability of username successfully
+#          content:
+#            application/json:
+#              schema:
+#                type: boolean
+#        '409':
+#          description: username already taken
+#          content:
+#            application/json:
+#              schema:
+#                type: boolean
 
-  /users/availability/email:
-    post:
-      summary: Check if email is available
-      operationId: checkEmailAvailability
-      x-acess-permission: admin:read
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateEmailDto'
-      responses:
-        '204':
-          description: checked for availability of email successfully
-          content:
-            application/json:
-              schema:
-                type: boolean
-        '409':
-          description: email already taken
-          content:
-            application/json:
-              schema:
-                type: boolean
-  /users/availability/username:
-    post:
-      summary: Check if username is available
-      operationId: checkUsernameAvailability
-      x-acess-permission: admin:read
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateUsernameDto'
-      responses:
-        '204':
-          description: checked for availability of username successfully
-          content:
-            application/json:
-              schema:
-                type: boolean
-        '409':
-          description: username already taken
-          content:
-            application/json:
-              schema:
-                type: boolean
-  /users/{userId}/addresses/{addressId}:
-    get:
-      summary: Get a user's address by address id
-      operationId: getAddressById
-      x-acess-permission: user:read
-      parameters:
-        - in: path
-          name: userId
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - in: path
-          name: addressId
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: The address was found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AddressDto'
-  /users/{userId}/addresses:
-    get:
-      summary: Get all addresses of a user
-      operationId: getAllAddresses
-      x-acess-permission: user:read
-      parameters:
-        - in: path
-          name: userId
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: All addresses were retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AddressDto'
 components:
   schemas:
     CreateAnyUserDto:
@@ -420,39 +377,11 @@ components:
           type: string
         lastName:
           type: string
-    CreateCustomerUserDto:
-      type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-        email:
-          type: string
-        phone:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
     UpdateEmailDto:
       type: object
       x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto
       properties:
         email:
-          type: string
-    UpdateFullUserProfileDto:
-      type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdateFullUserProfileDto
-      properties:
-        email:
-          type: string
-        phone:
-          type: string
-        firstName:
-          type: string
-        lastName:
           type: string
     UpdatePasswordDto:
       type: object
@@ -466,15 +395,6 @@ components:
       properties:
         phone:
           type: string
-    UpdateRolesDto:
-      type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdateRolesDto
-      properties:
-        roleIds:
-          type: array
-          items:
-            type: integer
-            format: int64
     UpdateUsernameDto:
       type: object
       x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto
@@ -570,4 +490,10 @@ components:
         - user:write
         - admin:read
         - admin:write
+
+  securitySchemes:
+    BearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
 

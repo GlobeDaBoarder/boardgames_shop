@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
-import ua.rivnegray.boardgames_shop.exceptions.UserIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.UsernameAlreadyTakenException;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
@@ -64,7 +65,7 @@ public class SessionServiceImpl implements SessionsService{
     @Override
     public LoginResponseDto register(CreateCustomerUserDto createCustomerUserDto) {
         if (userCredentialsRepository.existsByUsername(createCustomerUserDto.username())) {
-            throw new IllegalArgumentException("Username already exists");
+            throw new UsernameAlreadyTakenException("Username already exists");
         }
         UserProfile userProfile = this.userMapper.toUserProfile(createCustomerUserDto, this.userRoleRepository);
         UserCredentials userCredentials = new UserCredentials(createCustomerUserDto.username(), passwordEncoder.encode(createCustomerUserDto.password()));

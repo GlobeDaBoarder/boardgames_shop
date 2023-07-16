@@ -40,8 +40,8 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> addAddress(Long userId, AddAndUpdateAddressDto addAndUpdateAddressDto) {
-        UserPublicDto userWithAddedAddress = this.userService.addAddress(userId, addAndUpdateAddressDto);
+    public ResponseEntity<UserPublicDto> addAddress(AddAndUpdateAddressDto addAndUpdateAddressDto) {
+        UserPublicDto userWithAddedAddress = this.userService.addAddress(addAndUpdateAddressDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -49,19 +49,6 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
                 .toUri();
 
         return ResponseEntity.created(location).body(userWithAddedAddress);
-    }
-
-    @Override
-    public ResponseEntity<UserPublicDto> createCustomerUser(CreateCustomerUserDto createCustomerUserDto) {
-
-        UserPublicDto createdUser = this.userService.createCustomerUser(createCustomerUserDto);
-
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(createdUser.id())
-                .toUri();
-
-        return ResponseEntity.created(location).body(createdUser);
     }
 
     @Override
@@ -93,63 +80,70 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Void> removeAddress(Long userId, Long addressId) {
-        this.userService.removeAddress(userId, addressId);
+    public ResponseEntity<UserPublicDto> getCurrentUserPublicInfo() {
+        return ResponseEntity.ok(this.userService.getCurrentUserPublicInfo());
+    }
+
+
+
+    @Override
+    public ResponseEntity<Void> removeAddress(Long addressId) {
+        this.userService.removeAddress(addressId);
         return ResponseEntity.noContent().build();
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> updateAddress(Long userId, Long addressId,
+    public ResponseEntity<UserPublicDto> updateAddress(Long addressId,
                                                        AddAndUpdateAddressDto addAndUpdateAddressDto) {
-        return ResponseEntity.ok(this.userService.updateAddress(userId, addressId, addAndUpdateAddressDto));
+        return ResponseEntity.ok(this.userService.updateAddress(addressId, addAndUpdateAddressDto));
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> updateEmail(Long userId, UpdateEmailDto updateEmailDto) {
-        return ResponseEntity.ok(this.userService.updateEmail(userId, updateEmailDto));
+    public ResponseEntity<UserPublicDto> updateEmail(UpdateEmailDto updateEmailDto) {
+        return ResponseEntity.ok(this.userService.updateEmail(updateEmailDto));
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> updatePassword(Long userId, UpdatePasswordDto updatePasswordDto) {
-        return ResponseEntity.ok(this.userService.updatePassword(userId, updatePasswordDto));
+    public ResponseEntity<UserPublicDto> updatePassword(UpdatePasswordDto updatePasswordDto) {
+        return ResponseEntity.ok(this.userService.updatePassword(updatePasswordDto));
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> updatePhone(Long userId, UpdatePhoneDto updatePhoneDto) {
-        return ResponseEntity.ok(this.userService.updatePhone(userId, updatePhoneDto));
+    public ResponseEntity<UserPublicDto> updatePhone(UpdatePhoneDto updatePhoneDto) {
+        return ResponseEntity.ok(this.userService.updatePhone(updatePhoneDto));
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> updateUsername(Long userId, UpdateUsernameDto updateUsernameDto) {
-        return ResponseEntity.ok(this.userService.updateUsername(userId, updateUsernameDto));
+    public ResponseEntity<UserPublicDto> updateUsername(UpdateUsernameDto updateUsernameDto) {
+        return ResponseEntity.ok(this.userService.updateUsername(updateUsernameDto));
+    }
+
+//    @Override
+//    public ResponseEntity<Boolean> checkEmailAvailability(UpdateEmailDto updateEmailDto) {
+//        if (this.userService.isEmailAvailable(updateEmailDto)) {
+//            return new ResponseEntity<>(true, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+//        }
+//    }
+//
+//    @Override
+//    public ResponseEntity<Boolean> checkUsernameAvailability(UpdateUsernameDto updateUsernameDto) {
+//        if (this.userService.isUsernameAvailable(updateUsernameDto)) {
+//            return new ResponseEntity<>(true, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+//        }
+//    }
+
+    @Override
+    public ResponseEntity<AddressDto> getAddressById(Long addressId) {
+        return ResponseEntity.ok(this.userService.getAddress(addressId));
     }
 
     @Override
-    public ResponseEntity<Boolean> checkEmailAvailability(UpdateEmailDto updateEmailDto) {
-        if (this.userService.isEmailAvailable(updateEmailDto)) {
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
-        }
-    }
-
-    @Override
-    public ResponseEntity<Boolean> checkUsernameAvailability(UpdateUsernameDto updateUsernameDto) {
-        if (this.userService.isUsernameAvailable(updateUsernameDto)) {
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
-        }
-    }
-
-    @Override
-    public ResponseEntity<AddressDto> getAddressById(Long userId, Long addressId) {
-        return ResponseEntity.ok(this.userService.getAddress(userId, addressId));
-    }
-
-    @Override
-    public ResponseEntity<List<AddressDto>> getAllAddresses(Long userId) {
-        return ResponseEntity.ok(this.userService.getAllAddresses(userId));
+    public ResponseEntity<List<AddressDto>> getAllAddresses() {
+        return ResponseEntity.ok(this.userService.getAllAddresses());
     }
 
     @Override
