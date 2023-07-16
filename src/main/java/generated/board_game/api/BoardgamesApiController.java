@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-16T16:08:59.140505854+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-16T19:33:23.666540619+03:00[Europe/Kiev]")
 @Controller
 @RequestMapping("${openapi.boardgames.base-path:}")
 public class BoardgamesApiController implements BoardgamesApi {

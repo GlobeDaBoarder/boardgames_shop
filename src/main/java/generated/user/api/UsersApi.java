@@ -38,7 +38,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-16T16:08:58.690772025+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-16T19:33:23.309549578+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "users", description = "the users API")
     public interface UsersApi {
