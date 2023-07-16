@@ -31,4 +31,5 @@ In you dockerhub account:
 3. Click on New Access Token
 4. Copy it and save it to github secrets just like in the previous step 
 
-
+### trigger workflow run 
+Tou can do this by either commiting to master branch or by manually triggering the workflow run
