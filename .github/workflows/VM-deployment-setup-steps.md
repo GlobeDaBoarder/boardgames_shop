@@ -24,4 +24,11 @@ sudo chmod +x /usr/local/bin/docker-compose
 6. Paste the private key in the value field
 7. Click on Add secret
 
+### Add dockerhub credentials to GithubSecrets
+In you dockerhub account:
+1. Go to account settings
+2. Click on Security
+3. Click on New Access Token
+4. Copy it and save it to github secrets just like in the previous step 
+
 

@@ -31,16 +31,35 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:latest
 
+      - name: Create app deirectory if doesn't exist yet
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_PRIVATE_KEY }}
+          passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
+          script: |
+            mkdir -p ~/rivnegray
+
+      - name: Copy docker-compose file
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_PRIVATE_KEY }}
+          passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
+          source: "docker-compose.app.yml"
+          target: "~/rivnegray/docker-compose.app.yml
 
       - name: Deploy to VM
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          key: ${{ secrets.VM_PRIVATE_KEY }}
+          passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
           script: |
-            cd /path/to/your/project/on/vm
+            cd ~/rivnegray/
             docker-compose down
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/app:latest
             docker-compose up -d

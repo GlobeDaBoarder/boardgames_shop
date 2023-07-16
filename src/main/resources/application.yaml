@@ -47,3 +47,13 @@ spring:
 server:
   port: 8080
 
+---
+spring:
+  config:
+    activate:
+      on-profile: dev-remote-VM
+  datasource:
+    url: jdbc:mysql://db:3306/shop
+server:
+  port: 8080
+

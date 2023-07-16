@@ -24,7 +24,7 @@ services:
       - app-network
     environment:
       WAIT_HOSTS: db:3306
-      SPRING_PROFILES_ACTIVE: dev-remote-AKS
+      SPRING_PROFILES_ACTIVE: dev-remote-VM
 
 networks:
   app-network:
