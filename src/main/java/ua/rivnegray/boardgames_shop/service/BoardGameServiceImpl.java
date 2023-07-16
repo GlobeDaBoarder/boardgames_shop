@@ -9,9 +9,9 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameM
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
-import ua.rivnegray.boardgames_shop.exceptions.BoardGameGenreIdNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.BoardGameIdNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.BoardGameMechanicIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameGenreIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameMechanicIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameGenreMapper;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMapper;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMechanicMapper;

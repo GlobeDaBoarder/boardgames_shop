@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.exceptions;
+package ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions;
 
 
 // todo change to ResponseStatusException
