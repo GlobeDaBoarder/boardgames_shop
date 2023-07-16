@@ -60,6 +60,6 @@ jobs:
           passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
           script: |
             cd ~/rivnegray/
-            docker-compose down
+            docker-compose -f docker-compose.app.yaml down
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/app:latest
-            docker-compose up -d
+            docker-compose -f docker-compose.app.yaml up -d
