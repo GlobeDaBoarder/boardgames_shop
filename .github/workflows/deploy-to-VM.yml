@@ -49,7 +49,7 @@ jobs:
           key: ${{ secrets.VM_PRIVATE_KEY }}
           passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
           source: "docker-compose.app.yml"
-          target: "~/rivnegray/docker-compose.app.yml"
+          target: "~/rivnegray/"
 
       - name: Deploy to VM
         uses: appleboy/ssh-action@master
