@@ -61,5 +61,4 @@ jobs:
           script: |
             cd ~/rivnegray/
             docker-compose -f docker-compose.app.yml down
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/app:latest
             docker-compose -f docker-compose.app.yml up -d

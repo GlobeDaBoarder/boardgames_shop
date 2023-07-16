@@ -13,11 +13,8 @@ services:
       - app-network
 
   app:
-#    image: rivnegraycontainers.azurecr.io/app:latest
-#    image: app:latest
-    build:
-      context: .
-      dockerfile: dockerfile-app
+    image: gl0be/app:latest
+
     ports:
       - "8080:8080"
     networks:
