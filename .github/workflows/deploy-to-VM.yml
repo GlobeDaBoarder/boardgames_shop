@@ -48,5 +48,6 @@ jobs:
             host: ${{ secrets.VM_HOST }}
             username: ${{ secrets.VM_USERNAME }}
             key: ${{ secrets.VM_PRIVATE_KEY }}
+            passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
             script: ls -la
 
