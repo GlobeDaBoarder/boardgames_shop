@@ -10,6 +10,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
+import ua.rivnegray.boardgames_shop.DTO.response.UserProfileDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
 import ua.rivnegray.boardgames_shop.model.Address;
@@ -36,41 +37,44 @@ public interface UserService {
     UserPublicDto createCustomerUser(CreateCustomerUserDto createCustomerUserDto);
 
     @Transactional
-    UserPublicDto updateUsername(final Long id, final UpdateUsernameDto updateUsernameDto);
+    UserPublicDto updateUsername(final UpdateUsernameDto updateUsernameDto);
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    UserPublicDto updatePassword(final Long id, final UpdatePasswordDto updatePasswordDto);
+    UserPublicDto updatePassword(final UpdatePasswordDto updatePasswordDto);
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    UserPublicDto updateEmail(final Long id, final UpdateEmailDto updateEmailDto);
+    UserPublicDto updateEmail(final UpdateEmailDto updateEmailDto);
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    UserPublicDto updatePhone(final Long id, final UpdatePhoneDto updatePhoneDto);
+    UserPublicDto updatePhone(final UpdatePhoneDto updatePhoneDto);
+
+//    @Transactional(readOnly = true)
+//    Boolean isEmailAvailable(UpdateEmailDto updateEmailDto);
+//
+//    @Transactional(readOnly = true)
+//    Boolean isUsernameAvailable(UpdateUsernameDto updateUsernameDto);
 
     @Transactional(readOnly = true)
-    Boolean isEmailAvailable(UpdateEmailDto updateEmailDto);
+    AddressDto getAddress(Long addressId);
 
     @Transactional(readOnly = true)
-    Boolean isUsernameAvailable(UpdateUsernameDto updateUsernameDto);
-
-    @Transactional(readOnly = true)
-    AddressDto getAddress(Long userId, Long addressId);
-
-    @Transactional(readOnly = true)
-    List<AddressDto> getAllAddresses(Long userId);
+    List<AddressDto> getAllAddresses();
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    UserPublicDto updateAddress(final Long userId, final Long addressId, final AddAndUpdateAddressDto updateAddressDto);
+    UserPublicDto updateAddress(final Long addressId, final AddAndUpdateAddressDto updateAddressDto);
 
     @Transactional
-    UserPublicDto addAddress(final Long userId, final AddAndUpdateAddressDto addAddressDto);
+    UserPublicDto addAddress(final AddAndUpdateAddressDto addAddressDto);
 
     @Transactional
-    void removeAddress(final Long userId, final Long addressId);
+    void removeAddress(final Long addressId);
 
     @Transactional
     void deleteUser(Long id);
 
-    @Transactional
+    @Transactional(readOnly = true)
     List<UserRoleDto> getAllUserRoles();
+
+    @Transactional(readOnly = true)
+    UserPublicDto getCurrentUserPublicInfo();
 }
