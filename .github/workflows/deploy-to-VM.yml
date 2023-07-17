@@ -29,7 +29,7 @@ jobs:
           context: .
           file: ./dockerfile-app
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:{{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:${{ github.sha }}
 
       - name: Create app deirectory if doesn't exist yet
         uses: appleboy/ssh-action@master
