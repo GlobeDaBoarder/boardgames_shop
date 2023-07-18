@@ -7,7 +7,7 @@ paths:
 #    post:
 #      summary: Creates a new order
 #      operationId: createOrder
-#      x-acess-permission: user:write
+#      x-access-permission: user:write
 #      requestBody:
 #        required: true
 #        content:
@@ -25,7 +25,7 @@ paths:
 #          description: Invalid request
     get:
       summary: Retrieves a list of all orders
-      x-acess-permission: admin:read
+      x-access-permission: admin:read
       operationId: getAllOrders
       responses:
         '200':
@@ -40,7 +40,7 @@ paths:
     get:
       summary: Retrieves information about a specific order
       operationId: getOrderById
-      x-acess-permission: user:read
+      x-access-permission: user:read
       parameters:
         - in: path
           name: orderId
@@ -64,7 +64,7 @@ paths:
       summary: Updates the status of an order
       description: use PROCESSING, ACCEPTED, IN_DELIVERY, DONE, CANCELLED as possible statuses
       operationId: updateOrderStatus
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       parameters:
         - in: path
           name: orderId

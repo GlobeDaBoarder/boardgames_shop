@@ -9,7 +9,7 @@ paths:
     get:
       summary: Get all users
       operationId: getAllUsersPublicInfo
-      x-acess-permission: admin:read
+      x-access-permission: admin:read
       responses:
         '200':
           description: successful operation
@@ -22,7 +22,7 @@ paths:
     post:
       summary: Create a new user with specified roles
       operationId: createSpecifiedUser
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       requestBody:
         required: true
         content:
@@ -40,7 +40,7 @@ paths:
     get:
       summary: Get a user by ID
       operationId: getUserPublicInfoById
-      x-acess-permission: admin:read
+      x-access-permission: admin:read
       parameters:
         - name: userId
           in: path
@@ -60,7 +60,7 @@ paths:
     delete:
       summary: Delete a user by ID
       operationId: deleteUser
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       parameters:
         - name: userId
           in: path
@@ -77,7 +77,7 @@ paths:
     get:
       summary: Get users by role
       operationId: getUsersByRole
-      x-acess-permission: admin:read
+      x-access-permission: admin:read
       parameters:
         - name: role
           in: path
@@ -97,7 +97,7 @@ paths:
     get:
       summary: Get all user roles
       operationId: getAllUserRoles
-      x-acess-permission: admin:read
+      x-access-permission: admin:read
       responses:
         '200':
           description: successful operation
@@ -129,7 +129,7 @@ paths:
     patch:
       summary: Update a current user's username
       operationId: updateUsername
-      x-acess-permission: user:write
+      x-access-permission: user:write
       security:
         - bearerAuth: [ ]
       requestBody:
@@ -149,7 +149,7 @@ paths:
     patch:
       summary: Update a user's password
       operationId: updatePassword
-      x-acess-permission: user:write
+      x-access-permission: user:write
       security:
         - bearerAuth: [ ]
       requestBody:
@@ -169,7 +169,7 @@ paths:
     patch:
       summary: Update a  current user's email
       operationId: updateEmail
-      x-acess-permission: user:write
+      x-access-permission: user:write
       security:
         - bearerAuth: [ ]
       requestBody:
@@ -189,7 +189,7 @@ paths:
     patch:
       summary: Update a current user's phone
       operationId: updatePhone
-      x-acess-permission: user:write
+      x-access-permission: user:write
       security:
         - bearerAuth: [ ]
       requestBody:
@@ -209,7 +209,7 @@ paths:
     post:
       summary: Add an address to a current user
       operationId: addAddress
-      x-acess-permission: user:write
+      x-access-permission: user:write
       security:
         - bearerAuth: [ ]
       requestBody:
@@ -228,7 +228,7 @@ paths:
     get:
       summary: Get all addresses of a user
       operationId: getAllAddresses
-      x-acess-permission: user:read
+      x-access-permission: user:read
       security:
         - bearerAuth: [ ]
       responses:
@@ -244,7 +244,7 @@ paths:
     get:
       summary: Get a user's address by address id
       operationId: getAddressById
-      x-acess-permission: user:read
+      x-access-permission: user:read
       security:
         - bearerAuth: [ ]
       parameters:
@@ -264,7 +264,7 @@ paths:
     patch:
       summary: Update a user's address
       operationId: updateAddress
-      x-acess-permission: user:write
+      x-access-permission: user:write
       security:
         - bearerAuth: [ ]
       parameters:
@@ -290,7 +290,7 @@ paths:
     delete:
       summary: Remove an address from a user
       operationId: removeAddress
-      x-acess-permission: user:write
+      x-access-permission: user:write
       security:
         - bearerAuth: [ ]
       parameters:
@@ -309,7 +309,7 @@ paths:
 #    post:
 #      summary: Check if email is available
 #      operationId: checkEmailAvailability
-#      x-acess-permission: admin:read
+#      x-access-permission: admin:read
 #      requestBody:
 #        required: true
 #        content:
@@ -333,7 +333,7 @@ paths:
 #    post:
 #      summary: Check if username is available
 #      operationId: checkUsernameAvailability
-#      x-acess-permission: admin:read
+#      x-access-permission: admin:read
 #      requestBody:
 #        required: true
 #        content:

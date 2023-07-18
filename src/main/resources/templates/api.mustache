@@ -230,12 +230,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
             {{/swagger1AnnotationLibrary}}
         {{/implicitHeadersParams.0}}
             {{#vendorExtensions}}
-                {{#x-acess-permission}}
-                        @PreAuthorize("hasAuthority('SCOPE_{{x-acess-permission}}')")
-                {{/x-acess-permission}}
-                {{^x-acess-permission}}
+                {{#x-access-permission}}
+                        @PreAuthorize("hasAuthority('SCOPE_{{x-access-permission}}')")
+                {{/x-access-permission}}
+                {{^x-access-permission}}
                         //allow all
-                {{/x-acess-permission}}
+                {{/x-access-permission}}
             {{/vendorExtensions}}
             @RequestMapping(
             method = RequestMethod.{{httpMethod}},

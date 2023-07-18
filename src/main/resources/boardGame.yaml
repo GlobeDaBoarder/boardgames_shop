@@ -19,7 +19,7 @@ paths:
     post:
       summary: Add a new boardgame
       operationId: addBoardGame
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       requestBody:
         description: Boardgame to add
         required: true
@@ -62,7 +62,7 @@ paths:
     put:
       summary: Update a boardgame
       operationId: updateBoardGame
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       parameters:
         - name: id
           in: path
@@ -92,7 +92,7 @@ paths:
     delete:
       summary: Delete a boardgame
       operationId: deleteBoardGame
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       parameters:
         - name: id
           in: path
@@ -124,7 +124,7 @@ paths:
     post:
       summary: Add a new genre
       operationId: addGenre
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       requestBody:
         description: Genre to add
         required: true
@@ -168,7 +168,7 @@ paths:
     put:
       summary: Update a genre
       operationId: updateGenre
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       parameters:
         - name: id
           in: path
@@ -198,7 +198,7 @@ paths:
     delete:
       summary: Delete a genre
       operationId: deleteGenre
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       parameters:
         - name: id
           in: path
@@ -231,7 +231,7 @@ paths:
     post:
       summary: Add a new mechanic
       operationId: addMechanic
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       requestBody:
         description: Mechanic to add
         required: true
@@ -275,7 +275,7 @@ paths:
     put:
       summary: Update a mechanic
       operationId: updateMechanic
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       parameters:
         - name: id
           in: path
@@ -305,7 +305,7 @@ paths:
     delete:
       summary: Delete a mechanic
       operationId: deleteMechanic
-      x-acess-permission: admin:write
+      x-access-permission: admin:write
       parameters:
         - name: id
           in: path

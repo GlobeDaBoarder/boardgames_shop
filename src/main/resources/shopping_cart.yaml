@@ -182,7 +182,7 @@ paths:
     post:
       summary: Checkout the shopping cart and create an order for registered user
       operationId: checkoutRegisteredUser
-      x-acess-permission: user:write
+      x-access-permission: user:write
       parameters:
         - in: path
           name: cartId
