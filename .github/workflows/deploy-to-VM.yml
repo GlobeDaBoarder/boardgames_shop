@@ -59,7 +59,7 @@ jobs:
           key: ${{ secrets.VM_PRIVATE_KEY }}
           passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
           script: |
-            sed -i "s/gl0be\\/app:\\${TAG}/gl0be\\/app:${{ github.sha }}/g" ~/rivnegray/docker-compose.app.yml
+            sed -i "s/__TAG__/${{ github.sha }}/g" ~/rivnegray/docker-compose.app.yml
             cat ~/rivnegray/docker-compose.app.yml
 
       - name: Deploy to VM

@@ -13,7 +13,7 @@ services:
       - app-network
 
   app:
-    image: gl0be/app:${TAG}
+    image: gl0be/app:__TAG__
 
     ports:
       - "8080:8080"
