@@ -54,6 +54,8 @@ spring:
       on-profile: dev-remote-VM
   datasource:
     url: jdbc:mysql://db:3306/shop
+    username: root
+    password: rvngr2023
 server:
   port: 8080
 
