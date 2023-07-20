@@ -3,7 +3,7 @@ services:
   db:
     image: mysql:8.0.33-debian
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: rvngr2023
       MYSQL_DATABASE: shop
     ports:
       - "3306:3306"
