@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService{
 
         return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userProfile));
     }
-    private UserProfile getCurrentlyLoggedInUser() {
+    private UserProfile getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
         String username = jwtPrincipal.getSubject();
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserPublicDto updateUsername(UpdateUsernameDto updateUsernameDto) {
-        UserProfile userToUpdate = this.getCurrentlyLoggedInUser();
+        UserProfile userToUpdate = this.getCurrentUser();
 
         userToUpdate.getUserCredentials().setUsername(updateUsernameDto.username());
         return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserPublicDto updatePassword(UpdatePasswordDto updatePasswordDto) {
-        UserProfile userToUpdate = this.getCurrentlyLoggedInUser();
+        UserProfile userToUpdate = this.getCurrentUser();
 
         userToUpdate.getUserCredentials().setPassword(this.passwordEncoder.encode(updatePasswordDto.password()));
         return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserPublicDto updateEmail(UpdateEmailDto updateEmailDto) {
-        UserProfile userToUpdate = this.getCurrentlyLoggedInUser();
+        UserProfile userToUpdate = this.getCurrentUser();
 
         userToUpdate.setEmail(updateEmailDto.email());
         return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserPublicDto updatePhone(UpdatePhoneDto updatePhoneDto) {
-        UserProfile userToUpdate = this.getCurrentlyLoggedInUser();
+        UserProfile userToUpdate = this.getCurrentUser();
 
         userToUpdate.setPhone(updatePhoneDto.phone());
         return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserPublicDto updateAddress(Long addressId, AddAndUpdateAddressDto updateAddressDto) {
-        UserProfile userToUpdate = this.getCurrentlyLoggedInUser();
+        UserProfile userToUpdate = this.getCurrentUser();
 
         Address addressToUpdate = userToUpdate.getAddresses().stream()
                 .filter(address -> address.getId().equals(addressId))
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserPublicDto addAddress(AddAndUpdateAddressDto addAddressDto) {
-        UserProfile userToUpdate = this.getCurrentlyLoggedInUser();
+        UserProfile userToUpdate = this.getCurrentUser();
 
         Address addressToAdd = this.userMapper.toAddress(addAddressDto);
         userToUpdate.getAddresses().add(addressToAdd);
@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void removeAddress(Long addressId) {
-        UserProfile userToUpdate = this.getCurrentlyLoggedInUser();
+        UserProfile userToUpdate = this.getCurrentUser();
 
         userToUpdate.getAddresses().removeIf(address -> address.getId().equals(addressId));
         this.userProfileRepository.save(userToUpdate);
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserPublicDto getCurrentUserPublicInfo() {
-        return this.userMapper.toUserPublicDto(getCurrentlyLoggedInUser());
+        return this.userMapper.toUserPublicDto(getCurrentUser());
     }
 
     @Override
@@ -208,7 +208,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<AddressDto> getAllAddresses() {
-        UserProfile userProfileTiGetAddressesFrom = this.getCurrentlyLoggedInUser();
+        UserProfile userProfileTiGetAddressesFrom = this.getCurrentUser();
 
         return userProfileTiGetAddressesFrom.getAddresses().stream()
                 .map(address -> this.userMapper.toAddressDto(address))
