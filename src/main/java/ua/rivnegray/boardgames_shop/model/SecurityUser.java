@@ -21,6 +21,10 @@ public class SecurityUser implements UserDetails {
                 .collect(Collectors.toCollection(HashSet::new));
     }
 
+    public Long getId(){
+        return this.user.getId();
+    }
+
     @Override
     public String getPassword() {
         return this.user.getPassword();

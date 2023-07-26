@@ -67,8 +67,9 @@ public class UserServiceImpl implements UserService{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
         String username = jwtPrincipal.getSubject();
+        Long id = jwtPrincipal.getClaim("id");
 
-        return this.userProfileRepository.findByUserCredentials_Username(username)
+        return this.userProfileRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
