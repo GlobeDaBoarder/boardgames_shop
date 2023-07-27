@@ -29,6 +29,7 @@ import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Set;
 
 @SpringBootApplication
@@ -55,20 +56,24 @@ public class BoardgamesShopApplication {
 
 			System.out.println("Active profile: " + Arrays.toString(environment.getActiveProfiles()));
 
-			UserRole roleAdmin = new UserRole("ROLE_ADMIN");
-			Set<UserPermission> adminPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE,
-					UserPermission.ADMIN_READ, UserPermission.ADMIN_WRITE);
-			roleAdmin.setPermissions(adminPermissions);
-			roleRepository.save(roleAdmin);
+			UserRole roleSuperAdmin = new UserRole("ROLE_SUPER_ADMIN");
+			Set<UserPermission> superAdminPermissions = EnumSet.allOf(UserPermission.class);
+			roleSuperAdmin.setPermissions(superAdminPermissions);
+			roleRepository.save(roleSuperAdmin);
 
 			UserRole roleCustomer = new UserRole("ROLE_CUSTOMER");
-			Set<UserPermission> userPermissions = Set.of(UserPermission.USER_READ, UserPermission.USER_WRITE);
+			Set<UserPermission> userPermissions = EnumSet.of(
+					UserPermission.USER_READ_ME,
+					UserPermission.USER_UPDATE_ME,
+					UserPermission.SHOPPING_CART_MANAGE_ME,
+					UserPermission.ORDER_READ_ME,
+					UserPermission.ORDER_CANCEL_ME
+			);
 			roleCustomer.setPermissions(userPermissions);
 			roleRepository.save(roleCustomer);
 
-
 			UserProfile adminProfile = new UserProfile("@", "1", "Gleb", "Ivashyn",
-					Set.of(roleAdmin));
+					Set.of(roleSuperAdmin));
 			UserCredentials adminCredentials = new UserCredentials("admin", encoder.encode("admin"));
 			adminCredentials.setUserProfile(adminProfile);
 			adminProfile.setUserCredentials(adminCredentials);

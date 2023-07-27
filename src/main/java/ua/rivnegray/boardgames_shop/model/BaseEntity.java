@@ -23,20 +23,23 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @MappedSuperclass
-@Setter(AccessLevel.NONE)
+@Setter
 @Getter
 @ToString
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @CreationTimestamp
     @Column(updatable = false)
+    @Setter(AccessLevel.NONE)
     LocalDateTime dateCreated;
 
     @UpdateTimestamp
     @Column(updatable = false)
+    @Setter(AccessLevel.NONE)
     LocalDateTime dateUpdated;
 
     // should be used as a "soft-delete". When using service only get those with true

@@ -35,7 +35,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-18T15:40:42.466261179+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-27T15:23:43.716269734+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "boardgames", description = "the boardgames API")
     public interface BoardgamesApi {
@@ -61,9 +61,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_boardGame:create')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/boardgames",
@@ -94,9 +97,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_genreAndMechanic:create')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/boardgames/genres",
@@ -127,9 +133,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_genreAndMechanic:create')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/boardgames/mechanics",
@@ -158,9 +167,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_boardGame:delete')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/boardgames/{id}"
@@ -187,9 +199,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_genreAndMechanic:delete')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/boardgames/genres/{id}"
@@ -216,9 +231,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_genreAndMechanic:delete')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/boardgames/mechanics/{id}"
@@ -419,9 +437,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     }),
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_boardGame:update')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/boardgames/{id}",
@@ -454,9 +475,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     }),
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_genreAndMechanic:update')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/boardgames/genres/{id}",
@@ -489,9 +513,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     }),
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_genreAndMechanic:update')")
             @RequestMapping(
             method = RequestMethod.PUT,
             value = "/boardgames/mechanics/{id}",

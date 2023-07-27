@@ -40,17 +40,21 @@ public interface ProductMapper {
     @Mapping(target = "productId", source = "product.id")
     ProductInShoppingCartDto toProductInShoppingCartDto(ProductInShoppingCart productInShoppingCart);
 
-    default ProductInShoppingCart toProductInShoppingCart(long cartId, AddProductInShoppingCartDto addProductInShoppingCartDto,
-                                                  BoardGameRepository boardGameRepository,
-                                                          ShoppingCartRepository shoppingCartRepository){
-        ShoppingCart shoppingCart = shoppingCartRepository.findById(cartId)
-                .orElseThrow(() -> new ShoppingCartIdNotFoundException(cartId));
-
-        BoardGame boardGame = boardGameRepository.findById(addProductInShoppingCartDto.productId())
-                .orElseThrow(() -> new BoardGameIdNotFoundException(addProductInShoppingCartDto.productId()));
-
-        return new ProductInShoppingCart(boardGame, shoppingCart, addProductInShoppingCartDto.quantity());
-    }
+//    default ProductInShoppingCart toProductInShoppingCart(long cartId, Long productId,
+//                                                  BoardGameRepository boardGameRepository,
+//                                                          ShoppingCartRepository shoppingCartRepository){
+//        ShoppingCart shoppingCart = shoppingCartRepository.findById(cartId)
+//                .orElseThrow(() -> new ShoppingCartIdNotFoundException(cartId));
+//
+//        shoppingCart.getProductsInShoppingCart().stream()
+//                .filter(productInShoppingCart -> productInShoppingCart.getProduct().getId().equals(productId))
+//                .findFirst()
+//
+//        BoardGame boardGame = boardGameRepository.findById(productId)
+//                .orElseThrow(() -> new BoardGameIdNotFoundException(productId));
+//
+//        return new ProductInShoppingCart(boardGame, shoppingCart, );
+//    }
 
 
     @Mapping(target = "order", ignore = true)

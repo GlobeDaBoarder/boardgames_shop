@@ -3,14 +3,15 @@ package ua.rivnegray.boardgames_shop.delegateService;
 import generated.shopping_cart.api.ShoppingCartApiDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.AddProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
@@ -37,8 +38,8 @@ public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ShoppingCartDto> addProductToShoppingCart(Long cartId, AddProductInShoppingCartDto addProductInShoppingCartDto) {
-        ShoppingCartDto shoppingCartDto = this.shoppingCartService.addProductToShoppingCart(cartId, addProductInShoppingCartDto);
+    public ResponseEntity<ShoppingCartDto> addProductToMyShoppingCart(Long productId) {
+        ShoppingCartDto shoppingCartDto = this.shoppingCartService.addProductToMyShoppingCart(productId);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -50,8 +51,13 @@ public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ShoppingCartDto> clearShoppingCart(Long cartId) {
-        return ResponseEntity.ok(this.shoppingCartService.clearShoppingCart(cartId));
+    public ResponseEntity<ShoppingCartDto> clearMyShoppingCart() {
+        return ResponseEntity.ok(this.shoppingCartService.clearMyShoppingCart());
+    }
+
+    @Override
+    public ResponseEntity<List<ProductInShoppingCartDto>> getProductsInMyShoppingCart() {
+        return ResponseEntity.ok(this.shoppingCartService.getProductsInMyShoppingCart());
     }
 
     @Override
@@ -60,30 +66,29 @@ public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ShoppingCartDto> getShoppingCart(Long cartId) {
-        return ResponseEntity.ok(this.shoppingCartService.getShoppingCart(cartId));
+    public ResponseEntity<ShoppingCartDto> removeProductFromMyShoppingCart(Long productInCartId) {
+        return ResponseEntity.ok(this.shoppingCartService.removeProductFromMyShoppingCart(productInCartId));
+    }
+
+
+
+    @Override
+    public ResponseEntity<ShoppingCartDto> updateQuantityOfProductInMyShoppingCart(Long productInCartId,
+                                UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto) {
+        return ResponseEntity.ok(this.shoppingCartService.updateQuantityOfProductInMyShoppingCart(productInCartId,
+                updateQuantityOfProductInShoppingCartDto));
     }
 
     @Override
-    public ResponseEntity<ShoppingCartDto> removeProductFromShoppingCart(Long cartId, Long productInCartId) {
-        return ResponseEntity.ok(this.shoppingCartService.removeProductFromShoppingCart(cartId, productInCartId));
+    public ResponseEntity<OrderDto> checkoutUnregisteredUser( AddAndUpdateAddressDto addressDto) {
+//        return ResponseEntity.ok(this.shoppingCartService.checkoutUnregisteredUser(addressDto));
+        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @Override
-    public ResponseEntity<ShoppingCartDto> updateQuantityOfProductInShoppingCart(Long cartId,
-                                                                                 Long productInCartId,
-                                                                                 UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto) {
-        return ResponseEntity.ok(this.shoppingCartService.updateQuantityOfProductInShoppingCart(cartId,
-                productInCartId, updateQuantityOfProductInShoppingCartDto));
+    public ResponseEntity<OrderDto> checkoutRegisteredUser(Long addressId) {
+        return ResponseEntity.ok(this.shoppingCartService.checkoutRegisteredUser(addressId));
     }
 
-    @Override
-    public ResponseEntity<OrderDto> checkoutUnregisteredUser(Long cartId, AddAndUpdateAddressDto addressDto) {
-        return ResponseEntity.ok(this.shoppingCartService.checkoutUnregisteredUser(cartId, addressDto));
-    }
 
-    @Override
-    public ResponseEntity<OrderDto> checkoutRegisteredUser(Long cartId, Long addressId) {
-        return ResponseEntity.ok(this.shoppingCartService.checkoutRegisteredUser(cartId, addressId));
-    }
 }

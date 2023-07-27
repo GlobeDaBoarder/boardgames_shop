@@ -31,7 +31,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-18T15:40:43.238188873+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-27T15:23:44.416461194+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "login", description = "the login API")
     public interface LoginApi {

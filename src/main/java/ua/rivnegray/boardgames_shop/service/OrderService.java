@@ -9,6 +9,8 @@ import ua.rivnegray.boardgames_shop.model.OrderStatus;
 import java.util.List;
 
 public interface OrderService {
+
+    // admin orders operations
     @Transactional
     OrderDto createOrder(CreateOrderDto createOrderDto);
 
@@ -23,4 +25,14 @@ public interface OrderService {
 
     @Transactional
     void cancelOrder(Long orderId);
+
+    // my order operations
+    @Transactional
+    void cancelMyOrder(Long orderId);
+
+    @Transactional(readOnly = true)
+    List<OrderDto> getMyOrders();
+
+    @Transactional(readOnly = true)
+    OrderDto getMyOrderById(Long orderId);
 }

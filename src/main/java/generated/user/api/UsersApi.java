@@ -38,7 +38,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-18T15:40:41.823065680+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-27T15:23:43.189462262+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "users", description = "the users API")
     public interface UsersApi {
@@ -48,21 +48,24 @@ import org.springframework.security.access.prepost.PreAuthorize;
                 }
 
             /**
-            * POST /users/me/address : Add an address to a current user
+            * POST /users/me/address : Add an address to me
             *
                 * @param addAndUpdateAddressDto  (required)
             * @return address added (status code 201)
             */
                 @Operation(
                 operationId = "addAddress",
-                    summary = "Add an address to a current user",
+                    summary = "Add an address to me",
                 responses = {
                     @ApiResponse(responseCode = "201", description = "address added", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
                     })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_user:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/users/me/address",
@@ -89,9 +92,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "201", description = "User created", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
                     })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:create')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/users",
@@ -106,84 +112,63 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * DELETE /users/{userId} : Delete a user by ID
+            * DELETE /users/me : Delete me
             *
-                * @param userId  (required)
             * @return User deleted (status code 204)
-                *         or User not found (status code 404)
+                *         or Unauthorized (status code 401)
+                *         or Forbidden (status code 403)
             */
                 @Operation(
-                operationId = "deleteUser",
-                    summary = "Delete a user by ID",
+                operationId = "deleteMe",
+                    summary = "Delete me",
                 responses = {
                     @ApiResponse(responseCode = "204", description = "User deleted", content = @Content),
-                    @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
             @RequestMapping(
             method = RequestMethod.DELETE,
-            value = "/users/{userId}"
+            value = "/users/me"
             )
-        default ResponseEntity<Void> deleteUser(
-        @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId
+        default ResponseEntity<Void> deleteMe(
+        
             ) {
-            return getDelegate().deleteUser(userId);
+            return getDelegate().deleteMe();
             }
 
 
             /**
-            * GET /users/me/address/{addressId} : Get a user&#39;s address by address id
-            *
-                * @param addressId  (required)
-            * @return The address was found (status code 200)
-            */
-                @Operation(
-                operationId = "getAddressById",
-                    summary = "Get a user's address by address id",
-                responses = {
-                    @ApiResponse(responseCode = "200", description = "The address was found", content = {
-                        @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDto.class))
-                    })
-                }
-                )
-                        @PreAuthorize("hasAuthority('SCOPE_user:read')")
-            @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/users/me/address/{addressId}",
-            produces = { "application/json" }
-            )
-        default ResponseEntity<AddressDto> getAddressById(
-        @Parameter(name = "addressId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("addressId") Long addressId
-            ) {
-            return getDelegate().getAddressById(addressId);
-            }
-
-
-            /**
-            * GET /users/me/address : Get all addresses of a user
+            * GET /users/me/address : Get all my addresses
             *
             * @return All addresses were retrieved successfully (status code 200)
             */
                 @Operation(
-                operationId = "getAllAddresses",
-                    summary = "Get all addresses of a user",
+                operationId = "getAllMyAddresses",
+                    summary = "Get all my addresses",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "All addresses were retrieved successfully", content = {
                         @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AddressDto.class)))
                     })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_user:read')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:readMe')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/me/address",
             produces = { "application/json" }
             )
-        default ResponseEntity<List<AddressDto>> getAllAddresses(
+        default ResponseEntity<List<AddressDto>> getAllMyAddresses(
         
             ) {
-            return getDelegate().getAllAddresses();
+            return getDelegate().getAllMyAddresses();
             }
 
 
@@ -199,9 +184,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
                         @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserRoleDto.class)))
                     })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:read')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/roles",
@@ -226,9 +214,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
                         @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserPublicDto.class)))
                     })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:read')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users",
@@ -242,31 +233,65 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * GET /users/me : Get info of currently logged in user
+            * GET /users/me : Get my info
             *
             * @return successful operation (status code 200)
                 *         or Unauthorized (status code 401)
             */
                 @Operation(
-                operationId = "getCurrentUserPublicInfo",
-                    summary = "Get info of currently logged in user",
+                operationId = "getMe",
+                    summary = "Get my info",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
                     }),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        //allow all
+                        @PreAuthorize("hasAuthority('SCOPE_user:readMe')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/me",
             produces = { "application/json" }
             )
-        default ResponseEntity<UserPublicDto> getCurrentUserPublicInfo(
+        default ResponseEntity<UserPublicDto> getMe(
         
             ) {
-            return getDelegate().getCurrentUserPublicInfo();
+            return getDelegate().getMe();
+            }
+
+
+            /**
+            * GET /users/me/address/{addressId} : Get a my address by address id
+            *
+                * @param addressId  (required)
+            * @return The address was found (status code 200)
+            */
+                @Operation(
+                operationId = "getMyAddressById",
+                    summary = "Get a my address by address id",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "The address was found", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = AddressDto.class))
+                    })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_user:readMe')")
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/users/me/address/{addressId}",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<AddressDto> getMyAddressById(
+        @Parameter(name = "addressId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("addressId") Long addressId
+            ) {
+            return getDelegate().getMyAddressById(addressId);
             }
 
 
@@ -285,9 +310,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                         @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
                     }),
                     @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:read')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/{userId}",
@@ -313,9 +341,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "200", description = "Users wih role found", content = {
                         @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserPublicDto.class)))
                     })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_admin:read')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:read')")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/users/role/{role}",
@@ -329,7 +360,37 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * DELETE /users/me/address/{addressId} : Remove an address from a user
+            * DELETE /users/{userId} : hard delete a user by ID
+            *
+                * @param userId  (required)
+            * @return User deleted (status code 204)
+                *         or User not found (status code 404)
+            */
+                @Operation(
+                operationId = "hardDeleteUser",
+                    summary = "hard delete a user by ID",
+                responses = {
+                    @ApiResponse(responseCode = "204", description = "User deleted", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_user:delete')")
+            @RequestMapping(
+            method = RequestMethod.DELETE,
+            value = "/users/{userId}"
+            )
+        default ResponseEntity<Void> hardDeleteUser(
+        @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId
+            ) {
+            return getDelegate().hardDeleteUser(userId);
+            }
+
+
+            /**
+            * DELETE /users/me/address/{addressId} : Remove my address
             *
                 * @param addressId  (required)
             * @return address deleted (status code 204)
@@ -337,13 +398,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
             */
                 @Operation(
                 operationId = "removeAddress",
-                    summary = "Remove an address from a user",
+                    summary = "Remove my address",
                 responses = {
                     @ApiResponse(responseCode = "204", description = "address deleted", content = @Content),
                     @ApiResponse(responseCode = "404", description = "address not found", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_user:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
             @RequestMapping(
             method = RequestMethod.DELETE,
             value = "/users/me/address/{addressId}"
@@ -356,149 +420,164 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * PATCH /users/me/address/{addressId} : Update a user&#39;s address
+            * PATCH /users/me/address/{addressId} : Update my address
             *
                 * @param addressId  (required)
                 * @param addAndUpdateAddressDto  (required)
             * @return address updated (status code 200)
             */
                 @Operation(
-                operationId = "updateAddress",
-                    summary = "Update a user's address",
+                operationId = "updateMyAddress",
+                    summary = "Update my address",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "address updated", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
                     })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_user:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/users/me/address/{addressId}",
             produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<UserPublicDto> updateAddress(
+        default ResponseEntity<UserPublicDto> updateMyAddress(
         @Parameter(name = "addressId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("addressId") Long addressId,
         @Parameter(name = "AddAndUpdateAddressDto", description = "", required = true) @Valid @RequestBody AddAndUpdateAddressDto addAndUpdateAddressDto
             ) {
-            return getDelegate().updateAddress(addressId, addAndUpdateAddressDto);
+            return getDelegate().updateMyAddress(addressId, addAndUpdateAddressDto);
             }
 
 
             /**
-            * PATCH /users/me/email : Update a  current user&#39;s email
+            * PATCH /users/me/email : Update a  my email
             *
                 * @param updateEmailDto  (required)
             * @return email updated (status code 200)
             */
                 @Operation(
-                operationId = "updateEmail",
-                    summary = "Update a  current user's email",
+                operationId = "updateMyEmail",
+                    summary = "Update a  my email",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "email updated", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
                     })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_user:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/users/me/email",
             produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<UserPublicDto> updateEmail(
+        default ResponseEntity<UserPublicDto> updateMyEmail(
         @Parameter(name = "UpdateEmailDto", description = "", required = true) @Valid @RequestBody UpdateEmailDto updateEmailDto
             ) {
-            return getDelegate().updateEmail(updateEmailDto);
+            return getDelegate().updateMyEmail(updateEmailDto);
             }
 
 
             /**
-            * PATCH /users/me/password : Update a user&#39;s password
+            * PATCH /users/me/password : Update my user&#39;s password
             *
                 * @param updatePasswordDto  (required)
             * @return password updated (status code 200)
             */
                 @Operation(
-                operationId = "updatePassword",
-                    summary = "Update a user's password",
+                operationId = "updateMyPassword",
+                    summary = "Update my user's password",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "password updated", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
                     })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_user:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/users/me/password",
             produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<UserPublicDto> updatePassword(
+        default ResponseEntity<UserPublicDto> updateMyPassword(
         @Parameter(name = "UpdatePasswordDto", description = "", required = true) @Valid @RequestBody UpdatePasswordDto updatePasswordDto
             ) {
-            return getDelegate().updatePassword(updatePasswordDto);
+            return getDelegate().updateMyPassword(updatePasswordDto);
             }
 
 
             /**
-            * PATCH /users/me/phone : Update a current user&#39;s phone
+            * PATCH /users/me/phone : Update my phone
             *
                 * @param updatePhoneDto  (required)
             * @return phone number updated (status code 200)
             */
                 @Operation(
-                operationId = "updatePhone",
-                    summary = "Update a current user's phone",
+                operationId = "updateMyPhone",
+                    summary = "Update my phone",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "phone number updated", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
                     })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_user:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/users/me/phone",
             produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<UserPublicDto> updatePhone(
+        default ResponseEntity<UserPublicDto> updateMyPhone(
         @Parameter(name = "UpdatePhoneDto", description = "", required = true) @Valid @RequestBody UpdatePhoneDto updatePhoneDto
             ) {
-            return getDelegate().updatePhone(updatePhoneDto);
+            return getDelegate().updateMyPhone(updatePhoneDto);
             }
 
 
             /**
-            * PATCH /users/me/username : Update a current user&#39;s username
+            * PATCH /users/me/username : Update my username
             *
                 * @param updateUsernameDto  (required)
             * @return username updated (status code 200)
             */
                 @Operation(
-                operationId = "updateUsername",
-                    summary = "Update a current user's username",
+                operationId = "updateMyUsername",
+                    summary = "Update my username",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "username updated", content = {
                         @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
                     })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_user:write')")
+                        @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
             @RequestMapping(
             method = RequestMethod.PATCH,
             value = "/users/me/username",
             produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<UserPublicDto> updateUsername(
+        default ResponseEntity<UserPublicDto> updateMyUsername(
         @Parameter(name = "UpdateUsernameDto", description = "", required = true) @Valid @RequestBody UpdateUsernameDto updateUsernameDto
             ) {
-            return getDelegate().updateUsername(updateUsernameDto);
+            return getDelegate().updateMyUsername(updateUsernameDto);
             }
 
         }

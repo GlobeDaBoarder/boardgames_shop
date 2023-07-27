@@ -2,75 +2,15 @@ openapi: 3.0.3
 info:
   title: ShoppingCart API
   version: 1.0.0
+security:
+  - bearerAuth: []
 paths:
+  # admin/moderator operations
   /shoppingCart/{cartId}:
-    get:
-      summary: get shopping cart info
-      operationId: getShoppingCart
-      parameters:
-        - in: path
-          name: cartId
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: Shopping cart details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ShoppingCartDto'
-    delete:
-      summary: Clear all items from the shopping cart
-      operationId: clearShoppingCart
-      parameters:
-        - in : path
-          name: cartId
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: Shopping cart cleared successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ShoppingCartDto'
-        '400':
-          description: Invalid shopping cart ID
-
-  /shoppingCart/{cartId}/products:
-    post:
-      summary: Adds a product to the shopping cart
-      operationId: addProductToShoppingCart
-      parameters:
-        - in: path
-          name: cartId
-          required: true
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddProductInShoppingCartDto'
-      responses:
-        '201':
-          description: Product added successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ShoppingCartDto'
-        '400':
-          description: Invalid product data
-
     get:
       summary: Get all products in the shopping cart
       operationId: getProductsInShoppingCart
+      x-access-permission: shoppingCart:read
       parameters:
         - in: path
           name: cartId
@@ -90,17 +30,63 @@ paths:
         '400':
           description: Invalid shopping cart ID
 
-  /shoppingCart/{cartId}/products/{productInCartId}:
+  # my user operations / currently logged-in user operations
+  /shoppingCart/:
     delete:
-      summary: Remove a product from the shopping cart
-      operationId: removeProductFromShoppingCart
+      summary: Clear all items from my shopping cart
+      operationId: clearMyShoppingCart
+      x-access-permission: shoppingCart:manageMe
+      responses:
+        '200':
+          description: Shopping cart cleared successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCartDto'
+        '400':
+          description: Invalid shopping cart ID
+    get:
+      summary: Get all products in my shopping cart
+      operationId: getProductsInMyShoppingCart
+      x-access-permission: shoppingCart:read
+      responses:
+        '200':
+          description: Products in the shopping cart
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductInShoppingCartDto'
+        '400':
+          description: Invalid shopping cart ID
+  /shoppingCart/{productId}:
+    post:
+      summary: Adds a product to the shopping cart
+      operationId: addProductToMyShoppingCart
+      x-access-permission: shoppingCart:manageMe
       parameters:
         - in: path
-          name: cartId
+          name: productId
           required: true
           schema:
             type: integer
             format: int64
+      responses:
+        '201':
+          description: Product added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCartDto'
+        '400':
+          description: Invalid product data
+  /shoppingCart/{productInCartId}:
+    delete:
+      summary: Remove a product from the shopping cart
+      operationId: removeProductFromMyShoppingCart
+      x-access-permission: shoppingCart:manageMe
+      parameters:
         - in: path
           name: productInCartId
           required: true
@@ -119,14 +105,9 @@ paths:
 
     patch:
       summary: Update the quantity of a product in the shopping cart
-      operationId: updateQuantityOfProductInShoppingCart
+      operationId: updateQuantityOfProductInMyShoppingCart
+      x-access-permission: shoppingCart:manageMe
       parameters:
-        - in: path
-          name: cartId
-          required: true
-          schema:
-            type: integer
-            format: int64
         - in: path
           name: productInCartId
           required: true
@@ -149,17 +130,13 @@ paths:
         '400':
           description: Invalid product data
 
-  /shoppingCart/{cartId}/checkout:
+  # todo figure out how to incorporate with frontend
+  /shoppingCart/checkout:
     post:
-      summary: Checkout the shopping cart and create an order for unregistered user
+      summary: "Checkout the shopping cart and create an order for unregistered user. WARNING: \
+      this endpoint is not yet implemented."
       operationId: checkoutUnregisteredUser
-      parameters:
-        - in: path
-          name: cartId
-          required: true
-          schema:
-            type: integer
-            format: int64
+      deprecated: true
       requestBody:
         required: true
         content:
@@ -167,29 +144,25 @@ paths:
             schema:
               $ref: '#/components/schemas/AddAndUpdateAddressDto'
       responses:
+        '501':
+            description: Not implemented
         '201':
           description: Order created successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrderDto'
-        '400':
-          description: Invalid checkout request
-        '404':
-          description: Shopping cart not found
+#        '400':
+#          description: Invalid checkout request
+#        '404':
+#          description: Shopping cart not found
 
-  /shoppingCart/{cartId}/checkout/{addressId}:
+  /shoppingCart/checkout/{addressId}:
     post:
       summary: Checkout the shopping cart and create an order for registered user
       operationId: checkoutRegisteredUser
-      x-access-permission: user:write
+      x-access-permission: shoppingCart:manageMe
       parameters:
-        - in: path
-          name: cartId
-          required: true
-          schema:
-            type: integer
-            format: int64
         - in: path
           name: addressId
           required: true
@@ -211,6 +184,11 @@ paths:
           description: Unauthorized
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     AddProductInShoppingCartDto:
       type: object
