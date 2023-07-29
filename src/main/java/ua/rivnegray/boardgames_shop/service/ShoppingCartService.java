@@ -15,28 +15,30 @@ import java.util.List;
 import java.util.Set;
 
 public interface ShoppingCartService {
-    @Transactional(readOnly = true)
-    ShoppingCartDto getShoppingCart(Long cartId);
-
-    @Transactional
-    ShoppingCartDto clearShoppingCart(Long cartId);
-
-    @Transactional
-    ShoppingCartDto addProductToShoppingCart(Long cartId, AddProductInShoppingCartDto addProductInShoppingCartDto);
-
+    // admin operations
     @Transactional(readOnly = true)
     List<ProductInShoppingCartDto> getProductsInShoppingCart(Long cartId);
 
+    // current user  operations
     @Transactional
-    ShoppingCartDto removeProductFromShoppingCart(Long cartId, Long productInCartId);
+    ShoppingCartDto clearMyShoppingCart();
+
+    @Transactional
+    ShoppingCartDto addProductToMyShoppingCart(Long productId);
+
+    @Transactional(readOnly = true)
+    List<ProductInShoppingCartDto> getProductsInMyShoppingCart();
+
+    @Transactional
+    ShoppingCartDto removeProductFromMyShoppingCart(Long productInCartId);
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    ShoppingCartDto updateQuantityOfProductInShoppingCart(Long cartId, Long productInCartId,
-                                                          UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto);
+    ShoppingCartDto updateQuantityOfProductInMyShoppingCart(Long productInCartId,
+                                     UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto);
 
     @Transactional
-    OrderDto checkoutUnregisteredUser(Long cartId, AddAndUpdateAddressDto addressDto);
+    OrderDto checkoutUnregisteredUser(AddAndUpdateAddressDto addressDto);
     
     @Transactional
-    OrderDto checkoutRegisteredUser(Long cartId, Long addressId);
+    OrderDto checkoutRegisteredUser(Long addressId);
 }

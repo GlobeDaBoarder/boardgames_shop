@@ -32,24 +32,20 @@ public class OrderApiDelegateService implements OrdersApiDelegate {
         return OrdersApiDelegate.super.getRequest();
     }
 
-    @Override
-    public ResponseEntity<Void> cancelOrder(Long orderId) {
-        this.orderService.cancelOrder(orderId);
-        return ResponseEntity.noContent().build();
-    }
+    // admin orders operations
 
-//    @Override
-//    public ResponseEntity<OrderDto> createOrder(CreateOrderDto createOrderDto) {
-//        OrderDto orderDto = this.orderService.createOrder(createOrderDto);
-//
-//        URI location = ServletUriComponentsBuilder
-//                .fromCurrentRequest()
-//                .path("/{id}")
-//                .buildAndExpand(orderDto.id())
-//                .toUri();
-//
-//        return ResponseEntity.created(location).body(orderDto);
-//    }
+    @Override
+    public ResponseEntity<OrderDto> createOrder(CreateOrderDto createOrderDto) {
+        OrderDto orderDto = this.orderService.createOrder(createOrderDto);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(orderDto.id())
+                .toUri();
+
+        return ResponseEntity.created(location).body(orderDto);
+    }
 
     @Override
     public ResponseEntity<List<OrderDto>> getAllOrders() {
@@ -64,5 +60,24 @@ public class OrderApiDelegateService implements OrdersApiDelegate {
     @Override
     public ResponseEntity<OrderDto> updateOrderStatus(Long orderId, OrderStatus orderStatus) {
         return ResponseEntity.ok(this.orderService.updateOrderStatus(orderId, orderStatus));
+    }
+
+    // my orders operations
+
+
+    @Override
+    public ResponseEntity<Void> cancelMyOrder(Long orderId) {
+        this.orderService.cancelMyOrder(orderId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<OrderDto> getMyOrderById(Long orderId) {
+        return ResponseEntity.ok(this.orderService.getMyOrderById(orderId));
+    }
+
+    @Override
+    public ResponseEntity<List<OrderDto>> getMyOrders() {
+        return ResponseEntity.ok(this.orderService.getMyOrders());
     }
 }

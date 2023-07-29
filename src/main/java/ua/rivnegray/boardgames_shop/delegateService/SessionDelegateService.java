@@ -11,8 +11,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserProfileDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.service.SessionsService;
 
 import java.net.URI;
@@ -21,6 +19,8 @@ import java.util.Optional;
 @Service
 @Primary
 public class SessionDelegateService implements LoginApiDelegate, RegisterApiDelegate {
+
+    // TODO mapping of shpping cart from localstorage/cookies on login or register
 
     SessionsService sessionsService;
 

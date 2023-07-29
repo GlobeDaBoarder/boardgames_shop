@@ -25,7 +25,7 @@ public class OpenApiConfig {
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("bearerAuth", securityScheme()))
-                .info(new Info().title("My API").version("v1"))
+                .info(new Info().title("Rivne Gray API ").version("v1"))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
     }
 }
