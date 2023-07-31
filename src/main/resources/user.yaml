@@ -1,4 +1,3 @@
-# todo separate address api from user api
 openapi: 3.0.3
 info:
   title: User API

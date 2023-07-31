@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-27T15:23:44.416461194+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-31T09:14:24.638856770+03:00[Europe/Kiev]")
 @Controller
 @RequestMapping("${openapi.title.base-path:}")
 public class LoginApiController implements LoginApi {

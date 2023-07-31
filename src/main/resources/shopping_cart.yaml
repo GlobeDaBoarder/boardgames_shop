@@ -130,28 +130,27 @@ paths:
         '400':
           description: Invalid product data
 
-  # todo figure out how to incorporate with frontend
-  /shoppingCart/checkout:
-    post:
-      summary: "Checkout the shopping cart and create an order for unregistered user. WARNING: \
-      this endpoint is not yet implemented."
-      operationId: checkoutUnregisteredUser
-      deprecated: true
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddAndUpdateAddressDto'
-      responses:
-        '501':
-            description: Not implemented
-        '201':
-          description: Order created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderDto'
+#  /shoppingCart/checkout:
+#    post:
+#      summary: "Checkout the shopping cart and create an order for unregistered user. WARNING: \
+#      this endpoint is not yet implemented."
+#      operationId: checkoutUnregisteredUser
+#      deprecated: true
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/AddAndUpdateAddressDto'
+#      responses:
+#        '501':
+#            description: Not implemented
+#        '201':
+#          description: Order created successfully
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/OrderDto'
 #        '400':
 #          description: Invalid checkout request
 #        '404':

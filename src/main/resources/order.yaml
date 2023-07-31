@@ -10,7 +10,7 @@ paths:
     post:
       summary: Creates a new order
       operationId: createOrder
-      x-access-permission: order:create
+#      x-access-permission: order:create
       requestBody:
         required: true
         content:
@@ -191,18 +191,61 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    CreateOrderDto:
+    SimpleProductInShoppingCartDto:
       type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.CreateOrderDto
       properties:
-        shoppingCartId:
+        productId:
           type: integer
           format: int64
-        addressDto:
-          $ref: '#/components/schemas/AddAndUpdateAddressDto'
+        quantity:
+          type: integer
+          format: int32
       required:
-        - shoppingCartId
-        - addressDto
+        - productId
+        - quantity
+
+    MapShoppingCartDto:
+      type: object
+      properties:
+        simpleProductInShoppingCartDtos:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleProductInShoppingCartDto'
+      required:
+        - simpleProductInShoppingCartDtos
+
+    CreateUserProfileDto:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+      required:
+        - email
+        - phone
+        - firstName
+        - lastName
+
+
+    CreateOrderDto:
+      type: object
+      properties:
+        mapShoppingCartDto:
+          $ref: '#/components/schemas/MapShoppingCartDto'
+        addAndUpdateAddressDto:
+          $ref: '#/components/schemas/AddAndUpdateAddressDto'
+        userProfileDto:
+          $ref: '#/components/schemas/CreateUserProfileDto'
+      required:
+        - mapShoppingCartDto
+        - addAndUpdateAddressDto
+        - userProfileDto
 
     AddAndUpdateAddressDto:
       type: object
