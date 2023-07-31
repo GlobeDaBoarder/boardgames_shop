@@ -9,6 +9,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.AddProductInShoppingCartDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateUserProfileDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
@@ -174,65 +176,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         this.productInShoppingCartRepository.save(productInShoppingCart);
         return this.shoppingCartMapper.toShoppingCartDto(getShoppingCartOfCurrentUser());
     }
-
     @Override
-    public OrderDto checkoutUnregisteredUser(AddAndUpdateAddressDto addressDto) {
-//        ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
-//
-//        Address unregeisteredUserAddress = this.userMapper.toAddress(addressDto);
-//
-//        //todo unregistered user logic. how does shopping cart for it exist?
-//        UserProfile unregeisteredUserProfile = shoppingCart.getUserProfile();
-//        unregeisteredUserProfile.getAddresses().add(unregeisteredUserAddress);
-//
-//        unregeisteredUserProfile = this.userProfileRepository.save(unregeisteredUserProfile);
-//
-//        this.entityManager.flush();
-//        this.entityManager.refresh(unregeisteredUserProfile);
-//
-//        Order newOrder = Order.builder()
-//                .userProfile(unregeisteredUserProfile)
-//                .orderItems(shoppingCart.getProductsInShoppingCart().stream()
-//                        .map(productInShoppingCart -> this.productMapper.toProductInOrder(productInShoppingCart))
-//                        .collect(Collectors.toSet()))
-//                .status(OrderStatus.PLACED)
-//                .orderDate(LocalDateTime.now())
-//                .totalPrice(
-//                        shoppingCart.getProductsInShoppingCart().stream()
-//                        .map(
-//                                productInShoppingCart -> productInShoppingCart.getProduct().getProductPrice()
-//                                        .multiply(BigDecimal.valueOf(productInShoppingCart.getQuantity()))
-//                        )
-//                        .reduce(BigDecimal::add)
-//                        .orElse(BigDecimal.ZERO)
-//                )
-//                .address(
-//                        unregeisteredUserProfile.getAddresses().stream()
-//                                .max(Comparator.comparing(Address::getDateCreated))
-//                                .orElseThrow(() -> new AddressNotFoundException("No address found for user"))
-//                )
-//                .dateOrderPlaced(LocalDateTime.now())
-//                .paymentStatus(PaymentStatus.UNPAID)
-//                .build();
-//
-//
-//        Order finalNewOrder = newOrder;
-//        newOrder.getOrderItems().forEach(orderItem -> orderItem.setOrder(finalNewOrder));
-//
-//        newOrder = this.orderRepository.save(newOrder);
-//
-//        this.entityManager.flush();
-//        this.entityManager.refresh(newOrder);
-//
-//        clearShoppingCart();
-//
-//        return this.orderMapper.orderToOrderDto(newOrder);
-
-        return null;
-    }
-
-    @Override
-    public OrderDto checkoutRegisteredUser(Long addressId) {
+    public OrderDto checkoutMyUser(Long addressId) {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
 
         Order newOrder = Order.builder()

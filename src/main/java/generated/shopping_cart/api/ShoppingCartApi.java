@@ -5,7 +5,6 @@
 */
 package generated.shopping_cart.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
@@ -34,7 +33,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-27T15:23:44.028897608+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-31T10:24:55.928087677+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "shoppingCart", description = "the shoppingCart API")
     public interface ShoppingCartApi {
@@ -110,42 +109,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
         @Parameter(name = "addressId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("addressId") Long addressId
             ) {
             return getDelegate().checkoutRegisteredUser(addressId);
-            }
-
-
-            /**
-            * POST /shoppingCart/checkout : Checkout the shopping cart and create an order for unregistered user. WARNING: this endpoint is not yet implemented.
-            *
-                * @param addAndUpdateAddressDto  (required)
-            * @return Not implemented (status code 501)
-                *         or Order created successfully (status code 201)
-                * @deprecated
-            */
-                @Deprecated
-                @Operation(
-                operationId = "checkoutUnregisteredUser",
-                    summary = "Checkout the shopping cart and create an order for unregistered user. WARNING: this endpoint is not yet implemented.",
-                responses = {
-                    @ApiResponse(responseCode = "501", description = "Not implemented", content = @Content),
-                    @ApiResponse(responseCode = "201", description = "Order created successfully", content = {
-                        @Content(mediaType = "application/json", schema = @Schema(implementation = OrderDto.class))
-                    })
-                },
-                security = {
-                    @SecurityRequirement(name = "bearerAuth")
-                }
-                )
-                        //allow all
-            @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/shoppingCart/checkout",
-            produces = { "application/json" },
-            consumes = { "application/json" }
-            )
-        default ResponseEntity<OrderDto> checkoutUnregisteredUser(
-        @Parameter(name = "AddAndUpdateAddressDto", description = "", required = true) @Valid @RequestBody AddAndUpdateAddressDto addAndUpdateAddressDto
-            ) {
-            return getDelegate().checkoutUnregisteredUser(addAndUpdateAddressDto);
             }
 
 

@@ -32,7 +32,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-27T15:23:44.259114456+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-31T10:24:56.060662669+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "orders", description = "the orders API")
     public interface OrdersApi {
@@ -97,7 +97,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        @PreAuthorize("hasAuthority('SCOPE_order:create')")
+                        //allow all
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/orders",

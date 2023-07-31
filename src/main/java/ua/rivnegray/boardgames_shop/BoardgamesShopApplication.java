@@ -66,6 +66,7 @@ public class BoardgamesShopApplication {
 					UserPermission.USER_READ_ME,
 					UserPermission.USER_UPDATE_ME,
 					UserPermission.SHOPPING_CART_MANAGE_ME,
+					UserPermission.SHOPPING_CART_READ,
 					UserPermission.ORDER_READ_ME,
 					UserPermission.ORDER_CANCEL_ME
 			);

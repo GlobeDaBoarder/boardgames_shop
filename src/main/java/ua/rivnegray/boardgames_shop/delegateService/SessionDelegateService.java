@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto;
+import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestWithMapShoppingCartDto;
+import ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
 import ua.rivnegray.boardgames_shop.service.SessionsService;
 
@@ -35,8 +38,9 @@ public class SessionDelegateService implements LoginApiDelegate, RegisterApiDele
     }
 
     @Override
-    public ResponseEntity<LoginResponseDto> registerUser(CreateCustomerUserDto createCustomerUserDto) {
-        LoginResponseDto loginResponse = this.sessionsService.register(createCustomerUserDto);
+    public ResponseEntity<LoginResponseDto> registerUser(RegisterRequestWithMapShoppingCartDto registerRequestDto) {
+        LoginResponseDto loginResponse = this.sessionsService.register(registerRequestDto.createCustomerUserDto(),
+                registerRequestDto.mapShoppingCartDto());
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -47,7 +51,8 @@ public class SessionDelegateService implements LoginApiDelegate, RegisterApiDele
     }
 
     @Override
-    public ResponseEntity<LoginResponseDto> loginUser(LoginRequestDto loginRequestDto) {
-        return ResponseEntity.ok(this.sessionsService.login(loginRequestDto));
+    public ResponseEntity<LoginResponseDto> loginUser(LoginRequestWithMapShoppingCartDto loginRequestDto) {
+        return ResponseEntity.ok(this.sessionsService.login(loginRequestDto.loginRequestDto(),
+                loginRequestDto.mapShoppingCartDto()));
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.AddProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
@@ -80,14 +79,8 @@ public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
     }
 
     @Override
-    public ResponseEntity<OrderDto> checkoutUnregisteredUser( AddAndUpdateAddressDto addressDto) {
-//        return ResponseEntity.ok(this.shoppingCartService.checkoutUnregisteredUser(addressDto));
-        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    @Override
     public ResponseEntity<OrderDto> checkoutRegisteredUser(Long addressId) {
-        return ResponseEntity.ok(this.shoppingCartService.checkoutRegisteredUser(addressId));
+        return ResponseEntity.ok(this.shoppingCartService.checkoutMyUser(addressId));
     }
 
 

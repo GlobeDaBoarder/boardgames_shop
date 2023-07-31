@@ -41,8 +41,6 @@ public abstract class Product extends BaseEntity{
 //    @URL ??
     private String productImageURL;
 
-    // todo figure out if tree structure category is needed or not
-//    private Category category;
 
     private ProductCategory productCategory;
 

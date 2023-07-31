@@ -8,6 +8,7 @@ import org.mapstruct.Named;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateUserProfileDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
@@ -24,7 +25,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Mapper(componentModel = "spring", uses = {UserRoleRepository.class})
-// todo convert to Abstract class to use @Autowired and take care of Spring beans
 public interface UserMapper {
 
     @Named("mapToRoleSet")
@@ -64,6 +64,8 @@ public interface UserMapper {
     @Mapping(target = "roles", source = ".", qualifiedByName = "getCustomerRole")
     UserProfile toUserProfile(CreateCustomerUserDto createCustomerUserDto, @Context UserRoleRepository roleRepository);
 
+    UserProfile toUserProfile(CreateUserProfileDto createUserProfileDto);
+
 
     UserCredentials toUserCredentials(CreateAnyUserDto createAnyUserDto);
     UserCredentials toUserCredentials(CreateCustomerUserDto createAnyUserDto);
@@ -77,6 +79,8 @@ public interface UserMapper {
     UserRoleDto toUserRoleDto(UserRole userRole);
 
     Address toAddress(AddressDto addressDto);
+
+
 
 //    UserFullDto userToUserDto(User user);
 //

@@ -1,5 +1,6 @@
 package ua.rivnegray.boardgames_shop.service;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -7,14 +8,23 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.OrderIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.OrderMapper;
+import ua.rivnegray.boardgames_shop.mapper.UserMapper;
+import ua.rivnegray.boardgames_shop.model.Address;
 import ua.rivnegray.boardgames_shop.model.Order;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
+import ua.rivnegray.boardgames_shop.model.PaymentStatus;
+import ua.rivnegray.boardgames_shop.model.ProductInOrder;
+import ua.rivnegray.boardgames_shop.model.UserProfile;
+import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.OrderRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,10 +35,23 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     OrderMapper orderMapper;
 
+    UserMapper userMapper;
+    UserProfileRepository userProfileRepository;
+
+    BoardGameRepository boardGameRepository;
+
+    EntityManager entityManager;
+
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, UserMapper userMapper,
+                            UserProfileRepository userProfileRepository, BoardGameRepository boardGameRepository,
+                            EntityManager entityManager) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
+        this.userMapper = userMapper;
+        this.userProfileRepository = userProfileRepository;
+        this.boardGameRepository = boardGameRepository;
+        this.entityManager = entityManager;
     }
 
     private Order fetchOrderById(Long orderId) {
@@ -49,7 +72,44 @@ public class OrderServiceImpl implements OrderService {
     // admin orders operations
     @Override
     public OrderDto createOrder(CreateOrderDto createOrderDto) {
-        return this.orderMapper.orderToOrderDto(this.orderRepository.save(this.orderMapper.createOrderDtoToOrder(createOrderDto)));
+        UserProfile userProfile = this.userMapper.toUserProfile(createOrderDto.userProfileDto());
+
+        Address address = this.userMapper.toAddress(createOrderDto.addAndUpdateAddressDto());
+        userProfile.getAddresses().add(address);
+
+        this.userProfileRepository.save(userProfile);
+
+        Set<ProductInOrder> productInOrders = createOrderDto.mapShoppingCartDto().simpleProductInShoppingCartDtos().stream()
+                .map(simpleProductInShoppingCartDto -> ProductInOrder.builder()
+                        .product(this.boardGameRepository.findById(simpleProductInShoppingCartDto.productId())
+                                .orElseThrow(() -> new BoardGameIdNotFoundException(simpleProductInShoppingCartDto.productId())))
+                        .quantity(simpleProductInShoppingCartDto.quantity())
+                        .build()
+                )
+                .collect(Collectors.toSet());
+
+        Order order = Order.builder()
+                .userProfile(userProfile)
+                .orderItems(productInOrders)
+                .totalPrice(
+                        productInOrders.stream()
+                                .map(ProductInOrder::calculateTotalPrice)
+                                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                )
+                .status(OrderStatus.PLACED)
+                .address(address)
+                .dateOrderPlaced(LocalDateTime.now())
+                .paymentStatus(PaymentStatus.UNPAID)
+                .build();
+
+        order.getOrderItems().forEach(productInOrder -> productInOrder.setOrder(order));
+
+        this.orderRepository.save(order);
+
+        entityManager.flush();
+        entityManager.refresh(order);
+
+        return this.orderMapper.orderToOrderDto(order);
     }
 
     @Override
@@ -93,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getMyOrders() {
-        return this.orderRepository.findAllByUserProfile_Id(getCurrentUserId()).stream()
+        return this.getCurrentUserOrders().stream()
                 .map(order -> this.orderMapper.orderToOrderDto(order))
                 .collect(Collectors.toList());
     }

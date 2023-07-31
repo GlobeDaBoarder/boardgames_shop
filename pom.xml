@@ -308,7 +308,6 @@
 								<importMapping>OrderStatus=ua.rivnegray.boardgames_shop.model.OrderStatus</importMapping>
 								<importMapping>PaymentStatus=ua.rivnegray.boardgames_shop.model.PaymentStatus</importMapping>
 								<importMapping>ProductInOrderDto=ua.rivnegray.boardgames_shop.DTO.response.ProductInOrderDto</importMapping>
-
 							</importMappings>
 
 							<configOptions>
@@ -336,6 +335,8 @@
 								<importMapping>UserPublicDto=ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto</importMapping>
 								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto</importMapping>
 								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.UserPermission</importMapping>
+								<importMapping>LoginRequestWithMapShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.request.LoginRequestWithMapShoppingCartDto</importMapping>
+								<importMapping>RegisterRequestWithMapShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto</importMapping>
 							</importMappings>
 
 							<configOptions>

@@ -1,7 +1,7 @@
 package generated.session.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link RegisterApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-27T15:23:44.416461194+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-31T10:24:56.171032561+03:00[Europe/Kiev]")
 public interface RegisterApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -27,13 +27,13 @@ public interface RegisterApiDelegate {
     /**
      * POST /register : Register a new user
      *
-     * @param createCustomerUserDto  (required)
+     * @param registerRequestWithMapShoppingCartDto  (required)
      * @return Registration successful (status code 201)
      *         or Bad Request (status code 400)
      *         or Conflict, e.g., email already in use (status code 409)
      * @see RegisterApi#registerUser
      */
-    default ResponseEntity<LoginResponseDto> registerUser(CreateCustomerUserDto createCustomerUserDto) {
+    default ResponseEntity<LoginResponseDto> registerUser(RegisterRequestWithMapShoppingCartDto registerRequestWithMapShoppingCartDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

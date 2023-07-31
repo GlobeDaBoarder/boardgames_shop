@@ -8,7 +8,6 @@ import ua.rivnegray.boardgames_shop.model.Order;
 
 @Mapper(componentModel = "spring", uses = {ProductMapper.class, UserMapper.class})
 public interface OrderMapper {
-    Order createOrderDtoToOrder(CreateOrderDto createOrderDto);
 
     @Mapping(target = "userProfileId", source = "userProfile.id")
     @Mapping(target = "address", source = "address")
