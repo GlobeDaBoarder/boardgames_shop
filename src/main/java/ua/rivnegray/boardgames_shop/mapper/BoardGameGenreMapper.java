@@ -11,8 +11,6 @@ import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 public interface BoardGameGenreMapper {
     BoardGameGenreDto boardGameGenreToBoardGameGenreDto(BoardGameGenre boardGameGenre);
 
-    BoardGameGenre boardGameGenreDtoToBoardGameGenre(BoardGameGenreDto boardGameGenreDto);
-
     BoardGameGenre createBoardGameGenreDtoToBoardGameGenre(CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto);
 
     BoardGameGenre updateBoardGameGenreFromDto(CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto,

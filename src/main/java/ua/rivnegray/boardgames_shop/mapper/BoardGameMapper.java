@@ -1,6 +1,5 @@
 package ua.rivnegray.boardgames_shop.mapper;
 
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -8,6 +7,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameGenreIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameMechanicIdNotFoundException;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
@@ -24,7 +25,8 @@ public interface BoardGameMapper {
     default Set<BoardGameGenre> genreIdsToGenres(Set<Long> genreIds, @Context BoardGameGenreRepository boardGameGenreRepository) {
         Set<BoardGameGenre> genres = new HashSet<>();
         for (Long genreId : genreIds) {
-            genres.add(boardGameGenreRepository.findById(genreId).get());
+            genres.add(boardGameGenreRepository.findById(genreId)
+                    .orElseThrow(() -> new BoardGameGenreIdNotFoundException(genreId)));
         }
         return genres;
     }
@@ -33,7 +35,8 @@ public interface BoardGameMapper {
     default Set<BoardGameMechanic> mechanicIdsToMechanics(Set<Long> mechanicIds, @Context BoardGameMechanicRepository boardGameMechanicRepository) {
         Set<BoardGameMechanic> mechanics = new HashSet<>();
         for (Long mechanicId : mechanicIds) {
-            mechanics.add(boardGameMechanicRepository.findById(mechanicId).get());
+            mechanics.add(boardGameMechanicRepository.findById(mechanicId)
+                    .orElseThrow(() -> new BoardGameMechanicIdNotFoundException(mechanicId)));
         }
         return mechanics;
     }

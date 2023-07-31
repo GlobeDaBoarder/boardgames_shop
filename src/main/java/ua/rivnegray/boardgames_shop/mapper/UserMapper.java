@@ -40,7 +40,7 @@ public interface UserMapper {
     }
 
     @Named("getCustomerRole")
-    default Set<UserRole> getCustomerRole(CreateCustomerUserDto createCustomerUserDto, @Context UserRoleRepository roleRepository) {
+    default Set<UserRole> getCustomerRole(@Context UserRoleRepository roleRepository) {
         UserRole userRole = roleRepository.findUserRoleByRoleName("ROLE_CUSTOMER")
                 .orElseThrow(() -> new RoleNameNotFoundException("ROLE_CUSTOMER"));
         Set<UserRole> roles = new HashSet<>();
@@ -50,8 +50,6 @@ public interface UserMapper {
 
     @Mapping(source = "userCredentials.username", target = "username")
     UserPublicDto toUserPublicDto(UserProfile userProfile);
-
-    UserPublicDto toUserPublicDto(CreateAnyUserDto createAnyUserDto);
 
     @Mapping(source = "roleIds", target = "roles", qualifiedByName = "mapToRoleSet")
     UserProfile toUserProfile(CreateAnyUserDto createAnyUserDto, @Context UserRoleRepository roleRepository);
@@ -66,8 +64,8 @@ public interface UserMapper {
 
     UserProfile toUserProfile(CreateUserProfileDto createUserProfileDto);
 
-
     UserCredentials toUserCredentials(CreateAnyUserDto createAnyUserDto);
+
     UserCredentials toUserCredentials(CreateCustomerUserDto createAnyUserDto);
 
     Address toAddress(AddAndUpdateAddressDto addAndUpdateAddressDto);
@@ -77,26 +75,4 @@ public interface UserMapper {
     void updateAddress(@MappingTarget Address addressToUpdate, AddAndUpdateAddressDto updateAddressDto);
 
     UserRoleDto toUserRoleDto(UserRole userRole);
-
-    Address toAddress(AddressDto addressDto);
-
-
-
-//    UserFullDto userToUserDto(User user);
-//
-//    User userDtoToUser(UserFullDto userFullDto);
-//
-//
-//
-//    @Mapping(target = "id", ignore = true)
-//    @Mapping(target = "roles", source = "roleIds", qualifiedByName = "mapToRoleSet")
-//    User createAndUpdateUserDtoToUser(CreateAndUpdateUserDto createUserDto, @Context UserRoleService roleService);
-
-//    @Mapping(target = "username", source = "username")
-//    @Mapping(target = "roles", source = "roles")
-//    @Mapping(target = "email", source = "userProfile.email")
-//    @Mapping(target = "phone", source = "userProfile.phone")
-//    @Mapping(target = "firstName", source = "userProfile.firstName")
-//    @Mapping(target = "lastName", source = "userProfile.lastName")
-//    UserPublicDto toUserPublicDTO(UserCredentials userCredentials);
 }
