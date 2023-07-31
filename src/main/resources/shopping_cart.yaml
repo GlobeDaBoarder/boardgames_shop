@@ -189,18 +189,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    AddProductInShoppingCartDto:
-      type: object
-      properties:
-        productId:
-          type: integer
-          format: int64
-        quantity:
-          type: integer
-          format: int32
-      required:
-        - productId
-        - quantity
 
     UpdateQuantityOfProductInShoppingCartDto:
       type: object
