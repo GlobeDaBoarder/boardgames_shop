@@ -23,9 +23,7 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-//@Inheritance(strategy = )
 public class UserProfile extends BaseEntity{
-
 
     @Column( unique = true, nullable = false)
     private String email;
