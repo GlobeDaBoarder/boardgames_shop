@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Primary
 public class UserApiDelegateImpl implements UsersApiDelegate {
     UserService userService;
 

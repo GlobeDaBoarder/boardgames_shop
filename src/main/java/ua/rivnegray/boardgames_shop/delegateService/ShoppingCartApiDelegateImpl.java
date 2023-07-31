@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Primary
 public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
 
     ShoppingCartService shoppingCartService;

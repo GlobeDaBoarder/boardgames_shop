@@ -20,13 +20,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Primary
-public class BoardGameApiDelegateService implements BoardgamesApiDelegate {
+public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
 
     BoardGameService boardGameService;
 
     @Autowired
-    public BoardGameApiDelegateService(BoardGameService boardGameService) {
+    public BoardgamesApiDelegateImpl(BoardGameService boardGameService) {
         this.boardGameService = boardGameService;
     }
 

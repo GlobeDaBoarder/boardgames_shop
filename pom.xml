@@ -105,14 +105,15 @@
 			<version>2.1.0</version>
 		</dependency>
 
-		<!--		jwt and spring security dependencies-->
+		<!-- log4j -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+			<version>3.1.2</version>
+		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-configuration-processor</artifactId>-->
-<!--			<version>3.1.1</version>-->
-<!--			<optional>true</optional>-->
-<!--		</dependency>-->
+
 
 
 

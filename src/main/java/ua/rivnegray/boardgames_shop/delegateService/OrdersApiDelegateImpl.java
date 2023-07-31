@@ -17,13 +17,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Primary
-public class OrderApiDelegateService implements OrdersApiDelegate {
+public class OrdersApiDelegateImpl implements OrdersApiDelegate {
 
     OrderService orderService;
 
     @Autowired
-    public OrderApiDelegateService(OrderService orderService) {
+    public OrdersApiDelegateImpl(OrderService orderService) {
         this.orderService = orderService;
     }
 
