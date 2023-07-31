@@ -1,7 +1,7 @@
 package generated.session.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-31T09:14:24.638856770+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-31T10:24:56.171032561+03:00[Europe/Kiev]")
 @Controller
 @RequestMapping("${openapi.title.base-path:}")
 public class RegisterApiController implements RegisterApi {

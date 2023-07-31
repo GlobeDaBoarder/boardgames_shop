@@ -33,7 +33,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-31T09:14:24.413656439+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-31T10:24:55.928087677+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "shoppingCart", description = "the shoppingCart API")
     public interface ShoppingCartApi {

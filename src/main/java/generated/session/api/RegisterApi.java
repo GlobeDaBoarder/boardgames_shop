@@ -5,8 +5,8 @@
 */
 package generated.session.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto;
     import io.swagger.v3.oas.annotations.ExternalDocumentation;
     import io.swagger.v3.oas.annotations.Operation;
     import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +31,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-31T09:14:24.638856770+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-31T10:24:56.171032561+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "register", description = "the register API")
     public interface RegisterApi {
@@ -43,7 +43,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             /**
             * POST /register : Register a new user
             *
-                * @param createCustomerUserDto  (required)
+                * @param registerRequestWithMapShoppingCartDto  (required)
             * @return Registration successful (status code 201)
                 *         or Bad Request (status code 400)
                 *         or Conflict, e.g., email already in use (status code 409)
@@ -67,9 +67,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
             consumes = { "application/json" }
             )
         default ResponseEntity<LoginResponseDto> registerUser(
-        @Parameter(name = "CreateCustomerUserDto", description = "", required = true) @Valid @RequestBody CreateCustomerUserDto createCustomerUserDto
+        @Parameter(name = "RegisterRequestWithMapShoppingCartDto", description = "", required = true) @Valid @RequestBody RegisterRequestWithMapShoppingCartDto registerRequestWithMapShoppingCartDto
             ) {
-            return getDelegate().registerUser(createCustomerUserDto);
+            return getDelegate().registerUser(registerRequestWithMapShoppingCartDto);
             }
 
         }
