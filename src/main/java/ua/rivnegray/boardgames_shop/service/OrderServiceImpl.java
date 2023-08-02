@@ -54,24 +54,11 @@ public class OrderServiceImpl implements OrderService {
         this.entityManager = entityManager;
     }
 
-    private Order fetchOrderById(Long orderId) {
-        return this.orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderIdNotFoundException(orderId));
-    }
-
-    private Long getCurrentUserId(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
-        return jwtPrincipal.getClaim("id");
-    }
-
-    private Set<Order> getCurrentUserOrders(){
-        return this.orderRepository.findAllByUserProfile_Id(getCurrentUserId());
-    }
-
     // admin orders operations
     @Override
     public OrderDto createOrder(CreateOrderDto createOrderDto) {
+        // todo check for existing user profile by email or phone
+
         UserProfile userProfile = this.userMapper.toUserProfile(createOrderDto.userProfileDto());
 
         Address address = this.userMapper.toAddress(createOrderDto.addAndUpdateAddressDto());
@@ -134,15 +121,7 @@ public class OrderServiceImpl implements OrderService {
         return this.orderMapper.orderToOrderDto(order);
     }
 
-    @Override
-    public void cancelOrder(Long orderId) {
-        Order order = fetchOrderById(orderId);
-        order.setStatus(OrderStatus.CANCELLED);
-        this.orderRepository.save(order);
-    }
-
     // my order operations
-
     @Override
     public void cancelMyOrder(Long orderId) {
         Order orderToCancel = this.orderRepository.findByIdAndUserProfile_Id(orderId, getCurrentUserId())
@@ -163,5 +142,20 @@ public class OrderServiceImpl implements OrderService {
         return this.orderRepository.findByIdAndUserProfile_Id(orderId, getCurrentUserId())
                 .map(order -> this.orderMapper.orderToOrderDto(order))
                 .orElseThrow(() -> new OrderIdNotFoundException(orderId));
+    }
+
+    private Order fetchOrderById(Long orderId) {
+        return this.orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderIdNotFoundException(orderId));
+    }
+
+    private Long getCurrentUserId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
+        return jwtPrincipal.getClaim("id");
+    }
+
+    private Set<Order> getCurrentUserOrders(){
+        return this.orderRepository.findAllByUserProfile_Id(getCurrentUserId());
     }
 }

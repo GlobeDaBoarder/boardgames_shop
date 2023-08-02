@@ -23,9 +23,6 @@ public interface OrderService {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     OrderDto updateOrderStatus(Long orderId, OrderStatus orderStatus);
 
-    @Transactional
-    void cancelOrder(Long orderId);
-
     // my order operations
     @Transactional
     void cancelMyOrder(Long orderId);

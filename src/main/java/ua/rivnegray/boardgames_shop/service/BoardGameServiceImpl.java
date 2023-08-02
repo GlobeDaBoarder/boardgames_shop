@@ -56,11 +56,6 @@ public class BoardGameServiceImpl implements BoardGameService {
         this.boardGameMechanicMapper = boardGameMechanicMapper;
     }
 
-    private BoardGame fetchBoardGameById(Long id) {
-        return this.boardGameRepository.findById(id)
-                .orElseThrow(() -> new BoardGameIdNotFoundException(id));
-    }
-
     @Override
     public List<BoardGameDto> getAllBoardGames() {
         return this.boardGameRepository.findAll().stream()
@@ -72,7 +67,7 @@ public class BoardGameServiceImpl implements BoardGameService {
     public BoardGameDto addBoardGame(CreateAndUpdateBoardGameDto createBoardGameDto) {
         BoardGame boardGame = this.boardGameMapper.createBoardGameDtoToBoardGame(createBoardGameDto,
                 this.boardGameGenreRepository, this.boardGameMechanicRepository);
-        boardGame = this.boardGameRepository.save(boardGame);
+        this.boardGameRepository.save(boardGame);
         entityManager.flush();
         entityManager.refresh(boardGame); // entity now has the @CreationTimestamp field set
         return this.boardGameMapper.boardGameToBoardGameDto(boardGame);
@@ -88,7 +83,7 @@ public class BoardGameServiceImpl implements BoardGameService {
         BoardGame boardGame = fetchBoardGameById(id);
         this.boardGameMapper.updateBoardGameFromDto(updateBoardGameDto, boardGame, this.boardGameGenreRepository,
                 this.boardGameMechanicRepository);
-        boardGame = this.boardGameRepository.save(boardGame);
+        this.boardGameRepository.save(boardGame);
         entityManager.flush();
         entityManager.refresh(boardGame); // entity now has the @UpdateTimestamp field updated
         return this.boardGameMapper.boardGameToBoardGameDto(boardGame);
@@ -116,7 +111,7 @@ public class BoardGameServiceImpl implements BoardGameService {
     public BoardGameGenreDto addGenre(CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto) {
         BoardGameGenre boardGameGenre = this.boardGameGenreMapper
                 .createBoardGameGenreDtoToBoardGameGenre(createAndUpdateBoardGameGenreDto);
-        boardGameGenre = this.boardGameGenreRepository.save(boardGameGenre);
+        this.boardGameGenreRepository.save(boardGameGenre);
         return this.boardGameGenreMapper.boardGameGenreToBoardGameGenreDto(boardGameGenre);
     }
 
@@ -124,8 +119,8 @@ public class BoardGameServiceImpl implements BoardGameService {
     public BoardGameGenreDto updateGenre(Long id, CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto) {
         BoardGameGenre boardGameGenre = this.boardGameGenreRepository.findById(id)
                 .orElseThrow(() -> new BoardGameGenreIdNotFoundException(id));
-        boardGameGenre = this.boardGameGenreMapper.updateBoardGameGenreFromDto(createAndUpdateBoardGameGenreDto, boardGameGenre);
-        boardGameGenre = this.boardGameGenreRepository.save(boardGameGenre);
+        this.boardGameGenreMapper.updateBoardGameGenreFromDto(createAndUpdateBoardGameGenreDto, boardGameGenre);
+        this.boardGameGenreRepository.save(boardGameGenre);
         return this.boardGameGenreMapper.boardGameGenreToBoardGameGenreDto(boardGameGenre);
     }
 
@@ -152,7 +147,7 @@ public class BoardGameServiceImpl implements BoardGameService {
     public BoardGameMechanicDto addMechanic(CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto) {
         BoardGameMechanic boardGameMechanic = this.boardGameMechanicMapper
                 .createBoardGameMechanicDtoToBoardGameMechanic(createAndUpdateBoardGameMechanicDto);
-        boardGameMechanic = this.boardGameMechanicRepository.save(boardGameMechanic);
+        this.boardGameMechanicRepository.save(boardGameMechanic);
         return this.boardGameMechanicMapper.boardGameMechanicToBoardGameMechanicDto(boardGameMechanic);
     }
 
@@ -160,9 +155,9 @@ public class BoardGameServiceImpl implements BoardGameService {
     public BoardGameMechanicDto updateMechanic(Long id, CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto) {
         BoardGameMechanic boardGameMechanic = this.boardGameMechanicRepository.findById(id)
                 .orElseThrow(() -> new BoardGameMechanicIdNotFoundException(id));
-        boardGameMechanic = this.boardGameMechanicMapper.updateBoardGameMechanicFromDto(createAndUpdateBoardGameMechanicDto,
+        this.boardGameMechanicMapper.updateBoardGameMechanicFromDto(createAndUpdateBoardGameMechanicDto,
                 boardGameMechanic);
-        boardGameMechanic = this.boardGameMechanicRepository.save(boardGameMechanic);
+        this.boardGameMechanicRepository.save(boardGameMechanic);
         return this.boardGameMechanicMapper.boardGameMechanicToBoardGameMechanicDto(boardGameMechanic);
     }
 
@@ -171,4 +166,8 @@ public class BoardGameServiceImpl implements BoardGameService {
         this.boardGameMechanicRepository.deleteById(id);
     }
 
+    private BoardGame fetchBoardGameById(Long id) {
+        return this.boardGameRepository.findById(id)
+                .orElseThrow(() -> new BoardGameIdNotFoundException(id));
+    }
 }

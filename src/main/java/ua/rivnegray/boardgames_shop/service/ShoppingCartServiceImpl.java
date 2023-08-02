@@ -79,13 +79,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         this.userProfileRepository = userProfileRepository;
     }
 
-//    private ShoppingCart fetchShoppingCartFromRepo(Long cartId) {
-//        return this.shoppingCartRepository.findById(cartId)
-//                .orElseThrow(() -> new ShoppingCartIdNotFoundException(cartId));
-//    }
-//
     // admin operations
-
     @Override
     public List<ProductInShoppingCartDto> getProductsInShoppingCart(Long cartId) {
         ShoppingCart shoppingCart = this.shoppingCartRepository.findById(cartId)
@@ -96,16 +90,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     // current user operations
-    private ShoppingCart getShoppingCartOfCurrentUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
-        String username = jwtPrincipal.getSubject();
-        Long id = jwtPrincipal.getClaim("id");
-
-        return this.shoppingCartRepository.findById(id)
-                .orElseThrow(() -> new ShoppingCartIdNotFoundException(id));
-    }
-
     @Override
     public ShoppingCartDto clearMyShoppingCart() {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
@@ -204,5 +188,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         clearMyShoppingCart();
 
         return this.orderMapper.orderToOrderDto(newOrder);
+    }
+
+    private ShoppingCart getShoppingCartOfCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
+        String username = jwtPrincipal.getSubject();
+        Long id = jwtPrincipal.getClaim("id");
+
+        return this.shoppingCartRepository.findById(id)
+                .orElseThrow(() -> new ShoppingCartIdNotFoundException(id));
     }
 }
