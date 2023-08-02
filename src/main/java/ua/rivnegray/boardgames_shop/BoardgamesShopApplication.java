@@ -1,9 +1,10 @@
 package ua.rivnegray.boardgames_shop;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
@@ -35,8 +36,8 @@ import java.util.Set;
 @SpringBootApplication
 @ComponentScan({"ua.rivnegray.boardgames_shop", "generated"})
 public class BoardgamesShopApplication {
-	
-
+    
+    private final static Logger LOGGER = LoggerFactory.getLogger(BoardgamesShopApplication.class);
 	public static void main(String[] args) {
 		SpringApplication.run(BoardgamesShopApplication.class, args);
 	}
@@ -196,6 +197,7 @@ public class BoardgamesShopApplication {
 
 			shoppingCartRepository.save(cart1);
 
+			LOGGER.debug("test");
 
 		};
 	}

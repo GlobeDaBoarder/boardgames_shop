@@ -3,10 +3,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create-drop
-  sql:
-    init:
-      mode: always
-#      data-locations: static/startup.sql
   datasource:
     username: root
     password: root
@@ -21,12 +17,14 @@ springdoc:
     path: /api/docs
   swagger-ui:
     path: /api/ui
-logging:
-  level:
-    org:
-      springframework:
-        security: debug
 
+logging:
+  config: src/main/resources/logback-spring.xml
+#logging:
+#  level:
+#    ua.rivnegray.boardgames_shop: DEBUG
+#    org.hibernate.type.descriptor.sql: TRACE
+#    org.springframework.security: DEBUG
 ---
 spring:
   config:
