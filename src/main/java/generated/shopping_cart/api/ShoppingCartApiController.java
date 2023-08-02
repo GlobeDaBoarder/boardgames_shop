@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-31T11:38:29.051218470+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-08-02T10:51:04.618729304+03:00[Europe/Kiev]")
 @Controller
 @RequestMapping("${openapi.shoppingCart.base-path:}")
 public class ShoppingCartApiController implements ShoppingCartApi {

@@ -40,7 +40,7 @@ public interface UserMapper {
     }
 
     @Named("getCustomerRole")
-    default Set<UserRole> getCustomerRole(@Context UserRoleRepository roleRepository) {
+    default Set<UserRole> getCustomerRole(CreateCustomerUserDto createCustomerUserDto, @Context UserRoleRepository roleRepository) {
         UserRole userRole = roleRepository.findUserRoleByRoleName("ROLE_CUSTOMER")
                 .orElseThrow(() -> new RoleNameNotFoundException("ROLE_CUSTOMER"));
         Set<UserRole> roles = new HashSet<>();

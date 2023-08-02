@@ -6,11 +6,13 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +22,20 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardGame extends Product {
+
+    @Builder
+    public BoardGame(String manufacturer, String productName, String productDescription, BigDecimal productPrice, Integer productQuantityInStock, String productImageURL, ProductCategory productCategory, String productCode, String gameSet, Set<BoardGameGenre> gameGenres, Set<BoardGameMechanic> gameMechanics, Integer minAge, Integer minPlayers, String gameDuration, BoardGameLanguage gameLanguage, String BGGLink) {
+        super(manufacturer, productName, productDescription, productPrice, productQuantityInStock, productImageURL, productCategory);
+        this.productCode = productCode;
+        this.gameSet = gameSet;
+        this.gameGenres = gameGenres;
+        this.gameMechanics = gameMechanics;
+        this.minAge = minAge;
+        this.minPlayers = minPlayers;
+        this.gameDuration = gameDuration;
+        this.gameLanguage = gameLanguage;
+        this.BGGLink = BGGLink;
+    }
 
     /**
      *
