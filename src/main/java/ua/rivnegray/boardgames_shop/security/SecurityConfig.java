@@ -5,6 +5,8 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,8 +32,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-//todo change sout to logger output
 public class SecurityConfig {
+    private static final Logger LOGGR = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final UserDetailsService JpaDetailsService;
     private  RSAKey rsaKey;
@@ -89,10 +91,10 @@ public class SecurityConfig {
         final NimbusJwtEncoder nimbusJwtEncoder = new NimbusJwtEncoder(jwks);
 
         return parameters -> {
-            System.out.println("Encoding JWT with parameters: " + parameters.getClaims());
+            LOGGR.debug("Encoding JWT with parameters: " + parameters.getClaims());
             Jwt jwt = nimbusJwtEncoder.encode(parameters);
-            System.out.println("Encoded JWT value: " + jwt.getTokenValue());
-            System.out.println("Encoded JWT claims: " + jwt.getClaims());
+            LOGGR.debug("Encoded JWT value: " + jwt.getTokenValue());
+            LOGGR.debug("Encoded JWT claims: " + jwt.getClaims());
             return jwt;
         };
     }
@@ -102,10 +104,10 @@ public class SecurityConfig {
         final NimbusJwtDecoder nimbusJwtDecoder = NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
 
         return token -> {
-            System.out.println("Decoding JWT: " + token);
+            LOGGR.debug("Decoding JWT: " + token);
             Jwt jwt = nimbusJwtDecoder.decode(token);
-            System.out.println("Decoded JWT claims: " + jwt.getClaims());
-            System.out.println("Encoded JWT subject: " + jwt.getSubject());
+            LOGGR.debug("Decoded JWT claims: " + jwt.getClaims());
+            LOGGR.debug("Encoded JWT subject: " + jwt.getSubject());
             return jwt;
         };
     }

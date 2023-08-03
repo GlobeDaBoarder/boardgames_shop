@@ -55,7 +55,7 @@ public class BoardgamesShopApplication {
 
 			//---------USERS----------------
 
-			System.out.println("Active profile: " + Arrays.toString(environment.getActiveProfiles()));
+			LOGGER.info("Active profile: " + Arrays.toString(environment.getActiveProfiles()));
 
 			UserRole roleSuperAdmin = new UserRole("ROLE_SUPER_ADMIN");
 			Set<UserPermission> superAdminPermissions = EnumSet.allOf(UserPermission.class);

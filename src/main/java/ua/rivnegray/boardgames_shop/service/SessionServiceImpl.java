@@ -82,7 +82,7 @@ public class SessionServiceImpl implements SessionsService{
     @Override
     public LoginResponseDto register(CreateCustomerUserDto createCustomerUserDto, MapShoppingCartDto mapShoppingCartDto) {
         if (userCredentialsRepository.existsByUsername(createCustomerUserDto.username())) {
-            throw new UsernameAlreadyTakenException("Username already exists");
+            throw new UsernameAlreadyTakenException(createCustomerUserDto.username());
         }
         // todo add validation for existing phone and email
 

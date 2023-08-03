@@ -1,11 +1,11 @@
 package ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions;
 
 
-// todo change to ResponseStatusException
-public class AddressIdNotFoundException extends RuntimeException {
-    // todo add logging of IDs
-    public AddressIdNotFoundException(Long addressId) {
-        super("Address id not found");
+import ua.rivnegray.boardgames_shop.model.Address;
+
+public class AddressIdNotFoundException extends ResourceIdNotFoundException {
+    public AddressIdNotFoundException(Long id) {
+        super(Address.class.getName(), id);
     }
 
 }

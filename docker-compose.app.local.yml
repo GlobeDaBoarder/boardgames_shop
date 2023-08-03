@@ -1,0 +1,34 @@
+version: '3'
+services:
+  db:
+    image: mysql:8.0.33-debian
+    environment:
+      MYSQL_ROOT_PASSWORD: rvngr2023
+      MYSQL_DATABASE: shop
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile-app
+    ports:
+      - "8080:8080"
+    volumes:
+      - /rivnegray-application-logs:/app/logs
+    networks:
+      - app-network
+    environment:
+      WAIT_HOSTS: db:3306
+      SPRING_PROFILES_ACTIVE: dev-local-dockerfile
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:

@@ -35,7 +35,7 @@ import javax.annotation.Generated;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-08-02T10:51:04.399524176+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-08-03T19:22:19.071503511+03:00[Europe/Kiev]")
     @Validated
     @Tag(name = "boardgames", description = "the boardgames API")
     public interface BoardgamesApi {
