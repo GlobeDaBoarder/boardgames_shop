@@ -3,14 +3,12 @@ package ua.rivnegray.boardgames_shop.delegateService;
 import generated.user.api.UsersApiDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
@@ -25,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Primary
 public class UserApiDelegateImpl implements UsersApiDelegate {
     UserService userService;
 
@@ -64,8 +61,14 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Void> deleteUser(Long userId) {
-        this.userService.deleteUser(userId);
+    public ResponseEntity<Void> deleteMe() {
+        this.userService.deleteMe();
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> hardDeleteUser(Long userId) {
+        this.userService.hardDeleteUser(userId);
         return ResponseEntity.noContent().build();
     }
 
@@ -80,11 +83,9 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> getCurrentUserPublicInfo() {
+    public ResponseEntity<UserPublicDto> getMe() {
         return ResponseEntity.ok(this.userService.getCurrentUserPublicInfo());
     }
-
-
 
     @Override
     public ResponseEntity<Void> removeAddress(Long addressId) {
@@ -93,28 +94,28 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> updateAddress(Long addressId,
+    public ResponseEntity<UserPublicDto> updateMyAddress(Long addressId,
                                                        AddAndUpdateAddressDto addAndUpdateAddressDto) {
         return ResponseEntity.ok(this.userService.updateAddress(addressId, addAndUpdateAddressDto));
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> updateEmail(UpdateEmailDto updateEmailDto) {
+    public ResponseEntity<UserPublicDto> updateMyEmail(UpdateEmailDto updateEmailDto) {
         return ResponseEntity.ok(this.userService.updateEmail(updateEmailDto));
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> updatePassword(UpdatePasswordDto updatePasswordDto) {
+    public ResponseEntity<UserPublicDto> updateMyPassword(UpdatePasswordDto updatePasswordDto) {
         return ResponseEntity.ok(this.userService.updatePassword(updatePasswordDto));
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> updatePhone(UpdatePhoneDto updatePhoneDto) {
+    public ResponseEntity<UserPublicDto> updateMyPhone(UpdatePhoneDto updatePhoneDto) {
         return ResponseEntity.ok(this.userService.updatePhone(updatePhoneDto));
     }
 
     @Override
-    public ResponseEntity<UserPublicDto> updateUsername(UpdateUsernameDto updateUsernameDto) {
+    public ResponseEntity<UserPublicDto> updateMyUsername(UpdateUsernameDto updateUsernameDto) {
         return ResponseEntity.ok(this.userService.updateUsername(updateUsernameDto));
     }
 
@@ -137,12 +138,12 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
 //    }
 
     @Override
-    public ResponseEntity<AddressDto> getAddressById(Long addressId) {
+    public ResponseEntity<AddressDto> getMyAddressById(Long addressId) {
         return ResponseEntity.ok(this.userService.getAddress(addressId));
     }
 
     @Override
-    public ResponseEntity<List<AddressDto>> getAllAddresses() {
+    public ResponseEntity<List<AddressDto>> getAllMyAddresses() {
         return ResponseEntity.ok(this.userService.getAllAddresses());
     }
 

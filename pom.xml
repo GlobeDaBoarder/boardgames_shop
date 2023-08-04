@@ -104,18 +104,6 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.1.0</version>
 		</dependency>
-
-		<!--		jwt and spring security dependencies-->
-
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-configuration-processor</artifactId>-->
-<!--			<version>3.1.1</version>-->
-<!--			<optional>true</optional>-->
-<!--		</dependency>-->
-
-
-
 	</dependencies>
 
 	<build>
@@ -144,12 +132,6 @@
 							<artifactId>mapstruct-processor</artifactId>
 							<version>1.4.2.Final</version>
 						</path>
-<!--						<path>-->
-<!--							<groupId>org.springframework.boot</groupId>-->
-<!--							<artifactId>spring-boot-configuration-processor</artifactId>-->
-<!--							<version>3.1.1</version>-->
-<!--						</path>-->
-
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
@@ -227,7 +209,6 @@
 								<importMapping>UpdateRolesDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateRolesDto</importMapping>
 								<importMapping>UpdateUsernameDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto</importMapping>
 								<importMapping>AddressDto=ua.rivnegray.boardgames_shop.DTO.response.AddressDto</importMapping>
-								<importMapping>UserProfileDto=ua.rivnegray.boardgames_shop.DTO.response.UserProfileDto</importMapping>
 								<importMapping>UserPublicDto=ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto</importMapping>
 								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto</importMapping>
 								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.UserPermission</importMapping>
@@ -279,7 +260,6 @@
 							<inputSpec>src/main/resources/shopping_cart.yaml</inputSpec>
 
 							<importMappings>
-								<importMapping>AddProductInShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.request.create.AddProductInShoppingCartDto</importMapping>
 								<importMapping>UpdateQuantityOfProductInShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto</importMapping>
 								<importMapping>ShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto</importMapping>
 								<importmapping>ProductInShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto</importmapping>
@@ -314,7 +294,6 @@
 								<importMapping>OrderStatus=ua.rivnegray.boardgames_shop.model.OrderStatus</importMapping>
 								<importMapping>PaymentStatus=ua.rivnegray.boardgames_shop.model.PaymentStatus</importMapping>
 								<importMapping>ProductInOrderDto=ua.rivnegray.boardgames_shop.DTO.response.ProductInOrderDto</importMapping>
-
 							</importMappings>
 
 							<configOptions>
@@ -342,6 +321,8 @@
 								<importMapping>UserPublicDto=ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto</importMapping>
 								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto</importMapping>
 								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.UserPermission</importMapping>
+								<importMapping>LoginRequestWithMapShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.request.LoginRequestWithMapShoppingCartDto</importMapping>
+								<importMapping>RegisterRequestWithMapShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto</importMapping>
 							</importMappings>
 
 							<configOptions>

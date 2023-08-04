@@ -1,7 +1,9 @@
 package ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions;
 
+import ua.rivnegray.boardgames_shop.model.UserProfile;
+
 public class UserIdNotFoundException extends ResourceIdNotFoundException {
     public UserIdNotFoundException(Long id) {
-        super("User with id " + id + " not found");
+        super(UserProfile.class.getName(), id);
     }
 }

@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +31,6 @@ public class UserRole extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "role_permissions")
     private Set<UserPermission> permissions;
-
 
     public UserRole(String roleName) {
         this.roleName = roleName;

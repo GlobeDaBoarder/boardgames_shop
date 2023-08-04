@@ -23,13 +23,14 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-//@Inheritance(strategy = )
 public class UserProfile extends BaseEntity{
 
-
+    // todo change to JSON  
     @Column( unique = true, nullable = false)
     private String email;
 
+    // todo change to JSON
+    @Column(unique = true)
     private String phone;
 
     @Column( nullable = false)
@@ -41,8 +42,6 @@ public class UserProfile extends BaseEntity{
     @Setter(AccessLevel.NONE)
     private Set<UserRole> roles = new HashSet<>();
 
-    // todo figure out how to properly deal with LazyInitializationException;
-    //  possibly will need to use @Transactional to specify loading
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ToString.Exclude
     @Setter(AccessLevel.NONE)

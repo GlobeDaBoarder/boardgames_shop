@@ -8,15 +8,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.UsernameAlreadyTakenException;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
+import ua.rivnegray.boardgames_shop.model.ProductInOrder;
+import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
+import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
+
+import java.util.stream.Collectors;
 
 @Service
 public class SessionServiceImpl implements SessionsService{
@@ -33,11 +40,14 @@ public class SessionServiceImpl implements SessionsService{
 
     UserRoleRepository userRoleRepository;
 
+    BoardGameRepository boardGameRepository;
+
     @Autowired
     public SessionServiceImpl(UserProfileRepository userProfileRepository, UserCredentialsRepository userCredentialsRepository,
                               TokenService tokenService, PasswordEncoder passwordEncoder,
                               AuthenticationManager authenticationManager,
-                              UserMapper userMapper, UserRoleRepository userRoleRepository) {
+                              UserMapper userMapper, UserRoleRepository userRoleRepository,
+                              BoardGameRepository boardGameRepository) {
         this.userProfileRepository = userProfileRepository;
         this.userCredentialsRepository = userCredentialsRepository;
         this.tokenService = tokenService;
@@ -45,36 +55,62 @@ public class SessionServiceImpl implements SessionsService{
         this.authenticationManager = authenticationManager;
         this.userMapper = userMapper;
         this.userRoleRepository = userRoleRepository;
+        this.boardGameRepository = boardGameRepository;
     }
 
     @Override
-    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
+    public LoginResponseDto login(LoginRequestDto loginRequestDto, MapShoppingCartDto mapShoppingCartDto) {
         UserCredentials userCredentials = this.userCredentialsRepository.findByUsername(loginRequestDto.username())
                 .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
         if (!this.passwordEncoder.matches(loginRequestDto.password(), userCredentials.getPassword())) {
             throw new BadCredentialsException("Invalid username or password");
         }
+
         UserProfile userProfile = userProfileRepository.findById(userCredentials.getId())
                 .orElseThrow(() -> new UserIdNotFoundException(userCredentials.getId()));
         String token = tokenService.generateToken(this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDto.username(), loginRequestDto.password())
         ));
+
+        mapShoppingCartDtoToUserProfileCart(mapShoppingCartDto, userProfile);
+
+        this.userProfileRepository.save(userProfile);
+
         return new LoginResponseDto(this.userMapper.toUserPublicDto(userProfile), token);
     }
 
     @Override
-    public LoginResponseDto register(CreateCustomerUserDto createCustomerUserDto) {
+    public LoginResponseDto register(CreateCustomerUserDto createCustomerUserDto, MapShoppingCartDto mapShoppingCartDto) {
         if (userCredentialsRepository.existsByUsername(createCustomerUserDto.username())) {
-            throw new UsernameAlreadyTakenException("Username already exists");
+            throw new UsernameAlreadyTakenException(createCustomerUserDto.username());
         }
+        // todo add validation for existing phone and email
+
         UserProfile userProfile = this.userMapper.toUserProfile(createCustomerUserDto, this.userRoleRepository);
         UserCredentials userCredentials = new UserCredentials(createCustomerUserDto.username(), passwordEncoder.encode(createCustomerUserDto.password()));
         userCredentials.setUserProfile(userProfile);
         userProfile.setUserCredentials(userCredentials);
-        userProfileRepository.save(userProfile);
+
+        mapShoppingCartDtoToUserProfileCart(mapShoppingCartDto, userProfile);
+
+        this.userProfileRepository.save(userProfile);
+
         String token = tokenService.generateToken(this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(createCustomerUserDto.username(), createCustomerUserDto.password())
         ));
         return new LoginResponseDto(this.userMapper.toUserPublicDto(userProfile), token);
+    }
+
+    private void mapShoppingCartDtoToUserProfileCart(MapShoppingCartDto mapShoppingCartDto, UserProfile userProfile) {
+        userProfile.getShoppingCart().getProductsInShoppingCart().addAll(mapShoppingCartDto.simpleProductInShoppingCartDtos().stream()
+                .map(simpleProductInShoppingCartDto -> ProductInShoppingCart.builder()
+                        .product(this.boardGameRepository.findById(simpleProductInShoppingCartDto.productId())
+                                .orElseThrow(() -> new BoardGameIdNotFoundException(simpleProductInShoppingCartDto.productId())))
+                        .shoppingCart(userProfile.getShoppingCart())
+                        .quantity(simpleProductInShoppingCartDto.quantity())
+                        .build()
+                )
+                .collect(Collectors.toSet())
+        );
     }
 }

@@ -12,8 +12,6 @@ import java.util.Set;
 /**
  * DTO for {@link ua.rivnegray.boardgames_shop.model.BoardGame}
  */
-
-// todo remove product category
 public record CreateAndUpdateBoardGameDto(String manufacturer, String productName, String productDescription, BigDecimal productPrice,
                                           Integer productQuantityInStock, String productImageURL, ProductCategory productCategory,
                                           String productCode,  String gameSet,  @Schema(example = "[ 1 ]") Set<Long> gameGenreIds,

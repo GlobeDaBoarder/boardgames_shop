@@ -1,7 +1,9 @@
 package ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions;
 
+import ua.rivnegray.boardgames_shop.model.BoardGame;
+
 public class BoardGameIdNotFoundException extends ResourceIdNotFoundException {
     public BoardGameIdNotFoundException(Long id) {
-        super("Board game with id " + id + " not found");
+        super(BoardGame.class.getName(), id);
     }
 }

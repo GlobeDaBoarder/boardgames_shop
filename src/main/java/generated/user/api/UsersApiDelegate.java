@@ -24,7 +24,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link UsersApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-18T15:40:41.823065680+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-08-03T19:22:18.684568743+03:00[Europe/Kiev]")
 public interface UsersApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -32,7 +32,7 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * POST /users/me/address : Add an address to a current user
+     * POST /users/me/address : Add an address to me
      *
      * @param addAndUpdateAddressDto  (required)
      * @return address added (status code 201)
@@ -74,46 +74,25 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * DELETE /users/{userId} : Delete a user by ID
+     * DELETE /users/me : Delete me
      *
-     * @param userId  (required)
      * @return User deleted (status code 204)
-     *         or User not found (status code 404)
-     * @see UsersApi#deleteUser
+     *         or Unauthorized (status code 401)
+     *         or Forbidden (status code 403)
+     * @see UsersApi#deleteMe
      */
-    default ResponseEntity<Void> deleteUser(Long userId) {
+    default ResponseEntity<Void> deleteMe() {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
 
     /**
-     * GET /users/me/address/{addressId} : Get a user&#39;s address by address id
-     *
-     * @param addressId  (required)
-     * @return The address was found (status code 200)
-     * @see UsersApi#getAddressById
-     */
-    default ResponseEntity<AddressDto> getAddressById(Long addressId) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-    /**
-     * GET /users/me/address : Get all addresses of a user
+     * GET /users/me/address : Get all my addresses
      *
      * @return All addresses were retrieved successfully (status code 200)
-     * @see UsersApi#getAllAddresses
+     * @see UsersApi#getAllMyAddresses
      */
-    default ResponseEntity<List<AddressDto>> getAllAddresses() {
+    default ResponseEntity<List<AddressDto>> getAllMyAddresses() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -168,17 +147,38 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * GET /users/me : Get info of currently logged in user
+     * GET /users/me : Get my info
      *
      * @return successful operation (status code 200)
      *         or Unauthorized (status code 401)
-     * @see UsersApi#getCurrentUserPublicInfo
+     * @see UsersApi#getMe
      */
-    default ResponseEntity<UserPublicDto> getCurrentUserPublicInfo() {
+    default ResponseEntity<UserPublicDto> getMe() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"addresses\" : [ { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 }, { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 } ], \"phone\" : \"phone\", \"roles\" : [ { \"permissions\" : [ null, null ], \"roleName\" : \"roleName\", \"id\" : 0 }, { \"permissions\" : [ null, null ], \"roleName\" : \"roleName\", \"id\" : 0 } ], \"email\" : \"email\", \"username\" : \"username\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /users/me/address/{addressId} : Get a my address by address id
+     *
+     * @param addressId  (required)
+     * @return The address was found (status code 200)
+     * @see UsersApi#getMyAddressById
+     */
+    default ResponseEntity<AddressDto> getMyAddressById(Long addressId) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -232,7 +232,20 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * DELETE /users/me/address/{addressId} : Remove an address from a user
+     * DELETE /users/{userId} : hard delete a user by ID
+     *
+     * @param userId  (required)
+     * @return User deleted (status code 204)
+     *         or User not found (status code 404)
+     * @see UsersApi#hardDeleteUser
+     */
+    default ResponseEntity<Void> hardDeleteUser(Long userId) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * DELETE /users/me/address/{addressId} : Remove my address
      *
      * @param addressId  (required)
      * @return address deleted (status code 204)
@@ -245,14 +258,14 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * PATCH /users/me/address/{addressId} : Update a user&#39;s address
+     * PATCH /users/me/address/{addressId} : Update my address
      *
      * @param addressId  (required)
      * @param addAndUpdateAddressDto  (required)
      * @return address updated (status code 200)
-     * @see UsersApi#updateAddress
+     * @see UsersApi#updateMyAddress
      */
-    default ResponseEntity<UserPublicDto> updateAddress(Long addressId,
+    default ResponseEntity<UserPublicDto> updateMyAddress(Long addressId,
         AddAndUpdateAddressDto addAndUpdateAddressDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -268,13 +281,13 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * PATCH /users/me/email : Update a  current user&#39;s email
+     * PATCH /users/me/email : Update a  my email
      *
      * @param updateEmailDto  (required)
      * @return email updated (status code 200)
-     * @see UsersApi#updateEmail
+     * @see UsersApi#updateMyEmail
      */
-    default ResponseEntity<UserPublicDto> updateEmail(UpdateEmailDto updateEmailDto) {
+    default ResponseEntity<UserPublicDto> updateMyEmail(UpdateEmailDto updateEmailDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -289,13 +302,13 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * PATCH /users/me/password : Update a user&#39;s password
+     * PATCH /users/me/password : Update my user&#39;s password
      *
      * @param updatePasswordDto  (required)
      * @return password updated (status code 200)
-     * @see UsersApi#updatePassword
+     * @see UsersApi#updateMyPassword
      */
-    default ResponseEntity<UserPublicDto> updatePassword(UpdatePasswordDto updatePasswordDto) {
+    default ResponseEntity<UserPublicDto> updateMyPassword(UpdatePasswordDto updatePasswordDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -310,13 +323,13 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * PATCH /users/me/phone : Update a current user&#39;s phone
+     * PATCH /users/me/phone : Update my phone
      *
      * @param updatePhoneDto  (required)
      * @return phone number updated (status code 200)
-     * @see UsersApi#updatePhone
+     * @see UsersApi#updateMyPhone
      */
-    default ResponseEntity<UserPublicDto> updatePhone(UpdatePhoneDto updatePhoneDto) {
+    default ResponseEntity<UserPublicDto> updateMyPhone(UpdatePhoneDto updatePhoneDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -331,13 +344,13 @@ public interface UsersApiDelegate {
     }
 
     /**
-     * PATCH /users/me/username : Update a current user&#39;s username
+     * PATCH /users/me/username : Update my username
      *
      * @param updateUsernameDto  (required)
      * @return username updated (status code 200)
-     * @see UsersApi#updateUsername
+     * @see UsersApi#updateMyUsername
      */
-    default ResponseEntity<UserPublicDto> updateUsername(UpdateUsernameDto updateUsernameDto) {
+    default ResponseEntity<UserPublicDto> updateMyUsername(UpdateUsernameDto updateUsernameDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

@@ -4,5 +4,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 
 import java.io.Serializable;
 
-public record CreateOrderDto(Long shoppingCartId, AddAndUpdateAddressDto addAndUpdateAddressDto) implements Serializable {
+public record CreateOrderDto(MapShoppingCartDto mapShoppingCartDto,
+                             AddAndUpdateAddressDto addAndUpdateAddressDto,
+                             CreateUserProfileDto userProfileDto) implements Serializable {
 }

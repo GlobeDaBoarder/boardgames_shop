@@ -8,6 +8,7 @@ import org.mapstruct.Named;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateUserProfileDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
@@ -24,7 +25,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Mapper(componentModel = "spring", uses = {UserRoleRepository.class})
-// todo convert to Abstract class to use @Autowired and take care of Spring beans
 public interface UserMapper {
 
     @Named("mapToRoleSet")
@@ -51,8 +51,6 @@ public interface UserMapper {
     @Mapping(source = "userCredentials.username", target = "username")
     UserPublicDto toUserPublicDto(UserProfile userProfile);
 
-    UserPublicDto toUserPublicDto(CreateAnyUserDto createAnyUserDto);
-
     @Mapping(source = "roleIds", target = "roles", qualifiedByName = "mapToRoleSet")
     UserProfile toUserProfile(CreateAnyUserDto createAnyUserDto, @Context UserRoleRepository roleRepository);
 
@@ -64,8 +62,10 @@ public interface UserMapper {
     @Mapping(target = "roles", source = ".", qualifiedByName = "getCustomerRole")
     UserProfile toUserProfile(CreateCustomerUserDto createCustomerUserDto, @Context UserRoleRepository roleRepository);
 
+    UserProfile toUserProfile(CreateUserProfileDto createUserProfileDto);
 
     UserCredentials toUserCredentials(CreateAnyUserDto createAnyUserDto);
+
     UserCredentials toUserCredentials(CreateCustomerUserDto createAnyUserDto);
 
     Address toAddress(AddAndUpdateAddressDto addAndUpdateAddressDto);
@@ -75,24 +75,4 @@ public interface UserMapper {
     void updateAddress(@MappingTarget Address addressToUpdate, AddAndUpdateAddressDto updateAddressDto);
 
     UserRoleDto toUserRoleDto(UserRole userRole);
-
-    Address toAddress(AddressDto addressDto);
-
-//    UserFullDto userToUserDto(User user);
-//
-//    User userDtoToUser(UserFullDto userFullDto);
-//
-//
-//
-//    @Mapping(target = "id", ignore = true)
-//    @Mapping(target = "roles", source = "roleIds", qualifiedByName = "mapToRoleSet")
-//    User createAndUpdateUserDtoToUser(CreateAndUpdateUserDto createUserDto, @Context UserRoleService roleService);
-
-//    @Mapping(target = "username", source = "username")
-//    @Mapping(target = "roles", source = "roles")
-//    @Mapping(target = "email", source = "userProfile.email")
-//    @Mapping(target = "phone", source = "userProfile.phone")
-//    @Mapping(target = "firstName", source = "userProfile.firstName")
-//    @Mapping(target = "lastName", source = "userProfile.lastName")
-//    UserPublicDto toUserPublicDTO(UserCredentials userCredentials);
 }

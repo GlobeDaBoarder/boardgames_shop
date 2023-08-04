@@ -5,12 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
 
@@ -21,6 +18,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Product extends BaseEntity{
+
     @Column(unique = true)
     private String manufacturer;
 
@@ -38,31 +36,7 @@ public abstract class Product extends BaseEntity{
     private Integer productQuantityInStock;
 
     // todo figure out storing images
-//    @URL ??
     private String productImageURL;
 
-    // todo figure out if tree structure category is needed or not
-//    private Category category;
-
     private ProductCategory productCategory;
-
-    public void decreaseQuantityInStock(int quantity){
-        this.productQuantityInStock -= quantity;
-    }
-
-    public void decreaseQuantityInStock(){
-        this.productQuantityInStock--;
-    }
-
-    public void increaseQuantityInStock(int quantity){
-        this.productQuantityInStock += quantity;
-    }
-
-    public void increaseQuantityInStock(){
-        this.productQuantityInStock++;
-    }
-
-
-
-
 }

@@ -1,7 +1,5 @@
 package generated.shopping_cart.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.AddProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
@@ -30,7 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-07-18T15:40:42.800926263+03:00[Europe/Kiev]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-08-03T19:22:19.231829141+03:00[Europe/Kiev]")
 @Controller
 @RequestMapping("${openapi.shoppingCart.base-path:}")
 public class ShoppingCartApiController implements ShoppingCartApi {

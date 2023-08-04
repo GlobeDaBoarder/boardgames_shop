@@ -1,7 +1,6 @@
 package ua.rivnegray.boardgames_shop.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -11,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
@@ -53,10 +51,6 @@ public class BoardGame extends Product {
      */
     @Column(length = 1000)
     private String gameSet;
-
-    // todo figure out of game type is needed alongside with game genre and game mechanic
-
-//    private Set<BoardGameType> gameTypes = new HashSet<>();
 
     @ManyToMany
     private Set<BoardGameGenre> gameGenres = new HashSet<>();

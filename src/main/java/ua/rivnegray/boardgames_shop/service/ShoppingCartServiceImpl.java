@@ -2,27 +2,26 @@ package ua.rivnegray.boardgames_shop.service;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
-import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.AddProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.AddressIdNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.AddressNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.ShoppingCartIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.OrderMapper;
 import ua.rivnegray.boardgames_shop.mapper.ProductMapper;
 import ua.rivnegray.boardgames_shop.mapper.ShoppingCartMapper;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
-import ua.rivnegray.boardgames_shop.model.Address;
 import ua.rivnegray.boardgames_shop.model.Order;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
 import ua.rivnegray.boardgames_shop.model.PaymentStatus;
 import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.ShoppingCart;
-import ua.rivnegray.boardgames_shop.model.UserProfile;
 import ua.rivnegray.boardgames_shop.repository.AddressRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.OrderRepository;
@@ -32,8 +31,8 @@ import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -80,47 +79,63 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         this.userProfileRepository = userProfileRepository;
     }
 
-    private ShoppingCart fetchShoppingCartFromRepo(Long cartId) {
-        return this.shoppingCartRepository.findById(cartId)
+    // admin operations
+    @Override
+    public List<ProductInShoppingCartDto> getProductsInShoppingCart(Long cartId) {
+        ShoppingCart shoppingCart = this.shoppingCartRepository.findById(cartId)
                 .orElseThrow(() -> new ShoppingCartIdNotFoundException(cartId));
+        return shoppingCart.getProductsInShoppingCart().stream()
+                .map(productInShoppingCart -> this.productMapper.toProductInShoppingCartDto(productInShoppingCart))
+                .toList();
     }
 
+    // current user operations
     @Override
-    public ShoppingCartDto getShoppingCart(Long cartId) {
-        return this.shoppingCartRepository.findById(cartId)
-                .map(shoppingCart -> this.shoppingCartMapper.toShoppingCartDto(shoppingCart))
-                .orElseThrow(() -> new ShoppingCartIdNotFoundException(cartId));
-    }
-
-    @Override
-    public ShoppingCartDto clearShoppingCart(Long cartId) {
-        ShoppingCart shoppingCart = fetchShoppingCartFromRepo(cartId);
+    public ShoppingCartDto clearMyShoppingCart() {
+        ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
         shoppingCart.getProductsInShoppingCart().clear();
         this.shoppingCartRepository.save(shoppingCart);
         return this.shoppingCartMapper.toShoppingCartDto(shoppingCart);
     }
 
     @Override
-    public ShoppingCartDto addProductToShoppingCart(Long cartId, AddProductInShoppingCartDto addProductInShoppingCartDto) {
-        ProductInShoppingCart productInShoppingCart = this.productMapper.toProductInShoppingCart(cartId,
-                addProductInShoppingCartDto, this.boardGameRepository, this.shoppingCartRepository);
-        ShoppingCart shoppingCart = fetchShoppingCartFromRepo(cartId);
-        shoppingCart.getProductsInShoppingCart().add(productInShoppingCart);
+    public ShoppingCartDto addProductToMyShoppingCart(Long productId) {
+        ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
+
+        Optional<ProductInShoppingCart> existingProductInCart = shoppingCart.getProductsInShoppingCart().stream()
+                .filter(p -> p.getProduct().getId().equals(productId))
+                .findFirst();
+
+        if (existingProductInCart.isPresent()) {
+            existingProductInCart.get().setQuantity(existingProductInCart.get().getQuantity() + 1);
+        } else {
+            ProductInShoppingCart productInShoppingCart = new ProductInShoppingCart();
+            // tod change from boardgame repository to general product repository later
+            productInShoppingCart.setProduct(this.boardGameRepository.findById(productId)
+                    .orElseThrow(() -> new BoardGameIdNotFoundException(productId)));
+            productInShoppingCart.setShoppingCart(shoppingCart);
+            productInShoppingCart.setQuantity(1);
+
+            shoppingCart.getProductsInShoppingCart().add(productInShoppingCart);
+        }
+
         this.shoppingCartRepository.save(shoppingCart);
         return this.shoppingCartMapper.toShoppingCartDto(shoppingCart);
     }
 
+
     @Override
-    public List<ProductInShoppingCartDto> getProductsInShoppingCart(Long cartId) {
-        ShoppingCart shoppingCart = fetchShoppingCartFromRepo(cartId);
+    public List<ProductInShoppingCartDto> getProductsInMyShoppingCart() {
+        ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
         return shoppingCart.getProductsInShoppingCart().stream()
                 .map(productInShoppingCart -> this.productMapper.toProductInShoppingCartDto(productInShoppingCart))
                 .toList();
     }
 
+
     @Override
-    public ShoppingCartDto removeProductFromShoppingCart(Long cartId, Long productInCartId) {
-        ShoppingCart shoppingCart = fetchShoppingCartFromRepo(cartId);
+    public ShoppingCartDto removeProductFromMyShoppingCart(Long productInCartId) {
+        ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
         Set<ProductInShoppingCart> productsInShoppingCart = shoppingCart.getProductsInShoppingCart();
         productsInShoppingCart.removeIf(productInShoppingCart -> productInShoppingCart.getId() == productInCartId);
         this.shoppingCartRepository.save(shoppingCart);
@@ -128,71 +143,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto updateQuantityOfProductInShoppingCart(Long cartId, Long productInCartId, UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto) {
+    public ShoppingCartDto updateQuantityOfProductInMyShoppingCart(Long productInCartId,
+                                   UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto) {
         ProductInShoppingCart productInShoppingCart = this.productInShoppingCartRepository.findById(productInCartId)
                 .orElseThrow(() -> new ShoppingCartIdNotFoundException(productInCartId));
         productInShoppingCart.setQuantity(updateQuantityOfProductInShoppingCartDto.quantity());
         this.productInShoppingCartRepository.save(productInShoppingCart);
-        return getShoppingCart(cartId);
+        return this.shoppingCartMapper.toShoppingCartDto(getShoppingCartOfCurrentUser());
     }
-
     @Override
-    public OrderDto checkoutUnregisteredUser(Long cartId, AddAndUpdateAddressDto addressDto) {
-        ShoppingCart shoppingCart = fetchShoppingCartFromRepo(cartId);
-
-        Address unregeisteredUserAddress = this.userMapper.toAddress(addressDto);
-
-        //todo unregistered user logic. how does shopping cart for it exist?
-        UserProfile unregeisteredUserProfile = shoppingCart.getUserProfile();
-        unregeisteredUserProfile.getAddresses().add(unregeisteredUserAddress);
-
-        unregeisteredUserProfile = this.userProfileRepository.save(unregeisteredUserProfile);
-
-        this.entityManager.flush();
-        this.entityManager.refresh(unregeisteredUserProfile);
-
-        Order newOrder = Order.builder()
-                .userProfile(unregeisteredUserProfile)
-                .orderItems(shoppingCart.getProductsInShoppingCart().stream()
-                        .map(productInShoppingCart -> this.productMapper.toProductInOrder(productInShoppingCart))
-                        .collect(Collectors.toSet()))
-                .status(OrderStatus.PLACED)
-                .orderDate(LocalDateTime.now())
-                .totalPrice(
-                        shoppingCart.getProductsInShoppingCart().stream()
-                        .map(
-                                productInShoppingCart -> productInShoppingCart.getProduct().getProductPrice()
-                                        .multiply(BigDecimal.valueOf(productInShoppingCart.getQuantity()))
-                        )
-                        .reduce(BigDecimal::add)
-                        .orElse(BigDecimal.ZERO)
-                )
-                .address(
-                        unregeisteredUserProfile.getAddresses().stream()
-                                .max(Comparator.comparing(Address::getDateCreated))
-                                .orElseThrow(() -> new AddressNotFoundException("No address found for user"))
-                )
-                .dateOrderPlaced(LocalDateTime.now())
-                .paymentStatus(PaymentStatus.UNPAID)
-                .build();
-
-
-        Order finalNewOrder = newOrder;
-        newOrder.getOrderItems().forEach(orderItem -> orderItem.setOrder(finalNewOrder));
-
-        newOrder = this.orderRepository.save(newOrder);
-
-        this.entityManager.flush();
-        this.entityManager.refresh(newOrder);
-
-        clearShoppingCart(cartId);
-
-        return this.orderMapper.orderToOrderDto(newOrder);
-    }
-
-    @Override
-    public OrderDto checkoutRegisteredUser(Long cartId, Long addressId) {
-        ShoppingCart shoppingCart = fetchShoppingCartFromRepo(cartId);
+    public OrderDto checkoutMyUser(Long addressId) {
+        ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
 
         Order newOrder = Order.builder()
                 .userProfile(shoppingCart.getUserProfile())
@@ -224,8 +185,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         this.entityManager.flush();
         this.entityManager.refresh(newOrder);
 
-        clearShoppingCart(cartId);
+        clearMyShoppingCart();
 
         return this.orderMapper.orderToOrderDto(newOrder);
+    }
+
+    private ShoppingCart getShoppingCartOfCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
+        String username = jwtPrincipal.getSubject();
+        Long id = jwtPrincipal.getClaim("id");
+
+        return this.shoppingCartRepository.findById(id)
+                .orElseThrow(() -> new ShoppingCartIdNotFoundException(id));
     }
 }

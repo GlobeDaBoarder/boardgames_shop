@@ -13,17 +13,18 @@ services:
       - app-network
 
   app:
-    image: gl0be/app:__TAG__
-
+    build:
+      context: .
+      dockerfile: dockerfile-app
     ports:
       - "8080:8080"
     volumes:
-      - /home/globe/rivnegray/logs:/app/logs
+      - /rivnegray-application-logs:/app/logs
     networks:
       - app-network
     environment:
       WAIT_HOSTS: db:3306
-      SPRING_PROFILES_ACTIVE: dev-remote-VM
+      SPRING_PROFILES_ACTIVE: dev-local-dockerfile
 
 networks:
   app-network:

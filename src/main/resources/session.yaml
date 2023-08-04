@@ -15,7 +15,7 @@ paths:
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/LoginRequestDto'
+                $ref: '#/components/schemas/LoginRequestWithMapShoppingCartDto'
       responses:
         '200':
           description: Successful operation
@@ -36,7 +36,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCustomerUserDto'
+              $ref: '#/components/schemas/RegisterRequestWithMapShoppingCartDto'
       responses:
         '201':
           description: Registration successful
@@ -50,6 +50,50 @@ paths:
           description: Conflict, e.g., email already in use
 components:
   schemas:
+    LoginRequestWithMapShoppingCartDto:
+      type: object
+      properties:
+        loginRequestDto:
+          $ref: '#/components/schemas/LoginRequestDto'
+        mapShoppingCartDto:
+          $ref: '#/components/schemas/MapShoppingCartDto'
+      required:
+        - loginRequestDto
+
+    RegisterRequestWithMapShoppingCartDto:
+      type: object
+      properties:
+        createCustomerUserDto:
+          $ref: '#/components/schemas/CreateCustomerUserDto'
+        mapShoppingCartDto:
+          $ref: '#/components/schemas/MapShoppingCartDto'
+      required:
+        - createCustomerUserDto
+
+    SimpleProductInShoppingCartDto:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int32
+      required:
+        - productId
+        - quantity
+
+    MapShoppingCartDto:
+      type: object
+      properties:
+        simpleProductInShoppingCartDtos:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleProductInShoppingCartDto'
+      required:
+        - simpleProductInShoppingCartDtos
+
+
     LoginResponseDto:
       type: object
       properties:
