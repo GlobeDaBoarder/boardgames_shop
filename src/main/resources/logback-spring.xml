@@ -4,22 +4,17 @@
     <logger name="org.springframework.web" level="INFO"/>
     <logger name="org.springframework.security" level="DEBUG"/>
     <logger name="ua.rivnegray.boardgames_shop" level="DEBUG"/>
-    <logger name="org.hibernate.type.descriptor.sql" level="TRACE"/>
-    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
-        <appender-ref ref="FILE-ROLLING" />
-    </logger>
 
-    <springProfile name="dev-remote-VM,dev-local-dockerfile">
-        <!-- TODO CHANG TO INFO LEVEL IN PRODUCTION -->
-        <logger name="org.springframework.security" level="DEBUG"/>
-        <logger name="ua.rivnegray.boardgames_shop" level="DEBUG"/>
+    <springProfile name="dev-remote-VM">
+        <logger name="org.hibernate.SQL" level="DEBUG" additivity="false"/>
+
         <appender name="DEV-REMOTE-VM-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>/app/logs/boardgames_shop.log</file>
             <encoder>
                 <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %5p ${PID:- } --- [%15.15t] %-40.40logger{39} : %m%n%wEx</pattern>
             </encoder>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>/app/logs/boardgames_shop.%d{'yyyy-MM-dd'}.log.zip</fileNamePattern>
+                <fileNamePattern>/app/logs/archived/boardgames_shop.%d{'yyyy-MM-dd'}.log.zip</fileNamePattern>
                 <maxFileSize>1MB</maxFileSize>
                 <totalSizeCap>30MB</totalSizeCap>
                 <maxHistory>30</maxHistory>
@@ -27,26 +22,11 @@
         </appender>
 
         <root level="INFO">
-            <appender-ref ref="CONSOLE" />
             <appender-ref ref="DEV-REMOTE-VM-ROLLING" />
         </root>
     </springProfile>
 
-    <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>./logs/boardgames_shop.log</file>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %5p ${PID:- } --- [%15.15t] %-40.40logger{39} : %m%n%wEx</pattern>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./logs/archived/boardgames_shop.%d{'yyyy-MM-dd'}.log.zip</fileNamePattern>
-            <maxFileSize>1MB</maxFileSize>
-            <totalSizeCap>30MB</totalSizeCap>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-    </appender>
-
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE-ROLLING" />
     </root>
 </configuration>
