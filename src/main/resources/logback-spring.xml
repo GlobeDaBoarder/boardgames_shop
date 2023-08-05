@@ -6,7 +6,9 @@
     <logger name="ua.rivnegray.boardgames_shop" level="DEBUG"/>
 
     <springProfile name="dev-remote-VM">
-        <logger name="org.hibernate.SQL" level="DEBUG" additivity="false"/>
+        <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+            <appender-ref ref="DEV-REMOTE-VM-ROLLING"/>
+        </logger>
 
         <appender name="DEV-REMOTE-VM-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>/app/logs/boardgames_shop.log</file>
