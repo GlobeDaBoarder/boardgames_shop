@@ -3,7 +3,7 @@ services:
   db:
     image: mysql:8.0.33-debian
     environment:
-      MYSQL_ROOT_PASSWORD: rvngr2023
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: shop
     ports:
       - "3306:3306"
@@ -22,6 +22,9 @@ services:
     networks:
       - app-network
     environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_URL: ${DB_URL}
       WAIT_HOSTS: db:3306
       SPRING_PROFILES_ACTIVE: dev-remote-VM
 

@@ -24,8 +24,9 @@ spring:
     activate:
       on-profile: dev-local-dockerfile
   datasource:
-    url: jdbc:mysql://db:3306/shop
-    password: rvngr2023
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 server:
   port: 8080
 
@@ -35,8 +36,9 @@ spring:
     activate:
       on-profile: dev-remote-AKS
   datasource:
-    url: jdbc:mysql://db:3306/shop
-    password: rvngr2023
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 server:
   port: 8080
 
@@ -46,9 +48,9 @@ spring:
     activate:
       on-profile: dev-remote-VM
   datasource:
-    url: jdbc:mysql://db:3306/shop
-    username: root
-    password: rvngr2023
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 server:
   port: 8080
 
