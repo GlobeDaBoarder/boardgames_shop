@@ -2,7 +2,6 @@ package ua.rivnegray.boardgames_shop.delegateService;
 
 import generated.board_game.api.BoardgamesApiDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -13,6 +12,8 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameM
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
+import ua.rivnegray.boardgames_shop.service.BoardGameGenreService;
+import ua.rivnegray.boardgames_shop.service.BoardGameMechanicService;
 import ua.rivnegray.boardgames_shop.service.BoardGameService;
 
 import java.net.URI;
@@ -24,9 +25,17 @@ public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
 
     BoardGameService boardGameService;
 
+    BoardGameGenreService boardGameGenreService;
+
+    BoardGameMechanicService boardGameMechanicService;
+
     @Autowired
-    public BoardgamesApiDelegateImpl(BoardGameService boardGameService) {
+    public BoardgamesApiDelegateImpl(BoardGameService boardGameService,
+                                     BoardGameGenreService boardGameGenreService,
+                                     BoardGameMechanicService boardGameMechanicService) {
         this.boardGameService = boardGameService;
+        this.boardGameGenreService = boardGameGenreService;
+        this.boardGameMechanicService = boardGameMechanicService;
     }
 
     @Override
@@ -70,7 +79,7 @@ public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
 
     @Override
     public ResponseEntity<BoardGameGenreDto> addGenre(CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto) {
-        BoardGameGenreDto boardGameGenreDto = boardGameService.addGenre(createAndUpdateBoardGameGenreDto);
+        BoardGameGenreDto boardGameGenreDto = this.boardGameGenreService.addGenre(createAndUpdateBoardGameGenreDto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -83,7 +92,7 @@ public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
 
     @Override
     public ResponseEntity<BoardGameMechanicDto> addMechanic(CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto) {
-        BoardGameMechanicDto boardGameMechanicDto = boardGameService.addMechanic(createAndUpdateBoardGameMechanicDto);
+        BoardGameMechanicDto boardGameMechanicDto = this.boardGameMechanicService.addMechanic(createAndUpdateBoardGameMechanicDto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -96,44 +105,44 @@ public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
 
     @Override
     public ResponseEntity<Void> deleteGenre(Long id) {
-        this.boardGameService.deleteGenre(id);
+        this.boardGameGenreService.deleteGenre(id);
         return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity<Void> deleteMechanic(Long id) {
-        this.boardGameService.deleteMechanic(id);
+        this.boardGameMechanicService.deleteMechanic(id);
         return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity<List<BoardGameGenreDto>> getAllGenres() {
-        return ResponseEntity.ok(this.boardGameService.getAllGenres());
+        return ResponseEntity.ok(this.boardGameGenreService.getAllGenres());
     }
 
     @Override
     public ResponseEntity<List<BoardGameMechanicDto>> getAllMechanics() {
-        return ResponseEntity.ok(this.boardGameService.getAllMechanics());
+        return ResponseEntity.ok(this.boardGameMechanicService.getAllMechanics());
     }
 
     @Override
     public ResponseEntity<BoardGameGenreDto> getGenreById(Long id) {
-        return ResponseEntity.ok(this.boardGameService.getGenreById(id));
+        return ResponseEntity.ok(this.boardGameGenreService.getGenreById(id));
 
     }
 
     @Override
     public ResponseEntity<BoardGameMechanicDto> getMechanicById(Long id) {
-        return ResponseEntity.ok(this.boardGameService.getMechanicById(id));
+        return ResponseEntity.ok(this.boardGameMechanicService.getMechanicById(id));
     }
 
     @Override
     public ResponseEntity<BoardGameGenreDto> updateGenre(Long id, CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto) {
-        return ResponseEntity.ok(this.boardGameService.updateGenre(id, createAndUpdateBoardGameGenreDto));
+        return ResponseEntity.ok(this.boardGameGenreService.updateGenre(id, createAndUpdateBoardGameGenreDto));
     }
 
     @Override
     public ResponseEntity<BoardGameMechanicDto> updateMechanic(Long id, CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto) {
-        return ResponseEntity.ok(this.boardGameService.updateMechanic(id, createAndUpdateBoardGameMechanicDto));
+        return ResponseEntity.ok(this.boardGameMechanicService.updateMechanic(id, createAndUpdateBoardGameMechanicDto));
     }
 }

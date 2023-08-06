@@ -26,34 +26,4 @@ public interface BoardGameService {
 
     @Transactional
     void deleteBoardGame(Long id);
-
-    @Transactional(readOnly = true)
-    List<BoardGameGenreDto> getAllGenres();
-
-    @Transactional(readOnly = true)
-    BoardGameGenreDto getGenreById(Long id);
-
-    @Transactional
-    BoardGameGenreDto addGenre(CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto);
-
-    @Transactional
-    BoardGameGenreDto updateGenre(Long id, CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto);
-
-    @Transactional
-    void deleteGenre(Long id);
-
-    @Transactional(readOnly = true)
-    List<BoardGameMechanicDto> getAllMechanics();
-
-    @Transactional(readOnly = true)
-    BoardGameMechanicDto getMechanicById(Long id);
-
-    @Transactional
-    BoardGameMechanicDto addMechanic(CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto);
-
-    @Transactional
-    BoardGameMechanicDto updateMechanic(Long id, CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto);
-
-    @Transactional
-    void deleteMechanic(Long id);
 }
