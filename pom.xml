@@ -183,6 +183,7 @@
 						<library>spring-boot</library>
 						<java8>true</java8>
 						<delegatePattern>true</delegatePattern>
+						<hideGenerationTimestamp>true</hideGenerationTimestamp>
 					</configOptions>
 
 					<inputSpec/>
