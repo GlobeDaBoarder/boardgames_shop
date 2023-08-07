@@ -24,7 +24,11 @@ import java.util.Set;
 public class BoardGame extends Product {
 
     @Builder
-    public BoardGame(String manufacturer, String productName, String productDescription, BigDecimal productPrice, Integer productQuantityInStock, String productImageURL, ProductCategory productCategory, String productCode, String gameSet, Set<BoardGameGenre> gameGenres, Set<BoardGameMechanic> gameMechanics, Integer minAge, Integer minPlayers, String gameDuration, BoardGameLanguage gameLanguage, String BGGLink) {
+    public BoardGame(String manufacturer, String productName, String productDescription, BigDecimal productPrice,
+                     Integer productQuantityInStock, String productImageURL, ProductCategory productCategory,
+                     String productCode, String gameSet, Set<BoardGameGenre> gameGenres,
+                     Set<BoardGameMechanic> gameMechanics, Integer minAge, Integer minPlayers, Integer maxPlayers,
+                     String gameDuration, BoardGameLanguage gameLanguage, String BGGLink) {
         super(manufacturer, productName, productDescription, productPrice, productQuantityInStock, productImageURL, productCategory);
         this.productCode = productCode;
         this.gameSet = gameSet;
@@ -32,6 +36,7 @@ public class BoardGame extends Product {
         this.gameMechanics = gameMechanics;
         this.minAge = minAge;
         this.minPlayers = minPlayers;
+        this.maxPlayers = maxPlayers;
         this.gameDuration = gameDuration;
         this.gameLanguage = gameLanguage;
         this.BGGLink = BGGLink;
@@ -61,6 +66,8 @@ public class BoardGame extends Product {
     private Integer minAge;
 
     private Integer minPlayers;
+
+    private Integer maxPlayers;
 
     private String gameDuration;
 

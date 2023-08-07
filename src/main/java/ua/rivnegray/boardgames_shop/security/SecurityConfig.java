@@ -64,7 +64,7 @@ public class SecurityConfig {
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/token").permitAll()
                         .requestMatchers("/api/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/boardgames/**").permitAll()
+                        .requestMatchers("/boardgames/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/orders").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e.authenticationEntryPoint(this.authenticationEntryPoint))
