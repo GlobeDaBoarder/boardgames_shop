@@ -1,8 +1,11 @@
 package ua.rivnegray.boardgames_shop.repository.specifications;
 
+import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
+import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
+import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -55,7 +58,8 @@ public class BoardGameSpecification {
             if (boardGameGenres == null || boardGameGenres.isEmpty()) {
                 return null;
             }
-            return root.get("boardGameGenre").in(boardGameGenres);
+            Join<BoardGame, BoardGameGenre> join = root.join("gameGenres");
+            return join.get("genreName").in(boardGameGenres);
         };
     }
 
@@ -64,7 +68,8 @@ public class BoardGameSpecification {
             if (boardGameMechanics == null || boardGameMechanics.isEmpty()) {
                 return null;
             }
-            return root.get("boardGameMechanic").in(boardGameMechanics);
+            Join<BoardGame, BoardGameMechanic> join = root.join("gameMechanics");
+            return join.get("mechanicName").in(boardGameMechanics);
         };
     }
 

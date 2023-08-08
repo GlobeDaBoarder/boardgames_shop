@@ -91,10 +91,6 @@ public class BoardGameServiceImpl implements BoardGameService {
 
     @Override
     public List<BoardGameDto> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto) {
-//        return this.boardGameRepository.findAll(BoardGameSpecification.hasAttributes(filterBoardGamesRequestDto.filterMap()))
-//                .stream()
-//                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameDto(boardGame))
-//                .collect(Collectors.toList());
         Specification<BoardGame> specification = Specification.allOf(
                 BoardGameSpecification.hasManufacturers(filterBoardGamesRequestDto.manufacturers()),
                 BoardGameSpecification.hasPriceInRange(filterBoardGamesRequestDto.minProductPrice(), filterBoardGamesRequestDto.maxProductPrice()),
