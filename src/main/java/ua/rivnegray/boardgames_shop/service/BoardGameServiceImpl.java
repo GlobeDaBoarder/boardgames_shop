@@ -17,6 +17,7 @@ import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.specifications.BoardGameSpecification;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -97,7 +98,8 @@ public class BoardGameServiceImpl implements BoardGameService {
                 BoardGameSpecification.hasBoardGameGenres(filterBoardGamesRequestDto.boardGameGenres()),
                 BoardGameSpecification.hasBoardGameMechanics(filterBoardGamesRequestDto.boardGameMechanics()),
                 BoardGameSpecification.hasMinAges(filterBoardGamesRequestDto.minAges()),
-                BoardGameSpecification.hasPlayersInRange(filterBoardGamesRequestDto.minPlayers(), filterBoardGamesRequestDto.maxPlayers()),
+                BoardGameSpecification.hasPlayersInRange(filterBoardGamesRequestDto.playerCounts()),
+                BoardGameSpecification.hasGameDurationInRange(filterBoardGamesRequestDto.minGameDuration(), filterBoardGamesRequestDto.maxGameDuration()),
                 BoardGameSpecification.hasLanguage(filterBoardGamesRequestDto.boardGameLanguages())
         );
         return this.boardGameRepository.findAll(specification)
@@ -108,7 +110,27 @@ public class BoardGameServiceImpl implements BoardGameService {
 
     @Override
     public List<BoardGameDto> searchBoardgames(String searchValue) {
-        return null;
+        List<BoardGame> titleMatches = boardGameRepository.findAllByProductNameContainingIgnoreCase(searchValue);
+
+        List<Long> idsToExclude = titleMatches.stream()
+                .map(BoardGame::getId)
+                .toList();
+
+        List<BoardGame> descriptionMatches;
+
+        if (idsToExclude.isEmpty()){
+            descriptionMatches = boardGameRepository.findAllByProductDescriptionContainingIgnoreCase(searchValue);
+        } else {
+            descriptionMatches = boardGameRepository.findAllByProductDescriptionContainingIgnoreCaseAndIdNotIn(searchValue, idsToExclude);
+        }
+
+        List<BoardGame> combinedResults = new ArrayList<>();
+        combinedResults.addAll(titleMatches);
+        combinedResults.addAll(descriptionMatches);
+
+        return combinedResults.stream()
+                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameDto(boardGame))
+                .collect(Collectors.toList());
     }
 
     private BoardGame fetchBoardGameById(Long id) {

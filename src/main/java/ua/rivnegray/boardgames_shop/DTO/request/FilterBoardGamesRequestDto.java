@@ -7,8 +7,7 @@ import java.util.Set;
 
 public record FilterBoardGamesRequestDto(Set<String> manufacturers, BigDecimal minProductPrice, BigDecimal maxProductPrice,
                                          Set<String> boardGameGenres, Set<String> boardGameMechanics, Set<Integer> minAges,
-                                         Integer minPlayers,
-                                         Integer maxPlayers,
+                                         Set<Integer> playerCounts,
                                          Integer minGameDuration, Integer maxGameDuration,
                                          Set<BoardGameLanguage> boardGameLanguages) {
 }

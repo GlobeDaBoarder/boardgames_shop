@@ -426,10 +426,10 @@ components:
           type: array
           items:
             type: integer
-        minPlayers:
-          type: integer
-        maxPlayers:
-          type: integer
+        playerCounts:
+          type: array
+          items:
+            type: integer
         minGameDuration:
           type: integer
         maxGameDuration:
@@ -486,8 +486,13 @@ components:
         minPlayers:
           type: integer
           format: int32
-        gameDuration:
-          type: string
+        maxPlayers:
+          type: integer
+          format: int32
+        minGameDuration:
+          type: integer
+        maxGameDuration:
+          type: integer
         gameLanguage:
           $ref: '#/components/schemas/BoardGameLanguage'
         BGGLink:
@@ -542,8 +547,12 @@ components:
           type: integer
         minPlayers:
           type: integer
-        gameDuration:
-          type: string
+        maxPlayers:
+          type: integer
+        minGameDuration:
+          type: integer
+        maxGameDuration:
+          type: integer
         gameLanguage:
           $ref: '#/components/schemas/BoardGameLanguage'
         BGGLink:

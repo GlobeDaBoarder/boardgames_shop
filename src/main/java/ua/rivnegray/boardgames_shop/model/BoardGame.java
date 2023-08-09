@@ -28,7 +28,7 @@ public class BoardGame extends Product {
                      Integer productQuantityInStock, String productImageURL, ProductCategory productCategory,
                      String productCode, String gameSet, Set<BoardGameGenre> gameGenres,
                      Set<BoardGameMechanic> gameMechanics, Integer minAge, Integer minPlayers, Integer maxPlayers,
-                     String gameDuration, BoardGameLanguage gameLanguage, String BGGLink) {
+                     Integer minGameDuration, Integer maxGameDuration, BoardGameLanguage gameLanguage, String BGGLink) {
         super(manufacturer, productName, productDescription, productPrice, productQuantityInStock, productImageURL, productCategory);
         this.productCode = productCode;
         this.gameSet = gameSet;
@@ -37,7 +37,8 @@ public class BoardGame extends Product {
         this.minAge = minAge;
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
-        this.gameDuration = gameDuration;
+        this.minGameDuration = minGameDuration;
+        this.maxGameDuration = maxGameDuration;
         this.gameLanguage = gameLanguage;
         this.BGGLink = BGGLink;
     }
@@ -69,7 +70,9 @@ public class BoardGame extends Product {
 
     private Integer maxPlayers;
 
-    private String gameDuration;
+    private Integer minGameDuration;
+
+    private Integer maxGameDuration;
 
     @Enumerated(EnumType.STRING)
     private BoardGameLanguage gameLanguage;

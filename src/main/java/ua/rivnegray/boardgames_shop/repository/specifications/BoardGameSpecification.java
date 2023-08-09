@@ -1,6 +1,7 @@
 package ua.rivnegray.boardgames_shop.repository.specifications;
 
 import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
@@ -8,27 +9,9 @@ import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
 import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
 
 import java.math.BigDecimal;
-import java.util.Map;
 import java.util.Set;
 
 public class BoardGameSpecification {
-//    public static Specification<BoardGame> hasAttribute(String attribute, Set<String> values) {
-//        return (root, query, cb) -> {
-//            if (values == null || values.isEmpty()) {
-//                return null;
-//            }
-//            return root.get(attribute).in(values);
-//        };
-//    }
-//
-//    public static Specification<BoardGame> hasAttributes(Map<String, Set<String>> filterMap) {
-//        Specification<BoardGame> specification = Specification.where(null);
-//        for (Map.Entry<String, Set<String>> entry : filterMap.entrySet()) {
-//            specification = specification.and(hasAttribute(entry.getKey(), entry.getValue()));
-//        }
-//        return specification;
-//    }
-
     public static Specification<BoardGame> hasManufacturers(Set<String> manufacturers) {
         return (root, query, cb) -> {
             if (manufacturers == null || manufacturers.isEmpty()) {
@@ -82,18 +65,37 @@ public class BoardGameSpecification {
         };
     }
 
-    public static Specification<BoardGame> hasPlayersInRange(Integer minPlayers, Integer maxPlayers){
+    public static Specification<BoardGame> hasPlayersInRange(Set<Integer> playerCounts){
         return (root, query, cb) -> {
-            if (minPlayers == null && maxPlayers == null) {
+            if (playerCounts == null || playerCounts.isEmpty()) {
                 return null;
             }
-            if (minPlayers == null) {
-                return cb.lessThanOrEqualTo(root.get("minPlayers"), maxPlayers);
+            Predicate minPlayersIn = root.get("minPlayers").in(playerCounts);
+            Predicate maxPlayersIn = root.get("maxPlayers").in(playerCounts);
+            return cb.or(minPlayersIn, maxPlayersIn);
+        };
+    }
+
+    public static Specification<BoardGame> hasGameDurationInRange(Integer minGameDurationFilter, Integer maxGameDurationFilter) {
+        return (root, query, cb) -> {
+            if (minGameDurationFilter == null && maxGameDurationFilter == null) {
+                return null;
             }
-            if (maxPlayers == null) {
-                return cb.greaterThanOrEqualTo(root.get("minPlayers"), minPlayers);
+            if (minGameDurationFilter == null) {
+                return cb.lessThanOrEqualTo(root.get("minGameDuration"), maxGameDurationFilter);
             }
-            return cb.between(root.get("minPlayers"), minPlayers, maxPlayers);
+            if (maxGameDurationFilter == null) {
+                return cb.greaterThanOrEqualTo(root.get("maxGameDuration"), minGameDurationFilter);
+            }
+
+            Predicate gameMinInRange = cb.between(root.get("minGameDuration"), minGameDurationFilter, maxGameDurationFilter);
+            Predicate gameMaxInRange = cb.between(root.get("maxGameDuration"), minGameDurationFilter, maxGameDurationFilter);
+            Predicate filterWithinGameRange = cb.and(
+                    cb.lessThanOrEqualTo(root.get("minGameDuration"), minGameDurationFilter),
+                    cb.greaterThanOrEqualTo(root.get("maxGameDuration"), maxGameDurationFilter)
+            );
+
+            return cb.or(gameMinInRange, gameMaxInRange, filterWithinGameRange);
         };
     }
 
