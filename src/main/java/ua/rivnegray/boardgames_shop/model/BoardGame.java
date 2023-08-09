@@ -24,7 +24,11 @@ import java.util.Set;
 public class BoardGame extends Product {
 
     @Builder
-    public BoardGame(String manufacturer, String productName, String productDescription, BigDecimal productPrice, Integer productQuantityInStock, String productImageURL, ProductCategory productCategory, String productCode, String gameSet, Set<BoardGameGenre> gameGenres, Set<BoardGameMechanic> gameMechanics, Integer minAge, Integer minPlayers, String gameDuration, BoardGameLanguage gameLanguage, String BGGLink) {
+    public BoardGame(String manufacturer, String productName, String productDescription, BigDecimal productPrice,
+                     Integer productQuantityInStock, String productImageURL, ProductCategory productCategory,
+                     String productCode, String gameSet, Set<BoardGameGenre> gameGenres,
+                     Set<BoardGameMechanic> gameMechanics, Integer minAge, Integer minPlayers, Integer maxPlayers,
+                     Integer minGameDuration, Integer maxGameDuration, BoardGameLanguage gameLanguage, String BGGLink) {
         super(manufacturer, productName, productDescription, productPrice, productQuantityInStock, productImageURL, productCategory);
         this.productCode = productCode;
         this.gameSet = gameSet;
@@ -32,7 +36,9 @@ public class BoardGame extends Product {
         this.gameMechanics = gameMechanics;
         this.minAge = minAge;
         this.minPlayers = minPlayers;
-        this.gameDuration = gameDuration;
+        this.maxPlayers = maxPlayers;
+        this.minGameDuration = minGameDuration;
+        this.maxGameDuration = maxGameDuration;
         this.gameLanguage = gameLanguage;
         this.BGGLink = BGGLink;
     }
@@ -62,7 +68,11 @@ public class BoardGame extends Product {
 
     private Integer minPlayers;
 
-    private String gameDuration;
+    private Integer maxPlayers;
+
+    private Integer minGameDuration;
+
+    private Integer maxGameDuration;
 
     @Enumerated(EnumType.STRING)
     private BoardGameLanguage gameLanguage;

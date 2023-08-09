@@ -2,12 +2,9 @@ package ua.rivnegray.boardgames_shop.service;
 
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 
 import java.util.List;
 
@@ -26,4 +23,10 @@ public interface BoardGameService {
 
     @Transactional
     void deleteBoardGame(Long id);
+
+    @Transactional(readOnly = true)
+    List<BoardGameDto> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto);
+
+    @Transactional(readOnly = true)
+    List<BoardGameDto> searchBoardgames(String searchValue);
 }

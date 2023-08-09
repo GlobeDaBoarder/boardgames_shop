@@ -11,6 +11,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
+import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
     import io.swagger.v3.oas.annotations.ExternalDocumentation;
     import io.swagger.v3.oas.annotations.Operation;
     import io.swagger.v3.oas.annotations.Parameter;
@@ -249,6 +250,35 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
+            * POST /boardgames/filter/ : filter boardgames
+            *
+                * @param filterBoardGamesRequestDto map of filter properties with their values (required)
+            * @return Filtered successfully (status code 200)
+            */
+                @Operation(
+                operationId = "filterBoardGames",
+                    summary = "filter boardgames",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "Filtered successfully", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameDto.class)))
+                    })
+                }
+                )
+                        //allow all
+            @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/boardgames/filter/",
+            produces = { "application/json" },
+            consumes = { "application/json" }
+            )
+        default ResponseEntity<List<BoardGameDto>> filterBoardGames(
+        @Parameter(name = "FilterBoardGamesRequestDto", description = "map of filter properties with their values", required = true) @Valid @RequestBody FilterBoardGamesRequestDto filterBoardGamesRequestDto
+            ) {
+            return getDelegate().filterBoardGames(filterBoardGamesRequestDto);
+            }
+
+
+            /**
             * GET /boardgames : Get all boardgames
             *
             * @return OK (status code 200)
@@ -416,6 +446,34 @@ import org.springframework.security.access.prepost.PreAuthorize;
         @Parameter(name = "id", description = "ID of the mechanic", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
             ) {
             return getDelegate().getMechanicById(id);
+            }
+
+
+            /**
+            * GET /boardgames/search/{searchValue} : search
+            *
+                * @param searchValue search value for performing search on boardgames (required)
+            * @return OK (status code 200)
+            */
+                @Operation(
+                operationId = "searchBoardgames",
+                    summary = "search",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameDto.class)))
+                    })
+                }
+                )
+                        //allow all
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/boardgames/search/{searchValue}",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<List<BoardGameDto>> searchBoardgames(
+        @Parameter(name = "searchValue", description = "search value for performing search on boardgames", required = true, in = ParameterIn.PATH) @PathVariable("searchValue") String searchValue
+            ) {
+            return getDelegate().searchBoardgames(searchValue);
             }
 
 
