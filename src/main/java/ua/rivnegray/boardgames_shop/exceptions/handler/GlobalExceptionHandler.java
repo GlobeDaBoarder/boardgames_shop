@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.ConflictException;
+import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.InternalServerException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.ResourceIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.ResourceNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.UsernameAlreadyTakenException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -40,4 +40,11 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
+    @ExceptionHandler(InternalServerException.class)
+    public ResponseEntity<String> handleInternalServerException(InternalServerException ex) {
+        LOGGER.error(ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ex.getMessage());
+    }
 }

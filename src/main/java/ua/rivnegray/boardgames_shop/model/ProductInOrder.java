@@ -30,4 +30,8 @@ public class ProductInOrder extends BaseEntity{
     public BigDecimal calculateTotalPrice(){
         return product.getProductPrice().multiply(BigDecimal.valueOf(quantity));
     }
+
+    public String toStringForExcel() {
+        return product.getProductName()+ ": " + quantity;
+    }
 }

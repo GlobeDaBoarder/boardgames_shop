@@ -183,6 +183,41 @@ paths:
           description: Forbidden
         '404':
           description: Order not found
+  /orders/export:
+    get:
+      summary: Export orders data to Excel
+      operationId: exportOrdersToExcel
+      x-access-permission: order:export
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          description:
+            "Start date of the time range (format: yyyy-mm-dd)."
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          description:
+            "End date of the time range (format: yyyy-mm-dd)."
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Excel file containing the orders data
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid date format or date range
+
 
 components:
   securitySchemes:

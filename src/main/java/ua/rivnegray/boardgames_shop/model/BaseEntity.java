@@ -23,21 +23,21 @@ public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Setter(AccessLevel.NONE)
-    private Long id;
+    protected Long id;
 
     @CreationTimestamp
     @Column(updatable = false)
     @Setter(AccessLevel.NONE)
-    LocalDateTime dateCreated;
+    protected LocalDateTime dateCreated;
 
     @UpdateTimestamp
     @Column(updatable = false)
     @Setter(AccessLevel.NONE)
-    LocalDateTime dateUpdated;
+    protected LocalDateTime dateUpdated;
 
     // should be used as a "soft-delete". When using service only get those with true
     @Column(columnDefinition = "boolean default false", nullable = false)
-    Boolean isRemoved = Boolean.FALSE;
+    protected Boolean isRemoved = Boolean.FALSE;
 
     @Override
     public boolean equals(Object o) {

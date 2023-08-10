@@ -2,7 +2,10 @@ package ua.rivnegray.boardgames_shop.delegateService;
 
 import generated.order.api.OrdersApiDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -13,6 +16,7 @@ import ua.rivnegray.boardgames_shop.model.OrderStatus;
 import ua.rivnegray.boardgames_shop.service.OrderService;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,5 +82,20 @@ public class OrdersApiDelegateImpl implements OrdersApiDelegate {
     @Override
     public ResponseEntity<List<OrderDto>> getMyOrders() {
         return ResponseEntity.ok(this.orderService.getMyOrders());
+    }
+
+    @Override
+    public ResponseEntity<Resource> exportOrdersToExcel(LocalDate startDate, LocalDate endDate) {
+        byte[] excelData = this.orderService.exportOrdersToExcel(startDate, endDate);
+        ByteArrayResource resource = new ByteArrayResource(excelData);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=orders.xlsx");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(excelData.length)
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(resource);
     }
 }

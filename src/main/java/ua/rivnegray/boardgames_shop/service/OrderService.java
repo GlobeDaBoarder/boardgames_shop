@@ -6,6 +6,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
@@ -32,4 +33,7 @@ public interface OrderService {
 
     @Transactional(readOnly = true)
     OrderDto getMyOrderById(Long orderId);
+
+    @Transactional
+    byte[] exportOrdersToExcel(LocalDate startDate, LocalDate endDate);
 }
