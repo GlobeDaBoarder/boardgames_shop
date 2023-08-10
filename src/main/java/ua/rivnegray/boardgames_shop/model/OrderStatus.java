@@ -2,9 +2,9 @@ package ua.rivnegray.boardgames_shop.model;
 
 public enum OrderStatus {
     PLACED,
-    PROCESSING,
     ACCEPTED,
+    AWAITING_PICKUP,
     IN_DELIVERY,
-    DONE,
+    COMPLETED,
     CANCELLED
 }

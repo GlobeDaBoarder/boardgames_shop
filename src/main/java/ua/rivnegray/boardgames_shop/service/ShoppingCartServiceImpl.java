@@ -160,8 +160,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .orderItems(shoppingCart.getProductsInShoppingCart().stream()
                         .map(productInShoppingCart -> this.productMapper.toProductInOrder(productInShoppingCart))
                         .collect(Collectors.toSet()))
-                .status(OrderStatus.PLACED)
-                .orderDate(LocalDateTime.now())
+                .currentStatus(OrderStatus.PLACED)
                 .totalPrice(
                         shoppingCart.getProductsInShoppingCart().stream()
                                 .map(
@@ -173,7 +172,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 )
                 .address(this.addressRepository.findById(addressId)
                         .orElseThrow(() -> new AddressIdNotFoundException(addressId)))
-                .dateOrderPlaced(LocalDateTime.now())
                 .paymentStatus(PaymentStatus.UNPAID)
                 .build();
 

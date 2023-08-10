@@ -12,6 +12,6 @@ public interface BoardGameMechanicMapper {
 
     BoardGameMechanic createBoardGameMechanicDtoToBoardGameMechanic(CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto);
 
-    BoardGameMechanic updateBoardGameMechanicFromDto(CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto,
-                                                     @MappingTarget BoardGameMechanic boardGameMechanic);
+    void updateBoardGameMechanicFromDto(CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto,
+                                        @MappingTarget BoardGameMechanic boardGameMechanic);
 }

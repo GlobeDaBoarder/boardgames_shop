@@ -10,7 +10,6 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.OrderIdNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.OrderMapper;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.Address;
@@ -83,9 +82,8 @@ public class OrderServiceImpl implements OrderService {
                                 .map(ProductInOrder::calculateTotalPrice)
                                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 )
-                .status(OrderStatus.PLACED)
+                .currentStatus(OrderStatus.PLACED)
                 .address(address)
-                .dateOrderPlaced(LocalDateTime.now())
                 .paymentStatus(PaymentStatus.UNPAID)
                 .build();
 
@@ -116,7 +114,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto updateOrderStatus(Long orderId, OrderStatus orderStatus) {
         Order order = fetchOrderById(orderId);
-        order.setStatus(orderStatus);
+        order.setCurrentStatus(orderStatus);
         this.orderRepository.save(order);
         return this.orderMapper.orderToOrderDto(order);
     }
@@ -126,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
     public void cancelMyOrder(Long orderId) {
         Order orderToCancel = this.orderRepository.findByIdAndUserProfile_Id(orderId, getCurrentUserId())
                         .orElseThrow(() -> new OrderIdNotFoundException(orderId));
-        orderToCancel.setStatus(OrderStatus.CANCELLED);
+        orderToCancel.setCurrentStatus(OrderStatus.CANCELLED);
         this.orderRepository.save(orderToCancel);
     }
 
