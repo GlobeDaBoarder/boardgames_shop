@@ -20,17 +20,18 @@ import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.Order;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
 import ua.rivnegray.boardgames_shop.model.PaymentStatus;
+import ua.rivnegray.boardgames_shop.model.ProductInOrder;
 import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.ShoppingCart;
 import ua.rivnegray.boardgames_shop.repository.AddressRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.OrderRepository;
+import ua.rivnegray.boardgames_shop.repository.ProductInOrderRepository;
 import ua.rivnegray.boardgames_shop.repository.ProductInShoppingCartRepository;
 import ua.rivnegray.boardgames_shop.repository.ShoppingCartRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -41,6 +42,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     ShoppingCartRepository shoppingCartRepository;
     ProductInShoppingCartRepository productInShoppingCartRepository;
+
+    ProductInOrderRepository productInOrderRepository;
     ShoppingCartMapper shoppingCartMapper;
     ProductMapper productMapper;
     BoardGameRepository boardGameRepository;
@@ -60,6 +63,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Autowired
     public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository, ShoppingCartMapper shoppingCartMapper,
                                    ProductInShoppingCartRepository productInShoppingCartRepository,
+                                   ProductInOrderRepository productInOrderRepository,
                                    ProductMapper productMapper,
                                    BoardGameRepository boardGameRepository,
                                    OrderRepository orderRepository,
@@ -69,6 +73,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         this.shoppingCartRepository = shoppingCartRepository;
         this.shoppingCartMapper = shoppingCartMapper;
         this.productInShoppingCartRepository = productInShoppingCartRepository;
+        this.productInOrderRepository = productInOrderRepository;
         this.productMapper = productMapper;
         this.boardGameRepository = boardGameRepository;
         this.orderRepository = orderRepository;
@@ -137,7 +142,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCartDto removeProductFromMyShoppingCart(Long productInCartId) {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
         Set<ProductInShoppingCart> productsInShoppingCart = shoppingCart.getProductsInShoppingCart();
-        productsInShoppingCart.removeIf(productInShoppingCart -> productInShoppingCart.getId() == productInCartId);
+        productsInShoppingCart.removeIf(productInShoppingCart -> productInShoppingCart.getId().equals(productInCartId));
         this.shoppingCartRepository.save(shoppingCart);
         return this.shoppingCartMapper.toShoppingCartDto(shoppingCart);
     }
@@ -158,7 +163,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         Order newOrder = Order.builder()
                 .userProfile(shoppingCart.getUserProfile())
                 .orderItems(shoppingCart.getProductsInShoppingCart().stream()
-                        .map(productInShoppingCart -> this.productMapper.toProductInOrder(productInShoppingCart))
+                        .map(productInShoppingCart -> {
+                            ProductInOrder productInOrder= ProductInOrder.builder()
+                                    .product(productInShoppingCart.getProduct())
+                                    .quantity(productInShoppingCart.getQuantity())
+                                    .build();
+                            return this.productInOrderRepository.save(productInOrder);
+                        })
                         .collect(Collectors.toSet()))
                 .currentStatus(OrderStatus.PLACED)
                 .totalPrice(
@@ -191,7 +202,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private ShoppingCart getShoppingCartOfCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
-        String username = jwtPrincipal.getSubject();
         Long id = jwtPrincipal.getClaim("id");
 
         return this.shoppingCartRepository.findById(id)

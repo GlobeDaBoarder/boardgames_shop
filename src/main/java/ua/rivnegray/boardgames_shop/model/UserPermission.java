@@ -41,6 +41,8 @@ public enum UserPermission implements GrantedAuthority {
     ORDER_READ("order:read"),
     ORDER_CREATE("order:create"),
     ORDER_UPDATE_STATUS("order:updateStatus"),
+
+    ORDER_EXPORT("order:export"),
     ORDER_DELETE("order:delete");
 
     private final String permission;
