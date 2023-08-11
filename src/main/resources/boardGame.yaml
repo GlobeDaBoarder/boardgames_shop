@@ -15,7 +15,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BoardGameDto'
+                  $ref: '#/components/schemas/BoardGameSummaryDto'
     post:
       summary: Add a new boardgame
       operationId: addBoardGame
@@ -360,7 +360,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BoardGameDto'
+                  $ref: '#/components/schemas/BoardGameSummaryDto'
 
   /boardgames/search/{searchValue}:
     get:
@@ -381,7 +381,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BoardGameDto'
+                  $ref: '#/components/schemas/BoardGameSummaryDto'
 
 components:
   securitySchemes:
@@ -438,6 +438,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BoardGameLanguage'
+    BoardGameSummaryDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        productName:
+          type: string
+        productPrice:
+          type: number
+          format: float
+        productQuantityInStock:
+          type: integer
+          format: int32
+        productImageURL:
+          type: string
+      required:
+        - id
+        - productName
+        - productQuantityInStock
+        - productImageURL
     BoardGameDto:
       type: object
       properties:

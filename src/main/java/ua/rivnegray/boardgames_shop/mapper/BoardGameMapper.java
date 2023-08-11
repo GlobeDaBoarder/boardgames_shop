@@ -7,6 +7,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameGenreIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameMechanicIdNotFoundException;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
@@ -55,4 +56,5 @@ public interface BoardGameMapper {
                                 @Context BoardGameGenreRepository boardGameGenreRepository,
                                 @Context BoardGameMechanicRepository boardGameMechanicRepository);
 
+    BoardGameSummaryDto boardGameToBoardGameSummaryDto(BoardGame boardGame);
 }

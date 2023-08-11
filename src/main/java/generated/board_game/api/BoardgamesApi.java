@@ -8,6 +8,7 @@ package generated.board_game.api;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
@@ -260,7 +261,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     summary = "filter boardgames",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "Filtered successfully", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameDto.class)))
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameSummaryDto.class)))
                     })
                 }
                 )
@@ -271,7 +272,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<List<BoardGameDto>> filterBoardGames(
+        default ResponseEntity<List<BoardGameSummaryDto>> filterBoardGames(
         @Parameter(name = "FilterBoardGamesRequestDto", description = "map of filter properties with their values", required = true) @Valid @RequestBody FilterBoardGamesRequestDto filterBoardGamesRequestDto
             ) {
             return getDelegate().filterBoardGames(filterBoardGamesRequestDto);
@@ -288,7 +289,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     summary = "Get all boardgames",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameDto.class)))
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameSummaryDto.class)))
                     })
                 }
                 )
@@ -298,7 +299,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             value = "/boardgames",
             produces = { "application/json" }
             )
-        default ResponseEntity<List<BoardGameDto>> getAllBoardGames(
+        default ResponseEntity<List<BoardGameSummaryDto>> getAllBoardGames(
         
             ) {
             return getDelegate().getAllBoardGames();
@@ -460,7 +461,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     summary = "search",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameDto.class)))
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameSummaryDto.class)))
                     })
                 }
                 )
@@ -470,7 +471,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             value = "/boardgames/search/{searchValue}",
             produces = { "application/json" }
             )
-        default ResponseEntity<List<BoardGameDto>> searchBoardgames(
+        default ResponseEntity<List<BoardGameSummaryDto>> searchBoardgames(
         @Parameter(name = "searchValue", description = "search value for performing search on boardgames", required = true, in = ParameterIn.PATH) @PathVariable("searchValue") String searchValue
             ) {
             return getDelegate().searchBoardgames(searchValue);

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameGenreMapper;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMapper;
@@ -53,9 +54,9 @@ public class BoardGameServiceImpl implements BoardGameService {
     }
 
     @Override
-    public List<BoardGameDto> getAllBoardGames() {
+    public List<BoardGameSummaryDto> getAllBoardGames() {
         return this.boardGameRepository.findAll().stream()
-                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameDto(boardGame))
+                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
                 .collect(Collectors.toList());
     }
 
@@ -91,7 +92,7 @@ public class BoardGameServiceImpl implements BoardGameService {
     }
 
     @Override
-    public List<BoardGameDto> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto) {
+    public List<BoardGameSummaryDto> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto) {
         Specification<BoardGame> specification = Specification.allOf(
                 BoardGameSpecification.hasManufacturers(filterBoardGamesRequestDto.manufacturers()),
                 BoardGameSpecification.hasPriceInRange(filterBoardGamesRequestDto.minProductPrice(), filterBoardGamesRequestDto.maxProductPrice()),
@@ -104,12 +105,12 @@ public class BoardGameServiceImpl implements BoardGameService {
         );
         return this.boardGameRepository.findAll(specification)
                 .stream()
-                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameDto(boardGame))
+                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<BoardGameDto> searchBoardgames(String searchValue) {
+    public List<BoardGameSummaryDto> searchBoardgames(String searchValue) {
         List<BoardGame> titleMatches = boardGameRepository.findAllByProductNameContainingIgnoreCase(searchValue);
 
         List<Long> idsToExclude = titleMatches.stream()
@@ -129,7 +130,7 @@ public class BoardGameServiceImpl implements BoardGameService {
         combinedResults.addAll(descriptionMatches);
 
         return combinedResults.stream()
-                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameDto(boardGame))
+                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
                 .collect(Collectors.toList());
     }
 

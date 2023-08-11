@@ -13,6 +13,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameM
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.service.BoardGameGenreService;
 import ua.rivnegray.boardgames_shop.service.BoardGameMechanicService;
 import ua.rivnegray.boardgames_shop.service.BoardGameService;
@@ -64,7 +65,7 @@ public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<BoardGameDto>> getAllBoardGames() {
+    public ResponseEntity<List<BoardGameSummaryDto>> getAllBoardGames() {
         return ResponseEntity.ok(this.boardGameService.getAllBoardGames());
     }
 
@@ -148,12 +149,12 @@ public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<BoardGameDto>> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto) {
+    public ResponseEntity<List<BoardGameSummaryDto>> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto) {
         return ResponseEntity.ok(this.boardGameService.filterBoardGames(filterBoardGamesRequestDto));
     }
 
     @Override
-    public ResponseEntity<List<BoardGameDto>> searchBoardgames(String searchValue) {
+    public ResponseEntity<List<BoardGameSummaryDto>> searchBoardgames(String searchValue) {
         return ResponseEntity.ok(this.boardGameService.searchBoardgames(searchValue));
     }
 }
