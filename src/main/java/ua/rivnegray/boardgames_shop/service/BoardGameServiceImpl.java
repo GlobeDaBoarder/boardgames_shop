@@ -2,26 +2,23 @@ package ua.rivnegray.boardgames_shop.service;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameGenreIdNotFoundException;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameMechanicIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameGenreMapper;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMapper;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMechanicMapper;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
-import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
-import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
+import ua.rivnegray.boardgames_shop.repository.specifications.BoardGameSpecification;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,9 +54,9 @@ public class BoardGameServiceImpl implements BoardGameService {
     }
 
     @Override
-    public List<BoardGameDto> getAllBoardGames() {
-        return this.boardGameRepository.findAll().stream()
-                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameDto(boardGame))
+    public List<BoardGameSummaryDto> getAllBoardGames() {
+        return this.boardGameRepository.findAllByIsRemovedIsFalse().stream()
+                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
                 .collect(Collectors.toList());
     }
 
@@ -95,75 +92,67 @@ public class BoardGameServiceImpl implements BoardGameService {
     }
 
     @Override
-    public List<BoardGameGenreDto> getAllGenres() {
-        return this.boardGameGenreRepository.findAll().stream()
-                .map(boardGameGenre -> this.boardGameGenreMapper.boardGameGenreToBoardGameGenreDto(boardGameGenre))
+    public List<BoardGameSummaryDto> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto) {
+        Specification<BoardGame> specification = Specification.allOf(
+                BoardGameSpecification.hasManufacturers(filterBoardGamesRequestDto.manufacturers()),
+                BoardGameSpecification.hasPriceInRange(filterBoardGamesRequestDto.minProductPrice(), filterBoardGamesRequestDto.maxProductPrice()),
+                BoardGameSpecification.hasBoardGameGenres(filterBoardGamesRequestDto.boardGameGenres()),
+                BoardGameSpecification.hasBoardGameMechanics(filterBoardGamesRequestDto.boardGameMechanics()),
+                BoardGameSpecification.hasMinAges(filterBoardGamesRequestDto.minAges()),
+                BoardGameSpecification.hasPlayersInRange(filterBoardGamesRequestDto.playerCounts()),
+                BoardGameSpecification.hasGameDurationInRange(filterBoardGamesRequestDto.minGameDuration(), filterBoardGamesRequestDto.maxGameDuration()),
+                BoardGameSpecification.hasLanguage(filterBoardGamesRequestDto.boardGameLanguages())
+        );
+        return this.boardGameRepository.findAll(specification)
+                .stream()
+                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public BoardGameGenreDto getGenreById(Long id) {
-        return this.boardGameGenreMapper.boardGameGenreToBoardGameGenreDto(this.boardGameGenreRepository.findById(id)
-                .orElseThrow(() -> new BoardGameGenreIdNotFoundException(id)));
-    }
+    public List<BoardGameSummaryDto> searchBoardgames(String searchValue) {
+        List<BoardGame> titleMatches = boardGameRepository.findAllByProductNameContainingIgnoreCase(searchValue);
 
-    @Override
-    public BoardGameGenreDto addGenre(CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto) {
-        BoardGameGenre boardGameGenre = this.boardGameGenreMapper
-                .createBoardGameGenreDtoToBoardGameGenre(createAndUpdateBoardGameGenreDto);
-        this.boardGameGenreRepository.save(boardGameGenre);
-        return this.boardGameGenreMapper.boardGameGenreToBoardGameGenreDto(boardGameGenre);
-    }
+        List<Long> idsToExclude = titleMatches.stream()
+                .map(BoardGame::getId)
+                .toList();
 
-    @Override
-    public BoardGameGenreDto updateGenre(Long id, CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto) {
-        BoardGameGenre boardGameGenre = this.boardGameGenreRepository.findById(id)
-                .orElseThrow(() -> new BoardGameGenreIdNotFoundException(id));
-        this.boardGameGenreMapper.updateBoardGameGenreFromDto(createAndUpdateBoardGameGenreDto, boardGameGenre);
-        this.boardGameGenreRepository.save(boardGameGenre);
-        return this.boardGameGenreMapper.boardGameGenreToBoardGameGenreDto(boardGameGenre);
-    }
+        List<BoardGame> descriptionMatches;
 
-    @Override
-    public void deleteGenre(Long id) {
-        this.boardGameGenreRepository.deleteById(id);
-    }
+        if (idsToExclude.isEmpty()){
+            descriptionMatches = boardGameRepository.findAllByProductDescriptionContainingIgnoreCase(searchValue);
+        } else {
+            descriptionMatches = boardGameRepository.findAllByProductDescriptionContainingIgnoreCaseAndIdNotIn(searchValue, idsToExclude);
+        }
 
-    @Override
-    public List<BoardGameMechanicDto> getAllMechanics() {
-        return this.boardGameMechanicRepository.findAll().stream()
-                .map(boardGameMechanic -> this.boardGameMechanicMapper
-                        .boardGameMechanicToBoardGameMechanicDto(boardGameMechanic))
+        List<BoardGame> combinedResults = new ArrayList<>();
+        combinedResults.addAll(titleMatches);
+        combinedResults.addAll(descriptionMatches);
+
+        return combinedResults.stream()
+                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public BoardGameMechanicDto getMechanicById(Long id) {
-        return this.boardGameMechanicMapper.boardGameMechanicToBoardGameMechanicDto(this.boardGameMechanicRepository
-                .findById(id).orElseThrow(() -> new BoardGameMechanicIdNotFoundException(id)));
+    public List<BoardGameSummaryDto> getAllArchivedBoardGames() {
+        return this.boardGameRepository.findAllByIsRemovedIsTrue().stream()
+                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public BoardGameMechanicDto addMechanic(CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto) {
-        BoardGameMechanic boardGameMechanic = this.boardGameMechanicMapper
-                .createBoardGameMechanicDtoToBoardGameMechanic(createAndUpdateBoardGameMechanicDto);
-        this.boardGameMechanicRepository.save(boardGameMechanic);
-        return this.boardGameMechanicMapper.boardGameMechanicToBoardGameMechanicDto(boardGameMechanic);
+    public BoardGameDto archiveBoardGame(Long id) {
+        BoardGame boardGame = fetchBoardGameById(id);
+        boardGame.setIsRemoved(true);
+        return this.boardGameMapper.boardGameToBoardGameDto(boardGame);
     }
 
     @Override
-    public BoardGameMechanicDto updateMechanic(Long id, CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto) {
-        BoardGameMechanic boardGameMechanic = this.boardGameMechanicRepository.findById(id)
-                .orElseThrow(() -> new BoardGameMechanicIdNotFoundException(id));
-        this.boardGameMechanicMapper.updateBoardGameMechanicFromDto(createAndUpdateBoardGameMechanicDto,
-                boardGameMechanic);
-        this.boardGameMechanicRepository.save(boardGameMechanic);
-        return this.boardGameMechanicMapper.boardGameMechanicToBoardGameMechanicDto(boardGameMechanic);
-    }
-
-    @Override
-    public void deleteMechanic(Long id) {
-        this.boardGameMechanicRepository.deleteById(id);
+    public BoardGameDto unarchiveBoardGame(Long id) {
+        BoardGame boardGame = fetchBoardGameById(id);
+        boardGame.setIsRemoved(false);
+        return this.boardGameMapper.boardGameToBoardGameDto(boardGame);
     }
 
     private BoardGame fetchBoardGameById(Long id) {

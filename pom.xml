@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
-			<version>1.5.3.Final</version>
+			<version>1.5.5.Final</version>
 		</dependency>
 
 		<!-- spring doc dependency fro having a ui for openapi files 		-->
@@ -104,6 +104,15 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.1.0</version>
 		</dependency>
+
+		<!-- for excel files -->
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.2.3</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -130,7 +139,7 @@
 						<path>
 							<groupId>org.mapstruct</groupId>
 							<artifactId>mapstruct-processor</artifactId>
-							<version>1.4.2.Final</version>
+							<version>1.5.5.Final</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
@@ -183,6 +192,7 @@
 						<library>spring-boot</library>
 						<java8>true</java8>
 						<delegatePattern>true</delegatePattern>
+						<hideGenerationTimestamp>true</hideGenerationTimestamp>
 					</configOptions>
 
 					<inputSpec/>
@@ -233,6 +243,7 @@
 
 							<importMappings>
 								<importMapping>BoardGameDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto</importMapping>
+								<importMapping>BoardGameSummaryDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto</importMapping>
 								<importMapping>CreateAndUpdateBoardGameDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto</importMapping>
 								<importMapping>BoardGameLanguage=ua.rivnegray.boardgames_shop.model.BoardGameLanguage</importMapping>
 								<importMapping>ProductCategory=ua.rivnegray.boardgames_shop.model.ProductCategory</importMapping>
@@ -240,6 +251,7 @@
 								<importMapping>CreateAndUpdateBoardGameGenreDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto</importMapping>
 								<importMapping>BoardGameMechanicDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto</importMapping>
 								<importMapping>CreateAndUpdateBoardGameMechanicDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto</importMapping>
+								<importMapping>FilterBoardGamesRequestDto=ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto</importMapping>
 
 							</importMappings>
 

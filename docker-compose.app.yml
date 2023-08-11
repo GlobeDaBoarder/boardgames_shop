@@ -18,7 +18,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /home/globe/rivnegray/logs:/app/logs
+      - ${VM_LOGS_PATH}:/app/logs
     networks:
       - app-network
     environment:

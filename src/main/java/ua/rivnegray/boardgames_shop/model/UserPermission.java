@@ -19,6 +19,8 @@ public enum UserPermission implements GrantedAuthority {
     BOARD_GAME_CREATE("boardGame:create"),
     BOARD_GAME_UPDATE("boardGame:update"),
     BOARD_GAME_DELETE("boardGame:delete"),
+    BOARD_GAME_READ_ARCHIVED("boardGame:readArchived"),
+    BOARD_GAME_ARCHIVE_AND_UNARCHIVE("boardGame:archiveAndUnarchive"),
 
     //genres and mechanics for boardgames
     GENRE_AND_MECHANIC_CREATE("genreAndMechanic:create"),
@@ -41,6 +43,8 @@ public enum UserPermission implements GrantedAuthority {
     ORDER_READ("order:read"),
     ORDER_CREATE("order:create"),
     ORDER_UPDATE_STATUS("order:updateStatus"),
+
+    ORDER_EXPORT("order:export"),
     ORDER_DELETE("order:delete");
 
     private final String permission;

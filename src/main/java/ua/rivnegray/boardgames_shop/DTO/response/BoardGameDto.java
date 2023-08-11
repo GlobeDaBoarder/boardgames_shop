@@ -16,7 +16,7 @@ public record BoardGameDto(Long id, LocalDateTime dateCreated, LocalDateTime dat
                             String manufacturer, String productName, String productDescription, BigDecimal productPrice,
                             Integer productQuantityInStock, String productImageURL, ProductCategory productCategory,
                             String productCode, String gameSet, Set<BoardGameGenreDto> gameGenres,
-                            Set<BoardGameMechanicDto> gameMechanics, Integer minAge, Integer minPlayers,
-                            String gameDuration, BoardGameLanguage gameLanguage,
+                            Set<BoardGameMechanicDto> gameMechanics, Integer minAge, Integer minPlayers, Integer maxPlayers,
+                            Integer minGameDuration, Integer maxGameDuration, BoardGameLanguage gameLanguage,
                             @URL String BGGLink) implements Serializable {
 }
