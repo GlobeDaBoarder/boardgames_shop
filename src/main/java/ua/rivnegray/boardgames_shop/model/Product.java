@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Product extends BaseEntity{
 
-    @Column(unique = true)
     private String manufacturer;
 
     @Column(unique = true, nullable = false)

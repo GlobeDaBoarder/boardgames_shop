@@ -6,6 +6,8 @@
 package generated.order.api;
 
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDate;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
     import io.swagger.v3.oas.annotations.ExternalDocumentation;
@@ -108,6 +110,41 @@ import org.springframework.security.access.prepost.PreAuthorize;
         @Parameter(name = "CreateOrderDto", description = "", required = true) @Valid @RequestBody CreateOrderDto createOrderDto
             ) {
             return getDelegate().createOrder(createOrderDto);
+            }
+
+
+            /**
+            * GET /orders/export : Export orders data to Excel
+            *
+                * @param startDate Start date of the time range (format: yyyy-mm-dd). (required)
+                * @param endDate End date of the time range (format: yyyy-mm-dd). (required)
+            * @return Excel file containing the orders data (status code 200)
+                *         or Invalid date format or date range (status code 400)
+            */
+                @Operation(
+                operationId = "exportOrdersToExcel",
+                    summary = "Export orders data to Excel",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "Excel file containing the orders data", content = {
+                        @Content(mediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", schema = @Schema(implementation = org.springframework.core.io.Resource.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Invalid date format or date range", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_order:export')")
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/orders/export",
+            produces = { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }
+            )
+        default ResponseEntity<org.springframework.core.io.Resource> exportOrdersToExcel(
+        @NotNull @Parameter(name = "startDate", description = "Start date of the time range (format: yyyy-mm-dd).", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "startDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @NotNull @Parameter(name = "endDate", description = "End date of the time range (format: yyyy-mm-dd).", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "endDate", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+            ) {
+            return getDelegate().exportOrdersToExcel(startDate, endDate);
             }
 
 

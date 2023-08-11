@@ -30,4 +30,8 @@ public class Address extends BaseEntity{
 
     @Column(name = "country", nullable = false)
     private String country;
+
+    public String toStringForExcel(){
+        return street + " " + houseNumber + ", " + postalCode + ", " + city + ", " + country;
+    }
 }

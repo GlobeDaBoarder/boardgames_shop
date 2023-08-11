@@ -13,6 +13,6 @@ public interface BoardGameGenreMapper {
 
     BoardGameGenre createBoardGameGenreDtoToBoardGameGenre(CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto);
 
-    BoardGameGenre updateBoardGameGenreFromDto(CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto,
-                                               @MappingTarget BoardGameGenre boardGameGenre);
+    void updateBoardGameGenreFromDto(CreateAndUpdateBoardGameGenreDto createAndUpdateBoardGameGenreDto,
+                                     @MappingTarget BoardGameGenre boardGameGenre);
 }

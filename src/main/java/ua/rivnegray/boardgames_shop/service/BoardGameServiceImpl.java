@@ -2,7 +2,9 @@ package ua.rivnegray.boardgames_shop.service;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
@@ -13,7 +15,9 @@ import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
+import ua.rivnegray.boardgames_shop.repository.specifications.BoardGameSpecification;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,6 +88,49 @@ public class BoardGameServiceImpl implements BoardGameService {
     @Override
     public void deleteBoardGame(Long id) {
         this.boardGameRepository.deleteById(id);
+    }
+
+    @Override
+    public List<BoardGameDto> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto) {
+        Specification<BoardGame> specification = Specification.allOf(
+                BoardGameSpecification.hasManufacturers(filterBoardGamesRequestDto.manufacturers()),
+                BoardGameSpecification.hasPriceInRange(filterBoardGamesRequestDto.minProductPrice(), filterBoardGamesRequestDto.maxProductPrice()),
+                BoardGameSpecification.hasBoardGameGenres(filterBoardGamesRequestDto.boardGameGenres()),
+                BoardGameSpecification.hasBoardGameMechanics(filterBoardGamesRequestDto.boardGameMechanics()),
+                BoardGameSpecification.hasMinAges(filterBoardGamesRequestDto.minAges()),
+                BoardGameSpecification.hasPlayersInRange(filterBoardGamesRequestDto.playerCounts()),
+                BoardGameSpecification.hasGameDurationInRange(filterBoardGamesRequestDto.minGameDuration(), filterBoardGamesRequestDto.maxGameDuration()),
+                BoardGameSpecification.hasLanguage(filterBoardGamesRequestDto.boardGameLanguages())
+        );
+        return this.boardGameRepository.findAll(specification)
+                .stream()
+                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameDto(boardGame))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BoardGameDto> searchBoardgames(String searchValue) {
+        List<BoardGame> titleMatches = boardGameRepository.findAllByProductNameContainingIgnoreCase(searchValue);
+
+        List<Long> idsToExclude = titleMatches.stream()
+                .map(BoardGame::getId)
+                .toList();
+
+        List<BoardGame> descriptionMatches;
+
+        if (idsToExclude.isEmpty()){
+            descriptionMatches = boardGameRepository.findAllByProductDescriptionContainingIgnoreCase(searchValue);
+        } else {
+            descriptionMatches = boardGameRepository.findAllByProductDescriptionContainingIgnoreCaseAndIdNotIn(searchValue, idsToExclude);
+        }
+
+        List<BoardGame> combinedResults = new ArrayList<>();
+        combinedResults.addAll(titleMatches);
+        combinedResults.addAll(descriptionMatches);
+
+        return combinedResults.stream()
+                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameDto(boardGame))
+                .collect(Collectors.toList());
     }
 
     private BoardGame fetchBoardGameById(Long id) {

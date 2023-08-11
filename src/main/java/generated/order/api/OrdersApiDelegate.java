@@ -1,6 +1,8 @@
 package generated.order.api;
 
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDate;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
 import org.springframework.http.HttpStatus;
@@ -59,6 +61,21 @@ public interface OrdersApiDelegate {
                 }
             }
         });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /orders/export : Export orders data to Excel
+     *
+     * @param startDate Start date of the time range (format: yyyy-mm-dd). (required)
+     * @param endDate End date of the time range (format: yyyy-mm-dd). (required)
+     * @return Excel file containing the orders data (status code 200)
+     *         or Invalid date format or date range (status code 400)
+     * @see OrdersApi#exportOrdersToExcel
+     */
+    default ResponseEntity<org.springframework.core.io.Resource> exportOrdersToExcel(LocalDate startDate,
+        LocalDate endDate) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

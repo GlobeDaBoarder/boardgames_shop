@@ -340,6 +340,49 @@ paths:
           description: Not Found
         '401':
           description: Unauthorized
+  /boardgames/filter/:
+#    todo might need to change to get method with query params
+    post:
+      summary: filter boardgames
+      operationId: filterBoardGames
+      requestBody:
+        description: map of filter properties with their values
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FilterBoardGamesRequestDto'
+      responses:
+        '200':
+          description: Filtered successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BoardGameDto'
+
+  /boardgames/search/{searchValue}:
+    get:
+      summary: search
+      operationId: searchBoardgames
+      parameters:
+        - name: searchValue
+          in: path
+          description: search value for performing search on boardgames
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BoardGameDto'
+
 components:
   securitySchemes:
     bearerAuth:
@@ -347,6 +390,54 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+#    FilterBoardGamesRequestDto:
+#      type: object
+#      properties:
+#        filters:
+#          type: object
+#          additionalProperties:
+#            type: array
+#            items:
+#              type: string
+#      required:
+#        - filters
+    FilterBoardGamesRequestDto:
+      type: object
+      properties:
+        manufacturers:
+          type: array
+          items:
+            type: string
+        minProductPrice:
+          type: number
+          format: float
+        maxProductPrice:
+          type: number
+          format: float
+        boardGameGenres:
+          type: array
+          items:
+            type: string
+        boardGameMechanics:
+          type: array
+          items:
+            type: string
+        minAges:
+          type: array
+          items:
+            type: integer
+        playerCounts:
+          type: array
+          items:
+            type: integer
+        minGameDuration:
+          type: integer
+        maxGameDuration:
+          type: integer
+        boardGameLanguages:
+          type: array
+          items:
+            $ref: '#/components/schemas/BoardGameLanguage'
     BoardGameDto:
       type: object
       properties:
@@ -395,8 +486,13 @@ components:
         minPlayers:
           type: integer
           format: int32
-        gameDuration:
-          type: string
+        maxPlayers:
+          type: integer
+          format: int32
+        minGameDuration:
+          type: integer
+        maxGameDuration:
+          type: integer
         gameLanguage:
           $ref: '#/components/schemas/BoardGameLanguage'
         BGGLink:
@@ -451,8 +547,12 @@ components:
           type: integer
         minPlayers:
           type: integer
-        gameDuration:
-          type: string
+        maxPlayers:
+          type: integer
+        minGameDuration:
+          type: integer
+        maxGameDuration:
+          type: integer
         gameLanguage:
           $ref: '#/components/schemas/BoardGameLanguage'
         BGGLink:
