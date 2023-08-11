@@ -180,13 +180,13 @@ public class OrderServiceImpl implements OrderService {
         return jwtPrincipal.getClaim("id");
     }
 
-    private Set<Order> getCurrentUserOrders(){
+    private List<Order> getCurrentUserOrders(){
         return this.orderRepository.findAllByUserProfile_Id(getCurrentUserId());
     }
 
     @Override
     public byte[] exportOrdersToExcel(LocalDate startDate, LocalDate endDate){
-        Set<Order> orders = getOrdersWherePlacedStatusBetween(startDate, endDate);
+        List<Order> orders = getOrdersWherePlacedStatusBetween(startDate, endDate);
 
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
@@ -211,7 +211,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private static void fillData(Set<Order> orders, Workbook workbook, Sheet sheet) {
+    private static void fillData(List<Order> orders, Workbook workbook, Sheet sheet) {
         CellStyle wrapTextCellStyle = workbook.createCellStyle();
         wrapTextCellStyle.setWrapText(true);
 
@@ -260,8 +260,8 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private Set<Order> getOrdersWherePlacedStatusBetween(LocalDate startDate, LocalDate endDate) {
-        return orderRepository.findByOrderStatusHistory_StatusAndOrderStatusHistory_DateBetween(OrderStatus.PLACED,
+    private List<Order> getOrdersWherePlacedStatusBetween(LocalDate startDate, LocalDate endDate) {
+        return orderRepository.findAllByOrderStatusHistory_StatusAndOrderStatusHistory_DateBetween(OrderStatus.PLACED,
                 LocalDateTime.of(startDate, LocalTime.MIN),
                 LocalDateTime.of(endDate, LocalTime.MIN));
     }

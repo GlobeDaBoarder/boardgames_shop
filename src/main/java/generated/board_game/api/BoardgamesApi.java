@@ -8,6 +8,7 @@ package generated.board_game.api;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
@@ -154,6 +155,41 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
+            * PUT /boardgames/archive/{id} : archive board game
+            *
+                * @param id ID of the board game to archive (required)
+            * @return OK (status code 200)
+                *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
+            */
+                @Operation(
+                operationId = "archiveBoardGame",
+                    summary = "archive board game",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameDto.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_boardGame:archiveAndUnarchive')")
+            @RequestMapping(
+            method = RequestMethod.PUT,
+            value = "/boardgames/archive/{id}",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<BoardGameDto> archiveBoardGame(
+        @Parameter(name = "id", description = "ID of the board game to archive", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+            ) {
+            return getDelegate().archiveBoardGame(id);
+            }
+
+
+            /**
             * DELETE /boardgames/{id} : Delete a boardgame
             *
                 * @param id ID of the boardgame to delete (required)
@@ -260,7 +296,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     summary = "filter boardgames",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "Filtered successfully", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameDto.class)))
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameSummaryDto.class)))
                     })
                 }
                 )
@@ -271,10 +307,40 @@ import org.springframework.security.access.prepost.PreAuthorize;
             produces = { "application/json" },
             consumes = { "application/json" }
             )
-        default ResponseEntity<List<BoardGameDto>> filterBoardGames(
+        default ResponseEntity<List<BoardGameSummaryDto>> filterBoardGames(
         @Parameter(name = "FilterBoardGamesRequestDto", description = "map of filter properties with their values", required = true) @Valid @RequestBody FilterBoardGamesRequestDto filterBoardGamesRequestDto
             ) {
             return getDelegate().filterBoardGames(filterBoardGamesRequestDto);
+            }
+
+
+            /**
+            * GET /boardgames/archived/ : get all archived boardgames
+            *
+            * @return OK (status code 200)
+            */
+                @Operation(
+                operationId = "getAllArchivedBoardGames",
+                    summary = "get all archived boardgames",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameSummaryDto.class)))
+                    })
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_boardGame:readArchived')")
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/boardgames/archived/",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<List<BoardGameSummaryDto>> getAllArchivedBoardGames(
+        
+            ) {
+            return getDelegate().getAllArchivedBoardGames();
             }
 
 
@@ -288,7 +354,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     summary = "Get all boardgames",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameDto.class)))
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameSummaryDto.class)))
                     })
                 }
                 )
@@ -298,7 +364,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             value = "/boardgames",
             produces = { "application/json" }
             )
-        default ResponseEntity<List<BoardGameDto>> getAllBoardGames(
+        default ResponseEntity<List<BoardGameSummaryDto>> getAllBoardGames(
         
             ) {
             return getDelegate().getAllBoardGames();
@@ -460,7 +526,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     summary = "search",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameDto.class)))
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameSummaryDto.class)))
                     })
                 }
                 )
@@ -470,10 +536,45 @@ import org.springframework.security.access.prepost.PreAuthorize;
             value = "/boardgames/search/{searchValue}",
             produces = { "application/json" }
             )
-        default ResponseEntity<List<BoardGameDto>> searchBoardgames(
+        default ResponseEntity<List<BoardGameSummaryDto>> searchBoardgames(
         @Parameter(name = "searchValue", description = "search value for performing search on boardgames", required = true, in = ParameterIn.PATH) @PathVariable("searchValue") String searchValue
             ) {
             return getDelegate().searchBoardgames(searchValue);
+            }
+
+
+            /**
+            * PUT /boardgames/unarchive/{id} : unarchive board game
+            *
+                * @param id ID of the board game to unarchive (required)
+            * @return OK (status code 200)
+                *         or Not Found (status code 404)
+                *         or Unauthorized (status code 401)
+            */
+                @Operation(
+                operationId = "unarchiveBoardGame",
+                    summary = "unarchive board game",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameDto.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
+                }
+                )
+                        @PreAuthorize("hasAuthority('SCOPE_boardGame:archiveAndUnarchive')")
+            @RequestMapping(
+            method = RequestMethod.PUT,
+            value = "/boardgames/unarchive/{id}",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<BoardGameDto> unarchiveBoardGame(
+        @Parameter(name = "id", description = "ID of the board game to unarchive", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
+            ) {
+            return getDelegate().unarchiveBoardGame(id);
             }
 
 

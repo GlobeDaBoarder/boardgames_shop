@@ -5,12 +5,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 
 import java.util.List;
 
 public interface BoardGameService {
     @Transactional(readOnly = true)
-    List<BoardGameDto> getAllBoardGames();
+    List<BoardGameSummaryDto> getAllBoardGames();
 
     @Transactional
     BoardGameDto addBoardGame(CreateAndUpdateBoardGameDto createBoardGameDto);
@@ -25,8 +26,17 @@ public interface BoardGameService {
     void deleteBoardGame(Long id);
 
     @Transactional(readOnly = true)
-    List<BoardGameDto> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto);
+    List<BoardGameSummaryDto> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto);
 
     @Transactional(readOnly = true)
-    List<BoardGameDto> searchBoardgames(String searchValue);
+    List<BoardGameSummaryDto> searchBoardgames(String searchValue);
+
+    @Transactional(readOnly = true)
+    List<BoardGameSummaryDto> getAllArchivedBoardGames();
+
+    @Transactional
+    BoardGameDto archiveBoardGame(Long id);
+
+    @Transactional
+    BoardGameDto unarchiveBoardGame(Long id);
 }
