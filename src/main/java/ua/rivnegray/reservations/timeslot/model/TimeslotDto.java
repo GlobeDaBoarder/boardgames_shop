@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.reservations.timeslot.model;
+package ua.rivnegray.reservations.timeslot.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

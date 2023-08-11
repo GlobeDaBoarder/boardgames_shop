@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.reservations.timeslot.utils;
+package ua.rivnegray.reservations.timeslot.utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

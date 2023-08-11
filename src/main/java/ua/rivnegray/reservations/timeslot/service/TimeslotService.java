@@ -1,16 +1,16 @@
-package ua.rivnegray.boardgames_shop.reservations.timeslot.service;
+package ua.rivnegray.reservations.timeslot.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.utils.SortByDateString;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.repository.TimeslotRepository;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.mapper.TimeslotMapper;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.Timeslot;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.TimeslotDto;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.TimeslotRequest;
+import ua.rivnegray.reservations.timeslot.utils.SortByDateString;
+import ua.rivnegray.reservations.timeslot.repository.TimeslotRepository;
+import ua.rivnegray.reservations.timeslot.mapper.TimeslotMapper;
+import ua.rivnegray.reservations.timeslot.model.Timeslot;
+import ua.rivnegray.reservations.timeslot.model.TimeslotDto;
+import ua.rivnegray.reservations.timeslot.model.TimeslotRequest;
 
 import java.util.List;
 import java.util.Map;

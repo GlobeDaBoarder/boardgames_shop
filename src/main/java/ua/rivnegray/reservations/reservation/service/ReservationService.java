@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.reservations.reservation.service;
+package ua.rivnegray.reservations.reservation.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,13 +7,13 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
-import ua.rivnegray.boardgames_shop.reservations.reservation.mapper.ReservationMapper;
-import ua.rivnegray.boardgames_shop.reservations.reservation.model.Reservation;
-import ua.rivnegray.boardgames_shop.reservations.reservation.model.ReservationDto;
-import ua.rivnegray.boardgames_shop.reservations.reservation.model.ReservationRequest;
-import ua.rivnegray.boardgames_shop.reservations.reservation.repository.ReservationRepository;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.Timeslot;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.repository.TimeslotRepository;
+import ua.rivnegray.reservations.reservation.mapper.ReservationMapper;
+import ua.rivnegray.reservations.reservation.model.Reservation;
+import ua.rivnegray.reservations.reservation.model.ReservationDto;
+import ua.rivnegray.reservations.reservation.model.ReservationRequest;
+import ua.rivnegray.reservations.reservation.repository.ReservationRepository;
+import ua.rivnegray.reservations.timeslot.model.Timeslot;
+import ua.rivnegray.reservations.timeslot.repository.TimeslotRepository;
 
 import java.util.Collection;
 import java.util.List;

@@ -1,9 +1,9 @@
-package ua.rivnegray.boardgames_shop.reservations.reservation.repository;
+package ua.rivnegray.reservations.reservation.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import ua.rivnegray.boardgames_shop.reservations.reservation.model.Reservation;
+import ua.rivnegray.reservations.reservation.model.Reservation;
 
 import java.util.Collection;
 

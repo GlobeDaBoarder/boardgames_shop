@@ -1,8 +1,8 @@
-package ua.rivnegray.boardgames_shop.reservations.timeslot.repository;
+package ua.rivnegray.reservations.timeslot.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.Timeslot;
+import ua.rivnegray.reservations.timeslot.model.Timeslot;
 
 import java.util.Collection;
 

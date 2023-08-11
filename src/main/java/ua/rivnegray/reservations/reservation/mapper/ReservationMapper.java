@@ -1,8 +1,8 @@
-package ua.rivnegray.boardgames_shop.reservations.reservation.mapper;
+package ua.rivnegray.reservations.reservation.mapper;
 
-import ua.rivnegray.boardgames_shop.reservations.reservation.model.Reservation;
-import ua.rivnegray.boardgames_shop.reservations.reservation.model.ReservationDto;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.mapper.TimeslotMapper;
+import ua.rivnegray.reservations.reservation.model.Reservation;
+import ua.rivnegray.reservations.reservation.model.ReservationDto;
+import ua.rivnegray.reservations.timeslot.mapper.TimeslotMapper;
 
 public class ReservationMapper {
     public static ReservationDto toDto(Reservation reservation) {

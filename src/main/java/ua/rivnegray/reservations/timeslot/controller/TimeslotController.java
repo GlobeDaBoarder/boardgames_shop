@@ -1,11 +1,11 @@
-package ua.rivnegray.boardgames_shop.reservations.timeslot.controller;
+package ua.rivnegray.reservations.timeslot.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.Timeslot;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.TimeslotDto;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.TimeslotRequest;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.service.TimeslotService;
+import ua.rivnegray.reservations.timeslot.model.Timeslot;
+import ua.rivnegray.reservations.timeslot.model.TimeslotDto;
+import ua.rivnegray.reservations.timeslot.model.TimeslotRequest;
+import ua.rivnegray.reservations.timeslot.service.TimeslotService;
 
 import java.util.Collection;
 import java.util.List;

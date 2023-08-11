@@ -1,9 +1,9 @@
-package ua.rivnegray.boardgames_shop.reservations.reservation.model;
+package ua.rivnegray.reservations.reservation.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.TimeslotDto;
+import ua.rivnegray.reservations.timeslot.model.TimeslotDto;
 
 @Builder
 @Data

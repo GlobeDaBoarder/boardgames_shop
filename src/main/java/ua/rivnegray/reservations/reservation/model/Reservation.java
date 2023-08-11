@@ -1,11 +1,11 @@
-package ua.rivnegray.boardgames_shop.reservations.reservation.model;
+package ua.rivnegray.reservations.reservation.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.Timeslot;
+import ua.rivnegray.reservations.timeslot.model.Timeslot;
 
 @Entity
 @Getter

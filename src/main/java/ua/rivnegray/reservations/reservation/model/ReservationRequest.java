@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.reservations.reservation.model;
+package ua.rivnegray.reservations.reservation.model;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

@@ -1,13 +1,13 @@
-package ua.rivnegray.boardgames_shop.reservations.reservation.controller;
+package ua.rivnegray.reservations.reservation.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ua.rivnegray.boardgames_shop.reservations.reservation.model.Reservation;
-import ua.rivnegray.boardgames_shop.reservations.reservation.model.ReservationDto;
-import ua.rivnegray.boardgames_shop.reservations.reservation.model.ReservationRequest;
-import ua.rivnegray.boardgames_shop.reservations.reservation.service.ReservationService;
+import ua.rivnegray.reservations.reservation.model.Reservation;
+import ua.rivnegray.reservations.reservation.model.ReservationDto;
+import ua.rivnegray.reservations.reservation.model.ReservationRequest;
+import ua.rivnegray.reservations.reservation.service.ReservationService;
 
 import java.util.Collection;
 import java.util.List;

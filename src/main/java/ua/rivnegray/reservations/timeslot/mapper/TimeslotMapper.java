@@ -1,7 +1,7 @@
-package ua.rivnegray.boardgames_shop.reservations.timeslot.mapper;
+package ua.rivnegray.reservations.timeslot.mapper;
 
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.Timeslot;
-import ua.rivnegray.boardgames_shop.reservations.timeslot.model.TimeslotDto;
+import ua.rivnegray.reservations.timeslot.model.Timeslot;
+import ua.rivnegray.reservations.timeslot.model.TimeslotDto;
 
 public class TimeslotMapper {
     public static TimeslotDto toDto(Timeslot timeslot) {
