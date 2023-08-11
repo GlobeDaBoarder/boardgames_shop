@@ -30,4 +30,13 @@ public interface BoardGameService {
 
     @Transactional(readOnly = true)
     List<BoardGameSummaryDto> searchBoardgames(String searchValue);
+
+    @Transactional(readOnly = true)
+    List<BoardGameSummaryDto> getAllArchivedBoardGames();
+
+    @Transactional
+    BoardGameDto archiveBoardGame(Long id);
+
+    @Transactional
+    BoardGameDto unarchiveBoardGame(Long id);
 }

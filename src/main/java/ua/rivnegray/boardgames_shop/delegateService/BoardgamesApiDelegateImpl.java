@@ -157,4 +157,19 @@ public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
     public ResponseEntity<List<BoardGameSummaryDto>> searchBoardgames(String searchValue) {
         return ResponseEntity.ok(this.boardGameService.searchBoardgames(searchValue));
     }
+
+    @Override
+    public ResponseEntity<BoardGameDto> archiveBoardGame(Long id) {
+        return ResponseEntity.ok(this.boardGameService.archiveBoardGame(id));
+    }
+
+    @Override
+    public ResponseEntity<List<BoardGameSummaryDto>> getAllArchivedBoardGames() {
+        return ResponseEntity.ok(this.boardGameService.getAllArchivedBoardGames());
+    }
+
+    @Override
+    public ResponseEntity<BoardGameDto> unarchiveBoardGame(Long id) {
+        return ResponseEntity.ok(this.boardGameService.unarchiveBoardGame(id));
+    }
 }

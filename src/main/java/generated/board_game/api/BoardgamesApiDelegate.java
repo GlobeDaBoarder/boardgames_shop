@@ -100,6 +100,29 @@ public interface BoardgamesApiDelegate {
     }
 
     /**
+     * PUT /boardgames/archive/{id} : archive board game
+     *
+     * @param id ID of the board game to archive (required)
+     * @return OK (status code 200)
+     *         or Not Found (status code 404)
+     *         or Unauthorized (status code 401)
+     * @see BoardgamesApi#archiveBoardGame
+     */
+    default ResponseEntity<BoardGameDto> archiveBoardGame(Long id) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"productImageURL\" : \"productImageURL\", \"maxPlayers\" : 2, \"minPlayers\" : 5, \"gameSet\" : \"gameSet\", \"gameMechanicMechanicNames\" : [ \"gameMechanicMechanicNames\", \"gameMechanicMechanicNames\" ], \"BGGLink\" : \"https://openapi-generator.tech\", \"productName\" : \"productName\", \"dateUpdated\" : \"2000-01-23T04:56:07.000+00:00\", \"dateCreated\" : \"2000-01-23T04:56:07.000+00:00\", \"isRemoved\" : true, \"productCode\" : \"productCode\", \"minAge\" : 5, \"Manufacturer\" : \"Manufacturer\", \"minGameDuration\" : 7, \"maxGameDuration\" : 9, \"id\" : 0, \"gameGenreGenreNames\" : [ \"gameGenreGenreNames\", \"gameGenreGenreNames\" ], \"productDescription\" : \"productDescription\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
      * DELETE /boardgames/{id} : Delete a boardgame
      *
      * @param id ID of the boardgame to delete (required)
@@ -149,6 +172,26 @@ public interface BoardgamesApiDelegate {
      * @see BoardgamesApi#filterBoardGames
      */
     default ResponseEntity<List<BoardGameSummaryDto>> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 }, { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /boardgames/archived/ : get all archived boardgames
+     *
+     * @return OK (status code 200)
+     * @see BoardgamesApi#getAllArchivedBoardGames
+     */
+    default ResponseEntity<List<BoardGameSummaryDto>> getAllArchivedBoardGames() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -300,6 +343,29 @@ public interface BoardgamesApiDelegate {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "[ { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 }, { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * PUT /boardgames/unarchive/{id} : unarchive board game
+     *
+     * @param id ID of the board game to unarchive (required)
+     * @return OK (status code 200)
+     *         or Not Found (status code 404)
+     *         or Unauthorized (status code 401)
+     * @see BoardgamesApi#unarchiveBoardGame
+     */
+    default ResponseEntity<BoardGameDto> unarchiveBoardGame(Long id) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"productImageURL\" : \"productImageURL\", \"maxPlayers\" : 2, \"minPlayers\" : 5, \"gameSet\" : \"gameSet\", \"gameMechanicMechanicNames\" : [ \"gameMechanicMechanicNames\", \"gameMechanicMechanicNames\" ], \"BGGLink\" : \"https://openapi-generator.tech\", \"productName\" : \"productName\", \"dateUpdated\" : \"2000-01-23T04:56:07.000+00:00\", \"dateCreated\" : \"2000-01-23T04:56:07.000+00:00\", \"isRemoved\" : true, \"productCode\" : \"productCode\", \"minAge\" : 5, \"Manufacturer\" : \"Manufacturer\", \"minGameDuration\" : 7, \"maxGameDuration\" : 9, \"id\" : 0, \"gameGenreGenreNames\" : [ \"gameGenreGenreNames\", \"gameGenreGenreNames\" ], \"productDescription\" : \"productDescription\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

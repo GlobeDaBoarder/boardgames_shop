@@ -55,7 +55,7 @@ public class BoardGameServiceImpl implements BoardGameService {
 
     @Override
     public List<BoardGameSummaryDto> getAllBoardGames() {
-        return this.boardGameRepository.findAll().stream()
+        return this.boardGameRepository.findAllByIsRemovedIsFalse().stream()
                 .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
                 .collect(Collectors.toList());
     }
@@ -132,6 +132,27 @@ public class BoardGameServiceImpl implements BoardGameService {
         return combinedResults.stream()
                 .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BoardGameSummaryDto> getAllArchivedBoardGames() {
+        return this.boardGameRepository.findAllByIsRemovedIsTrue().stream()
+                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public BoardGameDto archiveBoardGame(Long id) {
+        BoardGame boardGame = fetchBoardGameById(id);
+        boardGame.setIsRemoved(true);
+        return this.boardGameMapper.boardGameToBoardGameDto(boardGame);
+    }
+
+    @Override
+    public BoardGameDto unarchiveBoardGame(Long id) {
+        BoardGame boardGame = fetchBoardGameById(id);
+        boardGame.setIsRemoved(false);
+        return this.boardGameMapper.boardGameToBoardGameDto(boardGame);
     }
 
     private BoardGame fetchBoardGameById(Long id) {
