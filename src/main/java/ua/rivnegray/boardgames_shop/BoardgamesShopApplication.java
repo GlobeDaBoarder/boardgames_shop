@@ -79,7 +79,7 @@ public class BoardgamesShopApplication {
 			roleCustomer.setPermissions(userPermissions);
 			roleRepository.save(roleCustomer);
 
-			UserProfile adminProfile = new UserProfile("@", "1", "Gleb", "Ivashyn",
+			UserProfile adminProfile = new UserProfile("glebivashyn@gmail.com", "1", "Gleb", "Ivashyn",
 					Set.of(roleSuperAdmin));
 			UserCredentials adminCredentials = new UserCredentials("admin", encoder.encode("admin"));
 			adminCredentials.setUserProfile(adminProfile);
@@ -89,7 +89,7 @@ public class BoardgamesShopApplication {
 
 			userProfileRepository.save(adminProfile);
 
-			UserProfile customerProfile = new UserProfile("@2", "2", "Gleb", "Ivashyn",
+			UserProfile customerProfile = new UserProfile("customeruser@gmail.com", "2", "Gleb", "Ivashyn",
 					Set.of(roleCustomer));
 			UserCredentials customerCredentials = new UserCredentials("customer", encoder.encode("customer"));
 			customerCredentials.setUserProfile(customerProfile);
@@ -472,7 +472,6 @@ public class BoardgamesShopApplication {
 			shoppingCartRepository.save(cart1);
 
 			LOGGER.debug("test");
-
 		};
 	}
 }

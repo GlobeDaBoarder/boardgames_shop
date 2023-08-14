@@ -14,6 +14,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @NoArgsConstructor
@@ -39,6 +40,7 @@ public class OrderStatusDate {
     }
 
     public String toStringForExcel(){
-        return status.toString() + ": " + date.toString();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        return status.toString() + ": " + date.format(dateTimeFormatter);
     }
 }
