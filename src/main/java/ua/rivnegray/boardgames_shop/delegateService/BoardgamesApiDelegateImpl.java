@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
@@ -14,6 +13,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
+import ua.rivnegray.boardgames_shop.model.SortType;
 import ua.rivnegray.boardgames_shop.service.BoardGameGenreService;
 import ua.rivnegray.boardgames_shop.service.BoardGameMechanicService;
 import ua.rivnegray.boardgames_shop.service.BoardGameService;
@@ -65,8 +65,8 @@ public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<BoardGameSummaryDto>> getAllBoardGames() {
-        return ResponseEntity.ok(this.boardGameService.getAllBoardGames());
+    public ResponseEntity<List<BoardGameSummaryDto>> getAllBoardGames(String search, String filter, SortType sort, Integer page) {
+        return ResponseEntity.ok(this.boardGameService.getAllBoardGames(search, filter, sort, page));
     }
 
     @Override
@@ -146,16 +146,6 @@ public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
     @Override
     public ResponseEntity<BoardGameMechanicDto> updateMechanic(Long id, CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto) {
         return ResponseEntity.ok(this.boardGameMechanicService.updateMechanic(id, createAndUpdateBoardGameMechanicDto));
-    }
-
-    @Override
-    public ResponseEntity<List<BoardGameSummaryDto>> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto) {
-        return ResponseEntity.ok(this.boardGameService.filterBoardGames(filterBoardGamesRequestDto));
-    }
-
-    @Override
-    public ResponseEntity<List<BoardGameSummaryDto>> searchBoardgames(String searchValue) {
-        return ResponseEntity.ok(this.boardGameService.searchBoardgames(searchValue));
     }
 
     @Override

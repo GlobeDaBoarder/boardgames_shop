@@ -252,6 +252,7 @@
 								<importMapping>BoardGameMechanicDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto</importMapping>
 								<importMapping>CreateAndUpdateBoardGameMechanicDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto</importMapping>
 								<importMapping>FilterBoardGamesRequestDto=ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto</importMapping>
+								<importMapping>SortType=ua.rivnegray.boardgames_shop.model.SortType</importMapping>
 
 							</importMappings>
 
