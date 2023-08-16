@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ua.rivnegray.boardgames_shop.exceptions.badRequestExceptions.BadRequestException;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.ConflictException;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.InternalServerException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.ResourceIdNotFoundException;
@@ -55,5 +56,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(String.valueOf(ex.getDetailMessageArguments()[1]));
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> handleBadRequestException(BadRequestException ex) {
+        LOGGER.error(ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
     }
 }

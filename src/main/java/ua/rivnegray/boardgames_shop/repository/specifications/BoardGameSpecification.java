@@ -107,4 +107,8 @@ public class BoardGameSpecification {
             return root.get("gameLanguage").in(boardGameLanguages);
         };
     }
+
+    public static Specification<BoardGame> hasIsRemovedFalse() {
+        return (root, query, cb) -> cb.isFalse(root.get("isRemoved"));
+    }
 }

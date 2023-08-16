@@ -7,7 +7,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
-import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
+import ua.rivnegray.boardgames_shop.model.SortType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -165,27 +165,6 @@ public interface BoardgamesApiDelegate {
     }
 
     /**
-     * POST /boardgames/filter/ : filter boardgames
-     *
-     * @param filterBoardGamesRequestDto map of filter properties with their values (required)
-     * @return Filtered successfully (status code 200)
-     * @see BoardgamesApi#filterBoardGames
-     */
-    default ResponseEntity<List<BoardGameSummaryDto>> filterBoardGames(FilterBoardGamesRequestDto filterBoardGamesRequestDto) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 }, { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 } ]";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-    /**
      * GET /boardgames/archived/ : get all archived boardgames
      *
      * @return OK (status code 200)
@@ -208,10 +187,17 @@ public interface BoardgamesApiDelegate {
     /**
      * GET /boardgames : Get all boardgames
      *
+     * @param search search in product name and description for some key words (optional)
+     * @param filter  URL encode this DTO: { \&quot;manufacturers\&quot;:[\&quot;string\&quot;], \&quot;minProductPrice\&quot;:0, \&quot;maxProductPrice\&quot;:0, \&quot;boardGameGenres\&quot;:[\&quot;string\&quot;], \&quot;boardGameMechanics\&quot;:[\&quot;string\&quot;], \&quot;minAges\&quot;:[0], \&quot;playerCounts\&quot;:[0], \&quot;minGameDuration\&quot;:0, \&quot;maxGameDuration\&quot;:0, \&quot;boardGameLanguages\&quot;:[\&quot;ENGLISH\&quot;]}  (optional)
+     * @param sort sort by: price (asc, desc), name (asc, desc), newest (optional)
+     * @param page current page number (optional, default to 0)
      * @return OK (status code 200)
      * @see BoardgamesApi#getAllBoardGames
      */
-    default ResponseEntity<List<BoardGameSummaryDto>> getAllBoardGames() {
+    default ResponseEntity<List<BoardGameSummaryDto>> getAllBoardGames(String search,
+        String filter,
+        SortType sort,
+        Integer page) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
@@ -322,27 +308,6 @@ public interface BoardgamesApiDelegate {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"mechanicDescription\" : \"mechanicDescription\", \"mechanicName\" : \"mechanicName\", \"id\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-    /**
-     * GET /boardgames/search/{searchValue} : search
-     *
-     * @param searchValue search value for performing search on boardgames (required)
-     * @return OK (status code 200)
-     * @see BoardgamesApi#searchBoardgames
-     */
-    default ResponseEntity<List<BoardGameSummaryDto>> searchBoardgames(String searchValue) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 }, { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
