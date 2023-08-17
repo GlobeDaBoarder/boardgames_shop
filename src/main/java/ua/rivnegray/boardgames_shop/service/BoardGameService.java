@@ -2,6 +2,7 @@ package ua.rivnegray.boardgames_shop.service;
 
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
@@ -33,4 +34,7 @@ public interface BoardGameService {
 
     @Transactional
     BoardGameDto unarchiveBoardGame(Long id);
+
+    @Transactional
+    BoardGameSummaryDto uploadAndAddImage(Long id, MultipartFile imageFile);
 }

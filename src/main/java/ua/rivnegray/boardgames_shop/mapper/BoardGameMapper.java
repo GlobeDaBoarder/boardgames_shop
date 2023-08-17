@@ -1,5 +1,6 @@
 package ua.rivnegray.boardgames_shop.mapper;
 
+import jdk.jfr.Name;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,11 +14,13 @@ import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameMecha
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
+import ua.rivnegray.boardgames_shop.model.ProductImage;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = {BoardGameGenreRepository.class, BoardGameMechanicRepository.class,
         BoardGameGenreMapper.class, BoardGameMechanicMapper.class})
@@ -42,6 +45,20 @@ public interface BoardGameMapper {
         return mechanics;
     }
 
+    @Named("pickFirstImageURL")
+    default String pickFirstImageURL(Set<ProductImage> productImages){
+        return productImages.iterator().next().getImagePath();
+    }
+
+    @Named("mapProductImagesToImageURLs")
+    default Set<String> mapProductImagesToImageURLs(Set<ProductImage> productImages){
+        return productImages.stream()
+                .map(ProductImage::getImagePath)
+                .collect(Collectors.toSet());
+    }
+
+
+    @Mapping(source = "productImages", target = "productImageURLs", qualifiedByName = "mapProductImagesToImageURLs")
     BoardGameDto boardGameToBoardGameDto(BoardGame boardGame);
 
     @Mapping(target = "gameGenres", source = "gameGenreIds", qualifiedByName = "genreIdsToGenres")
@@ -56,5 +73,6 @@ public interface BoardGameMapper {
                                 @Context BoardGameGenreRepository boardGameGenreRepository,
                                 @Context BoardGameMechanicRepository boardGameMechanicRepository);
 
+    @Mapping(source = "productImages", target = "productImageURL", qualifiedByName = "pickFirstImageURL")
     BoardGameSummaryDto boardGameToBoardGameSummaryDto(BoardGame boardGame);
 }

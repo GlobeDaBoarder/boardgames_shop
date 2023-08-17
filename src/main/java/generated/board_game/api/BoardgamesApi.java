@@ -641,4 +641,43 @@ import org.springframework.security.access.prepost.PreAuthorize;
             return getDelegate().updateMechanic(id, createAndUpdateBoardGameMechanicDto);
             }
 
+
+            /**
+            * POST /boardgames/{id}/images : Upload an image for a specific boardgame
+            *
+                * @param id The ID of the boardgame to which the image will be associated (required)
+                * @param file  (optional)
+            * @return Image uploaded and associated successfully (status code 201)
+                *         or Bad Request (status code 400)
+                *         or Unauthorized (status code 401)
+                *         or Forbidden (status code 403)
+                *         or Boardgame not found (status code 404)
+            */
+                @Operation(
+                operationId = "uploadAndAddImage",
+                    summary = "Upload an image for a specific boardgame",
+                responses = {
+                    @ApiResponse(responseCode = "201", description = "Image uploaded and associated successfully", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameSummaryDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Boardgame not found", content = @Content)
+                }
+                )
+                        //allow all
+            @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/boardgames/{id}/images",
+            produces = { "application/json" },
+            consumes = { "multipart/form-data" }
+            )
+        default ResponseEntity<BoardGameSummaryDto> uploadAndAddImage(
+        @Parameter(name = "id", description = "The ID of the boardgame to which the image will be associated", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
+        @Parameter(name = "file", description = "") @RequestPart(value = "file", required = false) MultipartFile file
+            ) {
+            return getDelegate().uploadAndAddImage(id, file);
+            }
+
         }

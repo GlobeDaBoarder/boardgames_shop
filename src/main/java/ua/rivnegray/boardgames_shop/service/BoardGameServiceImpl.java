@@ -8,30 +8,38 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.exceptions.badRequestExceptions.FilterRequestDeserializationException;
+import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.ImageFileSaveException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameGenreMapper;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMapper;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMechanicMapper;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
+import ua.rivnegray.boardgames_shop.model.ProductImage;
 import ua.rivnegray.boardgames_shop.model.SortType;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.specifications.BoardGameSpecification;
 
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class BoardGameServiceImpl implements BoardGameService {
+    private static final String IMAGES_DIR = "/home/globe/rivnegray/images/";
     private static final int PAGE_SIZE = 10;
     BoardGameRepository boardGameRepository;
     BoardGameMapper boardGameMapper;
@@ -181,5 +189,25 @@ public class BoardGameServiceImpl implements BoardGameService {
         } catch (JsonProcessingException e) {
             throw new FilterRequestDeserializationException(e);
         }
+    }
+
+    @Override
+    public BoardGameSummaryDto uploadAndAddImage(Long id, MultipartFile imageFile) {
+        String fileName = id + "_" + imageFile.getOriginalFilename();
+        String filePath = IMAGES_DIR + fileName;
+
+        // Save the file to the filesystem
+        try {
+            byte[] bytes = imageFile.getBytes();
+            Path path = Paths.get(filePath);
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            throw new ImageFileSaveException(e);
+        }
+
+        // Update the boardgame entity with the file path
+        BoardGame boardgame = this.fetchBoardGameById(id);
+        boardgame.getProductImages().add(new ProductImage(boardgame, filePath));
+        return boardGameMapper.boardGameToBoardGameSummaryDto(this.boardGameRepository.save(boardgame));
     }
 }

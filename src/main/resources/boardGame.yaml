@@ -447,6 +447,44 @@ paths:
           description: Not Found
         '401':
           description: Unauthorized
+  /boardgames/{id}/images:
+    post:
+      summary: Upload an image for a specific boardgame
+      operationId: uploadAndAddImage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the boardgame to which the image will be associated
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The image to upload
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Image uploaded and associated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BoardGameSummaryDto'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Boardgame not found
 
 components:
   securitySchemes:
@@ -539,8 +577,10 @@ components:
         productQuantityInStock:
           type: integer
           format: int32
-        productImageURL:
-          type: string
+        productImageURLs:
+          type: array
+          items:
+            type: string
         productCategory:
           $ref: '#/components/schemas/ProductCategory'
         productCode:
@@ -598,8 +638,6 @@ components:
           format: decimal
         productQuantityInStock:
           type: integer
-        productImageURL:
-          type: string
         productCategory:
           $ref: '#/components/schemas/ProductCategory'
         productCode:

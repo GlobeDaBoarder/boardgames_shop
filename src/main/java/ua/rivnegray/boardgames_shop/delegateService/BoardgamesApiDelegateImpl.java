@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
@@ -161,5 +162,10 @@ public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
     @Override
     public ResponseEntity<BoardGameDto> unarchiveBoardGame(Long id) {
         return ResponseEntity.ok(this.boardGameService.unarchiveBoardGame(id));
+    }
+
+    @Override
+    public ResponseEntity<BoardGameSummaryDto> uploadAndAddImage(Long id, MultipartFile file) {
+        return ResponseEntity.ok(this.boardGameService.uploadAndAddImage(id, file));
     }
 }
