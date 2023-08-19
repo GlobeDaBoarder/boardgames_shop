@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.ImageProperties;
+import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.PaginationProperties;
 import ua.rivnegray.boardgames_shop.model.Address;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
@@ -28,7 +30,6 @@ import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.ShoppingCartRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
-import ua.rivnegray.common_utils.CustomApplicationProperties;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -37,9 +38,8 @@ import java.util.Set;
 
 @SpringBootApplication
 @ComponentScan({"ua.rivnegray.boardgames_shop", "generated"})
-@EnableConfigurationProperties(CustomApplicationProperties.class)
+@EnableConfigurationProperties({ImageProperties.class, PaginationProperties.class})
 public class BoardgamesShopApplication {
-    
     private final static Logger LOGGER = LoggerFactory.getLogger(BoardgamesShopApplication.class);
 	public static void main(String[] args) {
 		SpringApplication.run(BoardgamesShopApplication.class, args);

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +17,8 @@ import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
+import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.ImageProperties;
+import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.PaginationProperties;
 import ua.rivnegray.boardgames_shop.exceptions.badRequestExceptions.FilterRequestDeserializationException;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.ImageFileSaveException;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.UnsupportedFileExtensionException;
@@ -34,7 +35,6 @@ import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.ProductImageRepository;
 import ua.rivnegray.boardgames_shop.repository.specifications.BoardGameSpecification;
-import ua.rivnegray.common_utils.CustomApplicationProperties;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -57,7 +57,8 @@ public class BoardGameServiceImpl implements BoardGameService {
     EntityManager  entityManager;
     ProductImageRepository productImageRepository;
 
-    CustomApplicationProperties customApplicationProperties;
+    ImageProperties imageProperties;
+    PaginationProperties paginationProperties;
 
     @Autowired
     public BoardGameServiceImpl(BoardGameRepository boardGameRepository, BoardGameMapper boardGameMapper,
@@ -67,7 +68,8 @@ public class BoardGameServiceImpl implements BoardGameService {
                                 BoardGameGenreMapper boardGameGenreMapper,
                                 BoardGameMechanicMapper boardGameMechanicMapper,
                                 ProductImageRepository productImageRepository,
-                                CustomApplicationProperties customApplicationProperties) {
+                                ImageProperties imageProperties,
+                                PaginationProperties paginationProperties){
         this.boardGameRepository = boardGameRepository;
         this.boardGameMapper = boardGameMapper;
         this.boardGameGenreRepository = boardGameGenreRepository;
@@ -76,7 +78,8 @@ public class BoardGameServiceImpl implements BoardGameService {
         this.boardGameGenreMapper = boardGameGenreMapper;
         this.boardGameMechanicMapper = boardGameMechanicMapper;
         this.productImageRepository = productImageRepository;
-        this.customApplicationProperties = customApplicationProperties;
+        this.imageProperties = imageProperties;
+        this.paginationProperties = paginationProperties;
     }
 
     @Override
@@ -88,7 +91,7 @@ public class BoardGameServiceImpl implements BoardGameService {
                         filterDTOEncoded != null?
                                 getFilterSpecificationFromFilterDto(convertFilterStringDtoToFilterDto(filterDTOEncoded)):
                                 Specification.where(null),
-                        PageRequest.of(page, customApplicationProperties.getPageSize(),
+                        PageRequest.of(page, paginationProperties.getPageSize(),
                                 sort != null?Sort.by(sort.getDirection(), sort.getProperty()):Sort.unsorted())
                 ).stream()
                 .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
@@ -212,14 +215,14 @@ public class BoardGameServiceImpl implements BoardGameService {
         try {
             ProductImage productImage = this.productImageRepository.save(new ProductImage());
 
-            Path filePath = Path.of(customApplicationProperties.getImagesDirectory() + productImage.getId().toString()
+            Path filePath = Path.of(imageProperties.getStoragePath() + productImage.getId().toString()
                     + extractImageExtensionFromFilename(imageFile.getOriginalFilename()));
 
             BoardGame boardgame = this.fetchBoardGameById(id);
             productImage.setImagePath(filePath.toString());
             productImage.setProduct(boardgame);
             productImage.setOriginalFileName(imageFile.getOriginalFilename());
-            productImage.setImageURL(customApplicationProperties.getBaseImagesUrl() + filePath.getFileName());
+            productImage.setImageURL(imageProperties.getEndpointBaseUrl() + filePath.getFileName());
 
             boardgame.getProductImages().add(productImage);
             this.boardGameRepository.save(boardgame);
@@ -247,7 +250,7 @@ public class BoardGameServiceImpl implements BoardGameService {
         }
 
         String extension =  filename.substring(filename.lastIndexOf("."));
-        if (!customApplicationProperties.getSupportedImageExtensions().contains(extension)) {
+        if (!imageProperties.getSupportedImageFileExtensions().contains(extension)) {
             throw new UnsupportedFileExtensionException(extension);
         }
 
@@ -256,7 +259,7 @@ public class BoardGameServiceImpl implements BoardGameService {
 
     @Override
     public Resource getBoardGameImage(String filename) {
-        return new FileSystemResource(customApplicationProperties.getImagesDirectory() + filename);
+        return new FileSystemResource(imageProperties.getStoragePath() + filename);
     }
 
     @Override
