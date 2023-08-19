@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
@@ -14,11 +15,7 @@ import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
 import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
-import ua.rivnegray.boardgames_shop.model.Order;
-import ua.rivnegray.boardgames_shop.model.OrderStatus;
-import ua.rivnegray.boardgames_shop.model.PaymentStatus;
 import ua.rivnegray.boardgames_shop.model.ProductCategory;
-import ua.rivnegray.boardgames_shop.model.ProductInOrder;
 import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.ShoppingCart;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
@@ -31,15 +28,16 @@ import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.ShoppingCartRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
+import ua.rivnegray.common_utils.CustomApplicationProperties;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
 
 @SpringBootApplication
 @ComponentScan({"ua.rivnegray.boardgames_shop", "generated"})
+@EnableConfigurationProperties(CustomApplicationProperties.class)
 public class BoardgamesShopApplication {
     
     private final static Logger LOGGER = LoggerFactory.getLogger(BoardgamesShopApplication.class);

@@ -20,6 +20,14 @@ springdoc:
   swagger-ui:
     path: /api/ui
 
+custom:
+  imagesDirectory: "/home/globe/rivnegray/images/"
+  pageSize: 20
+  baseImagesUrl: "/boardgames/images/"
+  supportedImageExtensions:
+    - ".jpg"
+    - ".jpeg"
+    - ".png"
 ---
 spring:
   config:

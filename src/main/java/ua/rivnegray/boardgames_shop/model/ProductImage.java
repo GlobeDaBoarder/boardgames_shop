@@ -13,7 +13,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductImage extends BaseEntity{
+
+    public ProductImage(Product product, String imageURL) {
+        this.product = product;
+        this.imageURL = imageURL;
+    }
     @ManyToOne
     private Product product;
+    private String originalFileName;
     private String imagePath;
+    private String imageURL;
 }

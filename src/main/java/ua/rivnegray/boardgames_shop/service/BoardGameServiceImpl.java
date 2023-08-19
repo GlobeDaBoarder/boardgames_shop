@@ -4,9 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
@@ -15,6 +20,8 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.exceptions.badRequestExceptions.FilterRequestDeserializationException;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.ImageFileSaveException;
+import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.UnsupportedFileExtensionException;
+import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.UnsupportedFilenameException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameGenreMapper;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMapper;
@@ -25,34 +32,32 @@ import ua.rivnegray.boardgames_shop.model.SortType;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
+import ua.rivnegray.boardgames_shop.repository.ProductImageRepository;
 import ua.rivnegray.boardgames_shop.repository.specifications.BoardGameSpecification;
+import ua.rivnegray.common_utils.CustomApplicationProperties;
 
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class BoardGameServiceImpl implements BoardGameService {
-    private static final String IMAGES_DIR = "/home/globe/rivnegray/images/";
-    private static final int PAGE_SIZE = 10;
+
     BoardGameRepository boardGameRepository;
     BoardGameMapper boardGameMapper;
-
     BoardGameGenreRepository boardGameGenreRepository;
-
     BoardGameGenreMapper boardGameGenreMapper;
-
     BoardGameMechanicRepository boardGameMechanicRepository;
-
     BoardGameMechanicMapper boardGameMechanicMapper;
-
     EntityManager  entityManager;
+    ProductImageRepository productImageRepository;
+
+    CustomApplicationProperties customApplicationProperties;
 
     @Autowired
     public BoardGameServiceImpl(BoardGameRepository boardGameRepository, BoardGameMapper boardGameMapper,
@@ -60,7 +65,9 @@ public class BoardGameServiceImpl implements BoardGameService {
                                 BoardGameMechanicRepository boardGameMechanicRepository,
                                 EntityManager entityManager,
                                 BoardGameGenreMapper boardGameGenreMapper,
-                                BoardGameMechanicMapper boardGameMechanicMapper) {
+                                BoardGameMechanicMapper boardGameMechanicMapper,
+                                ProductImageRepository productImageRepository,
+                                CustomApplicationProperties customApplicationProperties) {
         this.boardGameRepository = boardGameRepository;
         this.boardGameMapper = boardGameMapper;
         this.boardGameGenreRepository = boardGameGenreRepository;
@@ -68,6 +75,8 @@ public class BoardGameServiceImpl implements BoardGameService {
         this.entityManager = entityManager;
         this.boardGameGenreMapper = boardGameGenreMapper;
         this.boardGameMechanicMapper = boardGameMechanicMapper;
+        this.productImageRepository = productImageRepository;
+        this.customApplicationProperties = customApplicationProperties;
     }
 
     @Override
@@ -79,7 +88,7 @@ public class BoardGameServiceImpl implements BoardGameService {
                         filterDTOEncoded != null?
                                 getFilterSpecificationFromFilterDto(convertFilterStringDtoToFilterDto(filterDTOEncoded)):
                                 Specification.where(null),
-                        PageRequest.of(page, PAGE_SIZE,
+                        PageRequest.of(page, customApplicationProperties.getPageSize(),
                                 sort != null?Sort.by(sort.getDirection(), sort.getProperty()):Sort.unsorted())
                 ).stream()
                 .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
@@ -191,23 +200,74 @@ public class BoardGameServiceImpl implements BoardGameService {
         }
     }
 
+    /**
+     *
+     * @param id id of board game to add image to
+     * @param imageFile image file to add
+     * @throws ImageFileSaveException if image file saving failed
+     * @return BoardGameDto with added image
+     */
     @Override
-    public BoardGameSummaryDto uploadAndAddImage(Long id, MultipartFile imageFile) {
-        String fileName = id + "_" + imageFile.getOriginalFilename();
-        String filePath = IMAGES_DIR + fileName;
-
-        // Save the file to the filesystem
+    public BoardGameDto uploadAndAddImage(Long id, MultipartFile imageFile) {
         try {
+            ProductImage productImage = this.productImageRepository.save(new ProductImage());
+
+            Path filePath = Path.of(customApplicationProperties.getImagesDirectory() + productImage.getId().toString()
+                    + extractImageExtensionFromFilename(imageFile.getOriginalFilename()));
+
+            BoardGame boardgame = this.fetchBoardGameById(id);
+            productImage.setImagePath(filePath.toString());
+            productImage.setProduct(boardgame);
+            productImage.setOriginalFileName(imageFile.getOriginalFilename());
+            productImage.setImageURL(customApplicationProperties.getBaseImagesUrl() + filePath.getFileName());
+
+            boardgame.getProductImages().add(productImage);
+            this.boardGameRepository.save(boardgame);
+
             byte[] bytes = imageFile.getBytes();
-            Path path = Paths.get(filePath);
-            Files.write(path, bytes);
+            Files.write(filePath, bytes);
+
+            return this.boardGameMapper.boardGameToBoardGameDto(boardgame);
         } catch (IOException e) {
             throw new ImageFileSaveException(e);
         }
+    }
 
-        // Update the boardgame entity with the file path
-        BoardGame boardgame = this.fetchBoardGameById(id);
-        boardgame.getProductImages().add(new ProductImage(boardgame, filePath));
-        return boardGameMapper.boardGameToBoardGameSummaryDto(this.boardGameRepository.save(boardgame));
+    /**
+     * <h2>Extracts image extension from filename</h2>
+     * @param filename filename to extract extension from
+     * @throws UnsupportedFilenameException if filename is null or blank
+     * @throws UnsupportedFileExtensionException if filename has unsupported extension
+     * @return image extension
+     */
+    @Override
+    public  String extractImageExtensionFromFilename(@Nullable String filename){
+        if (filename == null || filename.isBlank()){
+            throw new UnsupportedFilenameException(filename);
+        }
+
+        String extension =  filename.substring(filename.lastIndexOf("."));
+        if (!customApplicationProperties.getSupportedImageExtensions().contains(extension)) {
+            throw new UnsupportedFileExtensionException(extension);
+        }
+
+        return extension;
+    }
+
+    @Override
+    public Resource getBoardGameImage(String filename) {
+        return new FileSystemResource(customApplicationProperties.getImagesDirectory() + filename);
+    }
+
+    @Override
+    public MediaType getFilenameMediaType(String filename) {
+        String extension = extractImageExtensionFromFilename(filename);
+        if (extension.equals(".jpg") || extension.equals(".jpeg")){
+            return MediaType.IMAGE_JPEG;
+        } else if (extension.equals(".png")){
+            return MediaType.IMAGE_PNG;
+        } else {
+            throw new UnsupportedFileExtensionException(extension);
+        }
     }
 }

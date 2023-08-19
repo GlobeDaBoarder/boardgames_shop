@@ -434,6 +434,44 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
+            * GET /boardgames/images/{filename} : Retrieve a specific image for a board game
+            *
+                * @param filename The filename of the image to retrieve (e.g., \&quot;1.png\&quot;) (required)
+            * @return Image retrieved successfully (status code 200)
+                *         or Bad Request (status code 400)
+                *         or Unauthorized (status code 401)
+                *         or Forbidden (status code 403)
+                *         or Boardgame or Image not found (status code 404)
+            */
+                @Operation(
+                operationId = "getBoardGameImage",
+                    summary = "Retrieve a specific image for a board game",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "Image retrieved successfully", content = {
+                        @Content(mediaType = "image/jpeg", schema = @Schema(implementation = org.springframework.core.io.Resource.class)),
+                        @Content(mediaType = "image/png", schema = @Schema(implementation = org.springframework.core.io.Resource.class)),
+                        @Content(mediaType = "image/jpg", schema = @Schema(implementation = org.springframework.core.io.Resource.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Boardgame or Image not found", content = @Content)
+                }
+                )
+                        //allow all
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/boardgames/images/{filename}",
+            produces = { "image/jpeg", "image/png", "image/jpg" }
+            )
+        default ResponseEntity<org.springframework.core.io.Resource> getBoardGameImage(
+        @Parameter(name = "filename", description = "The filename of the image to retrieve (e.g., \"1.png\")", required = true, in = ParameterIn.PATH) @PathVariable("filename") String filename
+            ) {
+            return getDelegate().getBoardGameImage(filename);
+            }
+
+
+            /**
             * GET /boardgames/genres/{id} : Get a genre by id
             *
                 * @param id ID of the genre (required)
@@ -643,7 +681,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * POST /boardgames/{id}/images : Upload an image for a specific boardgame
+            * POST /boardgames/{id}/image : Upload an image for a specific boardgame
             *
                 * @param id The ID of the boardgame to which the image will be associated (required)
                 * @param file  (optional)
@@ -658,7 +696,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     summary = "Upload an image for a specific boardgame",
                 responses = {
                     @ApiResponse(responseCode = "201", description = "Image uploaded and associated successfully", content = {
-                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameSummaryDto.class))
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameDto.class))
                     }),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
@@ -669,11 +707,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
                         //allow all
             @RequestMapping(
             method = RequestMethod.POST,
-            value = "/boardgames/{id}/images",
+            value = "/boardgames/{id}/image",
             produces = { "application/json" },
             consumes = { "multipart/form-data" }
             )
-        default ResponseEntity<BoardGameSummaryDto> uploadAndAddImage(
+        default ResponseEntity<BoardGameDto> uploadAndAddImage(
         @Parameter(name = "id", description = "The ID of the boardgame to which the image will be associated", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
         @Parameter(name = "file", description = "") @RequestPart(value = "file", required = false) MultipartFile file
             ) {

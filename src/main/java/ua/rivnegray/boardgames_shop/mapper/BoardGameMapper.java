@@ -1,6 +1,5 @@
 package ua.rivnegray.boardgames_shop.mapper;
 
-import jdk.jfr.Name;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -47,13 +46,13 @@ public interface BoardGameMapper {
 
     @Named("pickFirstImageURL")
     default String pickFirstImageURL(Set<ProductImage> productImages){
-        return productImages.iterator().next().getImagePath();
+        return productImages.iterator().next().getImageURL();
     }
 
     @Named("mapProductImagesToImageURLs")
     default Set<String> mapProductImagesToImageURLs(Set<ProductImage> productImages){
         return productImages.stream()
-                .map(ProductImage::getImagePath)
+                .map(ProductImage::getImageURL)
                 .collect(Collectors.toSet());
     }
 

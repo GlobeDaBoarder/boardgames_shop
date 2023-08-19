@@ -447,7 +447,7 @@ paths:
           description: Not Found
         '401':
           description: Unauthorized
-  /boardgames/{id}/images:
+  /boardgames/{id}/image:
     post:
       summary: Upload an image for a specific boardgame
       operationId: uploadAndAddImage
@@ -476,7 +476,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BoardGameSummaryDto'
+                $ref: '#/components/schemas/BoardGameDto'
         '400':
           description: Bad Request
         '401':
@@ -485,6 +485,42 @@ paths:
           description: Forbidden
         '404':
           description: Boardgame not found
+  /boardgames/images/{filename}:
+    get:
+      summary: Retrieve a specific image for a board game
+      operationId: getBoardGameImage
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          description: The filename of the image to retrieve (e.g., "1.png")
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Image retrieved successfully
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+            image/png:
+              schema:
+                type: string
+                format: binary
+            image/jpg:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Boardgame or Image not found
+
 
 components:
   securitySchemes:
