@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.security;
+package ua.rivnegray.boardgames_shop.config.security;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.JWKSet;

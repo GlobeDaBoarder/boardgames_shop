@@ -12,7 +12,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
-import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
+import ua.rivnegray.boardgames_shop.model.SortType;
     import io.swagger.v3.oas.annotations.ExternalDocumentation;
     import io.swagger.v3.oas.annotations.Operation;
     import io.swagger.v3.oas.annotations.Parameter;
@@ -286,35 +286,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
-            * POST /boardgames/filter/ : filter boardgames
-            *
-                * @param filterBoardGamesRequestDto map of filter properties with their values (required)
-            * @return Filtered successfully (status code 200)
-            */
-                @Operation(
-                operationId = "filterBoardGames",
-                    summary = "filter boardgames",
-                responses = {
-                    @ApiResponse(responseCode = "200", description = "Filtered successfully", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameSummaryDto.class)))
-                    })
-                }
-                )
-                        //allow all
-            @RequestMapping(
-            method = RequestMethod.POST,
-            value = "/boardgames/filter/",
-            produces = { "application/json" },
-            consumes = { "application/json" }
-            )
-        default ResponseEntity<List<BoardGameSummaryDto>> filterBoardGames(
-        @Parameter(name = "FilterBoardGamesRequestDto", description = "map of filter properties with their values", required = true) @Valid @RequestBody FilterBoardGamesRequestDto filterBoardGamesRequestDto
-            ) {
-            return getDelegate().filterBoardGames(filterBoardGamesRequestDto);
-            }
-
-
-            /**
             * GET /boardgames/archived/ : get all archived boardgames
             *
             * @return OK (status code 200)
@@ -347,6 +318,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
             /**
             * GET /boardgames : Get all boardgames
             *
+                * @param search search in product name and description for some key words (optional)
+                * @param filter  URL encode this DTO: { \&quot;manufacturers\&quot;:[\&quot;string\&quot;], \&quot;minProductPrice\&quot;:0, \&quot;maxProductPrice\&quot;:0, \&quot;boardGameGenres\&quot;:[\&quot;string\&quot;], \&quot;boardGameMechanics\&quot;:[\&quot;string\&quot;], \&quot;minAges\&quot;:[0], \&quot;playerCounts\&quot;:[0], \&quot;minGameDuration\&quot;:0, \&quot;maxGameDuration\&quot;:0, \&quot;boardGameLanguages\&quot;:[\&quot;ENGLISH\&quot;]}  (optional)
+                * @param sort sort by: price (asc, desc), name (asc, desc), newest (optional)
+                * @param page current page number (optional, default to 0)
             * @return OK (status code 200)
             */
                 @Operation(
@@ -365,9 +340,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
             produces = { "application/json" }
             )
         default ResponseEntity<List<BoardGameSummaryDto>> getAllBoardGames(
-        
+        @Parameter(name = "search", description = "search in product name and description for some key words", in = ParameterIn.QUERY) @Valid @RequestParam(value = "search", required = false) String search,
+        @Parameter(name = "filter", description = " URL encode this DTO: { \"manufacturers\":[\"string\"], \"minProductPrice\":0, \"maxProductPrice\":0, \"boardGameGenres\":[\"string\"], \"boardGameMechanics\":[\"string\"], \"minAges\":[0], \"playerCounts\":[0], \"minGameDuration\":0, \"maxGameDuration\":0, \"boardGameLanguages\":[\"ENGLISH\"]} ", in = ParameterIn.QUERY) @Valid @RequestParam(value = "filter", required = false) String filter,
+        @Parameter(name = "sort", description = "sort by: price (asc, desc), name (asc, desc), newest", in = ParameterIn.QUERY) @Valid @RequestParam(value = "sort", required = false) SortType sort,
+        @Parameter(name = "page", description = "current page number", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
             ) {
-            return getDelegate().getAllBoardGames();
+            return getDelegate().getAllBoardGames(search, filter, sort, page);
             }
 
 
@@ -456,6 +434,44 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 
             /**
+            * GET /boardgames/images/{filename} : Retrieve a specific image for a board game
+            *
+                * @param filename The filename of the image to retrieve (e.g., \&quot;1.png\&quot;) (required)
+            * @return Image retrieved successfully (status code 200)
+                *         or Bad Request (status code 400)
+                *         or Unauthorized (status code 401)
+                *         or Forbidden (status code 403)
+                *         or Boardgame or Image not found (status code 404)
+            */
+                @Operation(
+                operationId = "getBoardGameImage",
+                    summary = "Retrieve a specific image for a board game",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "Image retrieved successfully", content = {
+                        @Content(mediaType = "image/jpeg", schema = @Schema(implementation = org.springframework.core.io.Resource.class)),
+                        @Content(mediaType = "image/png", schema = @Schema(implementation = org.springframework.core.io.Resource.class)),
+                        @Content(mediaType = "image/jpg", schema = @Schema(implementation = org.springframework.core.io.Resource.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Boardgame or Image not found", content = @Content)
+                }
+                )
+                        //allow all
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/boardgames/images/{filename}",
+            produces = { "image/jpeg", "image/png", "image/jpg" }
+            )
+        default ResponseEntity<org.springframework.core.io.Resource> getBoardGameImage(
+        @Parameter(name = "filename", description = "The filename of the image to retrieve (e.g., \"1.png\")", required = true, in = ParameterIn.PATH) @PathVariable("filename") String filename
+            ) {
+            return getDelegate().getBoardGameImage(filename);
+            }
+
+
+            /**
             * GET /boardgames/genres/{id} : Get a genre by id
             *
                 * @param id ID of the genre (required)
@@ -512,34 +528,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
         @Parameter(name = "id", description = "ID of the mechanic", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
             ) {
             return getDelegate().getMechanicById(id);
-            }
-
-
-            /**
-            * GET /boardgames/search/{searchValue} : search
-            *
-                * @param searchValue search value for performing search on boardgames (required)
-            * @return OK (status code 200)
-            */
-                @Operation(
-                operationId = "searchBoardgames",
-                    summary = "search",
-                responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameSummaryDto.class)))
-                    })
-                }
-                )
-                        //allow all
-            @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/boardgames/search/{searchValue}",
-            produces = { "application/json" }
-            )
-        default ResponseEntity<List<BoardGameSummaryDto>> searchBoardgames(
-        @Parameter(name = "searchValue", description = "search value for performing search on boardgames", required = true, in = ParameterIn.PATH) @PathVariable("searchValue") String searchValue
-            ) {
-            return getDelegate().searchBoardgames(searchValue);
             }
 
 
@@ -689,6 +677,45 @@ import org.springframework.security.access.prepost.PreAuthorize;
         @Parameter(name = "CreateAndUpdateBoardGameMechanicDto", description = "Mechanic to update", required = true) @Valid @RequestBody CreateAndUpdateBoardGameMechanicDto createAndUpdateBoardGameMechanicDto
             ) {
             return getDelegate().updateMechanic(id, createAndUpdateBoardGameMechanicDto);
+            }
+
+
+            /**
+            * POST /boardgames/{id}/image : Upload an image for a specific boardgame
+            *
+                * @param id The ID of the boardgame to which the image will be associated (required)
+                * @param file  (optional)
+            * @return Image uploaded and associated successfully (status code 201)
+                *         or Bad Request (status code 400)
+                *         or Unauthorized (status code 401)
+                *         or Forbidden (status code 403)
+                *         or Boardgame not found (status code 404)
+            */
+                @Operation(
+                operationId = "uploadAndAddImage",
+                    summary = "Upload an image for a specific boardgame",
+                responses = {
+                    @ApiResponse(responseCode = "201", description = "Image uploaded and associated successfully", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = BoardGameDto.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Boardgame not found", content = @Content)
+                }
+                )
+                        //allow all
+            @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/boardgames/{id}/image",
+            produces = { "application/json" },
+            consumes = { "multipart/form-data" }
+            )
+        default ResponseEntity<BoardGameDto> uploadAndAddImage(
+        @Parameter(name = "id", description = "The ID of the boardgame to which the image will be associated", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
+        @Parameter(name = "file", description = "") @RequestPart(value = "file", required = false) MultipartFile file
+            ) {
+            return getDelegate().uploadAndAddImage(id, file);
             }
 
         }

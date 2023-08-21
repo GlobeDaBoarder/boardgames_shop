@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.security;
+package ua.rivnegray.boardgames_shop.config.security;
 
 import org.springframework.stereotype.Component;
 

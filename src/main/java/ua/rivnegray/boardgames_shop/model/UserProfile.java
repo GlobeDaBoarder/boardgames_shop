@@ -7,12 +7,14 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ua.rivnegray.common_utils.ValidationConstants;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +29,7 @@ public class UserProfile extends BaseEntity{
 
     // todo change to JSON  
     @Column( unique = true, nullable = false)
+    @Email(regexp = ValidationConstants.emailRegex, message = "test message")
     private String email;
 
     // todo change to JSON

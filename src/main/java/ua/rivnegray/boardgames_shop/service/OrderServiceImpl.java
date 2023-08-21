@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
-import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.FailedToExportDataException;
+import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.ExcelDataExportException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.OrderIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.OrderMapper;
@@ -207,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
 
             return bos.toByteArray();
         } catch (IOException e) {
-            throw new FailedToExportDataException(e);
+            throw new ExcelDataExportException(e);
         }
     }
 

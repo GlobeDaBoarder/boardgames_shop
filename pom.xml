@@ -113,6 +113,13 @@
 			<version>5.2.3</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<version>3.1.2</version>
+			<optional>true</optional>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -140,6 +147,11 @@
 							<groupId>org.mapstruct</groupId>
 							<artifactId>mapstruct-processor</artifactId>
 							<version>1.5.5.Final</version>
+						</path>
+						<path>
+							<groupId>org.springframework.boot</groupId>
+							<artifactId>spring-boot-configuration-processor</artifactId>
+							<version>3.1.2</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
@@ -252,6 +264,7 @@
 								<importMapping>BoardGameMechanicDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto</importMapping>
 								<importMapping>CreateAndUpdateBoardGameMechanicDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto</importMapping>
 								<importMapping>FilterBoardGamesRequestDto=ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto</importMapping>
+								<importMapping>SortType=ua.rivnegray.boardgames_shop.model.SortType</importMapping>
 
 							</importMappings>
 

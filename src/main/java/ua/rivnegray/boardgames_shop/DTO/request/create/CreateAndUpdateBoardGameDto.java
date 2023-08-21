@@ -12,10 +12,18 @@ import java.util.Set;
 /**
  * DTO for {@link ua.rivnegray.boardgames_shop.model.BoardGame}
  */
-public record CreateAndUpdateBoardGameDto(String manufacturer, String productName, String productDescription, BigDecimal productPrice,
-                                          Integer productQuantityInStock, @URL String productImageURL, ProductCategory productCategory,
-                                          String productCode,  String gameSet,  @Schema(example = "[ 1 ]") Set<Long> gameGenreIds,
+public record CreateAndUpdateBoardGameDto(String manufacturer,
+                                          String productName,
+                                          String productDescription,
+                                          BigDecimal productPrice,
+
+                                          Integer productQuantityInStock,
+                                          ProductCategory productCategory,
+                                          String productCode,
+                                          String gameSet,
+                                          @Schema(example = "[ 1 ]") Set<Long> gameGenreIds,
                                           @Schema(example = " [ 1 ]") Set<Long> gameMechanicIds, Integer minAge, Integer minPlayers, Integer maxPlayers,
                                           Integer minGameDuration, Integer maxGameDuration,  BoardGameLanguage gameLanguage,
                                           @URL @Schema(example = "https://boardgamegeek.com/boardgame/13/catan") String BGGLink) implements Serializable {
 }
+
