@@ -25,11 +25,11 @@ public class BoardGame extends Product {
 
     @Builder
     public BoardGame(String manufacturer, String productName, String productDescription, BigDecimal productPrice,
-                     Integer productQuantityInStock, String productImageURL, ProductCategory productCategory,
+                     Integer productQuantityInStock, Set<String> productImageURLs, ProductCategory productCategory,
                      String productCode, String gameSet, Set<BoardGameGenre> gameGenres,
                      Set<BoardGameMechanic> gameMechanics, Integer minAge, Integer minPlayers, Integer maxPlayers,
                      Integer minGameDuration, Integer maxGameDuration, BoardGameLanguage gameLanguage, String BGGLink) {
-        super(manufacturer, productName, productDescription, productPrice, productQuantityInStock, productImageURL, productCategory);
+        super(manufacturer, productName, productDescription, productPrice, productQuantityInStock, productImageURLs , productCategory);
         this.productCode = productCode;
         this.gameSet = gameSet;
         this.gameGenres = gameGenres;

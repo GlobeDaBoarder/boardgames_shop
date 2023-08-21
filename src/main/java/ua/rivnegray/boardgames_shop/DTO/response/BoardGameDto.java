@@ -12,11 +12,26 @@ import java.util.Set;
 /**
  * DTO for {@link ua.rivnegray.boardgames_shop.model.BoardGame}
  */
-public record BoardGameDto(Long id, LocalDateTime dateCreated, LocalDateTime dateUpdated, Boolean isRemoved,
-                            String manufacturer, String productName, String productDescription, BigDecimal productPrice,
-                            Integer productQuantityInStock, String productImageURL, ProductCategory productCategory,
-                            String productCode, String gameSet, Set<BoardGameGenreDto> gameGenres,
-                            Set<BoardGameMechanicDto> gameMechanics, Integer minAge, Integer minPlayers, Integer maxPlayers,
-                            Integer minGameDuration, Integer maxGameDuration, BoardGameLanguage gameLanguage,
-                            @URL String BGGLink) implements Serializable {
+public record BoardGameDto(Long id,
+                           LocalDateTime dateCreated,
+                           LocalDateTime dateUpdated,
+                           Boolean isRemoved,
+                           String manufacturer,
+                           String productName,
+                           String productDescription,
+                           BigDecimal productPrice,
+                           Integer productQuantityInStock,
+                           Set<String> productImageURLs,
+                           ProductCategory productCategory,
+                           String productCode,
+                           String gameSet,
+                           Set<BoardGameGenreDto> gameGenres,
+                           Set<BoardGameMechanicDto> gameMechanics,
+                           Integer minAge,
+                           Integer minPlayers,
+                           Integer maxPlayers,
+                           Integer minGameDuration,
+                           Integer maxGameDuration,
+                           BoardGameLanguage gameLanguage,
+                           @URL String BGGLink) implements Serializable {
 }

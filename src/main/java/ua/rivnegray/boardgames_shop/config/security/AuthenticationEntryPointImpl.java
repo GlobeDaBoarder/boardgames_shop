@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.security;
+package ua.rivnegray.boardgames_shop.config.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

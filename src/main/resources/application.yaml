@@ -20,6 +20,16 @@ springdoc:
   swagger-ui:
     path: /api/ui
 
+custom:
+  images:
+    endpoint-base-url: "/boardgames/images/"
+    storage-path: "/home/globe/rivnegray/images/"
+    supported-image-file-extensions:
+      - ".jpg"
+      - ".jpeg"
+      - ".png"
+  pagination:
+    page-size: 20
 ---
 spring:
   config:
