@@ -52,9 +52,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BoardGameSummaryDto'
+                $ref: '#/components/schemas/CatalogResponseDto'
     post:
       summary: Add a new boardgame
       operationId: addBoardGame
@@ -529,43 +527,16 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    FilterBoardGamesRequestDto:
+    CatalogResponseDto:
       type: object
       properties:
-        manufacturers:
+        boardGames:
           type: array
           items:
-            type: string
-        minProductPrice:
-          type: number
-          format: float
-        maxProductPrice:
-          type: number
-          format: float
-        boardGameGenres:
-          type: array
-          items:
-            type: string
-        boardGameMechanics:
-          type: array
-          items:
-            type: string
-        minAges:
-          type: array
-          items:
-            type: integer
-        playerCounts:
-          type: array
-          items:
-            type: integer
-        minGameDuration:
+            $ref: '#/components/schemas/BoardGameSummaryDto'
+        totalPages:
           type: integer
-        maxGameDuration:
-          type: integer
-        boardGameLanguages:
-          type: array
-          items:
-            $ref: '#/components/schemas/BoardGameLanguage'
+          format: int32
     BoardGameSummaryDto:
       type: object
       properties:

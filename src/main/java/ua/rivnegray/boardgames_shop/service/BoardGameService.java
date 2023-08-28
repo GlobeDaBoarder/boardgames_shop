@@ -8,13 +8,14 @@ import org.springframework.web.multipart.MultipartFile;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
+import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 
 import java.util.List;
 
 public interface BoardGameService {
     @Transactional(readOnly = true)
-    List<BoardGameSummaryDto> getAllBoardGames(String search, String filterDTO, SortType sort, Integer page);
+    CatalogResponseDto getAllBoardGames(String search, String filterDTO, SortType sort, Integer page);
 
     @Transactional
     BoardGameDto addBoardGame(CreateAndUpdateBoardGameDto createBoardGameDto);

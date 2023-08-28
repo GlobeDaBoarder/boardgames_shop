@@ -1,23 +1,23 @@
 package generated.board_game.api;
 
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
-import ua.rivnegray.boardgames_shop.model.SortType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
+import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
+import ua.rivnegray.boardgames_shop.model.SortType;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import javax.annotation.Generated;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * A delegate to be called by the {@link BoardgamesApiController}}.
@@ -194,14 +194,14 @@ public interface BoardgamesApiDelegate {
      * @return OK (status code 200)
      * @see BoardgamesApi#getAllBoardGames
      */
-    default ResponseEntity<List<BoardGameSummaryDto>> getAllBoardGames(String search,
+    default ResponseEntity<CatalogResponseDto> getAllBoardGames(String search,
         String filter,
         SortType sort,
         Integer page) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 }, { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 } ]";
+                    String exampleString = "{ \"boardGames\" : [ { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 }, { \"productImageURL\" : \"productImageURL\", \"id\" : 0, \"productName\" : \"productName\", \"productPrice\" : 6.0274563, \"productQuantityInStock\" : 1 } ], \"totalPages\" : 5 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

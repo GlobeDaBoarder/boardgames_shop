@@ -5,36 +5,38 @@
 */
 package generated.board_game.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
+import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
-    import io.swagger.v3.oas.annotations.ExternalDocumentation;
-    import io.swagger.v3.oas.annotations.Operation;
-    import io.swagger.v3.oas.annotations.Parameter;
-    import io.swagger.v3.oas.annotations.Parameters;
-    import io.swagger.v3.oas.annotations.media.ArraySchema;
-    import io.swagger.v3.oas.annotations.media.Content;
-    import io.swagger.v3.oas.annotations.media.Schema;
-    import io.swagger.v3.oas.annotations.responses.ApiResponse;
-    import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-    import io.swagger.v3.oas.annotations.tags.Tag;
-    import io.swagger.v3.oas.annotations.enums.ParameterIn;
-    import org.springframework.http.ResponseEntity;
-    import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-    import javax.validation.Valid;
-    import javax.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
 import javax.annotation.Generated;
-import org.springframework.security.access.prepost.PreAuthorize;
+import javax.validation.Valid;
+import java.util.List;
 
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
@@ -329,7 +331,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     summary = "Get all boardgames",
                 responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = {
-                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameSummaryDto.class)))
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = CatalogResponseDto.class))
                     })
                 }
                 )
@@ -339,7 +341,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
             value = "/boardgames",
             produces = { "application/json" }
             )
-        default ResponseEntity<List<BoardGameSummaryDto>> getAllBoardGames(
+        default ResponseEntity<CatalogResponseDto> getAllBoardGames(
         @Parameter(name = "search", description = "search in product name and description for some key words", in = ParameterIn.QUERY) @Valid @RequestParam(value = "search", required = false) String search,
         @Parameter(name = "filter", description = " URL encode this DTO: { \"manufacturers\":[\"string\"], \"minProductPrice\":0, \"maxProductPrice\":0, \"boardGameGenres\":[\"string\"], \"boardGameMechanics\":[\"string\"], \"minAges\":[0], \"playerCounts\":[0], \"minGameDuration\":0, \"maxGameDuration\":0, \"boardGameLanguages\":[\"ENGLISH\"]} ", in = ParameterIn.QUERY) @Valid @RequestParam(value = "filter", required = false) String filter,
         @Parameter(name = "sort", description = "sort by: price (asc, desc), name (asc, desc), newest", in = ParameterIn.QUERY) @Valid @RequestParam(value = "sort", required = false) SortType sort,

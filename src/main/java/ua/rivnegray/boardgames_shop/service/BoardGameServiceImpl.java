@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,6 +20,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
+import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.ImageProperties;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.PaginationProperties;
 import ua.rivnegray.boardgames_shop.exceptions.badRequestExceptions.FilterRequestDeserializationException;
@@ -43,7 +45,6 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,19 +87,25 @@ public class BoardGameServiceImpl implements BoardGameService {
     }
 
     @Override
-    public List<BoardGameSummaryDto> getAllBoardGames(String search, String filterDTOEncoded, SortType sort, Integer page) {
+    public CatalogResponseDto getAllBoardGames(String search, String filterDTOEncoded, SortType sort, Integer pageNumber) {
         if (search != null && !search.isBlank()) {
-            return searchBoardgames(search);
+            return searchBoardGames(search, pageNumber);
         }
-        return this.boardGameRepository.findAll(
+        Page<BoardGame> page = this.boardGameRepository.findAll(
                         filterDTOEncoded != null?
                                 getFilterSpecificationFromFilterDto(convertFilterStringDtoToFilterDto(filterDTOEncoded)):
                                 Specification.where(null),
-                        PageRequest.of(page, paginationProperties.getPageSize(),
+                        PageRequest.of(pageNumber, paginationProperties.getPageSize(),
                                 sort != null?Sort.by(sort.getDirection(), sort.getProperty()):Sort.unsorted())
-                ).stream()
-                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
-                .collect(Collectors.toList());
+                );
+
+        return new CatalogResponseDto(
+                page.getContent().stream()
+                        .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
+                        .collect(Collectors.toList()),
+                page.getTotalPages()
+        );
+
     }
 
     @Override
@@ -167,34 +174,22 @@ public class BoardGameServiceImpl implements BoardGameService {
                 BoardGameSpecification.hasMinAges(filterBoardGamesRequestDto.minAges()),
                 BoardGameSpecification.hasPlayersInRange(filterBoardGamesRequestDto.playerCounts()),
                 BoardGameSpecification.hasGameDurationInRange(filterBoardGamesRequestDto.minGameDuration(), filterBoardGamesRequestDto.maxGameDuration()),
-                BoardGameSpecification.hasLanguage(filterBoardGamesRequestDto.boardGameLanguages()),
-                //this is necessary to not show archived boardgames in the search results
-                BoardGameSpecification.hasIsRemovedFalse()
+                BoardGameSpecification.hasLanguage(filterBoardGamesRequestDto.boardGameLanguages())
         );
     }
 
-    private List<BoardGameSummaryDto> searchBoardgames(String searchValue) {
-        List<BoardGame> titleMatches = boardGameRepository.findAllByProductNameContainingIgnoreCase(searchValue);
+    private CatalogResponseDto searchBoardGames(String searchValue, Integer pageNumber) {
+        Page<BoardGame> page = this.boardGameRepository
+                .findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse(
+                        searchValue,
+                        PageRequest.of(pageNumber, paginationProperties.getPageSize()));
 
-        List<Long> idsToExclude = titleMatches.stream()
-                .map(BoardGame::getId)
-                .toList();
-
-        List<BoardGame> descriptionMatches;
-
-        if (idsToExclude.isEmpty()){
-            descriptionMatches = boardGameRepository.findAllByProductDescriptionContainingIgnoreCase(searchValue);
-        } else {
-            descriptionMatches = boardGameRepository.findAllByProductDescriptionContainingIgnoreCaseAndIdNotIn(searchValue, idsToExclude);
-        }
-
-        List<BoardGame> combinedResults = new ArrayList<>();
-        combinedResults.addAll(titleMatches);
-        combinedResults.addAll(descriptionMatches);
-
-        return combinedResults.stream()
-                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
-                .collect(Collectors.toList());
+        return new CatalogResponseDto(
+                page.getContent().stream()
+                        .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
+                        .collect(Collectors.toList()),
+                page.getTotalPages()
+        );
     }
 
     private FilterBoardGamesRequestDto convertFilterStringDtoToFilterDto(String filterDTOEncoded) {
