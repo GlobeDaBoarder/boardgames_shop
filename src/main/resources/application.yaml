@@ -41,7 +41,9 @@ spring:
     password: ${DB_PASSWORD}
 server:
   port: 8080
-
+custom:
+  images:
+    storage-path: "/app/images/"
 ---
 spring:
   config:
@@ -65,4 +67,7 @@ spring:
     password: ${DB_PASSWORD}
 server:
   port: 8080
+custom:
+  images:
+    storage-path: "/app/images/"
 

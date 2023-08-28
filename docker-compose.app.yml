@@ -2,15 +2,16 @@ version: '3'
 services:
   db:
     image: mysql:8.0.33-debian
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: shop
     ports:
       - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
     networks:
       - app-network
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: shop
+    restart: always
 
   app:
     image: gl0be/app:__TAG__
@@ -19,6 +20,7 @@ services:
       - "8080:8080"
     volumes:
       - ${VM_LOGS_PATH}:/app/logs
+      - ${VM_IMAGES_PATH}:/app/images
     networks:
       - app-network
     environment:
@@ -27,6 +29,7 @@ services:
       DB_URL: ${DB_URL}
       WAIT_HOSTS: db:3306
       SPRING_PROFILES_ACTIVE: dev-remote-VM
+    restart: always
 
 networks:
   app-network:

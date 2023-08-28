@@ -3,6 +3,8 @@ package ua.rivnegray.boardgames_shop.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -47,6 +49,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class BoardGameServiceImpl implements BoardGameService {
+    private final static Logger LOGGER = LoggerFactory.getLogger(BoardGameServiceImpl.class);
 
     BoardGameRepository boardGameRepository;
     BoardGameMapper boardGameMapper;
@@ -217,6 +220,8 @@ public class BoardGameServiceImpl implements BoardGameService {
 
             Path filePath = Path.of(imageProperties.getStoragePath() + productImage.getId().toString()
                     + extractImageExtensionFromFilename(imageFile.getOriginalFilename()));
+
+            LOGGER.debug("saving image at: " + filePath);
 
             BoardGame boardgame = this.fetchBoardGameById(id);
             productImage.setImagePath(filePath.toString());
