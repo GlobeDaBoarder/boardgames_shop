@@ -1,7 +1,13 @@
 package ua.rivnegray.boardgames_shop.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 
@@ -10,9 +16,24 @@ import java.util.List;
 @Repository
 public interface BoardGameRepository extends JpaRepository<BoardGame, Long>, JpaSpecificationExecutor<BoardGame> {
     List<BoardGame> findAllByIsRemovedIsTrue();
-    List<BoardGame> findAllByProductNameContainingIgnoreCase(String productName);
 
-    List<BoardGame> findAllByProductDescriptionContainingIgnoreCase(String productDescription);
+    @Query(
+        """
+        SELECT bg FROM BoardGame bg
+        WHERE bg.isRemoved = false
+        """
+    )
+    Page<BoardGame> findAllByIsRemovedIsFalse(@Nullable Specification<BoardGame> spec, Pageable pageable);
 
-    List<BoardGame> findAllByProductDescriptionContainingIgnoreCaseAndIdNotIn(String productDescription, List<Long> ids);
+    @Query(
+        """
+        SELECT bg FROM BoardGame bg
+        WHERE bg.isRemoved = false
+        AND (UPPER(bg.productName) LIKE UPPER(CONCAT('%', :searchValue, '%'))
+            OR UPPER(bg.productDescription) LIKE UPPER(CONCAT('%', :searchValue, '%')))
+        ORDER BY
+        CASE WHEN UPPER(bg.productName) LIKE UPPER(CONCAT('%', :searchValue, '%')) THEN 1 ELSE 2 END
+        """
+    )
+    Page<BoardGame> findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse(@Param("searchValue") String searchValue, Pageable pageable);
 }

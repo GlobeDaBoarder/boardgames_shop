@@ -3,7 +3,6 @@ package ua.rivnegray.boardgames_shop.delegateService;
 import generated.board_game.api.BoardgamesApiDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -16,6 +15,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
+import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 import ua.rivnegray.boardgames_shop.service.BoardGameGenreService;
 import ua.rivnegray.boardgames_shop.service.BoardGameMechanicService;
@@ -68,7 +68,7 @@ public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<BoardGameSummaryDto>> getAllBoardGames(String search, String filter, SortType sort, Integer page) {
+    public ResponseEntity<CatalogResponseDto> getAllBoardGames(String search, String filter, SortType sort, Integer page) {
         return ResponseEntity.ok(this.boardGameService.getAllBoardGames(search, filter, sort, page));
     }
 
