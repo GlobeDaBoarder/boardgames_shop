@@ -10,12 +10,14 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameGenreIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameMechanicIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.ImageNotFoundException;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
 import ua.rivnegray.boardgames_shop.model.ProductImage;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
+import ua.rivnegray.boardgames_shop.repository.ProductImageRepository;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,6 +58,13 @@ public interface BoardGameMapper {
                 .collect(Collectors.toSet());
     }
 
+    @Named("mapImageURLsToProductImages")
+    default Set<ProductImage> mapImageURLsToProductImages(Set<String> imageURLs, @Context ProductImageRepository productImageRepository){
+        return imageURLs.stream()
+                .map(url -> productImageRepository.findByImageURL(url).orElseThrow(() -> new ImageNotFoundException(url)))
+                .collect(Collectors.toSet());
+    }
+
 
     @Mapping(source = "productImages", target = "productImageURLs", qualifiedByName = "mapProductImagesToImageURLs")
     BoardGameDto boardGameToBoardGameDto(BoardGame boardGame);
@@ -68,9 +77,11 @@ public interface BoardGameMapper {
 
     @Mapping(target = "gameGenres", source = "gameGenreIds", qualifiedByName = "genreIdsToGenres")
     @Mapping(target = "gameMechanics", source = "gameMechanicIds", qualifiedByName = "mechanicIdsToMechanics")
+    @Mapping(target = "productImages", source = "productImageURLs", qualifiedByName = "mapImageURLsToProductImages")
     void updateBoardGameFromDto(CreateAndUpdateBoardGameDto dto, @MappingTarget BoardGame game,
                                 @Context BoardGameGenreRepository boardGameGenreRepository,
-                                @Context BoardGameMechanicRepository boardGameMechanicRepository);
+                                @Context BoardGameMechanicRepository boardGameMechanicRepository,
+                                @Context ProductImageRepository productImageRepository);
 
     @Mapping(source = "productImages", target = "productImageURL", qualifiedByName = "pickFirstImageURL")
     BoardGameSummaryDto boardGameToBoardGameSummaryDto(BoardGame boardGame);
