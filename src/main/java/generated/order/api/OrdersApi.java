@@ -5,33 +5,33 @@
 */
 package generated.order.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.format.annotation.DateTimeFormat;
-import java.time.LocalDate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
-    import io.swagger.v3.oas.annotations.ExternalDocumentation;
-    import io.swagger.v3.oas.annotations.Operation;
-    import io.swagger.v3.oas.annotations.Parameter;
-    import io.swagger.v3.oas.annotations.Parameters;
-    import io.swagger.v3.oas.annotations.media.ArraySchema;
-    import io.swagger.v3.oas.annotations.media.Content;
-    import io.swagger.v3.oas.annotations.media.Schema;
-    import io.swagger.v3.oas.annotations.responses.ApiResponse;
-    import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-    import io.swagger.v3.oas.annotations.tags.Tag;
-    import io.swagger.v3.oas.annotations.enums.ParameterIn;
-    import org.springframework.http.ResponseEntity;
-    import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-    import javax.validation.Valid;
-    import javax.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
 import javax.annotation.Generated;
-import org.springframework.security.access.prepost.PreAuthorize;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.List;
 
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
@@ -99,7 +99,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        //allow all
+                        @PreAuthorize("permitAll")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/orders",

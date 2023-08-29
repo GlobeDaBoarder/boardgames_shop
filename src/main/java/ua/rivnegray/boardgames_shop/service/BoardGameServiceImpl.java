@@ -91,7 +91,7 @@ public class BoardGameServiceImpl implements BoardGameService {
         if (search != null && !search.isBlank()) {
             return searchBoardGames(search, pageNumber);
         }
-        Page<BoardGame> page = this.boardGameRepository.findAll(
+        Page<BoardGame> page = this.boardGameRepository.findAllByIsRemovedIsFalse(
                         filterDTOEncoded != null?
                                 getFilterSpecificationFromFilterDto(convertFilterStringDtoToFilterDto(filterDTOEncoded)):
                                 Specification.where(null),

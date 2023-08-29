@@ -234,7 +234,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                         @PreAuthorize("hasAuthority('SCOPE_{{x-access-permission}}')")
                 {{/x-access-permission}}
                 {{^x-access-permission}}
-                        //allow all
+                        @PreAuthorize("permitAll")
                 {{/x-access-permission}}
             {{/vendorExtensions}}
             @RequestMapping(
