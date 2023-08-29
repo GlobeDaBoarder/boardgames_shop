@@ -1,7 +1,9 @@
 package ua.rivnegray.boardgames_shop.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(indexes = {@Index(name = "product_image_hash_index", columnList = "imageHash")})
 public class ProductImage extends BaseEntity{
 
     public ProductImage(Product product, String imageURL) {
@@ -23,4 +26,5 @@ public class ProductImage extends BaseEntity{
     private String originalFileName;
     private String imagePath;
     private String imageURL;
+    private String imageHash;
 }
