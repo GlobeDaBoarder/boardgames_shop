@@ -16,14 +16,24 @@ public record CreateAndUpdateBoardGameDto(String manufacturer,
                                           String productName,
                                           String productDescription,
                                           BigDecimal productPrice,
-
                                           Integer productQuantityInStock,
+                                          @Schema(example = "[ \"/boardgames/images/15.png\" ]")
+                                          Set<String> productImageURLs,
                                           ProductCategory productCategory,
                                           String productCode,
                                           String gameSet,
-                                          @Schema(example = "[ 1 ]") Set<Long> gameGenreIds,
-                                          @Schema(example = " [ 1 ]") Set<Long> gameMechanicIds, Integer minAge, Integer minPlayers, Integer maxPlayers,
-                                          Integer minGameDuration, Integer maxGameDuration,  BoardGameLanguage gameLanguage,
-                                          @URL @Schema(example = "https://boardgamegeek.com/boardgame/13/catan") String BGGLink) implements Serializable {
+                                          @Schema(example = "[ 1 ]")
+                                          Set<Long> gameGenreIds,
+                                          @Schema(example = " [ 1 ]")
+                                          Set<Long> gameMechanicIds,
+                                          Integer minAge,
+                                          Integer minPlayers,
+                                          Integer maxPlayers,
+                                          Integer minGameDuration,
+                                          Integer maxGameDuration,
+                                          BoardGameLanguage gameLanguage,
+                                          @URL
+                                          @Schema(example = "https://boardgamegeek.com/boardgame/13/catan")
+                                          String BGGLink) implements Serializable {
 }
 

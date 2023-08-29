@@ -129,7 +129,7 @@ public class BoardGameServiceImpl implements BoardGameService {
     public BoardGameDto updateBoardGame(Long id, CreateAndUpdateBoardGameDto updateBoardGameDto) {
         BoardGame boardGame = fetchBoardGameById(id);
         this.boardGameMapper.updateBoardGameFromDto(updateBoardGameDto, boardGame, this.boardGameGenreRepository,
-                this.boardGameMechanicRepository);
+                this.boardGameMechanicRepository, this.productImageRepository);
         this.boardGameRepository.save(boardGame);
         entityManager.flush();
         entityManager.refresh(boardGame); // entity now has the @UpdateTimestamp field updated
@@ -239,7 +239,7 @@ public class BoardGameServiceImpl implements BoardGameService {
 
             return this.boardGameMapper.boardGameToBoardGameDto(boardgame);
         } catch (IOException e) {
-            throw new ImageFileSaveException(e);
+            throw new ImageFileSaveException(imageFile.getOriginalFilename(), e);
         }
     }
 

@@ -7,7 +7,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -54,4 +53,7 @@ public abstract class Product extends BaseEntity{
     private Set<ProductImage> productImages;
 
     private ProductCategory productCategory;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<ProductInShoppingCart> productInShoppingCarts;
 }
