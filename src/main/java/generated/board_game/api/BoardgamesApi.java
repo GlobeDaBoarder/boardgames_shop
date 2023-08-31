@@ -335,7 +335,7 @@ import java.util.List;
                     })
                 }
                 )
-                        //allow all
+                        @PreAuthorize("permitAll")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames",
@@ -365,7 +365,7 @@ import java.util.List;
                     })
                 }
                 )
-                        //allow all
+                        @PreAuthorize("permitAll")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/genres",
@@ -392,7 +392,7 @@ import java.util.List;
                     })
                 }
                 )
-                        //allow all
+                        @PreAuthorize("permitAll")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/mechanics",
@@ -422,7 +422,7 @@ import java.util.List;
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
-                        //allow all
+                        @PreAuthorize("permitAll")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/{id}",
@@ -460,7 +460,7 @@ import java.util.List;
                     @ApiResponse(responseCode = "404", description = "Boardgame or Image not found", content = @Content)
                 }
                 )
-                        //allow all
+                        @PreAuthorize("permitAll")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/images/{filename}",
@@ -490,7 +490,7 @@ import java.util.List;
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
-                        //allow all
+                        @PreAuthorize("permitAll")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/genres/{id}",
@@ -520,7 +520,7 @@ import java.util.List;
                     @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
                 }
                 )
-                        //allow all
+                        @PreAuthorize("permitAll")
             @RequestMapping(
             method = RequestMethod.GET,
             value = "/boardgames/mechanics/{id}",
@@ -704,9 +704,12 @@ import java.util.List;
                     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Boardgame not found", content = @Content)
+                },
+                security = {
+                    @SecurityRequirement(name = "bearerAuth")
                 }
                 )
-                        //allow all
+                        @PreAuthorize("hasAuthority('SCOPE_boardGame:create')")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/boardgames/{id}/image",

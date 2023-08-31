@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
@@ -24,6 +25,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.ImageProperties;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.PaginationProperties;
 import ua.rivnegray.boardgames_shop.exceptions.badRequestExceptions.FilterRequestDeserializationException;
+import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.ImageAlreadyExistsException;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.ImageFileSaveException;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.UnsupportedFileExtensionException;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.UnsupportedFilenameException;
@@ -91,7 +93,7 @@ public class BoardGameServiceImpl implements BoardGameService {
         if (search != null && !search.isBlank()) {
             return searchBoardGames(search, pageNumber);
         }
-        Page<BoardGame> page = this.boardGameRepository.findAll(
+        Page<BoardGame> page = this.boardGameRepository.findAllByIsRemovedIsFalse(
                         filterDTOEncoded != null?
                                 getFilterSpecificationFromFilterDto(convertFilterStringDtoToFilterDto(filterDTOEncoded)):
                                 Specification.where(null),
@@ -127,7 +129,7 @@ public class BoardGameServiceImpl implements BoardGameService {
     public BoardGameDto updateBoardGame(Long id, CreateAndUpdateBoardGameDto updateBoardGameDto) {
         BoardGame boardGame = fetchBoardGameById(id);
         this.boardGameMapper.updateBoardGameFromDto(updateBoardGameDto, boardGame, this.boardGameGenreRepository,
-                this.boardGameMechanicRepository);
+                this.boardGameMechanicRepository, this.productImageRepository);
         this.boardGameRepository.save(boardGame);
         entityManager.flush();
         entityManager.refresh(boardGame); // entity now has the @UpdateTimestamp field updated
@@ -211,8 +213,11 @@ public class BoardGameServiceImpl implements BoardGameService {
     @Override
     public BoardGameDto uploadAndAddImage(Long id, MultipartFile imageFile) {
         try {
-            ProductImage productImage = this.productImageRepository.save(new ProductImage());
+            //check if image exists in db
+            checkImageExistence(imageFile);
 
+            // save image entity to db
+            ProductImage productImage = this.productImageRepository.save(new ProductImage());
             Path filePath = Path.of(imageProperties.getStoragePath() + productImage.getId().toString()
                     + extractImageExtensionFromFilename(imageFile.getOriginalFilename()));
 
@@ -223,16 +228,18 @@ public class BoardGameServiceImpl implements BoardGameService {
             productImage.setProduct(boardgame);
             productImage.setOriginalFileName(imageFile.getOriginalFilename());
             productImage.setImageURL(imageProperties.getEndpointBaseUrl() + filePath.getFileName());
+            productImage.setImageHash(DigestUtils.md5DigestAsHex(imageFile.getBytes()));
 
             boardgame.getProductImages().add(productImage);
             this.boardGameRepository.save(boardgame);
 
+            // save image file to filesystem
             byte[] bytes = imageFile.getBytes();
             Files.write(filePath, bytes);
 
             return this.boardGameMapper.boardGameToBoardGameDto(boardgame);
         } catch (IOException e) {
-            throw new ImageFileSaveException(e);
+            throw new ImageFileSaveException(imageFile.getOriginalFilename(), e);
         }
     }
 
@@ -272,5 +279,18 @@ public class BoardGameServiceImpl implements BoardGameService {
         } else {
             throw new UnsupportedFileExtensionException(extension);
         }
+    }
+
+
+    /**
+     * Checks if image with same hash already exists in db
+     * @param imageFile image file to check
+     * @throws ImageAlreadyExistsException if image with same hash already exists in db
+     */
+    private void checkImageExistence(MultipartFile imageFile) throws IOException {
+        String imageHash = DigestUtils.md5DigestAsHex(imageFile.getBytes());
+        this.productImageRepository.findByImageHash(imageHash).ifPresent(productImage -> {
+            throw new ImageAlreadyExistsException(imageHash);
+        });
     }
 }

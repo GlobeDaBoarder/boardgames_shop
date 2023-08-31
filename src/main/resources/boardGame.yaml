@@ -449,6 +449,9 @@ paths:
     post:
       summary: Upload an image for a specific boardgame
       operationId: uploadAndAddImage
+      x-access-permission: boardGame:create
+      security:
+          - bearerAuth: [ ]
       parameters:
         - name: id
           in: path

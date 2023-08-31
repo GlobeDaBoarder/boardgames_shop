@@ -5,30 +5,23 @@
 */
 package generated.session.api;
 
-import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
-import ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto;
-    import io.swagger.v3.oas.annotations.ExternalDocumentation;
-    import io.swagger.v3.oas.annotations.Operation;
-    import io.swagger.v3.oas.annotations.Parameter;
-    import io.swagger.v3.oas.annotations.Parameters;
-    import io.swagger.v3.oas.annotations.media.ArraySchema;
-    import io.swagger.v3.oas.annotations.media.Content;
-    import io.swagger.v3.oas.annotations.media.Schema;
-    import io.swagger.v3.oas.annotations.responses.ApiResponse;
-    import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-    import io.swagger.v3.oas.annotations.tags.Tag;
-    import io.swagger.v3.oas.annotations.enums.ParameterIn;
-    import org.springframework.http.ResponseEntity;
-    import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-    import javax.validation.Valid;
-    import javax.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Generated;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto;
+import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
+
+import javax.annotation.Generated;
+import javax.validation.Valid;
 
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
@@ -59,7 +52,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
                     @ApiResponse(responseCode = "409", description = "Conflict, e.g., email already in use", content = @Content)
                 }
                 )
-                        //allow all
+                        @PreAuthorize("permitAll")
             @RequestMapping(
             method = RequestMethod.POST,
             value = "/register",

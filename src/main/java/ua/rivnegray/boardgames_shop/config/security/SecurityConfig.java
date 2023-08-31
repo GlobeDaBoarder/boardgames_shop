@@ -17,6 +17,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,12 +29,17 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private static final Logger LOGGR = LoggerFactory.getLogger(SecurityConfig.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 
     private final UserDetailsService JpaDetailsService;
     private  RSAKey rsaKey;
@@ -57,7 +63,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf().disable()
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/error").permitAll()
@@ -77,6 +84,19 @@ public class SecurityConfig {
     }
 
     @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH", "PUT", "DELETE", "OPTIONS", "HEAD"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -93,10 +113,10 @@ public class SecurityConfig {
         final NimbusJwtEncoder nimbusJwtEncoder = new NimbusJwtEncoder(jwks);
 
         return parameters -> {
-            LOGGR.debug("Encoding JWT with parameters: " + parameters.getClaims());
+            LOGGER.debug("Encoding JWT with parameters: " + parameters.getClaims());
             Jwt jwt = nimbusJwtEncoder.encode(parameters);
-            LOGGR.debug("Encoded JWT value: " + jwt.getTokenValue());
-            LOGGR.debug("Encoded JWT claims: " + jwt.getClaims());
+            LOGGER.debug("Encoded JWT value: " + jwt.getTokenValue());
+            LOGGER.debug("Encoded JWT claims: " + jwt.getClaims());
             return jwt;
         };
     }
@@ -106,10 +126,10 @@ public class SecurityConfig {
         final NimbusJwtDecoder nimbusJwtDecoder = NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
 
         return token -> {
-            LOGGR.debug("Decoding JWT: " + token);
+            LOGGER.debug("Decoding JWT: " + token);
             Jwt jwt = nimbusJwtDecoder.decode(token);
-            LOGGR.debug("Decoded JWT claims: " + jwt.getClaims());
-            LOGGR.debug("Encoded JWT subject: " + jwt.getSubject());
+            LOGGER.debug("Decoded JWT claims: " + jwt.getClaims());
+            LOGGER.debug("Encoded JWT subject: " + jwt.getSubject());
             return jwt;
         };
     }
