@@ -15,6 +15,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
+import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.EmailAlreadyInUseException;
+import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.PhoneAlreadyInUseException;
+import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.TwoUserProfilesFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.ExcelDataExportException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.OrderIdNotFoundException;
@@ -38,6 +41,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -83,11 +87,30 @@ public class OrderServiceImpl implements OrderService {
     // admin orders operations
     @Override
     public OrderDto createOrder(CreateOrderDto createOrderDto) {
-        // todo check for existing user profile by email or phone
+        Optional<UserProfile> userProfileFoundByEmailOptional = this.userProfileRepository.findByEmail(createOrderDto.userProfileDto().email());
+        Optional<UserProfile> userProfileFoundByPhoneOptional = this.userProfileRepository.findByPhone(createOrderDto.userProfileDto().phone());
 
-        UserProfile userProfile = this.userMapper.toUserProfile(createOrderDto.userProfileDto());
+        UserProfile userProfile = null;
+        if(userProfileFoundByPhoneOptional.isPresent() && userProfileFoundByEmailOptional.isPresent()){
+            UserProfile userProfileFoundByPhone = userProfileFoundByPhoneOptional.get();
+            UserProfile userProfileFoundByEmail = userProfileFoundByEmailOptional.get();
+            if(!userProfileFoundByEmail.equals(userProfileFoundByPhone)){
+                throw new TwoUserProfilesFoundException();
+            }
+            userProfile = userProfileFoundByPhoneOptional.get();
+        }
+        else if (userProfileFoundByEmailOptional.isPresent()) {
+            throw new EmailAlreadyInUseException("Only the email you are providing is already in use. Perhaps you got the phone number wrong?");
+        }
+        else if (userProfileFoundByPhoneOptional.isPresent()) {
+            throw new PhoneAlreadyInUseException("Only the phone number you are providing is already in use. Perhaps you got the email wrong?");
+        }
+        else {
+            userProfile = this.userMapper.toUserProfile(createOrderDto.userProfileDto());
+        }
 
         Address address = this.userMapper.toAddress(createOrderDto.addAndUpdateAddressDto());
+
         userProfile.getAddresses().add(address);
 
         this.userProfileRepository.save(userProfile);
