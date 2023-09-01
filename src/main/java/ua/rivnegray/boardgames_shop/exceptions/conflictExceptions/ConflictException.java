@@ -10,4 +10,9 @@ public abstract class ConflictException extends RuntimeException{
         super("Such " + parameterName + " already exists");
         LOGGER.debug(parameterName + " with value" + parameterValue + " already exists");
     }
+
+    public ConflictException(String genericMessage) {
+        super(genericMessage);
+        LOGGER.debug(genericMessage);
+    }
 }
