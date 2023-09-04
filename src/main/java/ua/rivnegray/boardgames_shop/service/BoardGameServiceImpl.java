@@ -218,7 +218,7 @@ public class BoardGameServiceImpl implements BoardGameService {
             productImage.setImagePath(filePath.toString());
             productImage.setProduct(boardgame);
             productImage.setOriginalFileName(imageFile.getOriginalFilename());
-            productImage.setImageURL(imageProperties.getEndpointBaseUrl() + filePath.getFileName());
+            productImage.setImageURL(imageProperties.getServerBaseUrl() + imageProperties.getEndpointBaseUrl() + filePath.getFileName());
             productImage.setImageHash(DigestUtils.md5DigestAsHex(imageFile.getBytes()));
 
             boardgame.getProductImages().add(productImage);
