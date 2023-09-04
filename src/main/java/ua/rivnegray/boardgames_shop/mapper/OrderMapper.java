@@ -13,8 +13,6 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring", uses = {ProductMapper.class, UserMapper.class})
 public interface OrderMapper {
-
-    // todo try to get rid of this method
     @Named("orderItemsToOrderItems")
     default Set<ProductInOrderDto> orderItemsToOrderItems(Set<ProductInOrder> orderItems) {
         Set<ProductInOrderDto> productInOrderDtos = new HashSet<>();

@@ -10,9 +10,6 @@ import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.MapShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
-import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.EmailAlreadyInUseException;
-import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.PhoneAlreadyInUseException;
-import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.TwoUserProfilesFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.UserAlreadyRegisteredException;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.UsernameAlreadyTakenException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
@@ -90,40 +87,13 @@ public class SessionServiceImpl implements SessionsService{
             throw new UsernameAlreadyTakenException(createCustomerUserDto.username());
         }
 
-        Optional<UserProfile> userProfileFoundByEmailOptional = this.userProfileRepository.findByEmail(createCustomerUserDto.email());
-        Optional<UserProfile> userProfileFoundByPhoneOptional = this.userProfileRepository.findByPhone(createCustomerUserDto.phone());
-
-        UserProfile userProfile = null;
-
-        if(userProfileFoundByEmailOptional.isPresent() && userProfileFoundByPhoneOptional.isPresent()){
-            UserProfile userProfileFoundByEmail = userProfileFoundByEmailOptional.get();
-            UserProfile userProfileFoundByPhone = userProfileFoundByPhoneOptional.get();
-            if (!userProfileFoundByEmail.equals(userProfileFoundByPhone)){
-                throw new TwoUserProfilesFoundException();
-            }
-            if (userProfileFoundByEmail.getUserCredentials() != null) {
-                throw new UserAlreadyRegisteredException();
-            }
-
-            userProfile = userProfileFoundByEmail;
-        }
-        else if(userProfileFoundByEmailOptional.isPresent()){
-            throw new EmailAlreadyInUseException(createCustomerUserDto.email());
-        }
-        else if(userProfileFoundByPhoneOptional.isPresent()){
-            throw new PhoneAlreadyInUseException(createCustomerUserDto.phone());
-        }
-        else{
-            userProfile = this.userMapper.toUserProfile(createCustomerUserDto, this.userRoleRepository);
-        }
+        UserProfile userProfile = findOrCreateUserProfile(createCustomerUserDto);
 
         UserCredentials userCredentials = new UserCredentials(createCustomerUserDto.username(), passwordEncoder.encode(createCustomerUserDto.password()));
         userCredentials.setUserProfile(userProfile);
         userProfile.setUserCredentials(userCredentials);
 
         mapShoppingCartDtoToUserProfileCart(mapShoppingCartDto, userProfile);
-        userProfile.getRoles().add(this.userRoleRepository.findUserRoleByRoleName("ROLE_CUSTOMER")
-                .orElseThrow(() -> new RoleNameNotFoundException("ROLE_CUSTOMER")));
 
         this.userProfileRepository.save(userProfile);
 
@@ -131,6 +101,24 @@ public class SessionServiceImpl implements SessionsService{
                 new UsernamePasswordAuthenticationToken(createCustomerUserDto.username(), createCustomerUserDto.password())
         ));
         return new LoginResponseDto(this.userMapper.toUserPublicDto(userProfile), token);
+    }
+
+    private UserProfile findOrCreateUserProfile(CreateCustomerUserDto createCustomerUserDto) {
+        Optional<UserProfile> userProfileFoundByEmail = this.userProfileRepository.findByEmail(createCustomerUserDto.email());
+        if(userProfileFoundByEmail.isPresent()){
+            UserProfile existingProfile = userProfileFoundByEmail.get();
+            if(existingProfile.getUserCredentials() != null) {
+                throw new UserAlreadyRegisteredException();
+            }
+            this.userMapper.updateUserProfile(existingProfile, createCustomerUserDto);
+
+            existingProfile.getRoles().add(this.userRoleRepository.findUserRoleByRoleName("ROLE_CUSTOMER")
+                    .orElseThrow(() -> new RoleNameNotFoundException("ROLE_CUSTOMER")));
+
+            return existingProfile;
+        }
+
+        return this.userMapper.toUserProfile(createCustomerUserDto, this.userRoleRepository);
     }
 
     private void mapShoppingCartDtoToUserProfileCart(MapShoppingCartDto mapShoppingCartDto, UserProfile userProfile) {

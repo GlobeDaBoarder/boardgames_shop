@@ -83,7 +83,7 @@ public class BoardgamesShopApplication {
 			adminCredentials.setUserProfile(adminProfile);
 			adminProfile.setUserCredentials(adminCredentials);
 
-			adminProfile.getAddresses().add(new Address("Yermaka", "1", "33000","Rivne", "Ukraine"));
+			adminProfile.getAddresses().add(new Address("Yermaka", "1", "33000","Rivne", "Ukraine", adminProfile));
 
 			userProfileRepository.save(adminProfile);
 

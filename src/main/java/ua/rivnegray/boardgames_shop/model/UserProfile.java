@@ -26,14 +26,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProfile extends BaseEntity{
-
-    // todo change to JSON  
     @Column( unique = true, nullable = false)
     @Email(regexp = ValidationConstants.emailRegex, message = "test message")
     private String email;
 
-    // todo change to JSON
-    @Column(unique = true)
     private String phone;
 
     @Column( nullable = false)
@@ -45,7 +41,7 @@ public class UserProfile extends BaseEntity{
     @Setter(AccessLevel.NONE)
     private Set<UserRole> roles = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userProfile", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ToString.Exclude
     @Setter(AccessLevel.NONE)
     private Set<Address> addresses = new HashSet<>();
