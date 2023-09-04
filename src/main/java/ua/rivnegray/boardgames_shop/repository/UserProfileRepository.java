@@ -12,6 +12,4 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Long> 
     List<UserProfile> findByRoles_RoleName(String roleName);
 
     Optional<UserProfile> findByEmail(String email);
-
-    Optional<UserProfile> findByPhone(String phone);
 }

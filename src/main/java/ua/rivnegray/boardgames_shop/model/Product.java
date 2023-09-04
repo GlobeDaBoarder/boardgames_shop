@@ -49,7 +49,7 @@ public abstract class Product extends BaseEntity{
     @Column(nullable = false)
     private Integer productQuantityInStock;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ProductImage> productImages;
 
     private ProductCategory productCategory;

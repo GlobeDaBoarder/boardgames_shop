@@ -9,15 +9,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateUserProfileDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
-import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.EmailAlreadyInUseException;
-import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.PhoneAlreadyInUseException;
-import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.TwoUserProfilesFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.ExcelDataExportException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.OrderIdNotFoundException;
@@ -30,6 +29,7 @@ import ua.rivnegray.boardgames_shop.model.OrderStatusDate;
 import ua.rivnegray.boardgames_shop.model.PaymentStatus;
 import ua.rivnegray.boardgames_shop.model.ProductInOrder;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
+import ua.rivnegray.boardgames_shop.repository.AddressRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.OrderRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
@@ -72,46 +72,35 @@ public class OrderServiceImpl implements OrderService {
 
     EntityManager entityManager;
 
+    AddressRepository addressRepository;
+
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, UserMapper userMapper,
                             UserProfileRepository userProfileRepository, BoardGameRepository boardGameRepository,
-                            EntityManager entityManager) {
+                            EntityManager entityManager, AddressRepository addressRepository) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.userMapper = userMapper;
         this.userProfileRepository = userProfileRepository;
         this.boardGameRepository = boardGameRepository;
         this.entityManager = entityManager;
+        this.addressRepository = addressRepository;
     }
 
     // admin orders operations
     @Override
     public OrderDto createOrder(CreateOrderDto createOrderDto) {
-        Optional<UserProfile> userProfileFoundByEmailOptional = this.userProfileRepository.findByEmail(createOrderDto.userProfileDto().email());
-        Optional<UserProfile> userProfileFoundByPhoneOptional = this.userProfileRepository.findByPhone(createOrderDto.userProfileDto().phone());
-
-        UserProfile userProfile = null;
-        if(userProfileFoundByPhoneOptional.isPresent() && userProfileFoundByEmailOptional.isPresent()){
-            UserProfile userProfileFoundByPhone = userProfileFoundByPhoneOptional.get();
-            UserProfile userProfileFoundByEmail = userProfileFoundByEmailOptional.get();
-            if(!userProfileFoundByEmail.equals(userProfileFoundByPhone)){
-                throw new TwoUserProfilesFoundException();
-            }
-            userProfile = userProfileFoundByPhoneOptional.get();
-        }
-        else if (userProfileFoundByEmailOptional.isPresent()) {
-            throw new EmailAlreadyInUseException("Only the email you are providing is already in use. Perhaps you got the phone number wrong?");
-        }
-        else if (userProfileFoundByPhoneOptional.isPresent()) {
-            throw new PhoneAlreadyInUseException("Only the phone number you are providing is already in use. Perhaps you got the email wrong?");
-        }
-        else {
-            userProfile = this.userMapper.toUserProfile(createOrderDto.userProfileDto());
-        }
+        UserProfile userProfile = findOrCreateUserProfile(createOrderDto.userProfileDto());
 
         Address address = this.userMapper.toAddress(createOrderDto.addAndUpdateAddressDto());
-
-        userProfile.getAddresses().add(address);
+        Optional<Address> addressOptional = this.addressRepository.findOne(Example.of(address));
+        if(addressOptional.isPresent()){
+            address = addressOptional.get();
+        }
+        else{
+            address.setUserProfile(userProfile);
+            userProfile.getAddresses().add(address);
+        }
 
         this.userProfileRepository.save(userProfile);
 
@@ -145,6 +134,20 @@ public class OrderServiceImpl implements OrderService {
         entityManager.refresh(order);
 
         return this.orderMapper.orderToOrderDto(order);
+    }
+
+    private UserProfile findOrCreateUserProfile(CreateUserProfileDto createUserProfileDto) {
+        Optional<UserProfile> userProfileFoundByEmail = this.userProfileRepository.findByEmail(createUserProfileDto.email());
+        if(userProfileFoundByEmail.isPresent()){
+            UserProfile existingProfile = userProfileFoundByEmail.get();
+            // if the user is registered already, don't update it's information. Only update if it's not registered
+            if(existingProfile.getUserCredentials() == null)
+                this.userMapper.updateUserProfile(existingProfile, createUserProfileDto);
+
+            return existingProfile;
+        }
+
+        return this.userMapper.toUserProfile(createUserProfileDto);
     }
 
     @Override
