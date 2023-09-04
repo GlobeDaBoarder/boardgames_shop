@@ -13,10 +13,10 @@ import java.net.URI;
 
 @Service
 public class RegisterApiDelegateImpl implements RegisterApiDelegate {
-    SessionsService sessionsService;
+    private final SessionsService sessionsService;
 
     @Autowired
-    public RegisterApiDelegateImpl(SessionsService sessionsService) {
+    RegisterApiDelegateImpl(SessionsService sessionsService) {
         this.sessionsService = sessionsService;
     }
 

@@ -2,14 +2,10 @@ package ua.rivnegray.boardgames_shop.delegateService;
 
 import generated.shopping_cart.api.ShoppingCartApiDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
@@ -23,10 +19,10 @@ import java.util.Optional;
 @Service
 public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
 
-    ShoppingCartService shoppingCartService;
+    private final ShoppingCartService shoppingCartService;
 
     @Autowired
-    public ShoppingCartApiDelegateImpl(ShoppingCartService shoppingCartService) {
+    ShoppingCartApiDelegateImpl(ShoppingCartService shoppingCartService) {
         this.shoppingCartService = shoppingCartService;
     }
 

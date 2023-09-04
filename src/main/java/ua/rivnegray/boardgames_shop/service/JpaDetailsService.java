@@ -14,7 +14,7 @@ public class JpaDetailsService implements UserDetailsService {
     private final UserCredentialsRepository userCredentialsRepository;
 
     @Autowired
-    public JpaDetailsService(UserCredentialsRepository userCredentialsRepository) {
+    JpaDetailsService(UserCredentialsRepository userCredentialsRepository) {
         this.userCredentialsRepository = userCredentialsRepository;
     }
     @Override

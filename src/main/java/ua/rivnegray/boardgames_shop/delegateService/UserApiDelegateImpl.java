@@ -2,7 +2,6 @@ package ua.rivnegray.boardgames_shop.delegateService;
 
 import generated.user.api.UsersApiDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -24,10 +23,10 @@ import java.util.Optional;
 
 @Service
 public class UserApiDelegateImpl implements UsersApiDelegate {
-    UserService userService;
+    private final UserService userService;
 
     @Autowired
-    public UserApiDelegateImpl(UserService userService) {
+    UserApiDelegateImpl(UserService userService) {
         this.userService = userService;
     }
 

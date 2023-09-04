@@ -30,9 +30,7 @@ import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.ImageFil
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.UnsupportedFileExtensionException;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.UnsupportedFilenameException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
-import ua.rivnegray.boardgames_shop.mapper.BoardGameGenreMapper;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMapper;
-import ua.rivnegray.boardgames_shop.mapper.BoardGameMechanicMapper;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.ProductImage;
 import ua.rivnegray.boardgames_shop.model.SortType;
@@ -54,25 +52,20 @@ import java.util.stream.Collectors;
 public class BoardGameServiceImpl implements BoardGameService {
     private final static Logger LOGGER = LoggerFactory.getLogger(BoardGameServiceImpl.class);
 
-    BoardGameRepository boardGameRepository;
-    BoardGameMapper boardGameMapper;
-    BoardGameGenreRepository boardGameGenreRepository;
-    BoardGameGenreMapper boardGameGenreMapper;
-    BoardGameMechanicRepository boardGameMechanicRepository;
-    BoardGameMechanicMapper boardGameMechanicMapper;
-    EntityManager  entityManager;
-    ProductImageRepository productImageRepository;
-
-    ImageProperties imageProperties;
-    PaginationProperties paginationProperties;
+    private final BoardGameRepository boardGameRepository;
+    private final BoardGameMapper boardGameMapper;
+    private final BoardGameGenreRepository boardGameGenreRepository;
+    private final BoardGameMechanicRepository boardGameMechanicRepository;
+    private final EntityManager  entityManager;
+    private final ProductImageRepository productImageRepository;
+    private final ImageProperties imageProperties;
+    private final PaginationProperties paginationProperties;
 
     @Autowired
-    public BoardGameServiceImpl(BoardGameRepository boardGameRepository, BoardGameMapper boardGameMapper,
+    BoardGameServiceImpl(BoardGameRepository boardGameRepository, BoardGameMapper boardGameMapper,
                                 BoardGameGenreRepository boardGameGenreRepository,
                                 BoardGameMechanicRepository boardGameMechanicRepository,
                                 EntityManager entityManager,
-                                BoardGameGenreMapper boardGameGenreMapper,
-                                BoardGameMechanicMapper boardGameMechanicMapper,
                                 ProductImageRepository productImageRepository,
                                 ImageProperties imageProperties,
                                 PaginationProperties paginationProperties){
@@ -81,8 +74,6 @@ public class BoardGameServiceImpl implements BoardGameService {
         this.boardGameGenreRepository = boardGameGenreRepository;
         this.boardGameMechanicRepository = boardGameMechanicRepository;
         this.entityManager = entityManager;
-        this.boardGameGenreMapper = boardGameGenreMapper;
-        this.boardGameMechanicMapper = boardGameMechanicMapper;
         this.productImageRepository = productImageRepository;
         this.imageProperties = imageProperties;
         this.paginationProperties = paginationProperties;
@@ -103,7 +94,7 @@ public class BoardGameServiceImpl implements BoardGameService {
 
         return new CatalogResponseDto(
                 page.getContent().stream()
-                        .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
+                        .map(this.boardGameMapper::boardGameToBoardGameSummaryDto)
                         .collect(Collectors.toList()),
                 page.getTotalPages()
         );
@@ -144,7 +135,7 @@ public class BoardGameServiceImpl implements BoardGameService {
     @Override
     public List<BoardGameSummaryDto> getAllArchivedBoardGames() {
         return this.boardGameRepository.findAllByIsRemovedIsTrue().stream()
-                .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
+                .map(this.boardGameMapper::boardGameToBoardGameSummaryDto)
                 .collect(Collectors.toList());
     }
 
@@ -188,7 +179,7 @@ public class BoardGameServiceImpl implements BoardGameService {
 
         return new CatalogResponseDto(
                 page.getContent().stream()
-                        .map(boardGame -> this.boardGameMapper.boardGameToBoardGameSummaryDto(boardGame))
+                        .map(this.boardGameMapper::boardGameToBoardGameSummaryDto)
                         .collect(Collectors.toList()),
                 page.getTotalPages()
         );
@@ -227,7 +218,7 @@ public class BoardGameServiceImpl implements BoardGameService {
             productImage.setImagePath(filePath.toString());
             productImage.setProduct(boardgame);
             productImage.setOriginalFileName(imageFile.getOriginalFilename());
-            productImage.setImageURL(imageProperties.getEndpointBaseUrl() + filePath.getFileName());
+            productImage.setImageURL(imageProperties.getServerBaseUrl() + imageProperties.getEndpointBaseUrl() + filePath.getFileName());
             productImage.setImageHash(DigestUtils.md5DigestAsHex(imageFile.getBytes()));
 
             boardgame.getProductImages().add(productImage);

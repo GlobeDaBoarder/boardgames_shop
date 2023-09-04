@@ -15,4 +15,5 @@ public class ImageProperties {
     private String storagePath = "/home/globe/rivnegray/images/";
     private String endpointBaseUrl = "/boardgames/images/";
     private List<String> supportedImageFileExtensions = List.of(".jpg", ".jpeg", ".png");
+    private String serverBaseUrl = "http://localhost:8080";
 }

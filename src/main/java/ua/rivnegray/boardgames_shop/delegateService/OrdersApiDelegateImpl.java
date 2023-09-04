@@ -8,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
@@ -18,21 +17,15 @@ import ua.rivnegray.boardgames_shop.service.OrderService;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrdersApiDelegateImpl implements OrdersApiDelegate {
 
-    OrderService orderService;
+    private final OrderService orderService;
 
     @Autowired
-    public OrdersApiDelegateImpl(OrderService orderService) {
+    OrdersApiDelegateImpl(OrderService orderService) {
         this.orderService = orderService;
-    }
-
-    @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return OrdersApiDelegate.super.getRequest();
     }
 
     // admin orders operations

@@ -28,6 +28,7 @@ custom:
       - ".jpg"
       - ".jpeg"
       - ".png"
+    server-base-url: "http://localhost:8085"
   pagination:
     page-size: 20
 ---
@@ -70,4 +71,5 @@ server:
 custom:
   images:
     storage-path: "/app/images/"
+    server-base-url: "http://35.211.88.42:8080"
 

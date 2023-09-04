@@ -29,9 +29,13 @@ public class ProductImage extends BaseEntity{
     }
     @ManyToOne
     private Product product;
+
     private String originalFileName;
+
     private String imagePath;
+
     private String imageURL;
+
     private String imageHash;
 
     @PostRemove

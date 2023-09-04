@@ -11,9 +11,5 @@ import java.util.Optional;
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
     List<UserProfile> findByRoles_RoleName(String roleName);
 
-    boolean existsByEmail(String email);
-
-    boolean existsByUserCredentials_Username(String username);
-
-    Optional<UserProfile> findByUserCredentials_Username(String username);
+    Optional<UserProfile> findByEmail(String email);
 }

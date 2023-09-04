@@ -10,10 +10,10 @@ import ua.rivnegray.boardgames_shop.service.SessionsService;
 
 @Service
 public class LoginApiDelegateImpl implements LoginApiDelegate {
-    SessionsService sessionsService;
+    private final SessionsService sessionsService;
 
     @Autowired
-    public LoginApiDelegateImpl(SessionsService sessionsService) {
+    LoginApiDelegateImpl(SessionsService sessionsService) {
         this.sessionsService = sessionsService;
     }
 
