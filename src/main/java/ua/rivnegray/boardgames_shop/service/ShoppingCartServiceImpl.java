@@ -16,7 +16,6 @@ import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.ShoppingCartId
 import ua.rivnegray.boardgames_shop.mapper.OrderMapper;
 import ua.rivnegray.boardgames_shop.mapper.ProductMapper;
 import ua.rivnegray.boardgames_shop.mapper.ShoppingCartMapper;
-import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.Order;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
 import ua.rivnegray.boardgames_shop.model.PaymentStatus;
@@ -29,7 +28,6 @@ import ua.rivnegray.boardgames_shop.repository.OrderRepository;
 import ua.rivnegray.boardgames_shop.repository.ProductInOrderRepository;
 import ua.rivnegray.boardgames_shop.repository.ProductInShoppingCartRepository;
 import ua.rivnegray.boardgames_shop.repository.ShoppingCartRepository;
-import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -40,36 +38,26 @@ import java.util.stream.Collectors;
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
-    ShoppingCartRepository shoppingCartRepository;
-    ProductInShoppingCartRepository productInShoppingCartRepository;
-
-    ProductInOrderRepository productInOrderRepository;
-    ShoppingCartMapper shoppingCartMapper;
-    ProductMapper productMapper;
-    BoardGameRepository boardGameRepository;
-
-    OrderRepository orderRepository;
-
-    UserMapper userMapper;
-
-    OrderMapper orderMapper;
-
-    AddressRepository addressRepository;
-
-    EntityManager entityManager;
-
-    UserProfileRepository userProfileRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
+    private final ProductInShoppingCartRepository productInShoppingCartRepository;
+    private final ProductInOrderRepository productInOrderRepository;
+    private final ShoppingCartMapper shoppingCartMapper;
+    private final ProductMapper productMapper;
+    private final BoardGameRepository boardGameRepository;
+    private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
+    private final AddressRepository addressRepository;
+    private final EntityManager entityManager;
 
     @Autowired
-    public ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository, ShoppingCartMapper shoppingCartMapper,
+    ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository, ShoppingCartMapper shoppingCartMapper,
                                    ProductInShoppingCartRepository productInShoppingCartRepository,
                                    ProductInOrderRepository productInOrderRepository,
                                    ProductMapper productMapper,
                                    BoardGameRepository boardGameRepository,
                                    OrderRepository orderRepository,
                                    OrderMapper orderMapper,
-                                   AddressRepository addressRepository, EntityManager entityManager,
-                                   UserMapper userMapper, UserProfileRepository userProfileRepository) {
+                                   AddressRepository addressRepository, EntityManager entityManager) {
         this.shoppingCartRepository = shoppingCartRepository;
         this.shoppingCartMapper = shoppingCartMapper;
         this.productInShoppingCartRepository = productInShoppingCartRepository;
@@ -80,8 +68,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         this.orderMapper = orderMapper;
         this.addressRepository = addressRepository;
         this.entityManager = entityManager;
-        this.userMapper = userMapper;
-        this.userProfileRepository = userProfileRepository;
     }
 
     // admin operations
@@ -90,7 +76,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = this.shoppingCartRepository.findById(cartId)
                 .orElseThrow(() -> new ShoppingCartIdNotFoundException(cartId));
         return shoppingCart.getProductsInShoppingCart().stream()
-                .map(productInShoppingCart -> this.productMapper.toProductInShoppingCartDto(productInShoppingCart))
+                .map(this.productMapper::toProductInShoppingCartDto)
                 .toList();
     }
 
@@ -115,7 +101,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             existingProductInCart.get().setQuantity(existingProductInCart.get().getQuantity() + 1);
         } else {
             ProductInShoppingCart productInShoppingCart = new ProductInShoppingCart();
-            // tod change from boardgame repository to general product repository later
+            // todo  change from boardgame repository to general product repository later
             productInShoppingCart.setProduct(this.boardGameRepository.findById(productId)
                     .orElseThrow(() -> new BoardGameIdNotFoundException(productId)));
             productInShoppingCart.setShoppingCart(shoppingCart);
@@ -133,7 +119,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public List<ProductInShoppingCartDto> getProductsInMyShoppingCart() {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
         return shoppingCart.getProductsInShoppingCart().stream()
-                .map(productInShoppingCart -> this.productMapper.toProductInShoppingCartDto(productInShoppingCart))
+                .map(this.productMapper::toProductInShoppingCartDto)
                 .toList();
     }
 
@@ -194,6 +180,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         this.entityManager.flush();
         this.entityManager.refresh(newOrder);
 
+        // todo change transactional propagation??
         clearMyShoppingCart();
 
         return this.orderMapper.orderToOrderDto(newOrder);

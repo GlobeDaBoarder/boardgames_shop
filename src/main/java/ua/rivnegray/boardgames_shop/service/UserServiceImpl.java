@@ -24,7 +24,6 @@ import ua.rivnegray.boardgames_shop.model.Address;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
 import ua.rivnegray.boardgames_shop.repository.AddressRepository;
-import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
@@ -34,21 +33,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
+    private final UserProfileRepository userProfileRepository;
+    private final UserRoleRepository userRoleRepository;
+    private final AddressRepository userAddressRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    UserCredentialsRepository userCredentialsRepository;
-    UserProfileRepository userProfileRepository;
-
-    UserRoleRepository userRoleRepository;
-
-    AddressRepository userAddressRepository;
-
-    UserMapper userMapper;
-    PasswordEncoder passwordEncoder;
     @Autowired
-    public UserServiceImpl(UserCredentialsRepository userCredentialsRepository, UserProfileRepository userProfileRepository
-            , UserRoleRepository userRoleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder,
-            AddressRepository userAddressRepository) {
-        this.userCredentialsRepository = userCredentialsRepository;
+    UserServiceImpl(UserProfileRepository userProfileRepository,
+                    UserRoleRepository userRoleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder,
+                    AddressRepository userAddressRepository) {
         this.userProfileRepository = userProfileRepository;
         this.userRoleRepository = userRoleRepository;
         this.userMapper = userMapper;
@@ -76,14 +70,14 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserPublicDto> getAllUsersPublicInfo() {
         return this.userProfileRepository.findAll().stream()
-                .map(userProfile -> this.userMapper.toUserPublicDto(userProfile))
+                .map(this.userMapper::toUserPublicDto)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
     public UserPublicDto getUserPublicInfoById(Long id) {
         return this.userProfileRepository.findById(id)
-                .map(userProfile -> this.userMapper.toUserPublicDto(userProfile))
+                .map(this.userMapper::toUserPublicDto)
                 .orElseThrow(() -> new UserIdNotFoundException(id));
     }
 
@@ -182,7 +176,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserRoleDto> getAllUserRoles() {
         return this.userRoleRepository.findAll().stream()
-                .map(userRole -> this.userMapper.toUserRoleDto(userRole))
+                .map(this.userMapper::toUserRoleDto)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -194,19 +188,9 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserPublicDto> getUsersPublicInfoByRole(String role) {
         return this.userProfileRepository.findByRoles_RoleName(role).stream()
-                .map(userProfile -> this.userMapper.toUserPublicDto(userProfile))
+                .map(this.userMapper::toUserPublicDto)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-
-//    @Override
-//    public Boolean isEmailAvailable(UpdateEmailDto updateEmailDto) {
-//        return this.userProfileRepository.existsByEmail(updateEmailDto.email());
-//    }
-//
-//    @Override
-//    public Boolean isUsernameAvailable(UpdateUsernameDto updateUsernameDto) {
-//        return this.userProfileRepository.existsByUserCredentials_Username(updateUsernameDto.username());
-//    }
 
     @Override
     public AddressDto getAddress(Long addressId) {
@@ -219,7 +203,7 @@ public class UserServiceImpl implements UserService{
         UserProfile userProfileTiGetAddressesFrom = this.getCurrentUser();
 
         return userProfileTiGetAddressesFrom.getAddresses().stream()
-                .map(address -> this.userMapper.toAddressDto(address))
+                .map(this.userMapper::toAddressDto)
                 .collect(Collectors.toCollection(ArrayList::new));
 
     }

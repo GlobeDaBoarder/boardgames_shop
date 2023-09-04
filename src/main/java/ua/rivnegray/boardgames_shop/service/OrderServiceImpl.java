@@ -62,20 +62,16 @@ public class OrderServiceImpl implements OrderService {
     };
 
 
-    OrderRepository orderRepository;
-    OrderMapper orderMapper;
-
-    UserMapper userMapper;
-    UserProfileRepository userProfileRepository;
-
-    BoardGameRepository boardGameRepository;
-
-    EntityManager entityManager;
-
-    AddressRepository addressRepository;
+    private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
+    private final UserMapper userMapper;
+    private final UserProfileRepository userProfileRepository;
+    private final BoardGameRepository boardGameRepository;
+    private final EntityManager entityManager;
+    private final AddressRepository addressRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, UserMapper userMapper,
+    OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, UserMapper userMapper,
                             UserProfileRepository userProfileRepository, BoardGameRepository boardGameRepository,
                             EntityManager entityManager, AddressRepository addressRepository) {
         this.orderRepository = orderRepository;
@@ -153,14 +149,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getAllOrders() {
         return this.orderRepository.findAll().stream()
-                .map(order -> this.orderMapper.orderToOrderDto(order))
+                .map(this.orderMapper::orderToOrderDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public OrderDto getOrderById(Long orderId) {
         return this.orderRepository.findById(orderId)
-                .map(order -> this.orderMapper.orderToOrderDto(order))
+                .map(this.orderMapper::orderToOrderDto)
                 .orElseThrow(() -> new OrderIdNotFoundException(orderId));
     }
 
@@ -184,14 +180,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getMyOrders() {
         return this.getCurrentUserOrders().stream()
-                .map(order -> this.orderMapper.orderToOrderDto(order))
+                .map(this.orderMapper::orderToOrderDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public OrderDto getMyOrderById(Long orderId) {
         return this.orderRepository.findByIdAndUserProfile_Id(orderId, getCurrentUserId())
-                .map(order -> this.orderMapper.orderToOrderDto(order))
+                .map(this.orderMapper::orderToOrderDto)
                 .orElseThrow(() -> new OrderIdNotFoundException(orderId));
     }
 

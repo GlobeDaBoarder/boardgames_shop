@@ -29,23 +29,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class SessionServiceImpl implements SessionsService{
-    UserProfileRepository userProfileRepository;
-    UserCredentialsRepository userCredentialsRepository;
-
-    TokenService tokenService;
-
-    PasswordEncoder passwordEncoder;
-
-    AuthenticationManager authenticationManager;
-
-    UserMapper userMapper;
-
-    UserRoleRepository userRoleRepository;
-
-    BoardGameRepository boardGameRepository;
+    private final UserProfileRepository userProfileRepository;
+    private final UserCredentialsRepository userCredentialsRepository;
+    private final TokenService tokenService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
+    private final UserRoleRepository userRoleRepository;
+    private final BoardGameRepository boardGameRepository;
 
     @Autowired
-    public SessionServiceImpl(UserProfileRepository userProfileRepository, UserCredentialsRepository userCredentialsRepository,
+    SessionServiceImpl(UserProfileRepository userProfileRepository, UserCredentialsRepository userCredentialsRepository,
                               TokenService tokenService, PasswordEncoder passwordEncoder,
                               AuthenticationManager authenticationManager,
                               UserMapper userMapper, UserRoleRepository userRoleRepository,

@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
@@ -23,29 +22,23 @@ import ua.rivnegray.boardgames_shop.service.BoardGameService;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
 
-    BoardGameService boardGameService;
+    private final BoardGameService boardGameService;
 
-    BoardGameGenreService boardGameGenreService;
+    private final BoardGameGenreService boardGameGenreService;
 
-    BoardGameMechanicService boardGameMechanicService;
+    private final BoardGameMechanicService boardGameMechanicService;
 
     @Autowired
-    public BoardgamesApiDelegateImpl(BoardGameService boardGameService,
+    BoardgamesApiDelegateImpl(BoardGameService boardGameService,
                                      BoardGameGenreService boardGameGenreService,
                                      BoardGameMechanicService boardGameMechanicService) {
         this.boardGameService = boardGameService;
         this.boardGameGenreService = boardGameGenreService;
         this.boardGameMechanicService = boardGameMechanicService;
-    }
-
-    @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return BoardgamesApiDelegate.super.getRequest();
     }
 
     @Override

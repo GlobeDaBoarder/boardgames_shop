@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class BoardGameMechanicServiceImpl implements BoardGameMechanicService {
-    BoardGameMechanicRepository boardGameMechanicRepository;
-    BoardGameMechanicMapper boardGameMechanicMapper;
+    private final BoardGameMechanicRepository boardGameMechanicRepository;
+    private final BoardGameMechanicMapper boardGameMechanicMapper;
 
     @Autowired
-    public BoardGameMechanicServiceImpl(BoardGameMechanicRepository boardGameMechanicRepository,
+    BoardGameMechanicServiceImpl(BoardGameMechanicRepository boardGameMechanicRepository,
                                         BoardGameMechanicMapper boardGameMechanicMapper) {
         this.boardGameMechanicRepository = boardGameMechanicRepository;
         this.boardGameMechanicMapper = boardGameMechanicMapper;
@@ -27,8 +27,7 @@ public class BoardGameMechanicServiceImpl implements BoardGameMechanicService {
     @Override
     public List<BoardGameMechanicDto> getAllMechanics() {
         return this.boardGameMechanicRepository.findAll().stream()
-                .map(boardGameMechanic -> this.boardGameMechanicMapper
-                        .boardGameMechanicToBoardGameMechanicDto(boardGameMechanic))
+                .map(this.boardGameMechanicMapper::boardGameMechanicToBoardGameMechanicDto)
                 .collect(Collectors.toList());
     }
 

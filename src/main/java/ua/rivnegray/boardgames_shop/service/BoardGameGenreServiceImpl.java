@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class BoardGameGenreServiceImpl implements BoardGameGenreService {
-    BoardGameGenreRepository boardGameGenreRepository;
-    BoardGameGenreMapper boardGameGenreMapper;
+    private final BoardGameGenreRepository boardGameGenreRepository;
+    private final BoardGameGenreMapper boardGameGenreMapper;
 
     @Autowired
-    public BoardGameGenreServiceImpl(BoardGameGenreRepository boardGameGenreRepository,
+    BoardGameGenreServiceImpl(BoardGameGenreRepository boardGameGenreRepository,
                                      BoardGameGenreMapper boardGameGenreMapper) {
         this.boardGameGenreRepository = boardGameGenreRepository;
         this.boardGameGenreMapper = boardGameGenreMapper;
@@ -27,7 +27,7 @@ public class BoardGameGenreServiceImpl implements BoardGameGenreService {
     @Override
     public List<BoardGameGenreDto> getAllGenres() {
         return this.boardGameGenreRepository.findAll().stream()
-                .map(boardGameGenre -> this.boardGameGenreMapper.boardGameGenreToBoardGameGenreDto(boardGameGenre))
+                .map(this.boardGameGenreMapper::boardGameGenreToBoardGameGenreDto)
                 .collect(Collectors.toList());
     }
 
