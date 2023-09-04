@@ -10,11 +10,12 @@ import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.MapShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.UserAlreadyRegisteredException;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.UsernameAlreadyTakenException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.RoleNameNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
-import ua.rivnegray.boardgames_shop.model.ProductInOrder;
 import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
 import ua.rivnegray.boardgames_shop.model.UserProfile;
@@ -23,6 +24,7 @@ import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
 import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,12 +83,12 @@ public class SessionServiceImpl implements SessionsService{
 
     @Override
     public LoginResponseDto register(CreateCustomerUserDto createCustomerUserDto, MapShoppingCartDto mapShoppingCartDto) {
-        if (userCredentialsRepository.existsByUsername(createCustomerUserDto.username())) {
+        if (this.userCredentialsRepository.existsByUsername(createCustomerUserDto.username())) {
             throw new UsernameAlreadyTakenException(createCustomerUserDto.username());
         }
-        // todo add validation for existing phone and email
 
-        UserProfile userProfile = this.userMapper.toUserProfile(createCustomerUserDto, this.userRoleRepository);
+        UserProfile userProfile = findOrCreateUserProfile(createCustomerUserDto);
+
         UserCredentials userCredentials = new UserCredentials(createCustomerUserDto.username(), passwordEncoder.encode(createCustomerUserDto.password()));
         userCredentials.setUserProfile(userProfile);
         userProfile.setUserCredentials(userCredentials);
@@ -99,6 +101,24 @@ public class SessionServiceImpl implements SessionsService{
                 new UsernamePasswordAuthenticationToken(createCustomerUserDto.username(), createCustomerUserDto.password())
         ));
         return new LoginResponseDto(this.userMapper.toUserPublicDto(userProfile), token);
+    }
+
+    private UserProfile findOrCreateUserProfile(CreateCustomerUserDto createCustomerUserDto) {
+        Optional<UserProfile> userProfileFoundByEmail = this.userProfileRepository.findByEmail(createCustomerUserDto.email());
+        if(userProfileFoundByEmail.isPresent()){
+            UserProfile existingProfile = userProfileFoundByEmail.get();
+            if(existingProfile.getUserCredentials() != null) {
+                throw new UserAlreadyRegisteredException();
+            }
+            this.userMapper.updateUserProfile(existingProfile, createCustomerUserDto);
+
+            existingProfile.getRoles().add(this.userRoleRepository.findUserRoleByRoleName("ROLE_CUSTOMER")
+                    .orElseThrow(() -> new RoleNameNotFoundException("ROLE_CUSTOMER")));
+
+            return existingProfile;
+        }
+
+        return this.userMapper.toUserProfile(createCustomerUserDto, this.userRoleRepository);
     }
 
     private void mapShoppingCartDtoToUserProfileCart(MapShoppingCartDto mapShoppingCartDto, UserProfile userProfile) {

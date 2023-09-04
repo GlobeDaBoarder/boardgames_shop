@@ -20,7 +20,6 @@ import ua.rivnegray.boardgames_shop.model.UserProfile;
 import ua.rivnegray.boardgames_shop.model.UserRole;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -75,4 +74,10 @@ public interface UserMapper {
     void updateAddress(@MappingTarget Address addressToUpdate, AddAndUpdateAddressDto updateAddressDto);
 
     UserRoleDto toUserRoleDto(UserRole userRole);
+
+    @Mapping(target = "email", ignore = true)
+    void updateUserProfile(@MappingTarget UserProfile userProfile, CreateUserProfileDto createUserProfileDto);
+
+    @Mapping(target = "email", ignore = true)
+    void updateUserProfile(@MappingTarget UserProfile userProfile, CreateCustomerUserDto createCustomerUserDto);
 }
