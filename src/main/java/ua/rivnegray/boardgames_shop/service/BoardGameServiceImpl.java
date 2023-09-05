@@ -84,7 +84,7 @@ public class BoardGameServiceImpl implements BoardGameService {
         if (search != null && !search.isBlank()) {
             return searchBoardGames(search, pageNumber);
         }
-        Page<BoardGame> page = this.boardGameRepository.findAllByIsRemovedIsFalse(
+        Page<BoardGame> page = this.boardGameRepository.findAll(
                         filterDTOEncoded != null?
                                 getFilterSpecificationFromFilterDto(convertFilterStringDtoToFilterDto(filterDTOEncoded)):
                                 Specification.where(null),
@@ -167,7 +167,9 @@ public class BoardGameServiceImpl implements BoardGameService {
                 BoardGameSpecification.hasMinAges(filterBoardGamesRequestDto.minAges()),
                 BoardGameSpecification.hasPlayersInRange(filterBoardGamesRequestDto.playerCounts()),
                 BoardGameSpecification.hasGameDurationInRange(filterBoardGamesRequestDto.minGameDuration(), filterBoardGamesRequestDto.maxGameDuration()),
-                BoardGameSpecification.hasLanguage(filterBoardGamesRequestDto.boardGameLanguages())
+                BoardGameSpecification.hasLanguage(filterBoardGamesRequestDto.boardGameLanguages()),
+                // check for isRemoved false to only display non-archived board games
+                BoardGameSpecification.hasIsRemovedFalse()
         );
     }
 
