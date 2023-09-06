@@ -28,9 +28,14 @@ public abstract class Product extends BaseEntity{
         this.productDescription = productDescription;
         this.productPrice = productPrice;
         this.productQuantityInStock = productQuantityInStock;
-        this.productImages = productImageURLs.stream()
-                .map(url -> new ProductImage(this, url))
-                .collect(Collectors.toSet());
+        if (productImageURLs == null) {
+            this.productImages = Set.of();
+        }
+        else {
+            this.productImages = productImageURLs.stream()
+                    .map(url -> new ProductImage(this, url))
+                    .collect(Collectors.toSet());
+        }
         this.productCategory = productCategory;
     }
 
