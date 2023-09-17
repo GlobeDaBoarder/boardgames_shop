@@ -13,6 +13,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 
 import javax.annotation.Generated;
@@ -290,6 +291,26 @@ public interface BoardgamesApiDelegate {
     }
 
     /**
+     * GET /boardgames/gameDurationBounds : Get min and max game durations from all games
+     *
+     * @return OK (status code 200)
+     * @see BoardgamesApi#getGameDurationBounds
+     */
+    default ResponseEntity<MinMaxDto> getGameDurationBounds() {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"absoluteMinValue\" : 0, \"absoluteMaxValue\" : 6 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
      * GET /boardgames/genres/{id} : Get a genre by id
      *
      * @param id ID of the genre (required)
@@ -324,6 +345,26 @@ public interface BoardgamesApiDelegate {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"mechanicDescription\" : \"mechanicDescription\", \"mechanicName\" : \"mechanicName\", \"id\" : 0 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /boardgames/priceBounds : Get min and max price from all games
+     *
+     * @return OK (status code 200)
+     * @see BoardgamesApi#getPriceBounds
+     */
+    default ResponseEntity<MinMaxDto> getPriceBounds() {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"absoluteMinValue\" : 0, \"absoluteMaxValue\" : 6 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
