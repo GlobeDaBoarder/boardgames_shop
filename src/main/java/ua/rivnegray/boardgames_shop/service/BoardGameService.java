@@ -9,6 +9,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameD
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 
 import java.util.List;
@@ -47,4 +48,10 @@ public interface BoardGameService {
     String extractImageExtensionFromFilename(String filename);
 
     MediaType getFilenameMediaType(String filename);
+
+    @Transactional(readOnly = true)
+    MinMaxDto getGameDurationBounds();
+
+    @Transactional(readOnly = true)
+    MinMaxDto getPriceBounds();
 }
