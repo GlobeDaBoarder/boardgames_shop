@@ -32,6 +32,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 
 import javax.annotation.Generated;
@@ -474,6 +475,33 @@ import java.util.List;
 
 
             /**
+            * GET /boardgames/gameDurationBounds : Get min and max game durations from all games
+            *
+            * @return OK (status code 200)
+            */
+                @Operation(
+                operationId = "getGameDurationBounds",
+                    summary = "Get min and max game durations from all games",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = MinMaxDto.class))
+                    })
+                }
+                )
+                        @PreAuthorize("permitAll")
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/boardgames/gameDurationBounds",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<MinMaxDto> getGameDurationBounds(
+        
+            ) {
+            return getDelegate().getGameDurationBounds();
+            }
+
+
+            /**
             * GET /boardgames/genres/{id} : Get a genre by id
             *
                 * @param id ID of the genre (required)
@@ -530,6 +558,33 @@ import java.util.List;
         @Parameter(name = "id", description = "ID of the mechanic", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id
             ) {
             return getDelegate().getMechanicById(id);
+            }
+
+
+            /**
+            * GET /boardgames/priceBounds : Get min and max price from all games
+            *
+            * @return OK (status code 200)
+            */
+                @Operation(
+                operationId = "getPriceBounds",
+                    summary = "Get min and max price from all games",
+                responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = {
+                        @Content(mediaType = "application/json", schema = @Schema(implementation = MinMaxDto.class))
+                    })
+                }
+                )
+                        @PreAuthorize("permitAll")
+            @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/boardgames/priceBounds",
+            produces = { "application/json" }
+            )
+        default ResponseEntity<MinMaxDto> getPriceBounds(
+        
+            ) {
+            return getDelegate().getPriceBounds();
             }
 
 

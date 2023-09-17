@@ -22,6 +22,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameD
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.ImageProperties;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.PaginationProperties;
 import ua.rivnegray.boardgames_shop.exceptions.badRequestExceptions.FilterRequestDeserializationException;
@@ -285,5 +286,15 @@ public class BoardGameServiceImpl implements BoardGameService {
         this.productImageRepository.findByImageHash(imageHash).ifPresent(productImage -> {
             throw new ImageAlreadyExistsException(imageHash);
         });
+    }
+
+    @Override
+    public MinMaxDto getGameDurationBounds() {
+        return this.boardGameRepository.findMinMaxGameDuration();
+    }
+
+    @Override
+    public MinMaxDto getPriceBounds() {
+        return this.boardGameRepository.findMinMaxPrice();
     }
 }

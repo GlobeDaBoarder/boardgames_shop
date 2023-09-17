@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 
 import java.util.List;
@@ -26,4 +27,28 @@ public interface BoardGameRepository extends JpaRepository<BoardGame, Long>, Jpa
         """
     )
     Page<BoardGame> findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse(@Param("searchValue") String searchValue, Pageable pageable);
+
+    @Query(
+        """
+        SELECT new ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto(
+                MIN(bg.productPrice),
+                MAX(bg.productPrice)
+            )
+        FROM BoardGame bg
+        WHERE bg.isRemoved = false
+        """
+    )
+    MinMaxDto findMinMaxPrice();
+
+    @Query(
+            """
+            SELECT new ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto(
+                    MIN(bg.minGameDuration),
+                    MAX(bg.maxGameDuration)
+                )
+            FROM BoardGame bg
+            WHERE bg.isRemoved = false
+            """
+    )
+    MinMaxDto findMinMaxGameDuration();
 }
