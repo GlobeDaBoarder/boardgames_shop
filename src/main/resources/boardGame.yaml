@@ -521,7 +521,28 @@ paths:
           description: Forbidden
         '404':
           description: Boardgame or Image not found
-
+  /boardgames/priceBounds:
+    get:
+      summary: Get min and max price from all games
+      operationId: getPriceBounds
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinMaxDto'
+  /boardgames/gameDurationBounds:
+    get:
+      summary: Get min and max game durations from all games
+      operationId: getGameDurationBounds
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinMaxDto'
 
 components:
   securitySchemes:
@@ -751,3 +772,15 @@ components:
         - name_asc
         - name_desc
         - newest
+    MinMaxDto:
+      type: object
+      properties:
+        absoluteMinValue:
+          type: integer
+          format: int64
+        absoluteMaxValue:
+          type: integer
+          format: int64
+
+
+

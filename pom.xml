@@ -261,6 +261,7 @@
 								<importMapping>FilterBoardGamesRequestDto=ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto</importMapping>
 								<importMapping>SortType=ua.rivnegray.boardgames_shop.model.SortType</importMapping>
 								<importMapping>CatalogResponseDto=ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto</importMapping>
+								<importMapping>MinMaxDto=ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto</importMapping>
 							</importMappings>
 
 							<configOptions>
