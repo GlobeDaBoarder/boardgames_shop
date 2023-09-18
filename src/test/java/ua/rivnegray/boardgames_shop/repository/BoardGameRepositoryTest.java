@@ -3,9 +3,8 @@ package ua.rivnegray.boardgames_shop.repository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.PageRequest;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 
@@ -14,20 +13,19 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// todo change to @DataJpaTest
-//@DataJpaTest
-//(excludeAutoConfiguration = {SecurityAutoConfiguration.class, SecurityDataConfiguration.class, SecurityFilterAutoConfiguration.class})
-@SpringBootTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@DataJpaTest
 class BoardGameRepositoryTest {
     @Autowired
     private BoardGameRepository boardGameRepositoryUnderTest;
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     private final PageRequest pageRequest = PageRequest.of(0, 10);
 
     @AfterEach
     void tearDown() {
-        this.boardGameRepositoryUnderTest.deleteAll();
+        entityManager.clear();
     }
 
     @Test
@@ -48,7 +46,8 @@ class BoardGameRepositoryTest {
                 .build();
         archivedBoardGame.setIsRemoved(true);
 
-        boardGameRepositoryUnderTest.saveAll(List.of(nonArchivedBoardGame, archivedBoardGame));
+        entityManager.persist(nonArchivedBoardGame);
+        entityManager.persistAndFlush(archivedBoardGame);
 
         //Act
         List<BoardGame> archivedBoardGames = boardGameRepositoryUnderTest.findAllByIsRemovedIsTrue();
@@ -77,7 +76,8 @@ class BoardGameRepositoryTest {
                 .productQuantityInStock(2)
                 .build();
 
-        boardGameRepositoryUnderTest.saveAll(List.of(nonArchivedBoardGame, nonArchivedBoardGame2));
+        entityManager.persist(nonArchivedBoardGame);
+        entityManager.persistAndFlush(nonArchivedBoardGame2);
 
         //Act
         List<BoardGame> archivedBoardGames = boardGameRepositoryUnderTest.findAllByIsRemovedIsTrue();
@@ -104,7 +104,8 @@ class BoardGameRepositoryTest {
                 .productQuantityInStock(2)
                 .build();
 
-        boardGameRepositoryUnderTest.saveAll(List.of(boardGame1, boardGame2));
+        entityManager.persist(boardGame1);
+        entityManager.persistAndFlush(boardGame2);
 
         // Act
         List<BoardGame> foundBoardGames = boardGameRepositoryUnderTest.findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse("match", pageRequest).toList();
@@ -133,7 +134,8 @@ class BoardGameRepositoryTest {
                 .productQuantityInStock(2)
                 .build();
 
-        boardGameRepositoryUnderTest.saveAll(List.of(boardGame1, boardGame2));
+        entityManager.persist(boardGame1);
+        entityManager.persistAndFlush(boardGame2);
 
         // Act
         List<BoardGame> foundBoardGames = boardGameRepositoryUnderTest.findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse("match", pageRequest).toList();
@@ -162,7 +164,8 @@ class BoardGameRepositoryTest {
                 .productQuantityInStock(2)
                 .build();
 
-        boardGameRepositoryUnderTest.saveAll(List.of(boardGame1, boardGame2));
+        entityManager.persist(boardGame1);
+        entityManager.persistAndFlush(boardGame2);
 
         // Act
         List<BoardGame> foundBoardGames = boardGameRepositoryUnderTest.findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse("match", pageRequest).toList();
