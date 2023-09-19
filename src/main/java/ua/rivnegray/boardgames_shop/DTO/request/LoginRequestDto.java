@@ -1,7 +1,8 @@
 package ua.rivnegray.boardgames_shop.DTO.request;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record LoginRequestDto(
         @NotBlank(message = "Username is required")
