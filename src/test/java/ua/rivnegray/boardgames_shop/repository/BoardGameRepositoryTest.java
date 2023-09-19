@@ -29,22 +29,11 @@ class BoardGameRepositoryTest {
     }
 
     @Test
-    public void BoardGameRepository_findAllByIsRemovedIsTrue_ReturnsArchivedBoardGame(){
+    public void findAllByIsRemovedIsTrue_ReturnsArchivedBoardGame(){
         //Arrange
-        BoardGame nonArchivedBoardGame = BoardGame.builder()
-                .productName("Test1")
-                .productDescription("Test1")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame nonArchivedBoardGame = createTestGame("Test1", "Test1");
 
-        BoardGame archivedBoardGame = BoardGame.builder()
-                .productName("Test2")
-                .productDescription("Test2")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
-        archivedBoardGame.setIsRemoved(true);
+        BoardGame archivedBoardGame = createTestGame("Test2", "Test2", true);
 
         entityManager.persist(nonArchivedBoardGame);
         entityManager.persistAndFlush(archivedBoardGame);
@@ -60,21 +49,11 @@ class BoardGameRepositoryTest {
     }
 
     @Test
-    public void BoardGameRepository_findAllByIsRemovedIsTrue_ReturnsEmptyListOfBoardGames(){
+    public void findAllByIsRemovedIsTrue_ReturnsEmptyListOfBoardGames(){
         //Arrange
-        BoardGame nonArchivedBoardGame = BoardGame.builder()
-                .productName("Test1")
-                .productDescription("Test1")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame nonArchivedBoardGame = createTestGame("Test1", "Test1");
 
-        BoardGame nonArchivedBoardGame2 = BoardGame.builder()
-                .productName("Test2")
-                .productDescription("Test2")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame nonArchivedBoardGame2 = createTestGame("Test2", "Test2");
 
         entityManager.persist(nonArchivedBoardGame);
         entityManager.persistAndFlush(nonArchivedBoardGame2);
@@ -88,21 +67,11 @@ class BoardGameRepositoryTest {
     }
 
     @Test
-    public void BoardGameRepository_findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsTitleMatch(){
+    public void findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsTitleMatch(){
         //Arrange
-        BoardGame boardGame1 = BoardGame.builder()
-                .productName("match")
-                .productDescription("Test1")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame1 = createTestGame("match", "Test1");
 
-        BoardGame boardGame2 = BoardGame.builder()
-                .productName("Test2")
-                .productDescription("Test2")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame2 = createTestGame("Test2", "Test2");
 
         entityManager.persist(boardGame1);
         entityManager.persistAndFlush(boardGame2);
@@ -118,21 +87,11 @@ class BoardGameRepositoryTest {
     }
 
     @Test
-    public void BoardGameRepository_findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsDescriptionMatch(){
+    public void findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsDescriptionMatch(){
         //Arrange
-        BoardGame boardGame1 = BoardGame.builder()
-                .productName("Test1")
-                .productDescription("match")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame1 = createTestGame("Test1", "match");
 
-        BoardGame boardGame2 = BoardGame.builder()
-                .productName("Test2")
-                .productDescription("Test2")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame2 = createTestGame("Test2", "Test2");
 
         entityManager.persist(boardGame1);
         entityManager.persistAndFlush(boardGame2);
@@ -148,21 +107,11 @@ class BoardGameRepositoryTest {
     }
 
     @Test
-    public void BoardGameRepository_findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsDescriptionAndTitleMatchesInOrder(){
+    public void findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsDescriptionAndTitleMatchesInOrder(){
         //Arrange
-        BoardGame boardGame1 = BoardGame.builder()
-                .productName("Test1")
-                .productDescription("match")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame1 = createTestGame(("Test1"), "match");
 
-        BoardGame boardGame2 = BoardGame.builder()
-                .productName("match")
-                .productDescription("Test2")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame2 = createTestGame("match", "Test2");
 
         entityManager.persist(boardGame1);
         entityManager.persistAndFlush(boardGame2);
@@ -176,4 +125,21 @@ class BoardGameRepositoryTest {
         assertThat(foundBoardGames).hasSize(2);
         assertThat(foundBoardGames).extracting(BoardGame::getId).containsExactly(boardGame2.getId(), boardGame1.getId());
     }
+
+    private BoardGame createTestGame(String name, String description, boolean isRemoved){
+        BoardGame bg =  BoardGame.builder()
+                .productName(name)
+                .productDescription(description)
+                .productPrice(BigDecimal.valueOf(100))
+                .productQuantityInStock(2)
+                .build();
+
+        bg.setIsRemoved(isRemoved);
+
+        return bg;
+    }
+    private BoardGame createTestGame(String name, String description){
+        return createTestGame(name, description, false);
+    }
+
 }

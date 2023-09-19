@@ -4,5 +4,8 @@ public enum BoardGameLanguage {
     ENGLISH,
     RUSSIAN,
     UKRAINIAN,
+    POLISH,
+    GERMAN,
+    FRENCH,
     OTHER
 }
