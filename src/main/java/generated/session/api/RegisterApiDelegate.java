@@ -1,5 +1,6 @@
 package generated.session.api;
 
+import jakarta.annotation.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -7,7 +8,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
 
-import javax.annotation.Generated;
 import java.util.Optional;
 
 /**

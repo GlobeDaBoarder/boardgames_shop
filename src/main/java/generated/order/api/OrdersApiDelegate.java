@@ -1,5 +1,6 @@
 package generated.order.api;
 
+import jakarta.annotation.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +9,6 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
 
-import javax.annotation.Generated;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
