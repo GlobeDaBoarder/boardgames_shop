@@ -25,7 +25,7 @@ import java.net.URI;
 import java.util.List;
 
 @Service
-public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
+public class    BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
 
     private final BoardGameService boardGameService;
 

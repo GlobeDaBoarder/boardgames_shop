@@ -165,7 +165,6 @@
 					<generateModelDocumentation>false</generateModelDocumentation>
 					<generateApiTests>false</generateApiTests>
 					<generateApiDocumentation>false</generateApiDocumentation>
-<!--					<generateSupportingFiles>false</generateSupportingFiles>-->
 					<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
 
 					<templateDirectory>
