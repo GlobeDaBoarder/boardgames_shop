@@ -35,7 +35,7 @@ public class TokenService {
                 .issuer("self")
                 .issuedAt(now)
                 // TODO: change to 1 hour for production
-                .expiresAt(now.plus(1, ChronoUnit.WEEKS))
+                .expiresAt(now.plus(14, ChronoUnit.DAYS))
                 .subject(authentication.getName())
                 .claim("id", securityUser.getId())
                 .claim("scope", scope)
