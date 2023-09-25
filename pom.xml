@@ -312,16 +312,9 @@
 							<inputSpec>src/main/resources/session.yaml</inputSpec>
 
 							<importMappings>
-
-								<importMapping>AddressDto=ua.rivnegray.boardgames_shop.DTO.response.AddressDto</importMapping>
 								<importMapping>LoginRequestDto=ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto</importMapping>
-								<importMapping>LoginResponseDto=ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto</importMapping>
 								<importMapping>CreateCustomerUserDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto</importMapping>
-								<importMapping>UserPublicDto=ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto</importMapping>
-								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto</importMapping>
-								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.UserPermission</importMapping>
-								<importMapping>LoginRequestWithMapShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.request.LoginRequestWithMapShoppingCartDto</importMapping>
-								<importMapping>RegisterRequestWithMapShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto</importMapping>
+								<importMapping>TokenDto=ua.rivnegray.boardgames_shop.DTO.response.TokenDto</importMapping>
 							</importMappings>
 
 							<configOptions>
