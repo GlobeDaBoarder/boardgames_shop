@@ -1,5 +1,6 @@
 package ua.rivnegray.boardgames_shop;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.ImageProperties;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.PaginationProperties;
 import ua.rivnegray.boardgames_shop.model.Address;
@@ -1502,6 +1504,22 @@ public class BoardgamesShopApplication {
 			shoppingCartRepository.save(cart1);
 
 			LOGGER.debug("test");
+
+
+			FilterBoardGamesRequestDto filterExample = FilterBoardGamesRequestDto.builder()
+					.manufacturers(Set.of("Kosmos"))
+					.minProductPrice(new BigDecimal("90"))
+					.maxProductPrice(new BigDecimal("110"))
+					.boardGameGenres(Set.of("Економіка", "Сімейні"))
+					.boardGameMechanics(Set.of("Кооперативна гра", "Конструювання колоди"))
+					.ageIntervals(Set.of("8-9", "10-13"))
+					.playerCounts(Set.of("2", "3", "4", "5"))
+					.minGameDuration(30)
+					.maxGameDuration(130)
+					.boardGameLanguages(Set.of(BoardGameLanguage.ENGLISH, BoardGameLanguage.UKRAINIAN))
+					.build();
+
+			System.out.println(new ObjectMapper().writeValueAsString(filterExample));
 		};
 	}
 }

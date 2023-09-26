@@ -3,9 +3,8 @@ package ua.rivnegray.boardgames_shop.repository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.PageRequest;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 
@@ -14,41 +13,30 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// todo change to @DataJpaTest
-//@DataJpaTest
-//(excludeAutoConfiguration = {SecurityAutoConfiguration.class, SecurityDataConfiguration.class, SecurityFilterAutoConfiguration.class})
-@SpringBootTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@DataJpaTest
 class BoardGameRepositoryTest {
     @Autowired
     private BoardGameRepository boardGameRepositoryUnderTest;
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     private final PageRequest pageRequest = PageRequest.of(0, 10);
 
     @AfterEach
     void tearDown() {
-        this.boardGameRepositoryUnderTest.deleteAll();
+        entityManager.clear();
     }
 
     @Test
-    public void BoardGameRepository_findAllByIsRemovedIsTrue_ReturnsArchivedBoardGame(){
+    public void findAllByIsRemovedIsTrue_ReturnsArchivedBoardGame(){
         //Arrange
-        BoardGame nonArchivedBoardGame = BoardGame.builder()
-                .productName("Test1")
-                .productDescription("Test1")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame nonArchivedBoardGame = createTestGame("Test1", "Test1");
 
-        BoardGame archivedBoardGame = BoardGame.builder()
-                .productName("Test2")
-                .productDescription("Test2")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
-        archivedBoardGame.setIsRemoved(true);
+        BoardGame archivedBoardGame = createTestGame("Test2", "Test2", true);
 
-        boardGameRepositoryUnderTest.saveAll(List.of(nonArchivedBoardGame, archivedBoardGame));
+        entityManager.persist(nonArchivedBoardGame);
+        entityManager.persistAndFlush(archivedBoardGame);
 
         //Act
         List<BoardGame> archivedBoardGames = boardGameRepositoryUnderTest.findAllByIsRemovedIsTrue();
@@ -61,23 +49,14 @@ class BoardGameRepositoryTest {
     }
 
     @Test
-    public void BoardGameRepository_findAllByIsRemovedIsTrue_ReturnsEmptyListOfBoardGames(){
+    public void findAllByIsRemovedIsTrue_ReturnsEmptyListOfBoardGames(){
         //Arrange
-        BoardGame nonArchivedBoardGame = BoardGame.builder()
-                .productName("Test1")
-                .productDescription("Test1")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame nonArchivedBoardGame = createTestGame("Test1", "Test1");
 
-        BoardGame nonArchivedBoardGame2 = BoardGame.builder()
-                .productName("Test2")
-                .productDescription("Test2")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame nonArchivedBoardGame2 = createTestGame("Test2", "Test2");
 
-        boardGameRepositoryUnderTest.saveAll(List.of(nonArchivedBoardGame, nonArchivedBoardGame2));
+        entityManager.persist(nonArchivedBoardGame);
+        entityManager.persistAndFlush(nonArchivedBoardGame2);
 
         //Act
         List<BoardGame> archivedBoardGames = boardGameRepositoryUnderTest.findAllByIsRemovedIsTrue();
@@ -88,23 +67,14 @@ class BoardGameRepositoryTest {
     }
 
     @Test
-    public void BoardGameRepository_findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsTitleMatch(){
+    public void findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsTitleMatch(){
         //Arrange
-        BoardGame boardGame1 = BoardGame.builder()
-                .productName("match")
-                .productDescription("Test1")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame1 = createTestGame("match", "Test1");
 
-        BoardGame boardGame2 = BoardGame.builder()
-                .productName("Test2")
-                .productDescription("Test2")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame2 = createTestGame("Test2", "Test2");
 
-        boardGameRepositoryUnderTest.saveAll(List.of(boardGame1, boardGame2));
+        entityManager.persist(boardGame1);
+        entityManager.persistAndFlush(boardGame2);
 
         // Act
         List<BoardGame> foundBoardGames = boardGameRepositoryUnderTest.findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse("match", pageRequest).toList();
@@ -117,23 +87,14 @@ class BoardGameRepositoryTest {
     }
 
     @Test
-    public void BoardGameRepository_findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsDescriptionMatch(){
+    public void findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsDescriptionMatch(){
         //Arrange
-        BoardGame boardGame1 = BoardGame.builder()
-                .productName("Test1")
-                .productDescription("match")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame1 = createTestGame("Test1", "match");
 
-        BoardGame boardGame2 = BoardGame.builder()
-                .productName("Test2")
-                .productDescription("Test2")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame2 = createTestGame("Test2", "Test2");
 
-        boardGameRepositoryUnderTest.saveAll(List.of(boardGame1, boardGame2));
+        entityManager.persist(boardGame1);
+        entityManager.persistAndFlush(boardGame2);
 
         // Act
         List<BoardGame> foundBoardGames = boardGameRepositoryUnderTest.findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse("match", pageRequest).toList();
@@ -146,23 +107,14 @@ class BoardGameRepositoryTest {
     }
 
     @Test
-    public void BoardGameRepository_findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsDescriptionAndTitleMatchesInOrder(){
+    public void findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse_ReturnsDescriptionAndTitleMatchesInOrder(){
         //Arrange
-        BoardGame boardGame1 = BoardGame.builder()
-                .productName("Test1")
-                .productDescription("match")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame1 = createTestGame(("Test1"), "match");
 
-        BoardGame boardGame2 = BoardGame.builder()
-                .productName("match")
-                .productDescription("Test2")
-                .productPrice(BigDecimal.valueOf(100))
-                .productQuantityInStock(2)
-                .build();
+        BoardGame boardGame2 = createTestGame("match", "Test2");
 
-        boardGameRepositoryUnderTest.saveAll(List.of(boardGame1, boardGame2));
+        entityManager.persist(boardGame1);
+        entityManager.persistAndFlush(boardGame2);
 
         // Act
         List<BoardGame> foundBoardGames = boardGameRepositoryUnderTest.findAllByProductNameAndProductDescriptionContainingIgnoreCaseAndIsRemovedIsFalse("match", pageRequest).toList();
@@ -173,4 +125,21 @@ class BoardGameRepositoryTest {
         assertThat(foundBoardGames).hasSize(2);
         assertThat(foundBoardGames).extracting(BoardGame::getId).containsExactly(boardGame2.getId(), boardGame1.getId());
     }
+
+    private BoardGame createTestGame(String name, String description, boolean isRemoved){
+        BoardGame bg =  BoardGame.builder()
+                .productName(name)
+                .productDescription(description)
+                .productPrice(BigDecimal.valueOf(100))
+                .productQuantityInStock(2)
+                .build();
+
+        bg.setIsRemoved(isRemoved);
+
+        return bg;
+    }
+    private BoardGame createTestGame(String name, String description){
+        return createTestGame(name, description, false);
+    }
+
 }

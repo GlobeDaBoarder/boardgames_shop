@@ -1,5 +1,6 @@
 package generated.board_game.api;
 
+import jakarta.annotation.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,6 @@ import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
 import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 
-import javax.annotation.Generated;
 import java.util.List;
 import java.util.Optional;
 
@@ -189,7 +189,7 @@ public interface BoardgamesApiDelegate {
      * GET /boardgames : Get all boardgames
      *
      * @param search search in product name and description for some key words (optional)
-     * @param filter  URL encode this DTO: { \&quot;manufacturers\&quot;:[\&quot;string\&quot;], \&quot;minProductPrice\&quot;:0, \&quot;maxProductPrice\&quot;:0, \&quot;boardGameGenres\&quot;:[\&quot;string\&quot;], \&quot;boardGameMechanics\&quot;:[\&quot;string\&quot;], \&quot;minAges\&quot;:[0], \&quot;playerCounts\&quot;:[0], \&quot;minGameDuration\&quot;:0, \&quot;maxGameDuration\&quot;:0, \&quot;boardGameLanguages\&quot;:[\&quot;ENGLISH\&quot;]}  (optional)
+     * @param filter  For Filtering you have to URL encode a DTO in Json format. here&#39;s an example of possible DTO: { \&quot;manufacturers\&quot;:[\&quot;Kosmos\&quot;], \&quot;minProductPrice\&quot;:90, \&quot;maxProductPrice\&quot;:110, \&quot;boardGameGenres\&quot;:[\&quot;Сімейні\&quot;,\&quot;Економіка\&quot;], \&quot;boardGameMechanics\&quot;:[\&quot;Конструювання колоди\&quot;,\&quot;Кооперативна гра\&quot;], \&quot;ageIntervals\&quot;:[\&quot;10-13\&quot;,\&quot;8-9\&quot;],\&quot;playerCounts\&quot;:[\&quot;2\&quot;,\&quot;3\&quot;,\&quot;4\&quot;,\&quot;5\&quot;], \&quot;minGameDuration\&quot;:30,\&quot;maxGameDuration\&quot;:130, \&quot;boardGameLanguages\&quot;:[\&quot;UKRAINIAN\&quot;,\&quot;ENGLISH\&quot;] }  (optional)
      * @param sort sort by: price (asc, desc), name (asc, desc), newest (optional)
      * @param page current page number (optional, default to 0)
      * @return OK (status code 200)

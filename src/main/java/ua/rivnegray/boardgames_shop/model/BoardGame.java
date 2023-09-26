@@ -23,7 +23,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class BoardGame extends Product {
 
-    @Builder
+    @Builder()
     public BoardGame(String manufacturer, String productName, String productDescription, BigDecimal productPrice,
                      Integer productQuantityInStock, Set<String> productImageURLs, ProductCategory productCategory,
                      String productCode, String gameSet, Set<BoardGameGenre> gameGenres,

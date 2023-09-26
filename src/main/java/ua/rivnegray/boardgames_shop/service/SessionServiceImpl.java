@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.MapShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.IntermediateRegisterResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.TokenDto;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.UserAlreadyRegisteredException;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.UsernameAlreadyTakenException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.RoleNameNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.UserCredentials;
@@ -55,46 +55,41 @@ public class SessionServiceImpl implements SessionsService{
     }
 
     @Override
-    public LoginResponseDto login(LoginRequestDto loginRequestDto, MapShoppingCartDto mapShoppingCartDto) {
+    public TokenDto login(LoginRequestDto loginRequestDto) {
         UserCredentials userCredentials = this.userCredentialsRepository.findByUsername(loginRequestDto.username())
                 .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
         if (!this.passwordEncoder.matches(loginRequestDto.password(), userCredentials.getPassword())) {
             throw new BadCredentialsException("Invalid username or password");
         }
 
-        UserProfile userProfile = userProfileRepository.findById(userCredentials.getId())
-                .orElseThrow(() -> new UserIdNotFoundException(userCredentials.getId()));
-        String token = tokenService.generateToken(this.authenticationManager.authenticate(
+        return new TokenDto(tokenService.generateToken(this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDto.username(), loginRequestDto.password())
-        ));
-
-        mapShoppingCartDtoToUserProfileCart(mapShoppingCartDto, userProfile);
-
-        this.userProfileRepository.save(userProfile);
-
-        return new LoginResponseDto(this.userMapper.toUserPublicDto(userProfile), token);
+        )));
     }
 
     @Override
-    public LoginResponseDto register(CreateCustomerUserDto createCustomerUserDto, MapShoppingCartDto mapShoppingCartDto) {
+    public IntermediateRegisterResponseDto register(CreateCustomerUserDto createCustomerUserDto) {
         if (this.userCredentialsRepository.existsByUsername(createCustomerUserDto.username())) {
             throw new UsernameAlreadyTakenException(createCustomerUserDto.username());
         }
 
         UserProfile userProfile = findOrCreateUserProfile(createCustomerUserDto);
+        Long userid = userProfile.getId();
 
         UserCredentials userCredentials = new UserCredentials(createCustomerUserDto.username(), passwordEncoder.encode(createCustomerUserDto.password()));
         userCredentials.setUserProfile(userProfile);
         userProfile.setUserCredentials(userCredentials);
 
-        mapShoppingCartDtoToUserProfileCart(mapShoppingCartDto, userProfile);
-
         this.userProfileRepository.save(userProfile);
 
-        String token = tokenService.generateToken(this.authenticationManager.authenticate(
+        String token =  tokenService.generateToken(this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(createCustomerUserDto.username(), createCustomerUserDto.password())
         ));
-        return new LoginResponseDto(this.userMapper.toUserPublicDto(userProfile), token);
+
+        return IntermediateRegisterResponseDto.builder()
+                .token(new TokenDto(token))
+                .userId(userid)
+                .build();
     }
 
     private UserProfile findOrCreateUserProfile(CreateCustomerUserDto createCustomerUserDto) {

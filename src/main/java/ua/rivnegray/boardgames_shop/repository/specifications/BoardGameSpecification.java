@@ -9,6 +9,8 @@ import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
 import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class BoardGameSpecification {
@@ -56,27 +58,51 @@ public class BoardGameSpecification {
         };
     }
 
-    public static Specification<BoardGame> hasMinAges(Set<Integer> minAges){
-        return (root, query, cb) -> {
-            if (minAges == null || minAges.isEmpty()) {
+    public static Specification<BoardGame> hasMinAges(Set<String> ageIntervals){
+        return (root, query, criteriaBuilder) -> {
+            if (ageIntervals == null || ageIntervals.isEmpty()) {
                 return null;
             }
-            return root.get("minAge").in(minAges);
+
+            List<Predicate> predicates = new ArrayList<>();
+            for (String ageInterval : ageIntervals) {
+                if (ageInterval.equals("18+")) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("minAge"), 18));
+                    continue;
+                }
+                String[] ageBoundValues = ageInterval.split("-", 2);
+                Integer minBound = Integer.valueOf(ageBoundValues[0]);
+                Integer maxBound = Integer.valueOf(ageBoundValues[1]);
+                predicates.add(criteriaBuilder.between(root.get("minAge"), minBound, maxBound));
+            }
+
+            return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
         };
     }
 
-    public static Specification<BoardGame> hasPlayersInRange(Set<Integer> playerCounts){
-        return (root, query, cb) -> {
+    public static Specification<BoardGame> hasPlayersInRange(Set<String> playerCounts){
+        return (root, query, criteriaBuilder) -> {
             if (playerCounts == null || playerCounts.isEmpty()) {
                 return null;
             }
-            Predicate minPlayersIn = root.get("minPlayers").in(playerCounts);
-            Predicate maxPlayersIn = root.get("maxPlayers").in(playerCounts);
-            return cb.or(minPlayersIn, maxPlayersIn);
+
+            List<Predicate> predicates = new ArrayList<>();
+            for (String playerCount : playerCounts) {
+                if (playerCount.equals("6+")) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("maxPlayers" ), 6));
+                    continue;
+                }
+                predicates.add(criteriaBuilder.and(
+                        criteriaBuilder.lessThanOrEqualTo(root.get("minPlayers"), Integer.valueOf(playerCount)),
+                        criteriaBuilder.greaterThan(root.get("maxPlayers"), Integer.valueOf(playerCount))
+                ));
+            }
+
+            return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
         };
     }
 
-    public static Specification<BoardGame> hasGameDurationInRange(Integer minGameDurationFilter, Integer maxGameDurationFilter) {
+    public static Specification<BoardGame> hasGameDurationInRange(Integer minGameDurationFilter, Integer maxGameDurationFilter){
         return (root, query, cb) -> {
             if (minGameDurationFilter == null && maxGameDurationFilter == null) {
                 return null;

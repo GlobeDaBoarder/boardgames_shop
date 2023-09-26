@@ -1,17 +1,14 @@
 package generated.session.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestWithMapShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
+import jakarta.annotation.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.multipart.MultipartFile;
+import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto;
+import ua.rivnegray.boardgames_shop.DTO.response.TokenDto;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import javax.annotation.Generated;
 
 /**
  * A delegate to be called by the {@link LoginApiController}}.
@@ -27,17 +24,17 @@ public interface LoginApiDelegate {
     /**
      * POST /login : Log in a user
      *
-     * @param loginRequestWithMapShoppingCartDto  (required)
+     * @param loginRequestDto  (required)
      * @return Successful operation (status code 200)
      *         or Bad Request (status code 400)
      *         or Conflict, e.g., email already in use (status code 409)
      * @see LoginApi#loginUser
      */
-    default ResponseEntity<LoginResponseDto> loginUser(LoginRequestWithMapShoppingCartDto loginRequestWithMapShoppingCartDto) {
+    default ResponseEntity<TokenDto> loginUser(LoginRequestDto loginRequestDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"user\" : { \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"addresses\" : [ { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 }, { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 } ], \"phone\" : \"phone\", \"roles\" : [ { \"permissions\" : [ null, null ], \"roleName\" : \"roleName\", \"id\" : 0 }, { \"permissions\" : [ null, null ], \"roleName\" : \"roleName\", \"id\" : 0 } ], \"email\" : \"email\", \"username\" : \"username\" }, \"token\" : \"token\" }";
+                    String exampleString = "{ \"token\" : \"eyJraWQiOiI3N2VlNDlkOC02N2Q3LTQ0MDktODk0YS1jM2IzMjM2MTMwZjIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInNjb3BlIjpbImdlbnJlQW5kTWVjaGFuaWM6Y3JlYXRlIiwiYm9hcmRHYW1lOmRlbGV0ZSIsInVzZXI6ZGVsZXRlIiwidXNlcjp1cGRhdGVNZSIsInVzZXI6cmVhZE1lIiwib3JkZXI6ZXhwb3J0Iiwib3JkZXI6cmVhZCIsInVzZXI6dXBkYXRlIiwiYm9hcmRHYW1lOmFyY2hpdmVBbmRVbmFyY2hpdmUiLCJzaG9wcGluZ0NhcnQ6bWFuYWdlTWUiLCJvcmRlcjpjcmVhdGUiLCJib2FyZEdhbWU6dXBkYXRlIiwiZ2VucmVBbmRNZWNoYW5pYzpkZWxldGUiLCJnZW5yZUFuZE1lY2hhbmljOnVwZGF0ZSIsIm9yZGVyOmRlbGV0ZSIsInVzZXI6Y3JlYXRlIiwib3JkZXI6dXBkYXRlU3RhdHVzIiwiYm9hcmRHYW1lOmNyZWF0ZSIsInVzZXI6cmVhZCIsImJvYXJkR2FtZTpyZWFkQXJjaGl2ZWQiLCJvcmRlcjpyZWFkTWUiLCJvcmRlcjpjYW5jZWxNZSIsInNob3BwaW5nQ2FydDpyZWFkIl0sImlzcyI6InNlbGYiLCJpZCI6MSwiZXhwIjoxNjk1NjMzNjA1LCJpYXQiOjE2OTU2MzAwMDV9.Ln4RALpfhAliwqc2bvDC7quQB0KnrkdFr9t8wuUnD6K38k_69-ApcMl2J9vexA1DtUq6IsuFwyeTEH9n72p5h-KnwJ8pMmm6DgN4g4YytFBgK0rMrMFdFMgx3LD9JIpqiUuYe1M_ItsxFhrgYZAP1Sa6c5GeRLSrkxVz0tB8nHHZ_qd2Ihj1g8aTwzB74gX_IbpaGkO0ymmTKC4ZHVCSdKWP9Gi-TV67xFi0Vr78mVv9-JhV-Li_t98xiwOF3oNkDsDhl0FRyPRwkGZ-iDpHvulaDczp3hvGHwBavNMQf2mjBcW76M6GrH9iBA1f1Cla1SXksqx6wBFhAPRhdfOiPg\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.6</version>
+		<version>3.1.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ua.rivnegray</groupId>
@@ -15,6 +15,8 @@
 	<description>boardgames_shop</description>
 	<properties>
 		<java.version>17</java.version>
+		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<spring-boot.version>3.1.3</spring-boot.version>
 	</properties>
 	<packaging>jar</packaging>
 	<dependencies>
@@ -26,16 +28,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
-			<version>8.0.32</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -52,45 +55,14 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.28</version>
 			<scope>provided</scope>
-		</dependency>
-
- 		<!--		openapi generated sources dependencies-->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>4.0.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>javax.annotation-api</artifactId>
-			<version>1.3.2</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations -->
-		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-annotations</artifactId>
-			<version>2.2.11</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>8.0.0.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>2.0.1.Final</version>
 		</dependency>
 
 		<!--mapper dependency-->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
-			<version>1.5.5.Final</version>
+			<version>${mapstruct.version}</version>
 		</dependency>
 
 		<!-- spring doc dependency fro having a ui for openapi files 		-->
@@ -98,7 +70,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.1.0</version>
+			<version>2.2.0</version>
 		</dependency>
 
 		<!-- for excel files -->
@@ -112,7 +84,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
-			<version>3.1.2</version>
+			<version>${spring-boot.version}</version>
 			<optional>true</optional>
 		</dependency>
 
@@ -120,14 +92,12 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>2.2.222</version>
 			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
 
 	<build>
-<!--		<finalName>rivnegray</finalName>-->
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -137,7 +107,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
 				<configuration>
 					<source>17</source>
 					<target>17</target>
@@ -145,17 +114,17 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-							<version>1.18.28</version>
+							<version>${lombok.version}</version>
 						</path>
 						<path>
 							<groupId>org.mapstruct</groupId>
 							<artifactId>mapstruct-processor</artifactId>
-							<version>1.5.5.Final</version>
+							<version>${mapstruct.version}</version>
 						</path>
 						<path>
 							<groupId>org.springframework.boot</groupId>
 							<artifactId>spring-boot-configuration-processor</artifactId>
-							<version>3.1.2</version>
+							<version>${spring-boot.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
@@ -186,7 +155,7 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>6.6.0</version>
+				<version>7.0.0</version>
 
 				<configuration>
 					<generatorName>spring</generatorName>
@@ -196,7 +165,6 @@
 					<generateModelDocumentation>false</generateModelDocumentation>
 					<generateApiTests>false</generateApiTests>
 					<generateApiDocumentation>false</generateApiDocumentation>
-<!--					<generateSupportingFiles>false</generateSupportingFiles>-->
 					<supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
 
 					<templateDirectory>
@@ -209,6 +177,7 @@
 						<java8>true</java8>
 						<delegatePattern>true</delegatePattern>
 						<hideGenerationTimestamp>true</hideGenerationTimestamp>
+						<useSpringBoot3>true</useSpringBoot3>
 					</configOptions>
 
 					<inputSpec/>
@@ -343,16 +312,9 @@
 							<inputSpec>src/main/resources/session.yaml</inputSpec>
 
 							<importMappings>
-
-								<importMapping>AddressDto=ua.rivnegray.boardgames_shop.DTO.response.AddressDto</importMapping>
 								<importMapping>LoginRequestDto=ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto</importMapping>
-								<importMapping>LoginResponseDto=ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto</importMapping>
 								<importMapping>CreateCustomerUserDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto</importMapping>
-								<importMapping>UserPublicDto=ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto</importMapping>
-								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto</importMapping>
-								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.UserPermission</importMapping>
-								<importMapping>LoginRequestWithMapShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.request.LoginRequestWithMapShoppingCartDto</importMapping>
-								<importMapping>RegisterRequestWithMapShoppingCartDto=ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto</importMapping>
+								<importMapping>TokenDto=ua.rivnegray.boardgames_shop.DTO.response.TokenDto</importMapping>
 							</importMappings>
 
 							<configOptions>

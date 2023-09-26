@@ -1,5 +1,6 @@
 package ua.rivnegray.boardgames_shop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.ManyToOne;
@@ -28,6 +29,7 @@ public class ProductImage extends BaseEntity{
         this.imageURL = imageURL;
     }
     @ManyToOne
+    @JsonIgnore
     private Product product;
 
     private String originalFileName;

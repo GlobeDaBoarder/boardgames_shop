@@ -15,14 +15,14 @@ paths:
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/LoginRequestWithMapShoppingCartDto'
+                $ref: '#/components/schemas/LoginRequestDto'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponseDto'
+                $ref: '#/components/schemas/TokenDto'
         '400':
           description: Bad Request
         '409':
@@ -36,132 +36,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterRequestWithMapShoppingCartDto'
+              $ref: '#/components/schemas/CreateCustomerUserDto'
       responses:
         '201':
           description: Registration successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponseDto'
+                $ref: '#/components/schemas/TokenDto'
         '400':
           description: Bad Request
         '409':
           description: Conflict, e.g., email already in use
 components:
   schemas:
-    LoginRequestWithMapShoppingCartDto:
-      type: object
-      properties:
-        loginRequestDto:
-          $ref: '#/components/schemas/LoginRequestDto'
-        mapShoppingCartDto:
-          $ref: '#/components/schemas/MapShoppingCartDto'
-      required:
-        - loginRequestDto
-
-    RegisterRequestWithMapShoppingCartDto:
-      type: object
-      properties:
-        createCustomerUserDto:
-          $ref: '#/components/schemas/CreateCustomerUserDto'
-        mapShoppingCartDto:
-          $ref: '#/components/schemas/MapShoppingCartDto'
-      required:
-        - createCustomerUserDto
-
-    SimpleProductInShoppingCartDto:
-      type: object
-      properties:
-        productId:
-          type: integer
-          format: int64
-        quantity:
-          type: integer
-          format: int32
-      required:
-        - productId
-        - quantity
-
-    MapShoppingCartDto:
-      type: object
-      properties:
-        simpleProductInShoppingCartDtos:
-          type: array
-          items:
-            $ref: '#/components/schemas/SimpleProductInShoppingCartDto'
-      required:
-        - simpleProductInShoppingCartDtos
-
-
-    LoginResponseDto:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/UserPublicDto'
-        token:
-          type: string
-    UserPublicDto:
-      type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto
-      properties:
-        username:
-          type: string
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserRoleDto'
-        email:
-          type: string
-        phone:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AddressDto'
-    UserRoleDto:
-      type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto
-      properties:
-        id:
-          type: integer
-          format: int64
-        roleName:
-          type: string
-        permissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserPermission'
-    AddressDto:
-      type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.AddressDto
-      properties:
-        id:
-          type: integer
-          format: int64
-        street:
-          type: string
-        houseNumber:
-          type: string
-        postalCode:
-          type: string
-        city:
-          type: string
-        country:
-          type: string
-    UserPermission:
-      type: string
-      x-java-type: ua.rivnegray.boardgames_shop.model.user.UserPermission
-      enum:
-        - user:read
-        - user:write
-        - admin:read
-        - admin:write
-
     LoginRequestDto:
       type: object
       properties:
@@ -185,3 +73,11 @@ components:
           type: string
         lastName:
           type: string
+    TokenDto:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJraWQiOiI3N2VlNDlkOC02N2Q3LTQ0MDktODk0YS1jM2IzMjM2MTMwZjIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInNjb3BlIjpbImdlbnJlQW5kTWVjaGFuaWM6Y3JlYXRlIiwiYm9hcmRHYW1lOmRlbGV0ZSIsInVzZXI6ZGVsZXRlIiwidXNlcjp1cGRhdGVNZSIsInVzZXI6cmVhZE1lIiwib3JkZXI6ZXhwb3J0Iiwib3JkZXI6cmVhZCIsInVzZXI6dXBkYXRlIiwiYm9hcmRHYW1lOmFyY2hpdmVBbmRVbmFyY2hpdmUiLCJzaG9wcGluZ0NhcnQ6bWFuYWdlTWUiLCJvcmRlcjpjcmVhdGUiLCJib2FyZEdhbWU6dXBkYXRlIiwiZ2VucmVBbmRNZWNoYW5pYzpkZWxldGUiLCJnZW5yZUFuZE1lY2hhbmljOnVwZGF0ZSIsIm9yZGVyOmRlbGV0ZSIsInVzZXI6Y3JlYXRlIiwib3JkZXI6dXBkYXRlU3RhdHVzIiwiYm9hcmRHYW1lOmNyZWF0ZSIsInVzZXI6cmVhZCIsImJvYXJkR2FtZTpyZWFkQXJjaGl2ZWQiLCJvcmRlcjpyZWFkTWUiLCJvcmRlcjpjYW5jZWxNZSIsInNob3BwaW5nQ2FydDpyZWFkIl0sImlzcyI6InNlbGYiLCJpZCI6MSwiZXhwIjoxNjk1NjMzNjA1LCJpYXQiOjE2OTU2MzAwMDV9.Ln4RALpfhAliwqc2bvDC7quQB0KnrkdFr9t8wuUnD6K38k_69-ApcMl2J9vexA1DtUq6IsuFwyeTEH9n72p5h-KnwJ8pMmm6DgN4g4YytFBgK0rMrMFdFMgx3LD9JIpqiUuYe1M_ItsxFhrgYZAP1Sa6c5GeRLSrkxVz0tB8nHHZ_qd2Ihj1g8aTwzB74gX_IbpaGkO0ymmTKC4ZHVCSdKWP9Gi-TV67xFi0Vr78mVv9-JhV-Li_t98xiwOF3oNkDsDhl0FRyPRwkGZ-iDpHvulaDczp3hvGHwBavNMQf2mjBcW76M6GrH9iBA1f1Cla1SXksqx6wBFhAPRhdfOiPg"
+          description: JWT token
+

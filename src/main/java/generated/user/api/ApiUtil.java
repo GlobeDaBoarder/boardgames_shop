@@ -1,8 +1,8 @@
 package generated.user.api;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ApiUtil {
