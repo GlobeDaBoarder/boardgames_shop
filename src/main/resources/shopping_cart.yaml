@@ -222,16 +222,12 @@ components:
         id:
           type: integer
           format: int64
-        userProfileId:
-          type: integer
-          format: int64
         productsInShoppingCart:
           type: array
           items:
             $ref: '#/components/schemas/ProductInShoppingCartDto'
       required:
         - id
-        - userProfileId
         - products
 
     OrderDto:

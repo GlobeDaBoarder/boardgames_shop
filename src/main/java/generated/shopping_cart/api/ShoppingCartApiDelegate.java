@@ -36,7 +36,7 @@ public interface ShoppingCartApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"userProfileId\" : 6, \"id\" : 0 }";
+                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"id\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -81,7 +81,7 @@ public interface ShoppingCartApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"userProfileId\" : 6, \"id\" : 0 }";
+                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"id\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -146,7 +146,7 @@ public interface ShoppingCartApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"userProfileId\" : 6, \"id\" : 0 }";
+                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"id\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -170,7 +170,7 @@ public interface ShoppingCartApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"userProfileId\" : 6, \"id\" : 0 }";
+                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"id\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

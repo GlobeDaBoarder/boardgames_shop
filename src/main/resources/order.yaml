@@ -10,7 +10,6 @@ paths:
     post:
       summary: Creates a new order
       operationId: createOrder
-#      x-access-permission: order:create
       requestBody:
         required: true
         content:

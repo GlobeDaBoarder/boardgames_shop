@@ -34,7 +34,8 @@ public class TokenService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                // TODO: change to 1 hour for production
+                .expiresAt(now.plus(14, ChronoUnit.DAYS))
                 .subject(authentication.getName())
                 .claim("id", securityUser.getId())
                 .claim("scope", scope)

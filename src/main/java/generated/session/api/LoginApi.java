@@ -19,8 +19,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestWithMapShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto;
+import ua.rivnegray.boardgames_shop.DTO.response.TokenDto;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Validated
@@ -34,7 +34,7 @@ public interface LoginApi {
     /**
      * POST /login : Log in a user
      *
-     * @param loginRequestWithMapShoppingCartDto  (required)
+     * @param loginRequestDto  (required)
      * @return Successful operation (status code 200)
      *         or Bad Request (status code 400)
      *         or Conflict, e.g., email already in use (status code 409)
@@ -44,7 +44,7 @@ public interface LoginApi {
         summary = "Log in a user",
         responses = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = LoginResponseDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = TokenDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "409", description = "Conflict, e.g., email already in use", content = @Content)
@@ -57,10 +57,10 @@ public interface LoginApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<LoginResponseDto> loginUser(
-        @Parameter(name = "LoginRequestWithMapShoppingCartDto", description = "", required = true) @Valid @RequestBody LoginRequestWithMapShoppingCartDto loginRequestWithMapShoppingCartDto
+    default ResponseEntity<TokenDto> loginUser(
+        @Parameter(name = "LoginRequestDto", description = "", required = true) @Valid @RequestBody LoginRequestDto loginRequestDto
     ) {
-        return getDelegate().loginUser(loginRequestWithMapShoppingCartDto);
+        return getDelegate().loginUser(loginRequestDto);
     }
 
 }

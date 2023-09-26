@@ -5,8 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.IntermediateRegisterResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.TokenDto;
 import ua.rivnegray.boardgames_shop.service.SessionsService;
 
 import java.net.URI;
@@ -20,16 +21,16 @@ public class RegisterApiDelegateImpl implements RegisterApiDelegate {
         this.sessionsService = sessionsService;
     }
 
-    @Override
-    public ResponseEntity<LoginResponseDto> registerUser(RegisterRequestWithMapShoppingCartDto registerRequestDto) {
-        LoginResponseDto loginResponse = this.sessionsService.register(registerRequestDto.createCustomerUserDto(),
-                registerRequestDto.mapShoppingCartDto());
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+    @Override
+    public ResponseEntity<TokenDto> registerUser(CreateCustomerUserDto createCustomerUserDto) {
+        IntermediateRegisterResponseDto intermediateRegisterResponseDto = this.sessionsService.register(createCustomerUserDto);
+
+        URI location = ServletUriComponentsBuilder.fromUriString("/users")
                 .path("/{id}")
-                .buildAndExpand(loginResponse.user().id())
+                .buildAndExpand(intermediateRegisterResponseDto.userId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(loginResponse);
+        return ResponseEntity.created(location).body(intermediateRegisterResponseDto.token());
     }
 }

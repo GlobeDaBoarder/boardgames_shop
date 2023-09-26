@@ -321,7 +321,7 @@ public interface BoardgamesApi {
      * GET /boardgames : Get all boardgames
      *
      * @param search search in product name and description for some key words (optional)
-     * @param filter  URL encode this DTO: { \&quot;manufacturers\&quot;:[\&quot;string\&quot;], \&quot;minProductPrice\&quot;:0, \&quot;maxProductPrice\&quot;:0, \&quot;boardGameGenres\&quot;:[\&quot;string\&quot;], \&quot;boardGameMechanics\&quot;:[\&quot;string\&quot;], \&quot;minAges\&quot;:[0], \&quot;playerCounts\&quot;:[0], \&quot;minGameDuration\&quot;:0, \&quot;maxGameDuration\&quot;:0, \&quot;boardGameLanguages\&quot;:[\&quot;ENGLISH\&quot;]}  (optional)
+     * @param filter  For Filtering you have to URL encode a DTO in Json format. here&#39;s an example of possible DTO: { \&quot;manufacturers\&quot;:[\&quot;Kosmos\&quot;], \&quot;minProductPrice\&quot;:90, \&quot;maxProductPrice\&quot;:110, \&quot;boardGameGenres\&quot;:[\&quot;Сімейні\&quot;,\&quot;Економіка\&quot;], \&quot;boardGameMechanics\&quot;:[\&quot;Конструювання колоди\&quot;,\&quot;Кооперативна гра\&quot;], \&quot;ageIntervals\&quot;:[\&quot;10-13\&quot;,\&quot;8-9\&quot;],\&quot;playerCounts\&quot;:[\&quot;2\&quot;,\&quot;3\&quot;,\&quot;4\&quot;,\&quot;5\&quot;], \&quot;minGameDuration\&quot;:30,\&quot;maxGameDuration\&quot;:130, \&quot;boardGameLanguages\&quot;:[\&quot;UKRAINIAN\&quot;,\&quot;ENGLISH\&quot;] }  (optional)
      * @param sort sort by: price (asc, desc), name (asc, desc), newest (optional)
      * @param page current page number (optional, default to 0)
      * @return OK (status code 200)
@@ -343,7 +343,7 @@ public interface BoardgamesApi {
     )
     default ResponseEntity<CatalogResponseDto> getAllBoardGames(
         @Parameter(name = "search", description = "search in product name and description for some key words", in = ParameterIn.QUERY) @Valid @RequestParam(value = "search", required = false) String search,
-        @Parameter(name = "filter", description = " URL encode this DTO: { \"manufacturers\":[\"string\"], \"minProductPrice\":0, \"maxProductPrice\":0, \"boardGameGenres\":[\"string\"], \"boardGameMechanics\":[\"string\"], \"minAges\":[0], \"playerCounts\":[0], \"minGameDuration\":0, \"maxGameDuration\":0, \"boardGameLanguages\":[\"ENGLISH\"]} ", in = ParameterIn.QUERY) @Valid @RequestParam(value = "filter", required = false) String filter,
+        @Parameter(name = "filter", description = " For Filtering you have to URL encode a DTO in Json format. here's an example of possible DTO: { \"manufacturers\":[\"Kosmos\"], \"minProductPrice\":90, \"maxProductPrice\":110, \"boardGameGenres\":[\"Сімейні\",\"Економіка\"], \"boardGameMechanics\":[\"Конструювання колоди\",\"Кооперативна гра\"], \"ageIntervals\":[\"10-13\",\"8-9\"],\"playerCounts\":[\"2\",\"3\",\"4\",\"5\"], \"minGameDuration\":30,\"maxGameDuration\":130, \"boardGameLanguages\":[\"UKRAINIAN\",\"ENGLISH\"] } ", in = ParameterIn.QUERY) @Valid @RequestParam(value = "filter", required = false) String filter,
         @Parameter(name = "sort", description = "sort by: price (asc, desc), name (asc, desc), newest", in = ParameterIn.QUERY) @Valid @RequestParam(value = "sort", required = false) SortType sort,
         @Parameter(name = "page", description = "current page number", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
     ) {

@@ -18,18 +18,17 @@ paths:
           in: query
           required: false
           description: "
-            URL encode this DTO: 
+            For Filtering you have to URL encode a DTO in Json format. here's an example of possible DTO: 
             {
-            \"manufacturers\":[\"string\"],
-            \"minProductPrice\":0,
-            \"maxProductPrice\":0,
-            \"boardGameGenres\":[\"string\"],
-            \"boardGameMechanics\":[\"string\"],
-            \"minAges\":[0],
-            \"playerCounts\":[0],
-            \"minGameDuration\":0,
-            \"maxGameDuration\":0,
-            \"boardGameLanguages\":[\"ENGLISH\"]}
+              \"manufacturers\":[\"Kosmos\"],
+              \"minProductPrice\":90,
+              \"maxProductPrice\":110,
+              \"boardGameGenres\":[\"Сімейні\",\"Економіка\"],
+              \"boardGameMechanics\":[\"Конструювання колоди\",\"Кооперативна гра\"],
+              \"ageIntervals\":[\"10-13\",\"8-9\"],\"playerCounts\":[\"2\",\"3\",\"4\",\"5\"],
+              \"minGameDuration\":30,\"maxGameDuration\":130,
+              \"boardGameLanguages\":[\"UKRAINIAN\",\"ENGLISH\"]
+            }
           "
           schema:
             type: string

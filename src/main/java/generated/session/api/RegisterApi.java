@@ -19,8 +19,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ua.rivnegray.boardgames_shop.DTO.request.RegisterRequestWithMapShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.LoginResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.TokenDto;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Validated
@@ -34,7 +34,7 @@ public interface RegisterApi {
     /**
      * POST /register : Register a new user
      *
-     * @param registerRequestWithMapShoppingCartDto  (required)
+     * @param createCustomerUserDto  (required)
      * @return Registration successful (status code 201)
      *         or Bad Request (status code 400)
      *         or Conflict, e.g., email already in use (status code 409)
@@ -44,7 +44,7 @@ public interface RegisterApi {
         summary = "Register a new user",
         responses = {
             @ApiResponse(responseCode = "201", description = "Registration successful", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = LoginResponseDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = TokenDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "409", description = "Conflict, e.g., email already in use", content = @Content)
@@ -57,10 +57,10 @@ public interface RegisterApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<LoginResponseDto> registerUser(
-        @Parameter(name = "RegisterRequestWithMapShoppingCartDto", description = "", required = true) @Valid @RequestBody RegisterRequestWithMapShoppingCartDto registerRequestWithMapShoppingCartDto
+    default ResponseEntity<TokenDto> registerUser(
+        @Parameter(name = "CreateCustomerUserDto", description = "", required = true) @Valid @RequestBody CreateCustomerUserDto createCustomerUserDto
     ) {
-        return getDelegate().registerUser(registerRequestWithMapShoppingCartDto);
+        return getDelegate().registerUser(createCustomerUserDto);
     }
 
 }

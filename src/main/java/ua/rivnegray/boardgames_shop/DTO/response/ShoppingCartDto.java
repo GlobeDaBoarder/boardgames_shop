@@ -6,6 +6,7 @@ import java.util.Set;
 /**
  * DTO for {@link ua.rivnegray.boardgames_shop.model.ShoppingCart}
  */
-public record ShoppingCartDto(Long id, Long userProfileId,
-                              Set<ProductInShoppingCartDto> productsInShoppingCartDto) implements Serializable {
+public record ShoppingCartDto(
+        Long id,
+        Set<ProductInShoppingCartDto> productsInShoppingCartDto) implements Serializable {
 }
