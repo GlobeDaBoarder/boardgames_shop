@@ -165,7 +165,7 @@ public class BoardGameServiceImpl implements BoardGameService {
                 BoardGameSpecification.hasPriceInRange(filterBoardGamesRequestDto.minProductPrice(), filterBoardGamesRequestDto.maxProductPrice()),
                 BoardGameSpecification.hasBoardGameGenres(filterBoardGamesRequestDto.boardGameGenres()),
                 BoardGameSpecification.hasBoardGameMechanics(filterBoardGamesRequestDto.boardGameMechanics()),
-                BoardGameSpecification.hasMinAges(filterBoardGamesRequestDto.minAges()),
+                BoardGameSpecification.hasMinAges(filterBoardGamesRequestDto.ageIntervals()),
                 BoardGameSpecification.hasPlayersInRange(filterBoardGamesRequestDto.playerCounts()),
                 BoardGameSpecification.hasGameDurationInRange(filterBoardGamesRequestDto.minGameDuration(), filterBoardGamesRequestDto.maxGameDuration()),
                 BoardGameSpecification.hasLanguage(filterBoardGamesRequestDto.boardGameLanguages()),
