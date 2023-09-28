@@ -1,6 +1,5 @@
 package ua.rivnegray.boardgames_shop;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.ImageProperties;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.PaginationProperties;
 import ua.rivnegray.boardgames_shop.model.Address;
@@ -177,7 +175,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findById(1L).get(), boardGameMechanicRepository.findById(2L).get(), boardGameMechanicRepository.findByMechanicName("Розміщення плиток").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/13/catan")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(10)
+					.minAge(2)
 					.build();
 
 			BoardGame boardGame2 = BoardGame.builder()
@@ -240,7 +238,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/181304/mysterium")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(10)
+					.minAge(2)
 					.build();
 
 			BoardGame boardGame5 = BoardGame.builder()
@@ -282,7 +280,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Вибір карт").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/173346/7-wonders-duel")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(10)
+					.minAge(3)
 					.build();
 
 			BoardGame boardGame7 = BoardGame.builder()
@@ -303,7 +301,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Конструювання колоди").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/36218/dominion")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(10)
+					.minAge(3)
 					.build();
 
 
@@ -389,7 +387,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Розміщення робітників").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/120677/terra-mystica")
 					.gameLanguage(BoardGameLanguage.RUSSIAN)
-					.minAge(12)
+					.minAge(14)
 					.build();
 
 			BoardGame boardGame12 = BoardGame.builder()
@@ -431,7 +429,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кидання кубиків").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/84876/castles-burgundy")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(12)
+					.minAge(14)
 					.build();
 
 
@@ -453,7 +451,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кидання кубиків").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/3076/puerto-rico")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(12)
+					.minAge(15)
 					.build();
 
 			BoardGame boardGame15 = BoardGame.builder()
@@ -474,7 +472,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Аукціон/Ліцитація").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/2651/power-grid")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(12)
+					.minAge(15)
 					.build();
 
 			BoardGame boardGame16 = BoardGame.builder()
@@ -495,7 +493,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Розміщення робітників").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/31260/agricola")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(12)
+					.minAge(17)
 					.build();
 
 
@@ -517,7 +515,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Розміщення робітників").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/68448/7-wonders")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(10)
+					.minAge(4)
 					.build();
 
 			BoardGame boardGame18 = BoardGame.builder()
@@ -559,7 +557,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/205059/mansions-madness-second-edition")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(12)
+					.minAge(17)
 					.build();
 
 			BoardGame boardGame20 = BoardGame.builder()
@@ -580,7 +578,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/266192/wingspan")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(10)
+					.minAge(4)
 					.build();
 
 			BoardGame boardGame21 = BoardGame.builder()
@@ -601,7 +599,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/244521/quacks-quedlinburg")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(10)
+					.minAge(5)
 					.build();
 
 			BoardGame boardGame22 = BoardGame.builder()
@@ -622,7 +620,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findById(1L).get(), boardGameMechanicRepository.findById(2L).get(), boardGameMechanicRepository.findByMechanicName("Розміщення плиток").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/13/catan")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(10)
+					.minAge(5)
 					.build();
 
 			BoardGame boardGame23 = BoardGame.builder()
@@ -685,7 +683,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/181304/mysterium")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(10)
+					.minAge(6)
 					.build();
 
 			BoardGame boardGame26 = BoardGame.builder()
@@ -727,7 +725,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Вибір карт").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/173346/7-wonders-duel")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(10)
+					.minAge(6)
 					.build();
 
 			BoardGame boardGame28 = BoardGame.builder()
@@ -748,7 +746,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Конструювання колоди").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/36218/dominion")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(10)
+					.minAge(6)
 					.build();
 
 
@@ -770,7 +768,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Управління рукою").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/167791/terraforming-mars")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(12)
+					.minAge(18)
 					.build();
 
 			BoardGame boardGame30 = BoardGame.builder()
@@ -834,7 +832,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Розміщення робітників").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/120677/terra-mystica")
 					.gameLanguage(BoardGameLanguage.RUSSIAN)
-					.minAge(12)
+					.minAge(18)
 					.build();
 
 			BoardGame boardGame33 = BoardGame.builder()
@@ -876,7 +874,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кидання кубиків").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/84876/castles-burgundy")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(12)
+					.minAge(20)
 					.build();
 
 
@@ -898,7 +896,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кидання кубиків").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/3076/puerto-rico")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(12)
+					.minAge(20)
 					.build();
 
 			BoardGame boardGame36 = BoardGame.builder()
@@ -919,7 +917,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Аукціон/Ліцитація").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/2651/power-grid")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(12)
+					.minAge(21)
 					.build();
 
 			BoardGame boardGame37 = BoardGame.builder()
@@ -940,7 +938,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Розміщення робітників").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/31260/agricola")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(12)
+					.minAge(21)
 					.build();
 
 
@@ -962,7 +960,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Розміщення робітників").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/68448/7-wonders")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(10)
+					.minAge(7)
 					.build();
 
 			BoardGame boardGame39 = BoardGame.builder()
@@ -1004,7 +1002,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/205059/mansions-madness-second-edition")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(12)
+					.minAge(21)
 					.build();
 
 			BoardGame boardGame41 = BoardGame.builder()
@@ -1025,7 +1023,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/266192/wingspan")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(10)
+					.minAge(8)
 					.build();
 
 			BoardGame boardGame42 = BoardGame.builder()
@@ -1046,7 +1044,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/244521/quacks-quedlinburg")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(10)
+					.minAge(8)
 					.build();
 
 
@@ -1068,7 +1066,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findById(1L).get(), boardGameMechanicRepository.findById(2L).get(), boardGameMechanicRepository.findByMechanicName("Розміщення плиток").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/13/catan")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(10)
+					.minAge(9)
 					.build();
 
 			BoardGame boardGame44 = BoardGame.builder()
@@ -1131,7 +1129,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/181304/mysterium")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(10)
+					.minAge(9)
 					.build();
 
 			BoardGame boardGame47 = BoardGame.builder()
@@ -1173,7 +1171,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Вибір карт").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/173346/7-wonders-duel")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(10)
+					.minAge(11)
 					.build();
 
 			BoardGame boardGame49 = BoardGame.builder()
@@ -1194,7 +1192,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Конструювання колоди").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/36218/dominion")
 					.gameLanguage(BoardGameLanguage.ENGLISH)
-					.minAge(10)
+					.minAge(11)
 					.build();
 
 
@@ -1450,7 +1448,7 @@ public class BoardgamesShopApplication {
 					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/205059/mansions-madness-second-edition")
 					.gameLanguage(BoardGameLanguage.UKRAINIAN)
-					.minAge(12)
+					.minAge(13)
 					.build();
 
 			BoardGame boardGame62 = BoardGame.builder()
@@ -1504,22 +1502,6 @@ public class BoardgamesShopApplication {
 			shoppingCartRepository.save(cart1);
 
 			LOGGER.debug("test");
-
-
-			FilterBoardGamesRequestDto filterExample = FilterBoardGamesRequestDto.builder()
-					.manufacturers(Set.of("Kosmos"))
-					.minProductPrice(new BigDecimal("90"))
-					.maxProductPrice(new BigDecimal("110"))
-					.boardGameGenres(Set.of("Економіка", "Сімейні"))
-					.boardGameMechanics(Set.of("Кооперативна гра", "Конструювання колоди"))
-					.ageIntervals(Set.of("8-9", "10-13"))
-					.playerCounts(Set.of("2", "3", "4", "5"))
-					.minGameDuration(30)
-					.maxGameDuration(130)
-					.boardGameLanguages(Set.of(BoardGameLanguage.ENGLISH, BoardGameLanguage.UKRAINIAN))
-					.build();
-
-			System.out.println(new ObjectMapper().writeValueAsString(filterExample));
 		};
 	}
 }

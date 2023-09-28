@@ -514,10 +514,6 @@ paths:
                 format: binary
         '400':
           description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
         '404':
           description: Boardgame or Image not found
   /boardgames/priceBounds:
@@ -542,6 +538,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MinMaxDto'
+  /boardgames/filteringData:
+    get:
+      summary: Get all filtering data
+      operationId: getFilteringData
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilteringDataDto'
 
 components:
   securitySchemes:
@@ -780,6 +787,32 @@ components:
         absoluteMaxValue:
           type: integer
           format: int64
+    FilteringDataDto:
+      type: object
+      description: DTO for filtering data
+      properties:
+        boardGameGenres:
+          $ref: '#/components/schemas/FilteringCategoryDto'
+        boardGameMechanics:
+          $ref: '#/components/schemas/FilteringCategoryDto'
+        ageIntervals:
+          $ref: '#/components/schemas/FilteringCategoryDto'
+        playerCounts:
+          $ref: '#/components/schemas/FilteringCategoryDto'
+        boardGameLanguages:
+          $ref: '#/components/schemas/FilteringCategoryDto'
 
+
+    FilteringCategoryDto:
+      type: object
+      properties:
+        nameCategory:
+          type: string
+        nameFilters:
+          type: array
+          items:
+            type: string
+        isScrolled:
+          type: boolean
 
 

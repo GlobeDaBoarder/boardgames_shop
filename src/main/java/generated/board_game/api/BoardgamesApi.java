@@ -34,6 +34,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FilteringDataDto;
 import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 
@@ -441,8 +442,6 @@ public interface BoardgamesApi {
      * @param filename The filename of the image to retrieve (e.g., \&quot;1.png\&quot;) (required)
      * @return Image retrieved successfully (status code 200)
      *         or Bad Request (status code 400)
-     *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
      *         or Boardgame or Image not found (status code 404)
      */
     @Operation(
@@ -455,8 +454,6 @@ public interface BoardgamesApi {
                 @Content(mediaType = "image/jpg", schema = @Schema(implementation = org.springframework.core.io.Resource.class))
             }),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "404", description = "Boardgame or Image not found", content = @Content)
         }
     )
@@ -470,6 +467,33 @@ public interface BoardgamesApi {
         @Parameter(name = "filename", description = "The filename of the image to retrieve (e.g., \"1.png\")", required = true, in = ParameterIn.PATH) @PathVariable("filename") String filename
     ) {
         return getDelegate().getBoardGameImage(filename);
+    }
+
+
+    /**
+     * GET /boardgames/filteringData : Get all filtering data
+     *
+     * @return OK (status code 200)
+     */
+    @Operation(
+        operationId = "getFilteringData",
+        summary = "Get all filtering data",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = FilteringDataDto.class))
+            })
+        }
+    )
+    @PreAuthorize("permitAll")
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/boardgames/filteringData",
+        produces = { "application/json" }
+    )
+    default ResponseEntity<FilteringDataDto> getFilteringData(
+        
+    ) {
+        return getDelegate().getFilteringData();
     }
 
 
