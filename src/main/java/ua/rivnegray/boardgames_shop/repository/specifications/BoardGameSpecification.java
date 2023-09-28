@@ -125,12 +125,14 @@ public class BoardGameSpecification {
         };
     }
 
-    public static Specification<BoardGame> hasLanguage(Set<BoardGameLanguage> boardGameLanguages){
+    public static Specification<BoardGame> hasLanguage(Set<String> boardGameLanguageNamesInUkrainian){
         return (root, query, cb) -> {
-            if (boardGameLanguages == null || boardGameLanguages.isEmpty()) {
+            if (boardGameLanguageNamesInUkrainian == null || boardGameLanguageNamesInUkrainian.isEmpty()) {
                 return null;
             }
-            return root.get("gameLanguage").in(boardGameLanguages);
+            return root.get("gameLanguage").in(boardGameLanguageNamesInUkrainian.stream()
+                    .map(BoardGameLanguage::fromLanguageNameInUkrainian)
+                    .toList());
         };
     }
 

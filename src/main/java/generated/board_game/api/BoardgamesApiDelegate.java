@@ -14,6 +14,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FilteringDataDto;
 import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 
@@ -280,12 +281,30 @@ public interface BoardgamesApiDelegate {
      * @param filename The filename of the image to retrieve (e.g., \&quot;1.png\&quot;) (required)
      * @return Image retrieved successfully (status code 200)
      *         or Bad Request (status code 400)
-     *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
      *         or Boardgame or Image not found (status code 404)
      * @see BoardgamesApi#getBoardGameImage
      */
     default ResponseEntity<org.springframework.core.io.Resource> getBoardGameImage(String filename) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /boardgames/filteringData : Get all filtering data
+     *
+     * @return OK (status code 200)
+     * @see BoardgamesApi#getFilteringData
+     */
+    default ResponseEntity<FilteringDataDto> getFilteringData() {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"playerCounts\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"boardGameMechanics\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"ageIntervals\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"boardGameGenres\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"boardGameLanguages\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] } }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

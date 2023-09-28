@@ -1502,8 +1502,6 @@ public class BoardgamesShopApplication {
 			shoppingCartRepository.save(cart1);
 
 			LOGGER.debug("test");
-
-
 		};
 	}
 }
