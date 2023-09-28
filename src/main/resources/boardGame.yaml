@@ -548,7 +548,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FilteringDataDto'
+                $ref: '#/components/schemas/FilterDataDto'
 
 components:
   securitySchemes:
@@ -787,23 +787,35 @@ components:
         absoluteMaxValue:
           type: integer
           format: int64
-    FilteringDataDto:
+    FilterDataDto:
+      type: object
+      properties:
+        filters:
+          $ref: '#/components/schemas/FilterArrayCategoriesDto'
+        absoluteMinPrice:
+          type: number
+        absoluteMaxPrice:
+          type: number
+        absoluteMinGameDuration:
+          type: number
+        absoluteMaxGameDuration:
+          type: number
+
+    FilterArrayCategoriesDto:
       type: object
       description: DTO for filtering data
       properties:
         boardGameGenres:
-          $ref: '#/components/schemas/FilteringCategoryDto'
+          $ref: '#/components/schemas/FilterCategoryWithArrayDataDto'
         boardGameMechanics:
-          $ref: '#/components/schemas/FilteringCategoryDto'
+          $ref: '#/components/schemas/FilterCategoryWithArrayDataDto'
         ageIntervals:
-          $ref: '#/components/schemas/FilteringCategoryDto'
+          $ref: '#/components/schemas/FilterCategoryWithArrayDataDto'
         playerCounts:
-          $ref: '#/components/schemas/FilteringCategoryDto'
+          $ref: '#/components/schemas/FilterCategoryWithArrayDataDto'
         boardGameLanguages:
-          $ref: '#/components/schemas/FilteringCategoryDto'
-
-
-    FilteringCategoryDto:
+          $ref: '#/components/schemas/FilterCategoryWithArrayDataDto'
+    FilterCategoryWithArrayDataDto:
       type: object
       properties:
         nameCategory:

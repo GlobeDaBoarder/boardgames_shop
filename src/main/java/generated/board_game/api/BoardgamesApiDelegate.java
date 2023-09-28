@@ -14,7 +14,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FilteringDataDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FilterDataDto;
 import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 
@@ -295,11 +295,11 @@ public interface BoardgamesApiDelegate {
      * @return OK (status code 200)
      * @see BoardgamesApi#getFilteringData
      */
-    default ResponseEntity<FilteringDataDto> getFilteringData() {
+    default ResponseEntity<FilterDataDto> getFilteringData() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"playerCounts\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"boardGameMechanics\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"ageIntervals\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"boardGameGenres\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"boardGameLanguages\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] } }";
+                    String exampleString = "{ \"absoluteMinPrice\" : 0.8008281904610115, \"absoluteMaxPrice\" : 6.027456183070403, \"absoluteMinGameDuration\" : 1.4658129805029452, \"absoluteMaxGameDuration\" : 5.962133916683182, \"filters\" : { \"playerCounts\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"boardGameMechanics\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"ageIntervals\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"boardGameGenres\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] }, \"boardGameLanguages\" : { \"nameCategory\" : \"nameCategory\", \"isScrolled\" : true, \"nameFilters\" : [ \"nameFilters\", \"nameFilters\" ] } } }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

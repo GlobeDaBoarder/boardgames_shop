@@ -22,8 +22,9 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameD
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FilterCategoryDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FilteringDataDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FilterArrayCategoriesDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FilterCategoryWithArrayDataDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FilterDataDto;
 import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.ImageProperties;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.PaginationProperties;
@@ -308,29 +309,39 @@ public class BoardGameServiceImpl implements BoardGameService {
     }
 
     @Override
-    public FilteringDataDto getFilteringData() {
-        return FilteringDataDto.builder()
-                .boardGameGenres(FilterCategoryDto.builder()
+    public FilterDataDto getFilteringData() {
+        return FilterDataDto.builder()
+                .filters(buildFilterArrayCategoriesDto())
+                .absoluteMinPrice(getPriceBounds().absoluteMinValue())
+                .absoluteMaxPrice(getPriceBounds().absoluteMaxValue())
+                .absoluteMinGameDuration(getGameDurationBounds().absoluteMinValue())
+                .absoluteMaxGameDuration(getGameDurationBounds().absoluteMaxValue())
+                .build();
+    }
+
+    private FilterArrayCategoriesDto buildFilterArrayCategoriesDto(){
+        return FilterArrayCategoriesDto.builder()
+                .boardGameGenres(FilterCategoryWithArrayDataDto.builder()
                         .nameCategory("Жанр")
                         .nameFilters(this.boardGameGenreRepository.findAll().stream()
                                 .map(BoardGameGenre::getGenreName)
                                 .toList())
                         .build())
-                .boardGameMechanics(FilterCategoryDto.builder()
+                .boardGameMechanics(FilterCategoryWithArrayDataDto.builder()
                         .nameCategory("Механика")
                         .nameFilters(this.boardGameMechanicRepository.findAll().stream()
                                 .map(BoardGameMechanic::getMechanicName)
                                 .toList())
                         .build())
-                .ageIntervals(FilterCategoryDto.builder()
+                .ageIntervals(FilterCategoryWithArrayDataDto.builder()
                         .nameCategory("Вік гравців")
                         .nameFilters(AGE_RANGES_FOR_FILTER)
                         .build())
-                .playerCounts(FilterCategoryDto.builder()
+                .playerCounts(FilterCategoryWithArrayDataDto.builder()
                         .nameCategory("Кількість гравців")
                         .nameFilters(PLAYER_COUNTS_FOR_FILTER)
                         .build())
-                .boardGameLanguages(FilterCategoryDto.builder()
+                .boardGameLanguages(FilterCategoryWithArrayDataDto.builder()
                         .nameCategory("Мова")
                         .nameFilters(Arrays.stream(BoardGameLanguage.values())
                                 .map(BoardGameLanguage::getLanguageNameInUkrainianForFiltering)
