@@ -240,8 +240,9 @@
 								<importMapping>SortType=ua.rivnegray.boardgames_shop.model.SortType</importMapping>
 								<importMapping>CatalogResponseDto=ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto</importMapping>
 								<importMapping>MinMaxDto=ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto</importMapping>
-								<importMapping>FilteringDataDto=ua.rivnegray.boardgames_shop.DTO.response.FilteringDataDto</importMapping>
-								<importMapping>FilterCategoryDto=ua.rivnegray.boardgames_shop.DTO.response.FilterCategoryDto</importMapping>
+								<importMapping>FilterDataDto=ua.rivnegray.boardgames_shop.DTO.response.FilterDataDto</importMapping>
+								<importMapping>FilterArrayCategoriesDto=ua.rivnegray.boardgames_shop.DTO.response.FilterArrayCategoriesDto</importMapping>
+								<importMapping>FilterCategoryWithArrayDataDto=ua.rivnegray.boardgames_shop.DTO.response.FilterCategoryWithArrayDataDto</importMapping>
 							</importMappings>
 
 							<configOptions>

@@ -11,13 +11,13 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode
 @ToString
-public final class FilterCategoryDto {
+public final class FilterCategoryWithArrayDataDto {
     private final String nameCategory;
     private final List<String> nameFilters;
     private final boolean isScrolled = false;
 
     @Builder
-    public FilterCategoryDto(String nameCategory, List<String> nameFilters) {
+    public FilterCategoryWithArrayDataDto(String nameCategory, List<String> nameFilters) {
         this.nameCategory = nameCategory;
         this.nameFilters = nameFilters;
     }
