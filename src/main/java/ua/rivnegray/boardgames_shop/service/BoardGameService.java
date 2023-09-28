@@ -9,6 +9,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameD
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FilteringDataDto;
 import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 
@@ -54,4 +55,7 @@ public interface BoardGameService {
 
     @Transactional(readOnly = true)
     MinMaxDto getPriceBounds();
+
+    @Transactional(readOnly = true)
+    FilteringDataDto getFilteringData();
 }

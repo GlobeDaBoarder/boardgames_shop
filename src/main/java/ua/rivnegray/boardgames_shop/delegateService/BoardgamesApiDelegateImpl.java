@@ -15,6 +15,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FilteringDataDto;
 import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 import ua.rivnegray.boardgames_shop.service.BoardGameGenreService;
@@ -180,5 +181,10 @@ public class    BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
     @Override
     public ResponseEntity<MinMaxDto> getPriceBounds() {
         return ResponseEntity.ok(this.boardGameService.getPriceBounds());
+    }
+
+    @Override
+    public ResponseEntity<FilteringDataDto> getFilteringData() {
+        return ResponseEntity.ok(this.boardGameService.getFilteringData());
     }
 }

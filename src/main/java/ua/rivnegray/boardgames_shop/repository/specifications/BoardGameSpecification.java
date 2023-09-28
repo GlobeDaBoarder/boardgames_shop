@@ -88,13 +88,13 @@ public class BoardGameSpecification {
 
             List<Predicate> predicates = new ArrayList<>();
             for (String playerCount : playerCounts) {
-                if (playerCount.equals("6+")) {
+                if (playerCount.equals("Більше 6")) {
                     predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("maxPlayers" ), 6));
                     continue;
                 }
                 predicates.add(criteriaBuilder.and(
                         criteriaBuilder.lessThanOrEqualTo(root.get("minPlayers"), Integer.valueOf(playerCount)),
-                        criteriaBuilder.greaterThan(root.get("maxPlayers"), Integer.valueOf(playerCount))
+                        criteriaBuilder.greaterThanOrEqualTo(root.get("maxPlayers"), Integer.valueOf(playerCount))
                 ));
             }
 
@@ -125,12 +125,14 @@ public class BoardGameSpecification {
         };
     }
 
-    public static Specification<BoardGame> hasLanguage(Set<BoardGameLanguage> boardGameLanguages){
+    public static Specification<BoardGame> hasLanguage(Set<String> boardGameLanguageNamesInUkrainian){
         return (root, query, cb) -> {
-            if (boardGameLanguages == null || boardGameLanguages.isEmpty()) {
+            if (boardGameLanguageNamesInUkrainian == null || boardGameLanguageNamesInUkrainian.isEmpty()) {
                 return null;
             }
-            return root.get("gameLanguage").in(boardGameLanguages);
+            return root.get("gameLanguage").in(boardGameLanguageNamesInUkrainian.stream()
+                    .map(BoardGameLanguage::fromLanguageNameInUkrainian)
+                    .toList());
         };
     }
 

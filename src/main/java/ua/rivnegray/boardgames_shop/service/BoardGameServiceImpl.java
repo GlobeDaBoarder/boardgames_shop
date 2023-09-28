@@ -22,6 +22,8 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameD
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FilterCategoryDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FilteringDataDto;
 import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.ImageProperties;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.PaginationProperties;
@@ -33,6 +35,9 @@ import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.Unsuppor
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMapper;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
+import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
+import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
+import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
 import ua.rivnegray.boardgames_shop.model.ProductImage;
 import ua.rivnegray.boardgames_shop.model.SortType;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
@@ -46,12 +51,16 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class BoardGameServiceImpl implements BoardGameService {
     private final static Logger LOGGER = LoggerFactory.getLogger(BoardGameServiceImpl.class);
+    private final static List<String> AGE_RANGES_FOR_FILTER = List.of("2-3 рокiв", "4-5 рокiв", "6-7 рокiв", "8-9 рокiв", "10-13 рокiв", "18+");
+
+    private final static List<String> PLAYER_COUNTS_FOR_FILTER = List.of("1", "2", "3", "4", "5", "6+");
 
     private final BoardGameRepository boardGameRepository;
     private final BoardGameMapper boardGameMapper;
@@ -296,5 +305,37 @@ public class BoardGameServiceImpl implements BoardGameService {
     @Override
     public MinMaxDto getPriceBounds() {
         return this.boardGameRepository.findMinMaxPrice();
+    }
+
+    @Override
+    public FilteringDataDto getFilteringData() {
+        return FilteringDataDto.builder()
+                .boardGameGenres(FilterCategoryDto.builder()
+                        .nameCategory("Жанр")
+                        .nameFilters(this.boardGameGenreRepository.findAll().stream()
+                                .map(BoardGameGenre::getGenreName)
+                                .toList())
+                        .build())
+                .boardGameMechanics(FilterCategoryDto.builder()
+                        .nameCategory("Механика")
+                        .nameFilters(this.boardGameMechanicRepository.findAll().stream()
+                                .map(BoardGameMechanic::getMechanicName)
+                                .toList())
+                        .build())
+                .ageIntervals(FilterCategoryDto.builder()
+                        .nameCategory("Вік гравців")
+                        .nameFilters(AGE_RANGES_FOR_FILTER)
+                        .build())
+                .playerCounts(FilterCategoryDto.builder()
+                        .nameCategory("Кількість гравців")
+                        .nameFilters(PLAYER_COUNTS_FOR_FILTER)
+                        .build())
+                .boardGameLanguages(FilterCategoryDto.builder()
+                        .nameCategory("Мова")
+                        .nameFilters(Arrays.stream(BoardGameLanguage.values())
+                                .map(BoardGameLanguage::getLanguageNameInUkrainianForFiltering)
+                                .toList())
+                        .build())
+                .build();
     }
 }
