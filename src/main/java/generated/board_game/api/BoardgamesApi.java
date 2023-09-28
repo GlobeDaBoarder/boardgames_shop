@@ -34,7 +34,7 @@ import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FilteringDataDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FilterDataDto;
 import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
 import ua.rivnegray.boardgames_shop.model.SortType;
 
@@ -480,7 +480,7 @@ public interface BoardgamesApi {
         summary = "Get all filtering data",
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = FilteringDataDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = FilterDataDto.class))
             })
         }
     )
@@ -490,7 +490,7 @@ public interface BoardgamesApi {
         value = "/boardgames/filteringData",
         produces = { "application/json" }
     )
-    default ResponseEntity<FilteringDataDto> getFilteringData(
+    default ResponseEntity<FilterDataDto> getFilteringData(
         
     ) {
         return getDelegate().getFilteringData();
