@@ -88,13 +88,13 @@ public class BoardGameSpecification {
 
             List<Predicate> predicates = new ArrayList<>();
             for (String playerCount : playerCounts) {
-                if (playerCount.equals("6+")) {
+                if (playerCount.equals("Більше 6")) {
                     predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("maxPlayers" ), 6));
                     continue;
                 }
                 predicates.add(criteriaBuilder.and(
                         criteriaBuilder.lessThanOrEqualTo(root.get("minPlayers"), Integer.valueOf(playerCount)),
-                        criteriaBuilder.greaterThan(root.get("maxPlayers"), Integer.valueOf(playerCount))
+                        criteriaBuilder.greaterThanOrEqualTo(root.get("maxPlayers"), Integer.valueOf(playerCount))
                 ));
             }
 
