@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", uses = {BoardGameGenreRepository.class, BoardGameMechanicRepository.class,
         BoardGameGenreMapper.class, BoardGameMechanicMapper.class})
 public interface BoardGameMapper {
+
     @Named("genreIdsToGenres")
     default Set<BoardGameGenre> genreIdsToGenres(Set<Long> genreIds, @Context BoardGameGenreRepository boardGameGenreRepository) {
         Set<BoardGameGenre> genres = new HashSet<>();
@@ -61,7 +62,7 @@ public interface BoardGameMapper {
     @Named("mapImageURLsToProductImages")
     default Set<ProductImage> mapImageURLsToProductImages(Set<String> imageURLs, @Context ProductImageRepository productImageRepository){
         return imageURLs.stream()
-                .map(url -> productImageRepository.findByImageURL(url).orElseThrow(() -> new ImageNotFoundException(url)))
+                .map(url -> productImageRepository.findFirstByImageURL(url).orElseThrow(() -> new ImageNotFoundException(url)))
                 .collect(Collectors.toSet());
     }
 
@@ -71,6 +72,7 @@ public interface BoardGameMapper {
 
     @Mapping(target = "gameGenres", source = "gameGenreIds", qualifiedByName = "genreIdsToGenres")
     @Mapping(target = "gameMechanics", source = "gameMechanicIds", qualifiedByName = "mechanicIdsToMechanics")
+    @Mapping(target = "productCategory", constant = "BOARD_GAMES")
     BoardGame createBoardGameDtoToBoardGame(CreateAndUpdateBoardGameDto createAndUpdateBoardGameDto,
                                             @Context BoardGameGenreRepository boardGameGenreRepository,
                                             @Context BoardGameMechanicRepository boardGameMechanicRepository);
@@ -78,6 +80,7 @@ public interface BoardGameMapper {
     @Mapping(target = "gameGenres", source = "gameGenreIds", qualifiedByName = "genreIdsToGenres")
     @Mapping(target = "gameMechanics", source = "gameMechanicIds", qualifiedByName = "mechanicIdsToMechanics")
     @Mapping(target = "productImages", source = "productImageURLs", qualifiedByName = "mapImageURLsToProductImages")
+    @Mapping(target = "productCategory", constant = "BOARD_GAMES")
     void updateBoardGameFromDto(CreateAndUpdateBoardGameDto dto, @MappingTarget BoardGame game,
                                 @Context BoardGameGenreRepository boardGameGenreRepository,
                                 @Context BoardGameMechanicRepository boardGameMechanicRepository,

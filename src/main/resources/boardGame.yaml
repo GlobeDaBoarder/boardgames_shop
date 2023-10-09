@@ -560,217 +560,51 @@ components:
     CatalogResponseDto:
       type: object
       properties:
-        boardGames:
-          type: array
-          items:
-            $ref: '#/components/schemas/BoardGameSummaryDto'
-        totalPages:
-          type: integer
-          format: int32
+        emptyValue:
+          type: boolean
+
     BoardGameSummaryDto:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-        productName:
-          type: string
-        productPrice:
-          type: number
-          format: float
-        productQuantityInStock:
-          type: integer
-          format: int32
-        productImageURL:
-          type: string
-      required:
-        - id
-        - productName
-        - productQuantityInStock
-        - productImageURL
+        emptyValue:
+          type: boolean
+
     BoardGameDto:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-        dateCreated:
-          type: string
-          format: date-time
-        dateUpdated:
-          type: string
-          format: date-time
-        isRemoved:
+        emptyValue:
           type: boolean
-        Manufacturer:
-          type: string
-        productName:
-          type: string
-        productDescription:
-          type: string
-        productPrice:
-          type: number
-          format: float
-        productQuantityInStock:
-          type: integer
-          format: int32
-        productImageURLs:
-          type: array
-          items:
-            type: string
-        productCategory:
-          $ref: '#/components/schemas/ProductCategory'
-        productCode:
-          type: string
-        gameSet:
-          type: string
-        gameGenreGenreNames:
-          type: array
-          items:
-            type: string
-        gameMechanicMechanicNames:
-          type: array
-          items:
-            type: string
-        minAge:
-          type: integer
-          format: int32
-        minPlayers:
-          type: integer
-          format: int32
-        maxPlayers:
-          type: integer
-          format: int32
-        minGameDuration:
-          type: integer
-        maxGameDuration:
-          type: integer
-        gameLanguage:
-          $ref: '#/components/schemas/BoardGameLanguage'
-        BGGLink:
-          type: string
-          format: uri
-      required:
-        - id
-        - dateCreated
-        - dateUpdated
-        - isRemoved
-        - Manufacturer
-        - productName
-        - productPrice
-        - productQuantityInStock
-        - productCategory
 
     CreateAndUpdateBoardGameDto:
       type: object
       properties:
-        manufacturer:
-          type: string
-        productName:
-          type: string
-        productDescription:
-          type: string
-        productPrice:
-          type: string
-          format: decimal
-        productQuantityInStock:
-          type: integer
-        productCategory:
-          $ref: '#/components/schemas/ProductCategory'
-        productCode:
-          type: string
-        gameSet:
-          type: string
-        gameGenreIds:
-          type: array
-          items:
-            type: integer
-            format: int64
-          example: [ 1 ]
-        gameMechanicIds:
-          type: array
-          items:
-            type: integer
-            format: int64
-          example: [ 1 ]
-        minAge:
-          type: integer
-        minPlayers:
-          type: integer
-        maxPlayers:
-          type: integer
-        minGameDuration:
-          type: integer
-        maxGameDuration:
-          type: integer
-        gameLanguage:
-          $ref: '#/components/schemas/BoardGameLanguage'
-        BGGLink:
-          type: string
-          format: url
-          example: https://boardgamegeek.com/boardgame/169786/pandemic-legacy-season-1
-      required:
-        - manufacturer
-        - productName
-        - productPrice
-        - productQuantityInStock
-        - productImageURL
-        - productCategory
-        - productCode
-        - gameSet
-        - gameGenreGenreNames
-        - gameMechanicMechanicNames
-        - minAge
-        - minPlayers
-        - gameDuration
-        - gameLanguage
-        - BGGLink
-
-    BoardGameLanguage:
-      type: string
-      enum: [ ENGLISH, RUSSIAN, UKRAINIAN, OTHER ]
-
-    ProductCategory:
-      type: string
-      enum: [ BOARD_GAMES, ACCESSORIES, OTHER ]
+        emptyValue:
+          type: boolean
 
     BoardGameGenreDto:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-        genreName:
-          type: string
-        genreDescription:
-          type: string
+        emptyValue:
+          type: boolean
 
     CreateAndUpdateBoardGameGenreDto:
       type: object
       properties:
-        genreName:
-          type: string
-        genreDescription:
-          type: string
+        emptyValue:
+          type: boolean
 
     BoardGameMechanicDto:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-        mechanicName:
-          type: string
-        mechanicDescription:
-          type: string
+        emptyValue:
+          type: boolean
 
     CreateAndUpdateBoardGameMechanicDto:
       type: object
       properties:
-        mechanicName:
-          type: string
-        mechanicDescription:
-          type: string
+        emptyValue:
+          type: boolean
+
     SortType:
       enum:
         - price_asc
@@ -778,53 +612,17 @@ components:
         - name_asc
         - name_desc
         - newest
+
     MinMaxDto:
       type: object
       properties:
-        absoluteMinValue:
-          type: integer
-          format: int64
-        absoluteMaxValue:
-          type: integer
-          format: int64
+        emptyValue:
+          type: boolean
+
     FilterDataDto:
       type: object
       properties:
-        filters:
-          $ref: '#/components/schemas/FilterArrayCategoriesDto'
-        absoluteMinPrice:
-          type: number
-        absoluteMaxPrice:
-          type: number
-        absoluteMinGameDuration:
-          type: number
-        absoluteMaxGameDuration:
-          type: number
-
-    FilterArrayCategoriesDto:
-      type: object
-      description: DTO for filtering data
-      properties:
-        boardGameGenres:
-          $ref: '#/components/schemas/FilterCategoryWithArrayDataDto'
-        boardGameMechanics:
-          $ref: '#/components/schemas/FilterCategoryWithArrayDataDto'
-        ageIntervals:
-          $ref: '#/components/schemas/FilterCategoryWithArrayDataDto'
-        playerCounts:
-          $ref: '#/components/schemas/FilterCategoryWithArrayDataDto'
-        boardGameLanguages:
-          $ref: '#/components/schemas/FilterCategoryWithArrayDataDto'
-    FilterCategoryWithArrayDataDto:
-      type: object
-      properties:
-        nameCategory:
-          type: string
-        nameFilters:
-          type: array
-          items:
-            type: string
-        isScrolled:
+        emptyValue:
           type: boolean
 
 

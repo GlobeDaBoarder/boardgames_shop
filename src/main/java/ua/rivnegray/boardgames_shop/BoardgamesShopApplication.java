@@ -17,6 +17,7 @@ import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
 import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
+import ua.rivnegray.boardgames_shop.model.BoardGameType;
 import ua.rivnegray.boardgames_shop.model.ProductCategory;
 import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.ShoppingCart;
@@ -159,6 +160,7 @@ public class BoardgamesShopApplication {
 
 			BoardGame boardGame1 = BoardGame.builder()
 					.productName("Катан")
+					.productNameInEnglish("Catan")
 					.productDescription("Катан, раніше відомий як Поселенці Катану або просто Поселенці, - це багатокористувацька настільна гра, створена Клаусом Тойбером, і вперше опублікована в 1995 році в Німеччині фірмою Franckh-Kosmos Verlag (Kosmos) під назвою Die Siedler von Catan.")
 					.productPrice(new BigDecimal(100))
 					.manufacturer("Kosmos")
@@ -171,6 +173,9 @@ public class BoardgamesShopApplication {
 					.gameSet("Коробка для гри, ігрова дошка, 2 кубики, правила гри та альманах.")
 					.minPlayers(3)
 					.maxPlayers(4)
+					.author("Klaus Teuber")
+					.illustrator("Volkan Baga, Harald Lieske, Stephen Graham Walsh")
+					.gameTypes(Set.of(BoardGameType.STRATEGY, BoardGameType.ADVENTURE))
 					.gameGenres(Set.of(boardGameGenreRepository.findById(3L).get()))
 					.gameMechanics(Set.of(boardGameMechanicRepository.findById(1L).get(), boardGameMechanicRepository.findById(2L).get(), boardGameMechanicRepository.findByMechanicName("Розміщення плиток").get()))
 					.BGGLink("https://boardgamegeek.com/boardgame/13/catan")

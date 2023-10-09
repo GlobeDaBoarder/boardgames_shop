@@ -3,6 +3,7 @@ package ua.rivnegray.boardgames_shop.DTO.response;
 import lombok.Builder;
 import org.hibernate.validator.constraints.URL;
 import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
+import ua.rivnegray.boardgames_shop.model.BoardGameType;
 import ua.rivnegray.boardgames_shop.model.ProductCategory;
 
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public record BoardGameDto(Long id,
                            Boolean isRemoved,
                            String manufacturer,
                            String productName,
+                           String productNameInEnglish,
                            String productDescription,
                            BigDecimal productPrice,
                            Integer productQuantityInStock,
@@ -27,6 +29,7 @@ public record BoardGameDto(Long id,
                            ProductCategory productCategory,
                            String productCode,
                            String gameSet,
+                           Set<BoardGameType> gameTypes,
                            Set<BoardGameGenreDto> gameGenres,
                            Set<BoardGameMechanicDto> gameMechanics,
                            Integer minAge,
@@ -34,6 +37,8 @@ public record BoardGameDto(Long id,
                            Integer maxPlayers,
                            Integer minGameDuration,
                            Integer maxGameDuration,
+                           String author,
+                           String illustrator,
                            BoardGameLanguage gameLanguage,
                            @URL String BGGLink) implements Serializable {
 }
