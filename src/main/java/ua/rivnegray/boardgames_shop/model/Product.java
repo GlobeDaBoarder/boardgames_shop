@@ -40,6 +40,7 @@ public abstract class Product extends BaseEntity{
         this.productCategory = productCategory;
     }
 
+    @Column(nullable = false)
     private String manufacturer;
 
     @Column(unique = true, nullable = false)
@@ -48,14 +49,12 @@ public abstract class Product extends BaseEntity{
     @Column(unique = true)
     private String productNameInEnglish;
 
-    @Column(length = 1000)
+    @Column(length = 1000, nullable = false)
     private String productDescription;
 
     // todo add a discount system later
-    @Column(nullable = false)
     private BigDecimal productPrice;
 
-    @Column(nullable = false)
     private Integer productQuantityInStock;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
