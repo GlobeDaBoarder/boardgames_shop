@@ -2,6 +2,10 @@ package ua.rivnegray.boardgames_shop.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameTypeNotFoundByNameException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @AllArgsConstructor
@@ -34,4 +38,18 @@ public enum BoardGameType {
     COLLECTIBLE_CARD_GAMES("Колекційні карткові ігри");
 
     private final String boardGameTypeNameInUkrainian;
+    private static final Map<String, BoardGameType> typeNameToEnumMap = new HashMap<>();
+
+    static{
+        for(BoardGameType boardGameType : BoardGameType.values()){
+            typeNameToEnumMap.put(boardGameType.getBoardGameTypeNameInUkrainian(), boardGameType);
+        }
+    }
+
+    public static BoardGameType fromBoardGameTypeNameInUkrainian(String boardGameTypeNameInUkrainian) {
+        BoardGameType boardGameTypeEnumValue = typeNameToEnumMap.get(boardGameTypeNameInUkrainian);
+        if(boardGameTypeEnumValue == null)
+            throw new BoardGameTypeNotFoundByNameException(boardGameTypeNameInUkrainian);
+        return boardGameTypeEnumValue;
+    }
 }

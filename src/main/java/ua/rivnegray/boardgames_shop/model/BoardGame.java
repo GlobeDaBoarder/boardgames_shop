@@ -1,12 +1,10 @@
 package ua.rivnegray.boardgames_shop.model;
 
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -65,9 +63,8 @@ public class BoardGame extends Product {
     @Column(length = 1000)
     private String gameSet;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "board_game_types")
     private Set<BoardGameType> gameTypes = new HashSet<>();
 
     @ManyToMany

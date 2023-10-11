@@ -39,6 +39,7 @@ import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
 import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
+import ua.rivnegray.boardgames_shop.model.BoardGameType;
 import ua.rivnegray.boardgames_shop.model.ProductImage;
 import ua.rivnegray.boardgames_shop.model.SortType;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
@@ -173,6 +174,7 @@ public class BoardGameServiceImpl implements BoardGameService {
         return Specification.allOf(
                 BoardGameSpecification.hasManufacturers(filterBoardGamesRequestDto.manufacturers()),
                 BoardGameSpecification.hasPriceInRange(filterBoardGamesRequestDto.minProductPrice(), filterBoardGamesRequestDto.maxProductPrice()),
+                BoardGameSpecification.hasBoardGameTypes(filterBoardGamesRequestDto.boardGameTypes()),
                 BoardGameSpecification.hasBoardGameGenres(filterBoardGamesRequestDto.boardGameGenres()),
                 BoardGameSpecification.hasBoardGameMechanics(filterBoardGamesRequestDto.boardGameMechanics()),
                 BoardGameSpecification.hasMinAges(filterBoardGamesRequestDto.ageIntervals()),
@@ -321,6 +323,12 @@ public class BoardGameServiceImpl implements BoardGameService {
 
     private FilterArrayCategoriesDto buildFilterArrayCategoriesDto(){
         return FilterArrayCategoriesDto.builder()
+                .boardGameTypes(FilterCategoryWithArrayDataDto.builder()
+                        .nameCategory("Тип")
+                        .nameFilters(Arrays.stream(BoardGameType.values())
+                                .map(BoardGameType::getBoardGameTypeNameInUkrainian)
+                                .toList())
+                        .build())
                 .boardGameGenres(FilterCategoryWithArrayDataDto.builder()
                         .nameCategory("Жанр")
                         .nameFilters(this.boardGameGenreRepository.findAll().stream()
@@ -328,7 +336,7 @@ public class BoardGameServiceImpl implements BoardGameService {
                                 .toList())
                         .build())
                 .boardGameMechanics(FilterCategoryWithArrayDataDto.builder()
-                        .nameCategory("Механика")
+                        .nameCategory("Механіка")
                         .nameFilters(this.boardGameMechanicRepository.findAll().stream()
                                 .map(BoardGameMechanic::getMechanicName)
                                 .toList())

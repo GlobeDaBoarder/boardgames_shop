@@ -23,11 +23,12 @@ paths:
               \"manufacturers\":[\"Kosmos\"],
               \"minProductPrice\":90,
               \"maxProductPrice\":110,
+              \"boardGameTypes\": [\"Стратегії\"],
               \"boardGameGenres\":[\"Сімейні\",\"Економіка\"],
               \"boardGameMechanics\":[\"Конструювання колоди\",\"Кооперативна гра\"],
               \"ageIntervals\":[\"10-13\",\"8-9\"],\"playerCounts\":[\"2\",\"3\",\"4\",\"5\"],
               \"minGameDuration\":30,\"maxGameDuration\":130,
-              \"boardGameLanguages\":[\"UKRAINIAN\",\"ENGLISH\"]
+              \"boardGameLanguages\":[\"Англійська\"]
             }
           "
           schema:
@@ -518,6 +519,7 @@ paths:
           description: Boardgame or Image not found
   /boardgames/priceBounds:
     get:
+      deprecated: true
       summary: Get min and max price from all games
       operationId: getPriceBounds
       responses:
@@ -529,6 +531,7 @@ paths:
                 $ref: '#/components/schemas/MinMaxDto'
   /boardgames/gameDurationBounds:
     get:
+      deprecated: true
       summary: Get min and max game durations from all games
       operationId: getGameDurationBounds
       responses:

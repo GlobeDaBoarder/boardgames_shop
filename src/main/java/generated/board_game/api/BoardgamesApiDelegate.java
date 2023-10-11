@@ -190,7 +190,7 @@ public interface BoardgamesApiDelegate {
      * GET /boardgames : Get all boardgames
      *
      * @param search search in product name and description for some key words (optional)
-     * @param filter  For Filtering you have to URL encode a DTO in Json format. here&#39;s an example of possible DTO: { \&quot;manufacturers\&quot;:[\&quot;Kosmos\&quot;], \&quot;minProductPrice\&quot;:90, \&quot;maxProductPrice\&quot;:110, \&quot;boardGameGenres\&quot;:[\&quot;Сімейні\&quot;,\&quot;Економіка\&quot;], \&quot;boardGameMechanics\&quot;:[\&quot;Конструювання колоди\&quot;,\&quot;Кооперативна гра\&quot;], \&quot;ageIntervals\&quot;:[\&quot;10-13\&quot;,\&quot;8-9\&quot;],\&quot;playerCounts\&quot;:[\&quot;2\&quot;,\&quot;3\&quot;,\&quot;4\&quot;,\&quot;5\&quot;], \&quot;minGameDuration\&quot;:30,\&quot;maxGameDuration\&quot;:130, \&quot;boardGameLanguages\&quot;:[\&quot;UKRAINIAN\&quot;,\&quot;ENGLISH\&quot;] }  (optional)
+     * @param filter  For Filtering you have to URL encode a DTO in Json format. here&#39;s an example of possible DTO: { \&quot;manufacturers\&quot;:[\&quot;Kosmos\&quot;], \&quot;minProductPrice\&quot;:90, \&quot;maxProductPrice\&quot;:110, \&quot;boardGameTypes\&quot;: [\&quot;Стратегії\&quot;], \&quot;boardGameGenres\&quot;:[\&quot;Сімейні\&quot;,\&quot;Економіка\&quot;], \&quot;boardGameMechanics\&quot;:[\&quot;Конструювання колоди\&quot;,\&quot;Кооперативна гра\&quot;], \&quot;ageIntervals\&quot;:[\&quot;10-13\&quot;,\&quot;8-9\&quot;],\&quot;playerCounts\&quot;:[\&quot;2\&quot;,\&quot;3\&quot;,\&quot;4\&quot;,\&quot;5\&quot;], \&quot;minGameDuration\&quot;:30,\&quot;maxGameDuration\&quot;:130, \&quot;boardGameLanguages\&quot;:[\&quot;Англійська\&quot;] }  (optional)
      * @param sort sort by: price (asc, desc), name (asc, desc), newest (optional)
      * @param page current page number (optional, default to 0)
      * @return OK (status code 200)
@@ -313,8 +313,10 @@ public interface BoardgamesApiDelegate {
      * GET /boardgames/gameDurationBounds : Get min and max game durations from all games
      *
      * @return OK (status code 200)
+     * @deprecated
      * @see BoardgamesApi#getGameDurationBounds
      */
+    @Deprecated
     default ResponseEntity<MinMaxDto> getGameDurationBounds() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -377,8 +379,10 @@ public interface BoardgamesApiDelegate {
      * GET /boardgames/priceBounds : Get min and max price from all games
      *
      * @return OK (status code 200)
+     * @deprecated
      * @see BoardgamesApi#getPriceBounds
      */
+    @Deprecated
     default ResponseEntity<MinMaxDto> getPriceBounds() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
