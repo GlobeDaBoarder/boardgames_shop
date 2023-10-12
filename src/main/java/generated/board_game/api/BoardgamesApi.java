@@ -322,7 +322,7 @@ public interface BoardgamesApi {
      * GET /boardgames : Get all boardgames
      *
      * @param search search in product name and description for some key words (optional)
-     * @param filter  For Filtering you have to URL encode a DTO in Json format. here&#39;s an example of possible DTO: { \&quot;manufacturers\&quot;:[\&quot;Kosmos\&quot;], \&quot;minProductPrice\&quot;:90, \&quot;maxProductPrice\&quot;:110, \&quot;boardGameGenres\&quot;:[\&quot;Сімейні\&quot;,\&quot;Економіка\&quot;], \&quot;boardGameMechanics\&quot;:[\&quot;Конструювання колоди\&quot;,\&quot;Кооперативна гра\&quot;], \&quot;ageIntervals\&quot;:[\&quot;10-13\&quot;,\&quot;8-9\&quot;],\&quot;playerCounts\&quot;:[\&quot;2\&quot;,\&quot;3\&quot;,\&quot;4\&quot;,\&quot;5\&quot;], \&quot;minGameDuration\&quot;:30,\&quot;maxGameDuration\&quot;:130, \&quot;boardGameLanguages\&quot;:[\&quot;UKRAINIAN\&quot;,\&quot;ENGLISH\&quot;] }  (optional)
+     * @param filter  For Filtering you have to URL encode a DTO in Json format. here&#39;s an example of possible DTO: { \&quot;manufacturers\&quot;:[\&quot;Kosmos\&quot;], \&quot;minProductPrice\&quot;:90, \&quot;maxProductPrice\&quot;:110, \&quot;boardGameTypes\&quot;: [\&quot;Стратегії\&quot;], \&quot;boardGameGenres\&quot;:[\&quot;Сімейні\&quot;,\&quot;Економіка\&quot;], \&quot;boardGameMechanics\&quot;:[\&quot;Конструювання колоди\&quot;,\&quot;Кооперативна гра\&quot;], \&quot;ageIntervals\&quot;:[\&quot;10-13\&quot;,\&quot;8-9\&quot;],\&quot;playerCounts\&quot;:[\&quot;2\&quot;,\&quot;3\&quot;,\&quot;4\&quot;,\&quot;5\&quot;], \&quot;minGameDuration\&quot;:30,\&quot;maxGameDuration\&quot;:130, \&quot;boardGameLanguages\&quot;:[\&quot;Англійська\&quot;] }  (optional)
      * @param sort sort by: price (asc, desc), name (asc, desc), newest (optional)
      * @param page current page number (optional, default to 0)
      * @return OK (status code 200)
@@ -344,7 +344,7 @@ public interface BoardgamesApi {
     )
     default ResponseEntity<CatalogResponseDto> getAllBoardGames(
         @Parameter(name = "search", description = "search in product name and description for some key words", in = ParameterIn.QUERY) @Valid @RequestParam(value = "search", required = false) String search,
-        @Parameter(name = "filter", description = " For Filtering you have to URL encode a DTO in Json format. here's an example of possible DTO: { \"manufacturers\":[\"Kosmos\"], \"minProductPrice\":90, \"maxProductPrice\":110, \"boardGameGenres\":[\"Сімейні\",\"Економіка\"], \"boardGameMechanics\":[\"Конструювання колоди\",\"Кооперативна гра\"], \"ageIntervals\":[\"10-13\",\"8-9\"],\"playerCounts\":[\"2\",\"3\",\"4\",\"5\"], \"minGameDuration\":30,\"maxGameDuration\":130, \"boardGameLanguages\":[\"UKRAINIAN\",\"ENGLISH\"] } ", in = ParameterIn.QUERY) @Valid @RequestParam(value = "filter", required = false) String filter,
+        @Parameter(name = "filter", description = " For Filtering you have to URL encode a DTO in Json format. here's an example of possible DTO: { \"manufacturers\":[\"Kosmos\"], \"minProductPrice\":90, \"maxProductPrice\":110, \"boardGameTypes\": [\"Стратегії\"], \"boardGameGenres\":[\"Сімейні\",\"Економіка\"], \"boardGameMechanics\":[\"Конструювання колоди\",\"Кооперативна гра\"], \"ageIntervals\":[\"10-13\",\"8-9\"],\"playerCounts\":[\"2\",\"3\",\"4\",\"5\"], \"minGameDuration\":30,\"maxGameDuration\":130, \"boardGameLanguages\":[\"Англійська\"] } ", in = ParameterIn.QUERY) @Valid @RequestParam(value = "filter", required = false) String filter,
         @Parameter(name = "sort", description = "sort by: price (asc, desc), name (asc, desc), newest", in = ParameterIn.QUERY) @Valid @RequestParam(value = "sort", required = false) SortType sort,
         @Parameter(name = "page", description = "current page number", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false, defaultValue = "0") Integer page
     ) {
@@ -501,10 +501,13 @@ public interface BoardgamesApi {
      * GET /boardgames/gameDurationBounds : Get min and max game durations from all games
      *
      * @return OK (status code 200)
+     * @deprecated
      */
+    @Deprecated
     @Operation(
         operationId = "getGameDurationBounds",
         summary = "Get min and max game durations from all games",
+        deprecated = true,
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = MinMaxDto.class))
@@ -588,10 +591,13 @@ public interface BoardgamesApi {
      * GET /boardgames/priceBounds : Get min and max price from all games
      *
      * @return OK (status code 200)
+     * @deprecated
      */
+    @Deprecated
     @Operation(
         operationId = "getPriceBounds",
         summary = "Get min and max price from all games",
+        deprecated = true,
         responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = MinMaxDto.class))

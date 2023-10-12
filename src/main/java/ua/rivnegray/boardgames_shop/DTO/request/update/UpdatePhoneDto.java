@@ -1,9 +1,11 @@
 package ua.rivnegray.boardgames_shop.DTO.request.update;
 
+import ua.rivnegray.boardgames_shop.utils.validation.annotation.PhoneNumber;
+
 import java.io.Serializable;
 
 /**
- * DTO for {@link ua.rivnegray.boardgames_shop.model.UserProfile}
+ * DTO for {@link ua.rivnegray.boardgames_shop.model.User}
  */
-public record UpdatePhoneDto(String phone) implements Serializable {
+public record UpdatePhoneDto(@PhoneNumber String phone) implements Serializable {
 }

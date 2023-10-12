@@ -1,6 +1,7 @@
 package ua.rivnegray.boardgames_shop.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,14 +25,16 @@ import java.util.Set;
 public class BoardGame extends Product {
 
     @Builder()
-    public BoardGame(String manufacturer, String productName, String productDescription, BigDecimal productPrice,
+    public BoardGame(String manufacturer, String productName, String productNameInEnglish, String productDescription, BigDecimal productPrice,
                      Integer productQuantityInStock, Set<String> productImageURLs, ProductCategory productCategory,
-                     String productCode, String gameSet, Set<BoardGameGenre> gameGenres,
+                     String productCode, String gameSet, Set<BoardGameType> gameTypes, Set<BoardGameGenre> gameGenres,
                      Set<BoardGameMechanic> gameMechanics, Integer minAge, Integer minPlayers, Integer maxPlayers,
-                     Integer minGameDuration, Integer maxGameDuration, BoardGameLanguage gameLanguage, String BGGLink) {
-        super(manufacturer, productName, productDescription, productPrice, productQuantityInStock, productImageURLs , productCategory);
+                     Integer minGameDuration, Integer maxGameDuration,
+                     String author, String illustrator, BoardGameLanguage gameLanguage, String BGGLink) {
+        super(manufacturer, productName, productNameInEnglish, productDescription, productPrice, productQuantityInStock, productImageURLs , productCategory);
         this.productCode = productCode;
         this.gameSet = gameSet;
+        this.gameTypes = gameTypes;
         this.gameGenres = gameGenres;
         this.gameMechanics = gameMechanics;
         this.minAge = minAge;
@@ -40,6 +43,8 @@ public class BoardGame extends Product {
         this.minGameDuration = minGameDuration;
         this.maxGameDuration = maxGameDuration;
         this.gameLanguage = gameLanguage;
+        this.author = author;
+        this.illustrator = illustrator;
         this.BGGLink = BGGLink;
     }
 
@@ -58,6 +63,10 @@ public class BoardGame extends Product {
     @Column(length = 1000)
     private String gameSet;
 
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private Set<BoardGameType> gameTypes = new HashSet<>();
+
     @ManyToMany
     private Set<BoardGameGenre> gameGenres = new HashSet<>();
 
@@ -73,6 +82,10 @@ public class BoardGame extends Product {
     private Integer minGameDuration;
 
     private Integer maxGameDuration;
+
+    private String author;
+
+    private String illustrator;
 
     @Enumerated(EnumType.STRING)
     private BoardGameLanguage gameLanguage;

@@ -2,11 +2,14 @@ package ua.rivnegray.boardgames_shop.repository.specifications;
 
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 import org.springframework.data.jpa.domain.Specification;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
 import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
+import ua.rivnegray.boardgames_shop.model.BoardGameType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -35,6 +38,26 @@ public class BoardGameSpecification {
                 return cb.greaterThanOrEqualTo(root.get("productPrice"), minProductPrice);
             }
             return cb.between(root.get("productPrice"), minProductPrice, maxProductPrice);
+        };
+    }
+
+    public static Specification<BoardGame> hasBoardGameTypes(Set<String> boardGameTypes) {
+        return (root, query, cb) -> {
+            if (boardGameTypes == null || boardGameTypes.isEmpty()) {
+                return null;
+            }
+
+            // Create a subquery to select board games that have the specified types
+            Subquery<Long> subquery = query.subquery(Long.class);
+            Root<BoardGame> subRoot = subquery.from(BoardGame.class);
+            Join<Object, Object> subJoin = subRoot.join("gameTypes");
+            subquery.select(subRoot.get("id"))
+                    .where(subJoin.in(boardGameTypes.stream()
+                            .map(BoardGameType::fromBoardGameTypeNameInUkrainian)
+                            .toList()));
+
+            // The main query will then filter board games based on the subquery results
+            return root.get("id").in(subquery);
         };
     }
 

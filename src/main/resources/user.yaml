@@ -136,25 +136,6 @@ paths:
         '403':
           description: Forbidden
 
-
-  /users/me/username:
-    patch:
-      summary: Update my username
-      operationId: updateMyUsername
-      x-access-permission: user:updateMe
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateUsernameDto'
-      responses:
-        '200':
-          description: username updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserPublicDto'
   /users/me/password:
     patch:
       summary: Update my user's password
@@ -299,54 +280,6 @@ paths:
           description: address deleted
         '404':
           description: address not found
-  #  /users/availability/email:
-#    post:
-#      summary: Check if email is available
-#      operationId: checkEmailAvailability
-#      x-access-permission: admin:read
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/UpdateEmailDto'
-#      responses:
-#        '204':
-#          description: checked for availability of email successfully
-#          content:
-#            application/json:
-#              schema:
-#                type: boolean
-#        '409':
-#          description: email already taken
-#          content:
-#            application/json:
-#              schema:
-#                type: boolean
-#  /users/availability/username:
-#    post:
-#      summary: Check if username is available
-#      operationId: checkUsernameAvailability
-#      x-access-permission: admin:read
-#      requestBody:
-#        required: true
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/UpdateUsernameDto'
-#      responses:
-#        '204':
-#          description: checked for availability of username successfully
-#          content:
-#            application/json:
-#              schema:
-#                type: boolean
-#        '409':
-#          description: username already taken
-#          content:
-#            application/json:
-#              schema:
-#                type: boolean
 
 components:
   schemas:

@@ -1,6 +1,7 @@
-package ua.rivnegray.boardgames_shop.service;
+package ua.rivnegray.boardgames_shop.service.impl;
 
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -8,14 +9,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateOrderDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateUserProfileDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.UserInfoForOrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.ExcelDataExportException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
@@ -28,11 +27,12 @@ import ua.rivnegray.boardgames_shop.model.OrderStatus;
 import ua.rivnegray.boardgames_shop.model.OrderStatusDate;
 import ua.rivnegray.boardgames_shop.model.PaymentStatus;
 import ua.rivnegray.boardgames_shop.model.ProductInOrder;
-import ua.rivnegray.boardgames_shop.model.UserProfile;
-import ua.rivnegray.boardgames_shop.repository.AddressRepository;
+import ua.rivnegray.boardgames_shop.model.User;
+import ua.rivnegray.boardgames_shop.model.UserRegistrationStatus;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.OrderRepository;
-import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
+import ua.rivnegray.boardgames_shop.repository.UserRepository;
+import ua.rivnegray.boardgames_shop.service.OrderService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -46,6 +46,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private static final String[] EXCEL_HEADERS = {
@@ -65,40 +66,22 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final UserMapper userMapper;
-    private final UserProfileRepository userProfileRepository;
+    private final UserRepository userRepository;
     private final BoardGameRepository boardGameRepository;
     private final EntityManager entityManager;
-    private final AddressRepository addressRepository;
 
-    @Autowired
-    OrderServiceImpl(OrderRepository orderRepository, OrderMapper orderMapper, UserMapper userMapper,
-                            UserProfileRepository userProfileRepository, BoardGameRepository boardGameRepository,
-                            EntityManager entityManager, AddressRepository addressRepository) {
-        this.orderRepository = orderRepository;
-        this.orderMapper = orderMapper;
-        this.userMapper = userMapper;
-        this.userProfileRepository = userProfileRepository;
-        this.boardGameRepository = boardGameRepository;
-        this.entityManager = entityManager;
-        this.addressRepository = addressRepository;
-    }
 
     // admin orders operations
     @Override
     public OrderDto createOrder(CreateOrderDto createOrderDto) {
-        UserProfile userProfile = findOrCreateUserProfile(createOrderDto.userProfileDto());
+        User user = findOrCreateUserProfile(createOrderDto.userProfileDto());
 
-        Address address = this.userMapper.toAddress(createOrderDto.addAndUpdateAddressDto());
-        Optional<Address> addressOptional = this.addressRepository.findOne(Example.of(address));
-        if(addressOptional.isPresent()){
-            address = addressOptional.get();
-        }
-        else{
-            address.setUserProfile(userProfile);
-            userProfile.getAddresses().add(address);
+        Address address = userMapper.toAddress(createOrderDto.addAndUpdateAddressDto());
+        if(user.getAddresses().stream().noneMatch(address::equals)){
+            user.getAddresses().add(address);
         }
 
-        this.userProfileRepository.save(userProfile);
+        this.userRepository.save(user);
 
         Set<ProductInOrder> productInOrders = createOrderDto.mapShoppingCartDto().simpleProductInShoppingCartDtos().stream()
                 .map(simpleProductInShoppingCartDto -> ProductInOrder.builder()
@@ -110,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toSet());
 
         Order order = Order.builder()
-                .userProfile(userProfile)
+                .user(user)
                 .orderItems(productInOrders)
                 .totalPrice(
                         productInOrders.stream()
@@ -132,18 +115,27 @@ public class OrderServiceImpl implements OrderService {
         return this.orderMapper.orderToOrderDto(order);
     }
 
-    private UserProfile findOrCreateUserProfile(CreateUserProfileDto createUserProfileDto) {
-        Optional<UserProfile> userProfileFoundByEmail = this.userProfileRepository.findByEmail(createUserProfileDto.email());
-        if(userProfileFoundByEmail.isPresent()){
-            UserProfile existingProfile = userProfileFoundByEmail.get();
+    private User findOrCreateUserProfile(UserInfoForOrderDto userInfoForOrderDto) {
+        Optional<User> userFoundByEmail = this.userRepository.findByEmail(userInfoForOrderDto.email());
+        if(userFoundByEmail.isPresent()){
+            User existingProfile = userFoundByEmail.get();
             // if the user is registered already, don't update it's information. Only update if it's not registered
-            if(existingProfile.getUserCredentials() == null)
-                this.userMapper.updateUserProfile(existingProfile, createUserProfileDto);
+            if(existingProfile.getRegistrationStatus().equals(UserRegistrationStatus.NOT_REGISTERED)){
+                existingProfile.setPhone(userInfoForOrderDto.phone());
+                existingProfile.setFirstName(userInfoForOrderDto.firstName());
+                existingProfile.setLastName(userInfoForOrderDto.lastName());
+            }
 
             return existingProfile;
         }
 
-        return this.userMapper.toUserProfile(createUserProfileDto);
+        return User.builder()
+                .email(userInfoForOrderDto.email())
+                .phone(userInfoForOrderDto.phone())
+                .firstName(userInfoForOrderDto.firstName())
+                .lastName(userInfoForOrderDto.lastName())
+                .registrationStatus(UserRegistrationStatus.NOT_REGISTERED)
+                .build();
     }
 
     @Override
@@ -171,7 +163,7 @@ public class OrderServiceImpl implements OrderService {
     // my order operations
     @Override
     public void cancelMyOrder(Long orderId) {
-        Order orderToCancel = this.orderRepository.findByIdAndUserProfile_Id(orderId, getCurrentUserId())
+        Order orderToCancel = this.orderRepository.findByIdAndUser_Id(orderId, getCurrentUserId())
                         .orElseThrow(() -> new OrderIdNotFoundException(orderId));
         orderToCancel.setCurrentStatus(OrderStatus.CANCELLED);
         this.orderRepository.save(orderToCancel);
@@ -186,7 +178,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto getMyOrderById(Long orderId) {
-        return this.orderRepository.findByIdAndUserProfile_Id(orderId, getCurrentUserId())
+        return this.orderRepository.findByIdAndUser_Id(orderId, getCurrentUserId())
                 .map(this.orderMapper::orderToOrderDto)
                 .orElseThrow(() -> new OrderIdNotFoundException(orderId));
     }
@@ -203,7 +195,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private List<Order> getCurrentUserOrders(){
-        return this.orderRepository.findAllByUserProfile_Id(getCurrentUserId());
+        return this.orderRepository.findAllByUser_Id(getCurrentUserId());
     }
 
     @Override
@@ -242,9 +234,9 @@ public class OrderServiceImpl implements OrderService {
             Row row = sheet.createRow(rowNum++);
 
             row.createCell(0).setCellValue(order.getId());
-            row.createCell(1).setCellValue(order.getUserProfile().getFirstName());
-            row.createCell(2).setCellValue(order.getUserProfile().getLastName());
-            row.createCell(3).setCellValue(order.getUserProfile().getEmail());
+            row.createCell(1).setCellValue(order.getUser().getFirstName());
+            row.createCell(2).setCellValue(order.getUser().getLastName());
+            row.createCell(3).setCellValue(order.getUser().getEmail());
 
             Cell orderItensCell = row.createCell(4);
             orderItensCell.setCellValue(order.getOrderItems().stream()

@@ -22,9 +22,10 @@ import java.util.stream.Collectors;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Product extends BaseEntity{
 
-    public Product(String manufacturer, String productName, String productDescription, BigDecimal productPrice, Integer productQuantityInStock, Set<String> productImageURLs, ProductCategory productCategory) {
+    public Product(String manufacturer, String productName, String productNameInEnglishString,String productDescription, BigDecimal productPrice, Integer productQuantityInStock, Set<String> productImageURLs, ProductCategory productCategory) {
         this.manufacturer = manufacturer;
         this.productName = productName;
+        this.productNameInEnglish = productNameInEnglishString;
         this.productDescription = productDescription;
         this.productPrice = productPrice;
         this.productQuantityInStock = productQuantityInStock;
@@ -39,19 +40,21 @@ public abstract class Product extends BaseEntity{
         this.productCategory = productCategory;
     }
 
+    @Column(nullable = false)
     private String manufacturer;
 
     @Column(unique = true, nullable = false)
     private String productName;
 
-    @Column(length = 1000)
+    @Column(unique = true)
+    private String productNameInEnglish;
+
+    @Column(length = 1000, nullable = false)
     private String productDescription;
 
     // todo add a discount system later
-    @Column(nullable = false)
     private BigDecimal productPrice;
 
-    @Column(nullable = false)
     private Integer productQuantityInStock;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)

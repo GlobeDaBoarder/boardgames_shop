@@ -19,7 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.response.TokenDto;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
@@ -34,7 +34,7 @@ public interface RegisterApi {
     /**
      * POST /register : Register a new user
      *
-     * @param createCustomerUserDto  (required)
+     * @param registerCustomerRequestDto  (required)
      * @return Registration successful (status code 201)
      *         or Bad Request (status code 400)
      *         or Conflict, e.g., email already in use (status code 409)
@@ -58,9 +58,9 @@ public interface RegisterApi {
         consumes = { "application/json" }
     )
     default ResponseEntity<TokenDto> registerUser(
-        @Parameter(name = "CreateCustomerUserDto", description = "", required = true) @Valid @RequestBody CreateCustomerUserDto createCustomerUserDto
+        @Parameter(name = "RegisterCustomerRequestDto", description = "", required = true) @Valid @RequestBody RegisterCustomerRequestDto registerCustomerRequestDto
     ) {
-        return getDelegate().registerUser(createCustomerUserDto);
+        return getDelegate().registerUser(registerCustomerRequestDto);
     }
 
 }

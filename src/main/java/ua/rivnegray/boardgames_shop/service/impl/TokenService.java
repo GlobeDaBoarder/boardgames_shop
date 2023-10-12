@@ -1,6 +1,6 @@
-package ua.rivnegray.boardgames_shop.service;
+package ua.rivnegray.boardgames_shop.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -15,14 +15,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class TokenService {
-
     private final JwtEncoder encoder;
-
-    @Autowired
-    TokenService(JwtEncoder encoder) {
-        this.encoder = encoder;
-    }
 
     public String generateToken(Authentication authentication) {
         SecurityUser securityUser= (SecurityUser) authentication.getPrincipal();
