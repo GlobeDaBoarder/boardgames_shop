@@ -162,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
     // my order operations
     @Override
     public void cancelMyOrder(Long orderId) {
-        Order orderToCancel = this.orderRepository.findByIdAndUserProfile_Id(orderId, getCurrentUserId())
+        Order orderToCancel = this.orderRepository.findByIdAndUser_Id(orderId, getCurrentUserId())
                         .orElseThrow(() -> new OrderIdNotFoundException(orderId));
         orderToCancel.setCurrentStatus(OrderStatus.CANCELLED);
         this.orderRepository.save(orderToCancel);
@@ -177,7 +177,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto getMyOrderById(Long orderId) {
-        return this.orderRepository.findByIdAndUserProfile_Id(orderId, getCurrentUserId())
+        return this.orderRepository.findByIdAndUser_Id(orderId, getCurrentUserId())
                 .map(this.orderMapper::orderToOrderDto)
                 .orElseThrow(() -> new OrderIdNotFoundException(orderId));
     }
@@ -194,7 +194,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private List<Order> getCurrentUserOrders(){
-        return this.orderRepository.findAllByUserProfile_Id(getCurrentUserId());
+        return this.orderRepository.findAllByUser_Id(getCurrentUserId());
     }
 
     @Override

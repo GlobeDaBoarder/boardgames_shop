@@ -20,7 +20,7 @@ import java.util.Set;
 public class ShoppingCart extends BaseEntity{
 
     @OneToOne(mappedBy = "shoppingCart")
-    private User userProfile;
+    private User user;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProductInShoppingCart> productsInShoppingCart = new HashSet<>();

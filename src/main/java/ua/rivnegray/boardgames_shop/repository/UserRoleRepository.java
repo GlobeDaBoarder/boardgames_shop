@@ -10,8 +10,8 @@ import java.util.Optional;
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, Long>{
     @Query("""
-            select UserRole from UserRole
-            where UserRole.roleName = 'ROLE_CUSTOMER'
+            select role from UserRole role
+            where role.roleName = 'ROLE_CUSTOMER'
     """)
     Optional<UserRole> findCustomerRole();
 }

@@ -64,7 +64,7 @@ public class SessionServiceImpl implements SessionsService{
 
             this.userRepository.save(user);
 
-            return createIntermediateRegistrationResponse(user);
+            return createIntermediateRegistrationResponse(user, registerCustomerRequestDto);
         }
 
         User user = User.builder()
@@ -79,15 +79,19 @@ public class SessionServiceImpl implements SessionsService{
 
         this.userRepository.save(user);
 
-        return createIntermediateRegistrationResponse(user);
+        return createIntermediateRegistrationResponse(user, registerCustomerRequestDto);
     }
 
-    private IntermediateRegisterResponseDto createIntermediateRegistrationResponse(User user) {
-        return IntermediateRegisterResponseDto.builder()
-                .token(new TokenDto(tokenService.generateToken(this.authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
-                ))))
+    private IntermediateRegisterResponseDto createIntermediateRegistrationResponse(User user, RegisterCustomerRequestDto registerCustomerRequestDto) {
+        String token = tokenService.generateToken(this.authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(registerCustomerRequestDto.email(), registerCustomerRequestDto.password())
+        ));
+
+        IntermediateRegisterResponseDto dto = IntermediateRegisterResponseDto.builder()
+                .token(new TokenDto(token))
                 .userId(user.getId())
                 .build();
+
+        return dto;
     }
 }

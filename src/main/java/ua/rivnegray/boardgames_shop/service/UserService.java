@@ -37,7 +37,7 @@ public interface UserService {
     UserPublicDto updateMyPhone(final UpdatePhoneDto updatePhoneDto);
 
     @Transactional(readOnly = true)
-    AddressDto getAddress(Long addressId);
+    AddressDto getMyAddressById(Long addressId);
 
     @Transactional(readOnly = true)
     List<AddressDto> getAllMyAddresses();

@@ -147,7 +147,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
 
         Order newOrder = Order.builder()
-                .user(shoppingCart.getUserProfile())
+                .user(shoppingCart.getUser())
                 .orderItems(shoppingCart.getProductsInShoppingCart().stream()
                         .map(productInShoppingCart -> {
                             ProductInOrder productInOrder= ProductInOrder.builder()

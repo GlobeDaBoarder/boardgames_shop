@@ -97,7 +97,10 @@ public class BoardgamesShopApplication {
 							.postalCode("33000")
 							.country("Ukraine")
 							.build())
+					.shoppingCart(new ShoppingCart())
 					.build();
+
+			adminUser.getShoppingCart().setUser(adminUser);
 
 			User customerUser = User.builder()
 					.email("customer@rivnegray.ua")
@@ -108,7 +111,10 @@ public class BoardgamesShopApplication {
 					.nickname("customer")
 					.registrationStatus(UserRegistrationStatus.REGISTERED)
 					.roles(Set.of(roleCustomer))
+					.shoppingCart(new ShoppingCart())
 					.build();
+
+			customerUser.getShoppingCart().setUser(customerUser);
 
 			userRepository.saveAll(List.of(adminUser, customerUser));
 

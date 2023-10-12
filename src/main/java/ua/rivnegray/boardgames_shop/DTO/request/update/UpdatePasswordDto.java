@@ -1,5 +1,7 @@
 package ua.rivnegray.boardgames_shop.DTO.request.update;
 
+import ua.rivnegray.boardgames_shop.utils.validation.annotation.Password;
+
 import java.io.Serializable;
 
 /**
@@ -7,5 +9,6 @@ import java.io.Serializable;
  */
 public record UpdatePasswordDto(
         String oldPassword,
+        @Password
         String newPassword) implements Serializable {
 }

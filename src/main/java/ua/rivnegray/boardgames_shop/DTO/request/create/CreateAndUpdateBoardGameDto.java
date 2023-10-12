@@ -25,7 +25,7 @@ public record CreateAndUpdateBoardGameDto(
         String productCode,
         String gameSet,
         @Schema(example = "[ \"Стратегії\", \"Економічні\" ]")
-        Set<String> gameTypes,
+        Set<String> gameTypeNames,
         @Schema(example = "[ 1 ]")
         Set<Long> gameGenreIds,
         @Schema(example = " [ 1 ]")

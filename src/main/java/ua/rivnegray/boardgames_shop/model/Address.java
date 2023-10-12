@@ -2,8 +2,6 @@ package ua.rivnegray.boardgames_shop.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,13 +16,13 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"street", "house_number", "postal_code", "city", "country", "user_profile_id"})})
+//@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"street", "house_number", "postal_code", "city", "country"})})
 public class Address extends BaseEntity{
 
     @Column(nullable = false)
     private String street;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     private String houseNumber;
 
     @Column(nullable = false)

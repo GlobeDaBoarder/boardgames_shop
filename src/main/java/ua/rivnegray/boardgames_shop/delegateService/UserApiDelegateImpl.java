@@ -115,7 +115,7 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<AddressDto> getMyAddressById(Long addressId) {
-        return ResponseEntity.ok(this.userService.getAddress(addressId));
+        return ResponseEntity.ok(this.userService.getMyAddressById(addressId));
     }
 
     @Override

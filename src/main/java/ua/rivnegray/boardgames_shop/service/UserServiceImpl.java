@@ -3,7 +3,6 @@ package ua.rivnegray.boardgames_shop.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -15,6 +14,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
+import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.PasswordMissMatchException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.AddressIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserNotFoundException;
@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService{
 
         // todo verify email
         if(!passwordEncoder.matches(updatePasswordDto.oldPassword(), userToUpdate.getPassword()))
-            throw new UsernameNotFoundException("Password is not the same");
+            throw new PasswordMissMatchException();
 
         userToUpdate.setPassword(this.passwordEncoder.encode(updatePasswordDto.newPassword()));
         return this.userMapper.toUserPublicDto(this.userRepository.save(userToUpdate));
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public AddressDto getAddress(Long addressId) {
+    public AddressDto getMyAddressById(Long addressId) {
         return this.userMapper.toAddressDto(this.userAddressRepository.findById(addressId)
                 .orElseThrow(() -> new AddressIdNotFoundException(addressId)));
     }

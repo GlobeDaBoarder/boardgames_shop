@@ -3,9 +3,9 @@ package ua.rivnegray.boardgames_shop.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -34,7 +34,7 @@ import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.ImageFil
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.UnsupportedFileExtensionException;
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.UnsupportedFilenameException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
-import ua.rivnegray.boardgames_shop.mapper.BoardGameMapper;
+import ua.rivnegray.boardgames_shop.mapper.BoardGameMapperService;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
@@ -58,38 +58,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class BoardGameServiceImpl implements BoardGameService {
     private final static Logger LOGGER = LoggerFactory.getLogger(BoardGameServiceImpl.class);
     private final static List<String> AGE_RANGES_FOR_FILTER = List.of("2-3 рокiв", "4-5 рокiв", "6-7 рокiв", "8-9 рокiв", "10-13 рокiв", "18+");
-
     private final static List<String> PLAYER_COUNTS_FOR_FILTER = List.of("1", "2", "3", "4", "5", "6+");
 
     private final BoardGameRepository boardGameRepository;
-    private final BoardGameMapper boardGameMapper;
+    private final BoardGameMapperService boardGameMapperService;
     private final BoardGameGenreRepository boardGameGenreRepository;
     private final BoardGameMechanicRepository boardGameMechanicRepository;
     private final EntityManager  entityManager;
     private final ProductImageRepository productImageRepository;
     private final ImageProperties imageProperties;
     private final PaginationProperties paginationProperties;
-
-    @Autowired
-    BoardGameServiceImpl(BoardGameRepository boardGameRepository, BoardGameMapper boardGameMapper,
-                                BoardGameGenreRepository boardGameGenreRepository,
-                                BoardGameMechanicRepository boardGameMechanicRepository,
-                                EntityManager entityManager,
-                                ProductImageRepository productImageRepository,
-                                ImageProperties imageProperties,
-                                PaginationProperties paginationProperties){
-        this.boardGameRepository = boardGameRepository;
-        this.boardGameMapper = boardGameMapper;
-        this.boardGameGenreRepository = boardGameGenreRepository;
-        this.boardGameMechanicRepository = boardGameMechanicRepository;
-        this.entityManager = entityManager;
-        this.productImageRepository = productImageRepository;
-        this.imageProperties = imageProperties;
-        this.paginationProperties = paginationProperties;
-    }
 
     @Override
     public CatalogResponseDto getAllBoardGames(String search, String filterDTOEncoded, SortType sort, Integer pageNumber) {
@@ -106,7 +88,7 @@ public class BoardGameServiceImpl implements BoardGameService {
 
         return new CatalogResponseDto(
                 page.getContent().stream()
-                        .map(this.boardGameMapper::boardGameToBoardGameSummaryDto)
+                        .map(this.boardGameMapperService::boardGameToBoardGameSummaryDto)
                         .collect(Collectors.toList()),
                 page.getTotalPages()
         );
@@ -115,28 +97,29 @@ public class BoardGameServiceImpl implements BoardGameService {
 
     @Override
     public BoardGameDto addBoardGame(CreateAndUpdateBoardGameDto createBoardGameDto) {
-        BoardGame boardGame = this.boardGameMapper.createBoardGameDtoToBoardGame(createBoardGameDto,
-                this.boardGameGenreRepository, this.boardGameMechanicRepository);
+        BoardGame boardGame = this.boardGameMapperService.toBoardGame(createBoardGameDto);
+
         this.boardGameRepository.save(boardGame);
         entityManager.flush();
         entityManager.refresh(boardGame); // entity now has the @CreationTimestamp field set
-        return this.boardGameMapper.boardGameToBoardGameDto(boardGame);
+        return this.boardGameMapperService.boardGameToBoardGameDto(boardGame);
     }
 
     @Override
     public BoardGameDto getBoardGameById(Long id) {
-        return this.boardGameMapper.boardGameToBoardGameDto(fetchBoardGameById(id));
+        return this.boardGameMapperService.boardGameToBoardGameDto(fetchBoardGameById(id));
     }
 
     @Override
     public BoardGameDto updateBoardGame(Long id, CreateAndUpdateBoardGameDto updateBoardGameDto) {
         BoardGame boardGame = fetchBoardGameById(id);
-        this.boardGameMapper.updateBoardGameFromDto(updateBoardGameDto, boardGame, this.boardGameGenreRepository,
-                this.boardGameMechanicRepository, this.productImageRepository);
+
+        this.boardGameMapperService.updateBoardGame(boardGame, updateBoardGameDto);
+
         this.boardGameRepository.save(boardGame);
         entityManager.flush();
         entityManager.refresh(boardGame); // entity now has the @UpdateTimestamp field updated
-        return this.boardGameMapper.boardGameToBoardGameDto(boardGame);
+        return this.boardGameMapperService.boardGameToBoardGameDto(boardGame);
     }
 
     @Override
@@ -147,7 +130,7 @@ public class BoardGameServiceImpl implements BoardGameService {
     @Override
     public List<BoardGameSummaryDto> getAllArchivedBoardGames() {
         return this.boardGameRepository.findAllByIsRemovedIsTrue().stream()
-                .map(this.boardGameMapper::boardGameToBoardGameSummaryDto)
+                .map(this.boardGameMapperService::boardGameToBoardGameSummaryDto)
                 .collect(Collectors.toList());
     }
 
@@ -155,14 +138,14 @@ public class BoardGameServiceImpl implements BoardGameService {
     public BoardGameDto archiveBoardGame(Long id) {
         BoardGame boardGame = fetchBoardGameById(id);
         boardGame.setIsRemoved(true);
-        return this.boardGameMapper.boardGameToBoardGameDto(boardGame);
+        return this.boardGameMapperService.boardGameToBoardGameDto(boardGame);
     }
 
     @Override
     public BoardGameDto unarchiveBoardGame(Long id) {
         BoardGame boardGame = fetchBoardGameById(id);
         boardGame.setIsRemoved(false);
-        return this.boardGameMapper.boardGameToBoardGameDto(boardGame);
+        return this.boardGameMapperService.boardGameToBoardGameDto(boardGame);
     }
 
     private BoardGame fetchBoardGameById(Long id) {
@@ -194,7 +177,7 @@ public class BoardGameServiceImpl implements BoardGameService {
 
         return new CatalogResponseDto(
                 page.getContent().stream()
-                        .map(this.boardGameMapper::boardGameToBoardGameSummaryDto)
+                        .map(this.boardGameMapperService::boardGameToBoardGameSummaryDto)
                         .collect(Collectors.toList()),
                 page.getTotalPages()
         );
@@ -243,7 +226,7 @@ public class BoardGameServiceImpl implements BoardGameService {
             byte[] bytes = imageFile.getBytes();
             Files.write(filePath, bytes);
 
-            return this.boardGameMapper.boardGameToBoardGameDto(boardgame);
+            return this.boardGameMapperService.boardGameToBoardGameDto(boardgame);
         } catch (IOException e) {
             throw new ImageFileSaveException(imageFile.getOriginalFilename(), e);
         }
