@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.response.IntermediateRegisterResponseDto;
 import ua.rivnegray.boardgames_shop.DTO.response.TokenDto;
 import ua.rivnegray.boardgames_shop.service.SessionsService;
@@ -23,8 +23,8 @@ public class RegisterApiDelegateImpl implements RegisterApiDelegate {
 
 
     @Override
-    public ResponseEntity<TokenDto> registerUser(CreateCustomerUserDto createCustomerUserDto) {
-        IntermediateRegisterResponseDto intermediateRegisterResponseDto = this.sessionsService.register(createCustomerUserDto);
+    public ResponseEntity<TokenDto> registerUser(RegisterCustomerRequestDto registerCustomerRequestDto) {
+        IntermediateRegisterResponseDto intermediateRegisterResponseDto = this.sessionsService.register(registerCustomerRequestDto);
 
         URI location = ServletUriComponentsBuilder.fromUriString("/users")
                 .path("/{id}")

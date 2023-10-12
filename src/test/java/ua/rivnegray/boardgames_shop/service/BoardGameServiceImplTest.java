@@ -18,6 +18,7 @@ import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
+import ua.rivnegray.boardgames_shop.service.impl.BoardGameServiceImpl;
 import ua.rivnegray.boardgames_shop.testFactory.BoardGameTestDataFactory;
 
 import java.time.LocalDateTime;

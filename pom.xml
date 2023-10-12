@@ -196,7 +196,7 @@
 							<importMappings>
 								<importMapping>AddAndUpdateAddressDto=ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto</importMapping>
 								<importMapping>CreateAnyUserDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto</importMapping>
-								<importMapping>CreateCustomerUserDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto</importMapping>
+								<importMapping>CreateCustomerUserDto=ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto</importMapping>
 								<importMapping>UpdateEmailDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto</importMapping>
 								<importMapping>UpdateFullUserProfileDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateFullUserProfileDto</importMapping>
 								<importMapping>UpdatePasswordDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto</importMapping>
@@ -230,19 +230,14 @@
 								<importMapping>BoardGameDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto</importMapping>
 								<importMapping>BoardGameSummaryDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto</importMapping>
 								<importMapping>CreateAndUpdateBoardGameDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto</importMapping>
-								<importMapping>BoardGameLanguage=ua.rivnegray.boardgames_shop.model.BoardGameLanguage</importMapping>
-								<importMapping>ProductCategory=ua.rivnegray.boardgames_shop.model.ProductCategory</importMapping>
 								<importMapping>BoardGameGenreDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto</importMapping>
 								<importMapping>CreateAndUpdateBoardGameGenreDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto</importMapping>
 								<importMapping>BoardGameMechanicDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto</importMapping>
 								<importMapping>CreateAndUpdateBoardGameMechanicDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto</importMapping>
-								<importMapping>FilterBoardGamesRequestDto=ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto</importMapping>
 								<importMapping>SortType=ua.rivnegray.boardgames_shop.model.SortType</importMapping>
 								<importMapping>CatalogResponseDto=ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto</importMapping>
 								<importMapping>MinMaxDto=ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto</importMapping>
 								<importMapping>FilterDataDto=ua.rivnegray.boardgames_shop.DTO.response.FilterDataDto</importMapping>
-								<importMapping>FilterArrayCategoriesDto=ua.rivnegray.boardgames_shop.DTO.response.FilterArrayCategoriesDto</importMapping>
-								<importMapping>FilterCategoryWithArrayDataDto=ua.rivnegray.boardgames_shop.DTO.response.FilterCategoryWithArrayDataDto</importMapping>
 							</importMappings>
 
 							<configOptions>
@@ -316,7 +311,7 @@
 
 							<importMappings>
 								<importMapping>LoginRequestDto=ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto</importMapping>
-								<importMapping>CreateCustomerUserDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto</importMapping>
+								<importMapping>RegisterCustomerRequestDto=ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto</importMapping>
 								<importMapping>TokenDto=ua.rivnegray.boardgames_shop.DTO.response.TokenDto</importMapping>
 							</importMappings>
 

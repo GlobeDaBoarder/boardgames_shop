@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.delegateService.BoardgamesApiDelegateImpl;
-import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
+import ua.rivnegray.boardgames_shop.repository.UserRepository;
 import ua.rivnegray.boardgames_shop.service.BoardGameService;
 import ua.rivnegray.boardgames_shop.testFactory.BoardGameTestDataFactory;
 
@@ -39,7 +39,7 @@ public class BoardGameControllerTest {
     @MockBean
     private UserDetailsService userDetailsService;
     @MockBean
-    private UserCredentialsRepository  userCredentialsRepository;
+    private UserRepository userRepository;
     @MockBean
     private BoardgamesApiDelegateImpl boardgamesApiDelegate;
     @Autowired

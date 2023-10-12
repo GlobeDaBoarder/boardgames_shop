@@ -1,6 +1,6 @@
-package ua.rivnegray.boardgames_shop.service;
+package ua.rivnegray.boardgames_shop.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameMechanicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
@@ -8,21 +8,16 @@ import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameMecha
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMechanicMapper;
 import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
+import ua.rivnegray.boardgames_shop.service.BoardGameMechanicService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BoardGameMechanicServiceImpl implements BoardGameMechanicService {
     private final BoardGameMechanicRepository boardGameMechanicRepository;
     private final BoardGameMechanicMapper boardGameMechanicMapper;
-
-    @Autowired
-    BoardGameMechanicServiceImpl(BoardGameMechanicRepository boardGameMechanicRepository,
-                                        BoardGameMechanicMapper boardGameMechanicMapper) {
-        this.boardGameMechanicRepository = boardGameMechanicRepository;
-        this.boardGameMechanicMapper = boardGameMechanicMapper;
-    }
 
     @Override
     public List<BoardGameMechanicDto> getAllMechanics() {

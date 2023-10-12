@@ -28,7 +28,6 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
-import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
@@ -543,38 +542,6 @@ public interface UsersApi {
         @Parameter(name = "UpdatePhoneDto", description = "", required = true) @Valid @RequestBody UpdatePhoneDto updatePhoneDto
     ) {
         return getDelegate().updateMyPhone(updatePhoneDto);
-    }
-
-
-    /**
-     * PATCH /users/me/username : Update my username
-     *
-     * @param updateUsernameDto  (required)
-     * @return username updated (status code 200)
-     */
-    @Operation(
-        operationId = "updateMyUsername",
-        summary = "Update my username",
-        responses = {
-            @ApiResponse(responseCode = "200", description = "username updated", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
-            })
-        },
-        security = {
-            @SecurityRequirement(name = "bearerAuth")
-        }
-    )
-    @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
-    @RequestMapping(
-        method = RequestMethod.PATCH,
-        value = "/users/me/username",
-        produces = { "application/json" },
-        consumes = { "application/json" }
-    )
-    default ResponseEntity<UserPublicDto> updateMyUsername(
-        @Parameter(name = "UpdateUsernameDto", description = "", required = true) @Valid @RequestBody UpdateUsernameDto updateUsernameDto
-    ) {
-        return getDelegate().updateMyUsername(updateUsernameDto);
     }
 
 }

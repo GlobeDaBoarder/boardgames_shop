@@ -1,7 +1,7 @@
-package ua.rivnegray.boardgames_shop.service;
+package ua.rivnegray.boardgames_shop.service.impl;
 
 import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -28,6 +28,7 @@ import ua.rivnegray.boardgames_shop.repository.OrderRepository;
 import ua.rivnegray.boardgames_shop.repository.ProductInOrderRepository;
 import ua.rivnegray.boardgames_shop.repository.ProductInShoppingCartRepository;
 import ua.rivnegray.boardgames_shop.repository.ShoppingCartRepository;
+import ua.rivnegray.boardgames_shop.service.ShoppingCartService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,8 +37,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ShoppingCartServiceImpl implements ShoppingCartService {
-
     private final ShoppingCartRepository shoppingCartRepository;
     private final ProductInShoppingCartRepository productInShoppingCartRepository;
     private final ProductInOrderRepository productInOrderRepository;
@@ -48,27 +49,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final OrderMapper orderMapper;
     private final AddressRepository addressRepository;
     private final EntityManager entityManager;
-
-    @Autowired
-    ShoppingCartServiceImpl(ShoppingCartRepository shoppingCartRepository, ShoppingCartMapper shoppingCartMapper,
-                                   ProductInShoppingCartRepository productInShoppingCartRepository,
-                                   ProductInOrderRepository productInOrderRepository,
-                                   ProductMapper productMapper,
-                                   BoardGameRepository boardGameRepository,
-                                   OrderRepository orderRepository,
-                                   OrderMapper orderMapper,
-                                   AddressRepository addressRepository, EntityManager entityManager) {
-        this.shoppingCartRepository = shoppingCartRepository;
-        this.shoppingCartMapper = shoppingCartMapper;
-        this.productInShoppingCartRepository = productInShoppingCartRepository;
-        this.productInOrderRepository = productInOrderRepository;
-        this.productMapper = productMapper;
-        this.boardGameRepository = boardGameRepository;
-        this.orderRepository = orderRepository;
-        this.orderMapper = orderMapper;
-        this.addressRepository = addressRepository;
-        this.entityManager = entityManager;
-    }
 
     // admin operations
     @Override
@@ -147,7 +127,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
 
         Order newOrder = Order.builder()
-                .userProfile(shoppingCart.getUserProfile())
+                .user(shoppingCart.getUser())
                 .orderItems(shoppingCart.getProductsInShoppingCart().stream()
                         .map(productInShoppingCart -> {
                             ProductInOrder productInOrder= ProductInOrder.builder()

@@ -1,5 +1,14 @@
 package ua.rivnegray.boardgames_shop.model;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameLanguageNotFoundByNameException;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RequiredArgsConstructor
+@Getter
 public enum BoardGameLanguage {
     ENGLISH("Англійська"),
     RUSSIAN("Російська"),
@@ -10,21 +19,19 @@ public enum BoardGameLanguage {
     OTHER("Інша");
 
     private final String languageNameInUkrainianForFiltering;
+    private static final Map<String, BoardGameLanguage> languageNameInUkrainianToBoardGameLanguageMap = new HashMap<>();
 
-    BoardGameLanguage(String languageNameInUkrainianForFiltering) {
-        this.languageNameInUkrainianForFiltering = languageNameInUkrainianForFiltering;
-    }
-
-    public String getLanguageNameInUkrainianForFiltering() {
-        return languageNameInUkrainianForFiltering;
-    }
-
-    public static BoardGameLanguage fromLanguageNameInUkrainian(String languageNameInUkrainianForFiltering) {
-        for (BoardGameLanguage language : values()) {
-            if (language.getLanguageNameInUkrainianForFiltering().equals(languageNameInUkrainianForFiltering)) {
-                return language;
-            }
+    static {
+        for(BoardGameLanguage boardGameLanguage : BoardGameLanguage.values()){
+            languageNameInUkrainianToBoardGameLanguageMap.put(boardGameLanguage.getLanguageNameInUkrainianForFiltering(), boardGameLanguage);
         }
-        throw new IllegalArgumentException("No enum constant found for languageNameInUkrainianForFiltering: " + languageNameInUkrainianForFiltering);
+    }
+
+    public static BoardGameLanguage fromLanguageNameInUkrainian(String languageNameInUkrainian) {
+        BoardGameLanguage boardGameLanguageEnumValue = languageNameInUkrainianToBoardGameLanguageMap.get(languageNameInUkrainian);
+        if(boardGameLanguageEnumValue == null)
+            throw new BoardGameLanguageNotFoundByNameException(languageNameInUkrainian);
+
+        return boardGameLanguageEnumValue;
     }
 }
