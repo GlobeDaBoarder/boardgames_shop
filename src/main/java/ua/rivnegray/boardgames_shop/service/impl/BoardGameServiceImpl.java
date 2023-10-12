@@ -1,9 +1,9 @@
-package ua.rivnegray.boardgames_shop.service;
+package ua.rivnegray.boardgames_shop.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
@@ -47,6 +47,7 @@ import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.ProductImageRepository;
 import ua.rivnegray.boardgames_shop.repository.specifications.BoardGameSpecification;
+import ua.rivnegray.boardgames_shop.service.BoardGameService;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -58,7 +59,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BoardGameServiceImpl implements BoardGameService {
     private final static Logger LOGGER = LoggerFactory.getLogger(BoardGameServiceImpl.class);
     private final static List<String> AGE_RANGES_FOR_FILTER = List.of("2-3 рокiв", "4-5 рокiв", "6-7 рокiв", "8-9 рокiв", "10-13 рокiв", "18+");

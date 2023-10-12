@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.service;
+package ua.rivnegray.boardgames_shop.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

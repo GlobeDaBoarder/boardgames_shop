@@ -11,6 +11,7 @@ import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.repository.AddressRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
+import ua.rivnegray.boardgames_shop.service.impl.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -27,7 +28,7 @@ class UserServiceImplTest {
     private  PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private  UserServiceImpl userServiceImplUnderTest;
+    private UserServiceImpl userServiceImplUnderTest;
 
 
     @AfterEach

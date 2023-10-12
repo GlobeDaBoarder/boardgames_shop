@@ -1,4 +1,4 @@
-package ua.rivnegray.boardgames_shop.service;
+package ua.rivnegray.boardgames_shop.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,12 +16,13 @@ import ua.rivnegray.boardgames_shop.model.User;
 import ua.rivnegray.boardgames_shop.model.UserRegistrationStatus;
 import ua.rivnegray.boardgames_shop.repository.UserRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
+import ua.rivnegray.boardgames_shop.service.SessionsService;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class SessionServiceImpl implements SessionsService{
+public class SessionServiceImpl implements SessionsService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;

@@ -1,6 +1,6 @@
-package ua.rivnegray.boardgames_shop.service;
+package ua.rivnegray.boardgames_shop.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
@@ -8,22 +8,17 @@ import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameGenre
 import ua.rivnegray.boardgames_shop.mapper.BoardGameGenreMapper;
 import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
+import ua.rivnegray.boardgames_shop.service.BoardGameGenreService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BoardGameGenreServiceImpl implements BoardGameGenreService {
     private final BoardGameGenreRepository boardGameGenreRepository;
     private final BoardGameGenreMapper boardGameGenreMapper;
-
-    @Autowired
-    BoardGameGenreServiceImpl(BoardGameGenreRepository boardGameGenreRepository,
-                                     BoardGameGenreMapper boardGameGenreMapper) {
-        this.boardGameGenreRepository = boardGameGenreRepository;
-        this.boardGameGenreMapper = boardGameGenreMapper;
-    }
-
+    
     @Override
     public List<BoardGameGenreDto> getAllGenres() {
         return this.boardGameGenreRepository.findAll().stream()
