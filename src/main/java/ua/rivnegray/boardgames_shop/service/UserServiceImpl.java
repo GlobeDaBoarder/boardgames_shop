@@ -8,8 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
+import ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
@@ -88,9 +88,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserPublicDto createCustomerUser(CreateCustomerUserDto createCustomerUserDto) {
-        return doUserSaveOperations(this.userMapper.toUserProfile(createCustomerUserDto, this.userRoleRepository),
-                this.userMapper.toUserCredentials(createCustomerUserDto));
+    public UserPublicDto createCustomerUser(RegisterCustomerRequestDto registerCustomerRequestDto) {
+        return doUserSaveOperations(this.userMapper.toUserProfile(registerCustomerRequestDto, this.userRoleRepository),
+                this.userMapper.toUserCredentials(registerCustomerRequestDto));
     }
 
     @Override

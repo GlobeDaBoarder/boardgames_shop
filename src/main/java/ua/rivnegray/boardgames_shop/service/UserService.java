@@ -3,8 +3,8 @@ package ua.rivnegray.boardgames_shop.service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
+import ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
@@ -30,7 +30,7 @@ public interface UserService {
     UserPublicDto createSpecifiedUser(CreateAnyUserDto createAnyUserDto);
 
     @Transactional
-    UserPublicDto createCustomerUser(CreateCustomerUserDto createCustomerUserDto);
+    UserPublicDto createCustomerUser(RegisterCustomerRequestDto registerCustomerRequestDto);
 
     @Transactional
     UserPublicDto updateUsername(final UpdateUsernameDto updateUsernameDto);

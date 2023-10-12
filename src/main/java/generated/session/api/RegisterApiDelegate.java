@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.response.TokenDto;
 
 import java.util.Optional;
@@ -24,13 +24,13 @@ public interface RegisterApiDelegate {
     /**
      * POST /register : Register a new user
      *
-     * @param createCustomerUserDto  (required)
+     * @param registerCustomerRequestDto  (required)
      * @return Registration successful (status code 201)
      *         or Bad Request (status code 400)
      *         or Conflict, e.g., email already in use (status code 409)
      * @see RegisterApi#registerUser
      */
-    default ResponseEntity<TokenDto> registerUser(CreateCustomerUserDto createCustomerUserDto) {
+    default ResponseEntity<TokenDto> registerUser(RegisterCustomerRequestDto registerCustomerRequestDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

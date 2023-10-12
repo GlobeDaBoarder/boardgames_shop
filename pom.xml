@@ -196,7 +196,7 @@
 							<importMappings>
 								<importMapping>AddAndUpdateAddressDto=ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto</importMapping>
 								<importMapping>CreateAnyUserDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto</importMapping>
-								<importMapping>CreateCustomerUserDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto</importMapping>
+								<importMapping>CreateCustomerUserDto=ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto</importMapping>
 								<importMapping>UpdateEmailDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto</importMapping>
 								<importMapping>UpdateFullUserProfileDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateFullUserProfileDto</importMapping>
 								<importMapping>UpdatePasswordDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto</importMapping>
@@ -311,7 +311,7 @@
 
 							<importMappings>
 								<importMapping>LoginRequestDto=ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto</importMapping>
-								<importMapping>CreateCustomerUserDto=ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto</importMapping>
+								<importMapping>CreateCustomerUserDto=ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto</importMapping>
 								<importMapping>TokenDto=ua.rivnegray.boardgames_shop.DTO.response.TokenDto</importMapping>
 							</importMappings>
 

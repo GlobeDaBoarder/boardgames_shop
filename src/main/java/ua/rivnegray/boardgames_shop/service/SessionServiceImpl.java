@@ -7,7 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateCustomerUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.MapShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.IntermediateRegisterResponseDto;
 import ua.rivnegray.boardgames_shop.DTO.response.TokenDto;
@@ -68,22 +68,22 @@ public class SessionServiceImpl implements SessionsService{
     }
 
     @Override
-    public IntermediateRegisterResponseDto register(CreateCustomerUserDto createCustomerUserDto) {
-        if (this.userCredentialsRepository.existsByUsername(createCustomerUserDto.username())) {
-            throw new UsernameAlreadyTakenException(createCustomerUserDto.username());
+    public IntermediateRegisterResponseDto register(RegisterCustomerRequestDto registerCustomerRequestDto) {
+        if (this.userCredentialsRepository.existsByUsername(registerCustomerRequestDto.username())) {
+            throw new UsernameAlreadyTakenException(registerCustomerRequestDto.username());
         }
 
-        UserProfile userProfile = findOrCreateUserProfile(createCustomerUserDto);
+        UserProfile userProfile = findOrCreateUserProfile(registerCustomerRequestDto);
         Long userid = userProfile.getId();
 
-        UserCredentials userCredentials = new UserCredentials(createCustomerUserDto.username(), passwordEncoder.encode(createCustomerUserDto.password()));
+        UserCredentials userCredentials = new UserCredentials(registerCustomerRequestDto.username(), passwordEncoder.encode(registerCustomerRequestDto.password()));
         userCredentials.setUserProfile(userProfile);
         userProfile.setUserCredentials(userCredentials);
 
         this.userProfileRepository.save(userProfile);
 
         String token =  tokenService.generateToken(this.authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(createCustomerUserDto.username(), createCustomerUserDto.password())
+                new UsernamePasswordAuthenticationToken(registerCustomerRequestDto.username(), registerCustomerRequestDto.password())
         ));
 
         return IntermediateRegisterResponseDto.builder()
@@ -92,14 +92,14 @@ public class SessionServiceImpl implements SessionsService{
                 .build();
     }
 
-    private UserProfile findOrCreateUserProfile(CreateCustomerUserDto createCustomerUserDto) {
-        Optional<UserProfile> userProfileFoundByEmail = this.userProfileRepository.findByEmail(createCustomerUserDto.email());
+    private UserProfile findOrCreateUserProfile(RegisterCustomerRequestDto registerCustomerRequestDto) {
+        Optional<UserProfile> userProfileFoundByEmail = this.userProfileRepository.findByEmail(registerCustomerRequestDto.email());
         if(userProfileFoundByEmail.isPresent()){
             UserProfile existingProfile = userProfileFoundByEmail.get();
             if(existingProfile.getUserCredentials() != null) {
                 throw new UserAlreadyRegisteredException();
             }
-            this.userMapper.updateUserProfile(existingProfile, createCustomerUserDto);
+            this.userMapper.updateUserProfile(existingProfile, registerCustomerRequestDto);
 
             existingProfile.getRoles().add(this.userRoleRepository.findUserRoleByRoleName("ROLE_CUSTOMER")
                     .orElseThrow(() -> new RoleNameNotFoundException("ROLE_CUSTOMER")));
@@ -107,7 +107,7 @@ public class SessionServiceImpl implements SessionsService{
             return existingProfile;
         }
 
-        return this.userMapper.toUserProfile(createCustomerUserDto, this.userRoleRepository);
+        return this.userMapper.toUserProfile(registerCustomerRequestDto, this.userRoleRepository);
     }
 
     private void mapShoppingCartDtoToUserProfileCart(MapShoppingCartDto mapShoppingCartDto, UserProfile userProfile) {
