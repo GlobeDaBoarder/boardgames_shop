@@ -1,6 +1,5 @@
 package generated.session.api;
 
-
 import jakarta.annotation.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

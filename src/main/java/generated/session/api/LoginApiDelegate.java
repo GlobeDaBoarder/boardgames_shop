@@ -34,7 +34,7 @@ public interface LoginApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"token\" : \"eyJraWQiOiI3N2VlNDlkOC02N2Q3LTQ0MDktODk0YS1jM2IzMjM2MTMwZjIiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInNjb3BlIjpbImdlbnJlQW5kTWVjaGFuaWM6Y3JlYXRlIiwiYm9hcmRHYW1lOmRlbGV0ZSIsInVzZXI6ZGVsZXRlIiwidXNlcjp1cGRhdGVNZSIsInVzZXI6cmVhZE1lIiwib3JkZXI6ZXhwb3J0Iiwib3JkZXI6cmVhZCIsInVzZXI6dXBkYXRlIiwiYm9hcmRHYW1lOmFyY2hpdmVBbmRVbmFyY2hpdmUiLCJzaG9wcGluZ0NhcnQ6bWFuYWdlTWUiLCJvcmRlcjpjcmVhdGUiLCJib2FyZEdhbWU6dXBkYXRlIiwiZ2VucmVBbmRNZWNoYW5pYzpkZWxldGUiLCJnZW5yZUFuZE1lY2hhbmljOnVwZGF0ZSIsIm9yZGVyOmRlbGV0ZSIsInVzZXI6Y3JlYXRlIiwib3JkZXI6dXBkYXRlU3RhdHVzIiwiYm9hcmRHYW1lOmNyZWF0ZSIsInVzZXI6cmVhZCIsImJvYXJkR2FtZTpyZWFkQXJjaGl2ZWQiLCJvcmRlcjpyZWFkTWUiLCJvcmRlcjpjYW5jZWxNZSIsInNob3BwaW5nQ2FydDpyZWFkIl0sImlzcyI6InNlbGYiLCJpZCI6MSwiZXhwIjoxNjk1NjMzNjA1LCJpYXQiOjE2OTU2MzAwMDV9.Ln4RALpfhAliwqc2bvDC7quQB0KnrkdFr9t8wuUnD6K38k_69-ApcMl2J9vexA1DtUq6IsuFwyeTEH9n72p5h-KnwJ8pMmm6DgN4g4YytFBgK0rMrMFdFMgx3LD9JIpqiUuYe1M_ItsxFhrgYZAP1Sa6c5GeRLSrkxVz0tB8nHHZ_qd2Ihj1g8aTwzB74gX_IbpaGkO0ymmTKC4ZHVCSdKWP9Gi-TV67xFi0Vr78mVv9-JhV-Li_t98xiwOF3oNkDsDhl0FRyPRwkGZ-iDpHvulaDczp3hvGHwBavNMQf2mjBcW76M6GrH9iBA1f1Cla1SXksqx6wBFhAPRhdfOiPg\" }";
+                    String exampleString = "{ \"emptyValue\" : true }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

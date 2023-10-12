@@ -11,7 +11,6 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
-import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
@@ -37,7 +36,7 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<UserPublicDto> addAddress(AddAndUpdateAddressDto addAndUpdateAddressDto) {
-        UserPublicDto userWithAddedAddress = this.userService.addAddress(addAndUpdateAddressDto);
+        UserPublicDto userWithAddedAddress = this.userService.addMyAddress(addAndUpdateAddressDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -83,58 +82,36 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<UserPublicDto> getMe() {
-        return ResponseEntity.ok(this.userService.getCurrentUserPublicInfo());
+        return ResponseEntity.ok(this.userService.getMyUserInfo());
     }
 
     @Override
     public ResponseEntity<Void> removeAddress(Long addressId) {
-        this.userService.removeAddress(addressId);
+        this.userService.removeMyAddress(addressId);
         return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity<UserPublicDto> updateMyAddress(Long addressId,
                                                        AddAndUpdateAddressDto addAndUpdateAddressDto) {
-        return ResponseEntity.ok(this.userService.updateAddress(addressId, addAndUpdateAddressDto));
+        return ResponseEntity.ok(this.userService.updateMyAddress(addressId, addAndUpdateAddressDto));
     }
 
     @Override
     public ResponseEntity<UserPublicDto> updateMyEmail(UpdateEmailDto updateEmailDto) {
-        return ResponseEntity.ok(this.userService.updateEmail(updateEmailDto));
+        return ResponseEntity.ok(this.userService.updateMyEmail(updateEmailDto));
     }
 
     @Override
     public ResponseEntity<UserPublicDto> updateMyPassword(UpdatePasswordDto updatePasswordDto) {
-        return ResponseEntity.ok(this.userService.updatePassword(updatePasswordDto));
+        return ResponseEntity.ok(this.userService.updateMyPassword(updatePasswordDto));
     }
 
     @Override
     public ResponseEntity<UserPublicDto> updateMyPhone(UpdatePhoneDto updatePhoneDto) {
-        return ResponseEntity.ok(this.userService.updatePhone(updatePhoneDto));
+        return ResponseEntity.ok(this.userService.updateMyPhone(updatePhoneDto));
     }
 
-    @Override
-    public ResponseEntity<UserPublicDto> updateMyUsername(UpdateUsernameDto updateUsernameDto) {
-        return ResponseEntity.ok(this.userService.updateUsername(updateUsernameDto));
-    }
-
-//    @Override
-//    public ResponseEntity<Boolean> checkEmailAvailability(UpdateEmailDto updateEmailDto) {
-//        if (this.userService.isEmailAvailable(updateEmailDto)) {
-//            return new ResponseEntity<>(true, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
-//        }
-//    }
-//
-//    @Override
-//    public ResponseEntity<Boolean> checkUsernameAvailability(UpdateUsernameDto updateUsernameDto) {
-//        if (this.userService.isUsernameAvailable(updateUsernameDto)) {
-//            return new ResponseEntity<>(true, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
-//        }
-//    }
 
     @Override
     public ResponseEntity<AddressDto> getMyAddressById(Long addressId) {
@@ -143,7 +120,7 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
 
     @Override
     public ResponseEntity<List<AddressDto>> getAllMyAddresses() {
-        return ResponseEntity.ok(this.userService.getAllAddresses());
+        return ResponseEntity.ok(this.userService.getAllMyAddresses());
     }
 
     @Override

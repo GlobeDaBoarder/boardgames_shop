@@ -8,23 +8,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
-import ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
-import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.AddressIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.Address;
-import ua.rivnegray.boardgames_shop.model.UserCredentials;
-import ua.rivnegray.boardgames_shop.model.UserProfile;
+import ua.rivnegray.boardgames_shop.model.User;
+import ua.rivnegray.boardgames_shop.model.UserRegistrationStatus;
 import ua.rivnegray.boardgames_shop.repository.AddressRepository;
-import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
+import ua.rivnegray.boardgames_shop.repository.UserRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
 import java.util.ArrayList;
@@ -33,104 +32,99 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
-    private final UserProfileRepository userProfileRepository;
+    private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final AddressRepository userAddressRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserServiceImpl(UserProfileRepository userProfileRepository,
+    UserServiceImpl(UserRepository userRepository,
                     UserRoleRepository userRoleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder,
                     AddressRepository userAddressRepository) {
-        this.userProfileRepository = userProfileRepository;
+        this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.userAddressRepository = userAddressRepository;
     }
 
-    private UserPublicDto doUserSaveOperations(UserProfile userProfile, UserCredentials userCredentials) {
-        userCredentials.setPassword(this.passwordEncoder.encode(userCredentials.getPassword()));
-        userCredentials.setUserProfile(userProfile);
-        userProfile.setUserCredentials(userCredentials);
-
-        return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userProfile));
-    }
-    private UserProfile getCurrentUser() {
+    private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
-        String username = jwtPrincipal.getSubject();
+        String email = jwtPrincipal.getSubject();
         Long id = jwtPrincipal.getClaim("id");
 
-        return this.userProfileRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+        return this.userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(email));
     }
 
     @Override
     public List<UserPublicDto> getAllUsersPublicInfo() {
-        return this.userProfileRepository.findAll().stream()
+        return this.userRepository.findAll().stream()
                 .map(this.userMapper::toUserPublicDto)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
     public UserPublicDto getUserPublicInfoById(Long id) {
-        return this.userProfileRepository.findById(id)
+        return this.userRepository.findById(id)
                 .map(this.userMapper::toUserPublicDto)
                 .orElseThrow(() -> new UserIdNotFoundException(id));
     }
 
     @Override
     public UserPublicDto createSpecifiedUser(CreateAnyUserDto createAnyUserDto) {
-        return doUserSaveOperations(this.userMapper.toUserProfile(createAnyUserDto, this.userRoleRepository),
-                this.userMapper.toUserCredentials(createAnyUserDto));
+        User user = User.builder()
+                .email(createAnyUserDto.email())
+                .password(this.passwordEncoder.encode(createAnyUserDto.password()))
+                .phone(createAnyUserDto.phone())
+                .firstName(createAnyUserDto.firstName())
+                .lastName(createAnyUserDto.lastName())
+                .nickname(createAnyUserDto.nickName())
+                .registrationStatus(UserRegistrationStatus.REGISTERED)
+                .roles(this.userRoleRepository.findAllById(createAnyUserDto.roleIds()))
+                .build();
+
+        return this.userMapper.toUserPublicDto(this.userRepository.save(user));
     }
 
     @Override
-    public UserPublicDto createCustomerUser(RegisterCustomerRequestDto registerCustomerRequestDto) {
-        return doUserSaveOperations(this.userMapper.toUserProfile(registerCustomerRequestDto, this.userRoleRepository),
-                this.userMapper.toUserCredentials(registerCustomerRequestDto));
-    }
+    public UserPublicDto updateMyPassword(UpdatePasswordDto updatePasswordDto) {
+        User userToUpdate = this.getCurrentUser();
 
-    @Override
-    public UserPublicDto updateUsername(UpdateUsernameDto updateUsernameDto) {
-        UserProfile userToUpdate = this.getCurrentUser();
+        // todo verify email
+        if(!passwordEncoder.matches(updatePasswordDto.oldPassword(), userToUpdate.getPassword()))
+            throw new UsernameNotFoundException("Password is not the same");
 
-        userToUpdate.getUserCredentials().setUsername(updateUsernameDto.username());
-        return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
-    }
-
-    @Override
-    public UserPublicDto updatePassword(UpdatePasswordDto updatePasswordDto) {
-        UserProfile userToUpdate = this.getCurrentUser();
-
-        userToUpdate.getUserCredentials().setPassword(this.passwordEncoder.encode(updatePasswordDto.password()));
-        return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
+        userToUpdate.setPassword(this.passwordEncoder.encode(updatePasswordDto.newPassword()));
+        return this.userMapper.toUserPublicDto(this.userRepository.save(userToUpdate));
 
     }
 
     @Override
-    public UserPublicDto updateEmail(UpdateEmailDto updateEmailDto) {
-        UserProfile userToUpdate = this.getCurrentUser();
+    public UserPublicDto updateMyEmail(UpdateEmailDto updateEmailDto) {
+        User userToUpdate = this.getCurrentUser();
 
+        // todo verify email
         userToUpdate.setEmail(updateEmailDto.email());
-        return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
+        return this.userMapper.toUserPublicDto(this.userRepository.save(userToUpdate));
 
     }
 
     @Override
-    public UserPublicDto updatePhone(UpdatePhoneDto updatePhoneDto) {
-        UserProfile userToUpdate = this.getCurrentUser();
+    public UserPublicDto updateMyPhone(UpdatePhoneDto updatePhoneDto) {
+        User userToUpdate = this.getCurrentUser();
 
+        // todo verify phone number
         userToUpdate.setPhone(updatePhoneDto.phone());
-        return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
+        return this.userMapper.toUserPublicDto(this.userRepository.save(userToUpdate));
 
     }
 
     @Override
-    public UserPublicDto updateAddress(Long addressId, AddAndUpdateAddressDto updateAddressDto) {
-        UserProfile userToUpdate = this.getCurrentUser();
+    public UserPublicDto updateMyAddress(Long addressId, AddAndUpdateAddressDto updateAddressDto) {
+        User userToUpdate = this.getCurrentUser();
 
         Address addressToUpdate = userToUpdate.getAddresses().stream()
                 .filter(address -> address.getId().equals(addressId))
@@ -139,38 +133,38 @@ public class UserServiceImpl implements UserService{
 
         this.userMapper.updateAddress(addressToUpdate, updateAddressDto);
 
-        return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
+        return this.userMapper.toUserPublicDto(this.userRepository.save(userToUpdate));
 
     }
 
     @Override
-    public UserPublicDto addAddress(AddAndUpdateAddressDto addAddressDto) {
-        UserProfile userToUpdate = this.getCurrentUser();
+    public UserPublicDto addMyAddress(AddAndUpdateAddressDto addAddressDto) {
+        User userToUpdate = this.getCurrentUser();
 
         Address addressToAdd = this.userMapper.toAddress(addAddressDto);
         userToUpdate.getAddresses().add(addressToAdd);
-        return this.userMapper.toUserPublicDto(this.userProfileRepository.save(userToUpdate));
+        return this.userMapper.toUserPublicDto(this.userRepository.save(userToUpdate));
     }
 
     @Override
-    public void removeAddress(Long addressId) {
-        UserProfile userToUpdate = this.getCurrentUser();
+    public void removeMyAddress(Long addressId) {
+        User userToUpdate = this.getCurrentUser();
 
         userToUpdate.getAddresses().removeIf(address -> address.getId().equals(addressId));
-        this.userProfileRepository.save(userToUpdate);
+        this.userRepository.save(userToUpdate);
 
     }
 
     @Override
     public void hardDeleteUser(Long id) {
-        this.userProfileRepository.deleteById(id);
+        this.userRepository.deleteById(id);
     }
 
     @Override
     public void deleteMe() {
-        UserProfile userToDelete = this.getCurrentUser();
+        User userToDelete = this.getCurrentUser();
         userToDelete.setIsRemoved(true);
-        this.userProfileRepository.save(userToDelete);
+        this.userRepository.save(userToDelete);
     }
 
     @Override
@@ -181,13 +175,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserPublicDto getCurrentUserPublicInfo() {
+    public UserPublicDto getMyUserInfo() {
         return this.userMapper.toUserPublicDto(getCurrentUser());
     }
 
     @Override
     public List<UserPublicDto> getUsersPublicInfoByRole(String role) {
-        return this.userProfileRepository.findByRoles_RoleName(role).stream()
+        return this.userRepository.findByRoles_RoleName(role).stream()
                 .map(this.userMapper::toUserPublicDto)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -199,8 +193,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<AddressDto> getAllAddresses() {
-        UserProfile userProfileTiGetAddressesFrom = this.getCurrentUser();
+    public List<AddressDto> getAllMyAddresses() {
+        User userProfileTiGetAddressesFrom = this.getCurrentUser();
 
         return userProfileTiGetAddressesFrom.getAddresses().stream()
                 .map(this.userMapper::toAddressDto)

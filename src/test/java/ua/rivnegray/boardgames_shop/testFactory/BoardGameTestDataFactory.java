@@ -72,7 +72,6 @@ public class BoardGameTestDataFactory {
                 .productPrice(BigDecimal.valueOf(100))
                 .productQuantityInStock(1)
                 .productImageURLs(Set.of("/boardgames/images/15.png", "/boardgames/images/16.png"))
-                .productCategory(ProductCategory.BOARD_GAMES)
                 .productCode("Test")
                 .gameSet("Test")
                 .gameGenreIds(Set.of(1L, 2L))

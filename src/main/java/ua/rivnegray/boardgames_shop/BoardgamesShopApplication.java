@@ -23,15 +23,15 @@ import ua.rivnegray.boardgames_shop.model.BoardGameType;
 import ua.rivnegray.boardgames_shop.model.ProductCategory;
 import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.ShoppingCart;
-import ua.rivnegray.boardgames_shop.model.UserCredentials;
+import ua.rivnegray.boardgames_shop.model.User;
 import ua.rivnegray.boardgames_shop.model.UserPermission;
-import ua.rivnegray.boardgames_shop.model.UserProfile;
+import ua.rivnegray.boardgames_shop.model.UserRegistrationStatus;
 import ua.rivnegray.boardgames_shop.model.UserRole;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
 import ua.rivnegray.boardgames_shop.repository.ShoppingCartRepository;
-import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
+import ua.rivnegray.boardgames_shop.repository.UserRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
 import java.math.BigDecimal;
@@ -50,12 +50,12 @@ public class BoardgamesShopApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner( UserProfileRepository userProfileRepository, Environment environment,
+	public CommandLineRunner commandLineRunner(UserRepository userRepository, Environment environment,
 											   UserRoleRepository roleRepository, PasswordEncoder encoder,
-												BoardGameMechanicRepository boardGameMechanicRepository,
-												BoardGameGenreRepository boardGameGenreRepository,
-												BoardGameRepository boardGameRepository,
-												ShoppingCartRepository shoppingCartRepository) {
+											   BoardGameMechanicRepository boardGameMechanicRepository,
+											   BoardGameGenreRepository boardGameGenreRepository,
+											   BoardGameRepository boardGameRepository,
+											   ShoppingCartRepository shoppingCartRepository) {
 		return args -> {
 
 			// SAMPLE DATA
@@ -81,23 +81,36 @@ public class BoardgamesShopApplication {
 			roleCustomer.setPermissions(userPermissions);
 			roleRepository.save(roleCustomer);
 
-			UserProfile adminProfile = new UserProfile("glebivashyn@gmail.com", "1", "Gleb", "Ivashyn",
-					Set.of(roleSuperAdmin));
-			UserCredentials adminCredentials = new UserCredentials("admin", encoder.encode("admin"));
-			adminCredentials.setUserProfile(adminProfile);
-			adminProfile.setUserCredentials(adminCredentials);
+			User adminUser = User.builder()
+					.email("admin@rivnegray.ua")
+					.password(encoder.encode("admin"))
+					.phone("+37062124078")
+					.firstName("Gleb")
+					.lastName("Ivashyn")
+					.nickname("admin")
+					.registrationStatus(UserRegistrationStatus.REGISTERED)
+					.roles(Set.of(roleSuperAdmin))
+					.address(Address.builder()
+							.city("Rivne")
+							.street("Soborna")
+							.houseNumber("1")
+							.postalCode("33000")
+							.country("Ukraine")
+							.build())
+					.build();
 
-			adminProfile.getAddresses().add(new Address("Yermaka", "1", "33000","Rivne", "Ukraine", adminProfile));
+			User customerUser = User.builder()
+					.email("customer@rivnegray.ua")
+					.password(encoder.encode("customer"))
+					.phone("+37062124078")
+					.firstName("Gleb")
+					.lastName("Ivashyn")
+					.nickname("customer")
+					.registrationStatus(UserRegistrationStatus.REGISTERED)
+					.roles(Set.of(roleCustomer))
+					.build();
 
-			userProfileRepository.save(adminProfile);
-
-			UserProfile customerProfile = new UserProfile("customeruser@gmail.com", "2", "Gleb", "Ivashyn",
-					Set.of(roleCustomer));
-			UserCredentials customerCredentials = new UserCredentials("customer", encoder.encode("customer"));
-			customerCredentials.setUserProfile(customerProfile);
-			customerProfile.setUserCredentials(customerCredentials);
-
-			userProfileRepository.save(customerProfile);
+			userRepository.saveAll(List.of(adminUser, customerUser));
 
 			//------------------BOARDGAMES---------------------------------
 
@@ -1504,7 +1517,7 @@ public class BoardgamesShopApplication {
 			boardGameRepository.saveAll(List.of(boardGame1, boardGame2, boardGame3, boardGame4, boardGame5, boardGame6, boardGame7, boardGame8, boardGame9, boardGame10, boardGame11, boardGame12, boardGame13, boardGame14, boardGame15, boardGame16, boardGame17, boardGame18, boardGame19, boardGame20, boardGame21, boardGame22, boardGame23, boardGame24, boardGame25, boardGame26, boardGame27, boardGame28, boardGame29, boardGame30, boardGame31, boardGame32, boardGame33, boardGame34, boardGame35, boardGame36, boardGame37, boardGame38, boardGame39, boardGame40, boardGame41, boardGame42, boardGame43, boardGame44, boardGame45, boardGame46, boardGame47, boardGame48, boardGame49, boardGame50, boardGame51, boardGame52, boardGame53, boardGame54, boardGame55, boardGame56, boardGame57, boardGame58, boardGame59, boardGame60, boardGame61, boardGame62, boardGame63));
 
 			//-------------------shoppingCart-------------------
-			ShoppingCart cart1 = adminProfile.getShoppingCart();
+			ShoppingCart cart1 = adminUser.getShoppingCart();
 			cart1.getProductsInShoppingCart().add(new ProductInShoppingCart(boardGame1, cart1, 1));
 
 			shoppingCartRepository.save(cart1);

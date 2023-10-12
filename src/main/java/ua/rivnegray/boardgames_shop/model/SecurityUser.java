@@ -1,5 +1,6 @@
 package ua.rivnegray.boardgames_shop.model;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -7,17 +8,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class SecurityUser implements UserDetails {
-
-    private final UserCredentials user;
-
-    public SecurityUser(UserCredentials user) {
-        this.user = user;
-    }
+    private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.user.getUserProfile().getRoles().stream().flatMap(userRole -> userRole.getPermissions().stream())
+        return this.user.getRoles().stream().flatMap(userRole -> userRole.getPermissions().stream())
                 .collect(Collectors.toCollection(HashSet::new));
     }
 
@@ -32,7 +29,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.user.getUsername();
+        return this.user.getEmail();
     }
 
     @Override

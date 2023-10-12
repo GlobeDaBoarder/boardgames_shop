@@ -45,7 +45,7 @@ public class Order{
     private Long id;
 
     @ManyToOne
-    private UserProfile userProfile;
+    private User user;
 
     @OneToMany(mappedBy = "order", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<ProductInOrder> orderItems = new HashSet<>();
@@ -68,9 +68,9 @@ public class Order{
     private final Set<OrderStatusDate> orderStatusHistory = new HashSet<>();
 
     @Builder
-    public Order(UserProfile userProfile, Set<ProductInOrder> orderItems, OrderStatus currentStatus,
+    public Order(User user, Set<ProductInOrder> orderItems, OrderStatus currentStatus,
                  BigDecimal totalPrice, Address address, PaymentStatus paymentStatus) {
-        this.userProfile = userProfile;
+        this.user = user;
         this.orderItems = orderItems;
         setCurrentStatus(currentStatus);
         this.totalPrice = totalPrice;

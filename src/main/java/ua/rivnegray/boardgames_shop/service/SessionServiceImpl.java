@@ -1,6 +1,6 @@
 package ua.rivnegray.boardgames_shop.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,118 +8,86 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.LoginRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.MapShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.IntermediateRegisterResponseDto;
 import ua.rivnegray.boardgames_shop.DTO.response.TokenDto;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.UserAlreadyRegisteredException;
-import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.UsernameAlreadyTakenException;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.RoleNameNotFoundException;
-import ua.rivnegray.boardgames_shop.mapper.UserMapper;
-import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
-import ua.rivnegray.boardgames_shop.model.UserCredentials;
-import ua.rivnegray.boardgames_shop.model.UserProfile;
-import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
-import ua.rivnegray.boardgames_shop.repository.UserCredentialsRepository;
-import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
+import ua.rivnegray.boardgames_shop.model.User;
+import ua.rivnegray.boardgames_shop.model.UserRegistrationStatus;
+import ua.rivnegray.boardgames_shop.repository.UserRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class SessionServiceImpl implements SessionsService{
-    private final UserProfileRepository userProfileRepository;
-    private final UserCredentialsRepository userCredentialsRepository;
+    private final UserRepository userRepository;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final UserMapper userMapper;
     private final UserRoleRepository userRoleRepository;
-    private final BoardGameRepository boardGameRepository;
-
-    @Autowired
-    SessionServiceImpl(UserProfileRepository userProfileRepository, UserCredentialsRepository userCredentialsRepository,
-                              TokenService tokenService, PasswordEncoder passwordEncoder,
-                              AuthenticationManager authenticationManager,
-                              UserMapper userMapper, UserRoleRepository userRoleRepository,
-                              BoardGameRepository boardGameRepository) {
-        this.userProfileRepository = userProfileRepository;
-        this.userCredentialsRepository = userCredentialsRepository;
-        this.tokenService = tokenService;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.userMapper = userMapper;
-        this.userRoleRepository = userRoleRepository;
-        this.boardGameRepository = boardGameRepository;
-    }
 
     @Override
     public TokenDto login(LoginRequestDto loginRequestDto) {
-        UserCredentials userCredentials = this.userCredentialsRepository.findByUsername(loginRequestDto.username())
+        User user = this.userRepository.findByEmail(loginRequestDto.email())
                 .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
-        if (!this.passwordEncoder.matches(loginRequestDto.password(), userCredentials.getPassword())) {
+        if (user.getRegistrationStatus().equals(UserRegistrationStatus.NOT_REGISTERED))
+            throw new BadCredentialsException("You are not registered yet to login. Please register first");
+        if (!this.passwordEncoder.matches(loginRequestDto.password(), user.getPassword()))
             throw new BadCredentialsException("Invalid username or password");
-        }
 
         return new TokenDto(tokenService.generateToken(this.authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequestDto.username(), loginRequestDto.password())
+                new UsernamePasswordAuthenticationToken(loginRequestDto.email(), loginRequestDto.password())
         )));
     }
 
     @Override
     public IntermediateRegisterResponseDto register(RegisterCustomerRequestDto registerCustomerRequestDto) {
-        if (this.userCredentialsRepository.existsByUsername(registerCustomerRequestDto.username())) {
-            throw new UsernameAlreadyTakenException(registerCustomerRequestDto.username());
-        }
+        Optional<User> userOptional = this.userRepository.findByEmail(registerCustomerRequestDto.email());
 
-        UserProfile userProfile = findOrCreateUserProfile(registerCustomerRequestDto);
-        Long userid = userProfile.getId();
-
-        UserCredentials userCredentials = new UserCredentials(registerCustomerRequestDto.username(), passwordEncoder.encode(registerCustomerRequestDto.password()));
-        userCredentials.setUserProfile(userProfile);
-        userProfile.setUserCredentials(userCredentials);
-
-        this.userProfileRepository.save(userProfile);
-
-        String token =  tokenService.generateToken(this.authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(registerCustomerRequestDto.username(), registerCustomerRequestDto.password())
-        ));
-
-        return IntermediateRegisterResponseDto.builder()
-                .token(new TokenDto(token))
-                .userId(userid)
-                .build();
-    }
-
-    private UserProfile findOrCreateUserProfile(RegisterCustomerRequestDto registerCustomerRequestDto) {
-        Optional<UserProfile> userProfileFoundByEmail = this.userProfileRepository.findByEmail(registerCustomerRequestDto.email());
-        if(userProfileFoundByEmail.isPresent()){
-            UserProfile existingProfile = userProfileFoundByEmail.get();
-            if(existingProfile.getUserCredentials() != null) {
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            if(user.getRegistrationStatus().equals(UserRegistrationStatus.REGISTERED)) {
                 throw new UserAlreadyRegisteredException();
             }
-            this.userMapper.updateUserProfile(existingProfile, registerCustomerRequestDto);
 
-            existingProfile.getRoles().add(this.userRoleRepository.findUserRoleByRoleName("ROLE_CUSTOMER")
-                    .orElseThrow(() -> new RoleNameNotFoundException("ROLE_CUSTOMER")));
+            // todo email verification
+            user = user.toBuilder()
+                    .password(this.passwordEncoder.encode(registerCustomerRequestDto.password()))
+                    .phone(registerCustomerRequestDto.phone())
+                    .firstName(registerCustomerRequestDto.firstName())
+                    .lastName(registerCustomerRequestDto.lastName())
+                    .registrationStatus(UserRegistrationStatus.REGISTERED)
+                    .role(this.userRoleRepository.findCustomerRole().orElseThrow(() -> new RoleNameNotFoundException("ROLE_CUSTOMER")))
+                    .build();
 
-            return existingProfile;
+            this.userRepository.save(user);
+
+            return createIntermediateRegistrationResponse(user);
         }
 
-        return this.userMapper.toUserProfile(registerCustomerRequestDto, this.userRoleRepository);
+        User user = User.builder()
+                .email(registerCustomerRequestDto.email())
+                .password(this.passwordEncoder.encode(registerCustomerRequestDto.password()))
+                .phone(registerCustomerRequestDto.phone())
+                .firstName(registerCustomerRequestDto.firstName())
+                .lastName(registerCustomerRequestDto.lastName())
+                .registrationStatus(UserRegistrationStatus.REGISTERED)
+                .role(this.userRoleRepository.findCustomerRole().orElseThrow(() -> new RoleNameNotFoundException("ROLE_CUSTOMER")))
+                .build();
+
+        this.userRepository.save(user);
+
+        return createIntermediateRegistrationResponse(user);
     }
 
-    private void mapShoppingCartDtoToUserProfileCart(MapShoppingCartDto mapShoppingCartDto, UserProfile userProfile) {
-        userProfile.getShoppingCart().getProductsInShoppingCart().addAll(mapShoppingCartDto.simpleProductInShoppingCartDtos().stream()
-                .map(simpleProductInShoppingCartDto -> ProductInShoppingCart.builder()
-                        .product(this.boardGameRepository.findById(simpleProductInShoppingCartDto.productId())
-                                .orElseThrow(() -> new BoardGameIdNotFoundException(simpleProductInShoppingCartDto.productId())))
-                        .shoppingCart(userProfile.getShoppingCart())
-                        .quantity(simpleProductInShoppingCartDto.quantity())
-                        .build()
-                )
-                .collect(Collectors.toSet())
-        );
+    private IntermediateRegisterResponseDto createIntermediateRegistrationResponse(User user) {
+        return IntermediateRegisterResponseDto.builder()
+                .token(new TokenDto(tokenService.generateToken(this.authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+                ))))
+                .userId(user.getId())
+                .build();
     }
 }

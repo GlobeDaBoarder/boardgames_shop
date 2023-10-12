@@ -24,7 +24,7 @@ public interface OrderMapper {
         return productInOrderDtos;
     }
 
-    @Mapping(target = "userProfileId", source = "userProfile.id")
+    @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "address", source = "address")
     @Mapping(target = "orderItems", source = "orderItems", qualifiedByName = "orderItemsToOrderItems")
     OrderDto orderToOrderDto(Order order);

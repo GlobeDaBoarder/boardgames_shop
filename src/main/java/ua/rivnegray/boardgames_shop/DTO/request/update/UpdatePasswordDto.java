@@ -3,7 +3,9 @@ package ua.rivnegray.boardgames_shop.DTO.request.update;
 import java.io.Serializable;
 
 /**
- * DTO for {@link ua.rivnegray.boardgames_shop.model.UserCredentials}
+ * DTO for {@link ua.rivnegray.boardgames_shop.model.User}
  */
-public record UpdatePasswordDto(String password) implements Serializable {
+public record UpdatePasswordDto(
+        String oldPassword,
+        String newPassword) implements Serializable {
 }

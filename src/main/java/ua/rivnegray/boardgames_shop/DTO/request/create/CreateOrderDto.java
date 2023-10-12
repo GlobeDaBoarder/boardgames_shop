@@ -6,5 +6,5 @@ import java.io.Serializable;
 
 public record CreateOrderDto(MapShoppingCartDto mapShoppingCartDto,
                              AddAndUpdateAddressDto addAndUpdateAddressDto,
-                             CreateUserProfileDto userProfileDto) implements Serializable {
+                             UserInfoForOrderDto userProfileDto) implements Serializable {
 }

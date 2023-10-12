@@ -58,7 +58,7 @@ public interface RegisterApi {
         consumes = { "application/json" }
     )
     default ResponseEntity<TokenDto> registerUser(
-        @Parameter(name = "CreateCustomerUserDto", description = "", required = true) @Valid @RequestBody RegisterCustomerRequestDto registerCustomerRequestDto
+        @Parameter(name = "RegisterCustomerRequestDto", description = "", required = true) @Valid @RequestBody RegisterCustomerRequestDto registerCustomerRequestDto
     ) {
         return getDelegate().registerUser(registerCustomerRequestDto);
     }

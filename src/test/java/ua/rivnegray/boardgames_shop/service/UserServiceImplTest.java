@@ -1,22 +1,22 @@
 package ua.rivnegray.boardgames_shop.service;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.repository.AddressRepository;
-import ua.rivnegray.boardgames_shop.repository.UserProfileRepository;
+import ua.rivnegray.boardgames_shop.repository.UserRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
     @Mock
-    private  UserProfileRepository userProfileRepository;
+    private UserRepository userRepository;
     @Mock
     private  UserRoleRepository userRoleRepository;
     @Mock
@@ -26,13 +26,9 @@ class UserServiceImplTest {
     @Mock
     private  PasswordEncoder passwordEncoder;
 
+    @InjectMocks
     private  UserServiceImpl userServiceImplUnderTest;
 
-
-    @BeforeEach
-    void setUp() {
-        this.userServiceImplUnderTest = new UserServiceImpl(userProfileRepository, userRoleRepository, userMapper, passwordEncoder, userAddressRepository);
-    }
 
     @AfterEach
     void tearDown() {

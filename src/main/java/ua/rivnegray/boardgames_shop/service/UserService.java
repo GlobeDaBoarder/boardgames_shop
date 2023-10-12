@@ -3,12 +3,10 @@ package ua.rivnegray.boardgames_shop.service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
-import ua.rivnegray.boardgames_shop.DTO.request.RegisterCustomerRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
-import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
@@ -29,41 +27,29 @@ public interface UserService {
     @Transactional
     UserPublicDto createSpecifiedUser(CreateAnyUserDto createAnyUserDto);
 
-    @Transactional
-    UserPublicDto createCustomerUser(RegisterCustomerRequestDto registerCustomerRequestDto);
-
-    @Transactional
-    UserPublicDto updateUsername(final UpdateUsernameDto updateUsernameDto);
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    UserPublicDto updateMyPassword(final UpdatePasswordDto updatePasswordDto);
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    UserPublicDto updatePassword(final UpdatePasswordDto updatePasswordDto);
+    UserPublicDto updateMyEmail(final UpdateEmailDto updateEmailDto);
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    UserPublicDto updateEmail(final UpdateEmailDto updateEmailDto);
-
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
-    UserPublicDto updatePhone(final UpdatePhoneDto updatePhoneDto);
-
-//    @Transactional(readOnly = true)
-//    Boolean isEmailAvailable(UpdateEmailDto updateEmailDto);
-//
-//    @Transactional(readOnly = true)
-//    Boolean isUsernameAvailable(UpdateUsernameDto updateUsernameDto);
+    UserPublicDto updateMyPhone(final UpdatePhoneDto updatePhoneDto);
 
     @Transactional(readOnly = true)
     AddressDto getAddress(Long addressId);
 
     @Transactional(readOnly = true)
-    List<AddressDto> getAllAddresses();
+    List<AddressDto> getAllMyAddresses();
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    UserPublicDto updateAddress(final Long addressId, final AddAndUpdateAddressDto updateAddressDto);
+    UserPublicDto updateMyAddress(final Long addressId, final AddAndUpdateAddressDto updateAddressDto);
 
     @Transactional
-    UserPublicDto addAddress(final AddAndUpdateAddressDto addAddressDto);
+    UserPublicDto addMyAddress(final AddAndUpdateAddressDto addAddressDto);
 
     @Transactional
-    void removeAddress(final Long addressId);
+    void removeMyAddress(final Long addressId);
 
     @Transactional
     void hardDeleteUser(Long id);
@@ -75,5 +61,5 @@ public interface UserService {
     List<UserRoleDto> getAllUserRoles();
 
     @Transactional(readOnly = true)
-    UserPublicDto getCurrentUserPublicInfo();
+    UserPublicDto getMyUserInfo();
 }
