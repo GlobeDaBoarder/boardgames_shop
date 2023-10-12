@@ -13,7 +13,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameD
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
-import ua.rivnegray.boardgames_shop.mapper.BoardGameMapper;
+import ua.rivnegray.boardgames_shop.mapper.BoardGameMapperService;
 import ua.rivnegray.boardgames_shop.model.BoardGame;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
@@ -35,7 +35,7 @@ class BoardGameServiceImplTest {
     @Mock
     private BoardGameRepository boardGameRepository;
     @Mock
-    private BoardGameMapper boardGameMapper;
+    private BoardGameMapperService boardGameMapper;
     @Mock
     private BoardGameGenreRepository boardGameGenreRepository;
     @Mock
@@ -61,7 +61,7 @@ class BoardGameServiceImplTest {
     @Test
     void addBoardGame_returnsBoardGameDto() {
 
-        when(boardGameMapper.createBoardGameDtoToBoardGame(eq(createAndUpdateBoardGameDto), eq(boardGameGenreRepository), eq(boardGameMechanicRepository)))
+        when(boardGameMapper.toBoardGame(eq(createAndUpdateBoardGameDto)))
                 .thenReturn(boardGameState);
 
         doAnswer(invocationOnMock -> {
@@ -104,7 +104,7 @@ class BoardGameServiceImplTest {
         BoardGame boardGame = Mockito.mock(BoardGame.class);
         BoardGameDto returnedDto = Mockito.mock(BoardGameDto.class);
 
-        when(boardGameMapper.createBoardGameDtoToBoardGame(any(CreateAndUpdateBoardGameDto.class), any(BoardGameGenreRepository.class), any(BoardGameMechanicRepository.class)))
+        when(boardGameMapper.toBoardGame(any(CreateAndUpdateBoardGameDto.class)))
                 .thenReturn(boardGame);
         when(boardGameRepository.save(boardGame))
                 .thenReturn(boardGame);
