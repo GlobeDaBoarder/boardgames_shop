@@ -1,6 +1,5 @@
 package ua.rivnegray.boardgames_shop;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.ImageProperties;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.PaginationProperties;
 import ua.rivnegray.boardgames_shop.model.Address;
@@ -1530,8 +1528,85 @@ public class BoardgamesShopApplication {
 
 			LOGGER.debug("test");
 
-			ObjectMapper objectMapper = new ObjectMapper();
-			System.out.println(objectMapper.writeValueAsString(FilterBoardGamesRequestDto.builder().build()));
+
+//			BoardGame bg1 = BoardGame.builder()
+//					.productName("Катан")
+//					.productNameInEnglish("Catan")
+//					.productDescription("Катан, раніше відомий як Поселенці Катану або просто Поселенці, - це багатокористувацька настільна гра, створена Клаусом Тойбером, і вперше опублікована в 1995 році в Німеччині фірмою Franckh-Kosmos Verlag (Kosmos) під назвою Die Siedler von Catan.")
+//					.productPrice(new BigDecimal(100))
+//					.manufacturer("Kosmos")
+//					.productCategory(ProductCategory.BOARD_GAMES)
+//					.productCode("КАТАН")
+//					.productQuantityInStock(10)
+//					.productImageURLs(Set.of("https://www.catan.com/sites/default/files/2021-08/3DBox_CATAN_w_b.jpg"))
+//					.minGameDuration(60)
+//					.maxGameDuration(120)
+//					.gameSet("Коробка для гри, ігрова дошка, 2 кубики, правила гри та альманах.")
+//					.minPlayers(3)
+//					.maxPlayers(4)
+//					.author("Klaus Teuber")
+//					.illustrator("Volkan Baga, Harald Lieske, Stephen Graham Walsh")
+//					.gameTypes(Set.of(BoardGameType.STRATEGY, BoardGameType.ADVENTURE))
+//					.gameGenres(Set.of(boardGameGenreRepository.findById(3L).get()))
+//					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get()))
+//					.BGGLink("https://boardgamegeek.com/boardgame/13/catan")
+//					.gameLanguage(BoardGameLanguage.ENGLISH)
+//					.minAge(2)
+//					.build();
+//
+//			BoardGame bg2 = BoardGame.builder()
+//					.productName("Катан2")
+//					.productNameInEnglish("Catan2")
+//					.productDescription("Катан, раніше відомий як Поселенці Катану або просто Поселенці, - це багатокористувацька настільна гра, створена Клаусом Тойбером, і вперше опублікована в 1995 році в Німеччині фірмою Franckh-Kosmos Verlag (Kosmos) під назвою Die Siedler von Catan.")
+//					.productPrice(new BigDecimal(100))
+//					.manufacturer("Kosmos")
+//					.productCategory(ProductCategory.BOARD_GAMES)
+//					.productCode("КАТАН")
+//					.productQuantityInStock(10)
+//					.productImageURLs(Set.of("https://www.catan.com/sites/default/files/2021-08/3DBox_CATAN_w_b.jpg"))
+//					.minGameDuration(60)
+//					.maxGameDuration(120)
+//					.gameSet("Коробка для гри, ігрова дошка, 2 кубики, правила гри та альманах.")
+//					.minPlayers(3)
+//					.maxPlayers(4)
+//					.author("Klaus Teuber")
+//					.illustrator("Volkan Baga, Harald Lieske, Stephen Graham Walsh")
+//					.gameTypes(Set.of(BoardGameType.STRATEGY, BoardGameType.ADVENTURE))
+//					.gameGenres(Set.of(boardGameGenreRepository.findById(3L).get()))
+//					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Конструювання колоди").get()))
+//					.BGGLink("https://boardgamegeek.com/boardgame/13/catan")
+//					.gameLanguage(BoardGameLanguage.ENGLISH)
+//					.minAge(2)
+//					.build();
+//
+//			BoardGame bg3 = BoardGame.builder()
+//					.productName("Катан3")
+//					.productNameInEnglish("Catan3")
+//					.productDescription("Катан, раніше відомий як Поселенці Катану або просто Поселенці, - це багатокористувацька настільна гра, створена Клаусом Тойбером, і вперше опублікована в 1995 році в Німеччині фірмою Franckh-Kosmos Verlag (Kosmos) під назвою Die Siedler von Catan.")
+//					.productPrice(new BigDecimal(100))
+//					.manufacturer("Kosmos")
+//					.productCategory(ProductCategory.BOARD_GAMES)
+//					.productCode("КАТАН")
+//					.productQuantityInStock(10)
+//					.productImageURLs(Set.of("https://www.catan.com/sites/default/files/2021-08/3DBox_CATAN_w_b.jpg"))
+//					.minGameDuration(60)
+//					.maxGameDuration(120)
+//					.gameSet("Коробка для гри, ігрова дошка, 2 кубики, правила гри та альманах.")
+//					.minPlayers(3)
+//					.maxPlayers(4)
+//					.author("Klaus Teuber")
+//					.illustrator("Volkan Baga, Harald Lieske, Stephen Graham Walsh")
+//					.gameTypes(Set.of(BoardGameType.STRATEGY, BoardGameType.ADVENTURE))
+//					.gameGenres(Set.of(boardGameGenreRepository.findById(3L).get()))
+//					.gameMechanics(Set.of(boardGameMechanicRepository.findByMechanicName("Кооперативна гра").get(), boardGameMechanicRepository.findByMechanicName("Конструювання колоди").get()))
+//					.BGGLink("https://boardgamegeek.com/boardgame/13/catan")
+//					.gameLanguage(BoardGameLanguage.ENGLISH)
+//					.minAge(2)
+//					.build();
+//
+//			boardGameRepository.saveAll(List.of(bg1, bg2, bg3));
 		};
+
+
 	}
 }
