@@ -10,6 +10,7 @@ import ua.rivnegray.boardgames_shop.repository.ShoppingCartRepository;
 @Mapper(componentModel = "spring", uses = {BoardGameRepository.class, ShoppingCartRepository.class})
 public interface ProductMapper {
 
+    @Mapping(target = "productInCartId", source = "id")
     @Mapping(target = "productId", source = "product.id")
     ProductInShoppingCartDto toProductInShoppingCartDto(ProductInShoppingCart productInShoppingCart);
 }

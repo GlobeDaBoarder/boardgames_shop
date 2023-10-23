@@ -5,5 +5,5 @@ import java.io.Serializable;
 /**
  * DTO for {@link ua.rivnegray.boardgames_shop.model.ProductInShoppingCart}
  */
-public record ProductInShoppingCartDto(Long id, Long productId, Integer quantity) implements Serializable {
+public record ProductInShoppingCartDto(Long productInCartId, Long productId, Integer quantity) implements Serializable {
 }

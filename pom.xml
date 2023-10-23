@@ -266,7 +266,7 @@
 								<importmapping>OrderStatus=ua.rivnegray.boardgames_shop.model.OrderStatus</importmapping>
 								<importmapping>PaymentStatus=ua.rivnegray.boardgames_shop.model.PaymentStatus</importmapping>
 								<importmapping>AddAndUpdateAddressDto=ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto</importmapping>
-
+								<importmapping>MapProductInCartCartDto=ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInCartCartDto</importmapping>
 							</importMappings>
 
 							<configOptions>

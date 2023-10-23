@@ -5,14 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInCartCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
 import ua.rivnegray.boardgames_shop.service.ShoppingCartService;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,21 +30,14 @@ public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ShoppingCartDto> addProductToMyShoppingCart(Long productId) {
-        ShoppingCartDto shoppingCartDto = this.shoppingCartService.addProductToMyShoppingCart(productId);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(shoppingCartDto.id())
-                .toUri();
-
-        return ResponseEntity.created(location).body(shoppingCartDto);
+    public ResponseEntity<List<ProductInShoppingCartDto>> addProductToMyShoppingCart(Long productId) {
+        return ResponseEntity.ok(this.shoppingCartService.addProductToMyShoppingCart(productId));
     }
 
     @Override
-    public ResponseEntity<ShoppingCartDto> clearMyShoppingCart() {
-        return ResponseEntity.ok(this.shoppingCartService.clearMyShoppingCart());
+    public ResponseEntity<Void> clearMyShoppingCart() {
+        this.shoppingCartService.clearMyShoppingCart();
+        return ResponseEntity.noContent().build();
     }
 
     @Override
@@ -60,14 +51,14 @@ public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ShoppingCartDto> removeProductFromMyShoppingCart(Long productInCartId) {
+    public ResponseEntity<List<ProductInShoppingCartDto>> removeProductFromMyShoppingCart(Long productInCartId) {
         return ResponseEntity.ok(this.shoppingCartService.removeProductFromMyShoppingCart(productInCartId));
     }
 
 
 
     @Override
-    public ResponseEntity<ShoppingCartDto> updateQuantityOfProductInMyShoppingCart(Long productInCartId,
+    public ResponseEntity<List<ProductInShoppingCartDto>> updateQuantityOfProductInMyShoppingCart(Long productInCartId,
                                 UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto) {
         return ResponseEntity.ok(this.shoppingCartService.updateQuantityOfProductInMyShoppingCart(productInCartId,
                 updateQuantityOfProductInShoppingCartDto));
@@ -78,5 +69,8 @@ public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
         return ResponseEntity.ok(this.shoppingCartService.checkoutMyUser(addressId));
     }
 
-
+    @Override
+    public ResponseEntity<List<ProductInShoppingCartDto>> mapCart(List<MapProductInCartCartDto> mapShoppingCartDto) {
+        return ResponseEntity.ok(this.shoppingCartService.mapCart(mapShoppingCartDto));
+    }
 }
