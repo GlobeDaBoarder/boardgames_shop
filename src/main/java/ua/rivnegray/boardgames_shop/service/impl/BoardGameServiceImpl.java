@@ -305,6 +305,13 @@ public class BoardGameServiceImpl implements BoardGameService {
                 .build();
     }
 
+    @Override
+    public List<BoardGameSummaryDto> getNewestFiveBoardGames() {
+        return this.boardGameRepository.findTop5ByIsRemovedIsFalseOrderByDateCreatedDesc().stream()
+                .map(this.boardGameMapperService::boardGameToBoardGameSummaryDto)
+                .collect(Collectors.toList());
+    }
+
     private FilterArrayCategoriesDto buildFilterArrayCategoriesDto(){
         return FilterArrayCategoriesDto.builder()
                 .boardGameTypes(FilterCategoryWithArrayDataDto.builder()

@@ -58,4 +58,7 @@ public interface BoardGameService {
 
     @Transactional(readOnly = true)
     FilterDataDto getFilteringData();
+
+    @Transactional(readOnly = true)
+    List<BoardGameSummaryDto> getNewestFiveBoardGames();
 }

@@ -588,6 +588,35 @@ public interface BoardgamesApi {
 
 
     /**
+     * GET /boardgames/newest-five : Get five newest boardgames
+     * Get five newest boardgames
+     *
+     * @return OK (status code 200)
+     */
+    @Operation(
+        operationId = "getNewestFiveBoardGames",
+        summary = "Get five newest boardgames",
+        description = "Get five newest boardgames",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = BoardGameSummaryDto.class)))
+            })
+        }
+    )
+    @PreAuthorize("permitAll")
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/boardgames/newest-five",
+        produces = { "application/json" }
+    )
+    default ResponseEntity<List<BoardGameSummaryDto>> getNewestFiveBoardGames(
+        
+    ) {
+        return getDelegate().getNewestFiveBoardGames();
+    }
+
+
+    /**
      * GET /boardgames/priceBounds : Get min and max price from all games
      *
      * @return OK (status code 200)

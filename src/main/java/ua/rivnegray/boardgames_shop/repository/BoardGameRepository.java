@@ -51,4 +51,6 @@ public interface BoardGameRepository extends JpaRepository<BoardGame, Long>, Jpa
             """
     )
     MinMaxDto findMinMaxGameDuration();
+
+    List<BoardGame> findTop5ByIsRemovedIsFalseOrderByDateCreatedDesc();
 }
