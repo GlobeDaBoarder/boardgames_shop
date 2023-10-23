@@ -552,6 +552,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FilterDataDto'
+  /boardgames/newest-five:
+    get:
+      summary: Get five newest boardgames
+      operationId: getNewestFiveBoardGames
+      description: Get five newest boardgames
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BoardGameSummaryDto'
 
 components:
   securitySchemes:

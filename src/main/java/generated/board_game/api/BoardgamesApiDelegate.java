@@ -376,6 +376,27 @@ public interface BoardgamesApiDelegate {
     }
 
     /**
+     * GET /boardgames/newest-five : Get five newest boardgames
+     * Get five newest boardgames
+     *
+     * @return OK (status code 200)
+     * @see BoardgamesApi#getNewestFiveBoardGames
+     */
+    default ResponseEntity<List<BoardGameSummaryDto>> getNewestFiveBoardGames() {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"emptyValue\" : true }, { \"emptyValue\" : true } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
      * GET /boardgames/priceBounds : Get min and max price from all games
      *
      * @return OK (status code 200)
