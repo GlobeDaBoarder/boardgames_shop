@@ -10,14 +10,17 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInCartCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
+import ua.rivnegray.boardgames_shop.exceptions.badRequestExceptions.InsufficientStockException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.AddressIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.ProductInCartIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.ShoppingCartIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.OrderMapper;
 import ua.rivnegray.boardgames_shop.mapper.ProductMapper;
 import ua.rivnegray.boardgames_shop.model.Order;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
 import ua.rivnegray.boardgames_shop.model.PaymentStatus;
+import ua.rivnegray.boardgames_shop.model.Product;
 import ua.rivnegray.boardgames_shop.model.ProductInOrder;
 import ua.rivnegray.boardgames_shop.model.ProductInShoppingCart;
 import ua.rivnegray.boardgames_shop.model.ShoppingCart;
@@ -30,6 +33,7 @@ import ua.rivnegray.boardgames_shop.repository.ShoppingCartRepository;
 import ua.rivnegray.boardgames_shop.service.ShoppingCartService;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -47,6 +51,31 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final OrderMapper orderMapper;
     private final AddressRepository addressRepository;
     private final EntityManager entityManager;
+
+    /**
+     * Validates if requested quantity is in stock
+     *
+     * @param requestedQuantity - quantity requested by user
+     * @param quantityInStock   - quantity in stock
+     * @param productId         - id of product
+     * @throws InsufficientStockException if requested quantity is greater than quantity in stock
+     **/
+    private static void validateIfRequestedQuantityIsInStock(Long productId, Integer requestedQuantity, Integer quantityInStock) {
+        if (requestedQuantity > quantityInStock)
+            throw new InsufficientStockException(productId, requestedQuantity, quantityInStock);
+    }
+
+    /**
+     * Validates if requested quantity is in stock
+     *
+     * @param requestedQuantity - quantity requested by user
+     * @param quantityInStock   - quantity in stock
+     * @throws InsufficientStockException if requested quantity is greater than quantity in stock
+     **/
+    private static void validateIfRequestedQuantityIsInStock(Integer requestedQuantity, Integer quantityInStock) {
+        if (requestedQuantity > quantityInStock)
+            throw new InsufficientStockException(requestedQuantity, quantityInStock);
+    }
 
     // admin operations
     @Override
@@ -70,21 +99,29 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public List<ProductInShoppingCartDto> addProductToMyShoppingCart(Long productId) {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
 
-        Optional<ProductInShoppingCart> existingProductInCart = shoppingCart.getProductsInShoppingCart().stream()
+        Optional<ProductInShoppingCart> existingProductInCartOptional = shoppingCart.getProductsInShoppingCart().stream()
                 .filter(p -> p.getProduct().getId().equals(productId))
                 .findFirst();
 
-        if (existingProductInCart.isPresent()) {
-            existingProductInCart.get().setQuantity(existingProductInCart.get().getQuantity() + 1);
-        } else {
-            ProductInShoppingCart productInShoppingCart = new ProductInShoppingCart();
-            // todo  change from boardgame repository to general product repository later
-            productInShoppingCart.setProduct(this.boardGameRepository.findById(productId)
-                    .orElseThrow(() -> new BoardGameIdNotFoundException(productId)));
-            productInShoppingCart.setShoppingCart(shoppingCart);
-            productInShoppingCart.setQuantity(1);
+        if (existingProductInCartOptional.isPresent()) {
+            ProductInShoppingCart existingProductInCart = existingProductInCartOptional.get();
 
-            shoppingCart.getProductsInShoppingCart().add(productInShoppingCart);
+            validateIfRequestedQuantityIsInStock(existingProductInCart.getQuantity() + 1,
+                    existingProductInCart.getProduct().getProductQuantityInStock());
+
+            existingProductInCart.setQuantity(existingProductInCartOptional.get().getQuantity() + 1);
+        } else {
+            ProductInShoppingCart newProductInShoppingCart = new ProductInShoppingCart();
+
+            validateIfRequestedQuantityIsInStock(1,
+                    newProductInShoppingCart.getProduct().getProductQuantityInStock());
+
+            newProductInShoppingCart.setProduct(this.boardGameRepository.findById(productId)
+                    .orElseThrow(() -> new BoardGameIdNotFoundException(productId)));
+            newProductInShoppingCart.setShoppingCart(shoppingCart);
+            newProductInShoppingCart.setQuantity(1);
+
+            shoppingCart.getProductsInShoppingCart().add(newProductInShoppingCart);
         }
 
         this.shoppingCartRepository.save(shoppingCart);
@@ -94,7 +131,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .toList();
     }
 
-
     @Override
     public List<ProductInShoppingCartDto> getProductsInMyShoppingCart() {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
@@ -102,7 +138,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .map(this.productMapper::toProductInShoppingCartDto)
                 .toList();
     }
-
 
     @Override
     public List<ProductInShoppingCartDto> removeProductFromMyShoppingCart(Long productInCartId) {
@@ -119,9 +154,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public List<ProductInShoppingCartDto> updateQuantityOfProductInMyShoppingCart(Long productInCartId,
-                                   UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto) {
+                                                                                  UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto) {
         ProductInShoppingCart productInShoppingCart = this.productInShoppingCartRepository.findById(productInCartId)
-                .orElseThrow(() -> new ShoppingCartIdNotFoundException(productInCartId));
+                .orElseThrow(() -> new ProductInCartIdNotFoundException(productInCartId));
+
+        Integer quantityInStock = productInShoppingCart.getProduct().getProductQuantityInStock();
+        validateIfRequestedQuantityIsInStock(updateQuantityOfProductInShoppingCartDto.quantity(), quantityInStock);
+
         productInShoppingCart.setQuantity(updateQuantityOfProductInShoppingCartDto.quantity());
 
         this.productInShoppingCartRepository.save(productInShoppingCart);
@@ -130,6 +169,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .map(this.productMapper::toProductInShoppingCartDto)
                 .toList();
     }
+
     @Override
     public OrderDto checkoutMyUser(Long addressId) {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
@@ -138,7 +178,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .user(shoppingCart.getUser())
                 .orderItems(shoppingCart.getProductsInShoppingCart().stream()
                         .map(productInShoppingCart -> {
-                            ProductInOrder productInOrder= ProductInOrder.builder()
+                            ProductInOrder productInOrder = ProductInOrder.builder()
                                     .product(productInShoppingCart.getProduct())
                                     .quantity(productInShoppingCart.getQuantity())
                                     .build();
@@ -175,29 +215,55 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public List<ProductInShoppingCartDto> mapCart(List<MapProductInCartCartDto> mapShoppingCartDto) {
-       ShoppingCart currentUserShoppingCart = getShoppingCartOfCurrentUser();
+    public List<ProductInShoppingCartDto> mapCart(List<MapProductInCartCartDto> mapProductInCartCartDtos) {
+        ShoppingCart currentUserShoppingCart = getShoppingCartOfCurrentUser();
+        List<ProductInShoppingCart> newProductsInCart = new ArrayList<>();
 
-       currentUserShoppingCart.getProductsInShoppingCart().addAll(mapShoppingCartDto.stream()
-                .map(simpleProductInShoppingCartDto -> ProductInShoppingCart.builder()
-                        .product(this.boardGameRepository.findById(simpleProductInShoppingCartDto.productId())
-                                .orElseThrow(() -> new BoardGameIdNotFoundException(simpleProductInShoppingCartDto.productId())))
-                        .shoppingCart(currentUserShoppingCart)
-                        .quantity(simpleProductInShoppingCartDto.quantity())
-                        .build()
-                )
-                .collect(Collectors.toSet())
-        );
+        for (MapProductInCartCartDto mapProductInCartCartDto : mapProductInCartCartDtos) {
+            Product product = boardGameRepository.findById(mapProductInCartCartDto.productId())
+                    .orElseThrow(() -> new BoardGameIdNotFoundException(mapProductInCartCartDto.productId()));
 
-       this.shoppingCartRepository.save(currentUserShoppingCart);
+            ProductInShoppingCart newProductInCart = ProductInShoppingCart.builder()
+                    .product(product)
+                    .shoppingCart(currentUserShoppingCart)
+                    .quantity(mapProductInCartCartDto.quantity())
+                    .build();
 
-       return currentUserShoppingCart.getProductsInShoppingCart().stream()
-               .map(this.productMapper::toProductInShoppingCartDto)
-               .toList();
+            validateIfRequestedQuantityIsInStock(mapProductInCartCartDto.productId(), newProductInCart.getQuantity(), product.getProductQuantityInStock());
+
+            Optional<ProductInShoppingCart> potentiallyAlreadyExistingProductInCart = findMatchingProductInCart(product);
+            if (potentiallyAlreadyExistingProductInCart.isPresent()) {
+                ProductInShoppingCart existingProductInCart = potentiallyAlreadyExistingProductInCart.get();
+                existingProductInCart.setQuantity(newProductInCart.getQuantity());
+
+                continue;
+            }
+
+            newProductsInCart.add(newProductInCart);
+        }
+
+        currentUserShoppingCart.getProductsInShoppingCart().addAll(newProductsInCart);
+
+        shoppingCartRepository.save(currentUserShoppingCart);
+
+        return currentUserShoppingCart.getProductsInShoppingCart().stream()
+                .map(this.productMapper::toProductInShoppingCartDto)
+                .toList();
     }
 
+    private Optional<ProductInShoppingCart> findMatchingProductInCart(Product product) {
+        return getShoppingCartOfCurrentUser().getProductsInShoppingCart().stream()
+                .filter(productInShoppingCart -> productInShoppingCart.getProduct().equals(product))
+                .findFirst();
+    }
 
-    private ShoppingCart getShoppingCartOfCurrentUser(){
+    /**
+     * Returns shopping cart of current user from security context.
+     * Basically gets it from JWT token info (id)
+     *
+     * @return shopping cart of current user
+     */
+    private ShoppingCart getShoppingCartOfCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
         Long id = jwtPrincipal.getClaim("id");

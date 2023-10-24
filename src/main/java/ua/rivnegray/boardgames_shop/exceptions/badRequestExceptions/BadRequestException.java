@@ -11,4 +11,8 @@ public abstract class BadRequestException extends RuntimeException{
         super(message, cause);
         LOGGER.debug(cause.getMessage());
     }
+
+    public BadRequestException(String message) {
+        super(message);
+    }
 }

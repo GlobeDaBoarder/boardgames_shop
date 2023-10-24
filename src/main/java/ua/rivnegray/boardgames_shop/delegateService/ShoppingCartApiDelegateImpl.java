@@ -5,12 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInCartCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.service.ShoppingCartService;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,7 +68,15 @@ public class ShoppingCartApiDelegateImpl implements ShoppingCartApiDelegate {
 
     @Override
     public ResponseEntity<OrderDto> checkoutRegisteredUser(Long addressId) {
-        return ResponseEntity.ok(this.shoppingCartService.checkoutMyUser(addressId));
+        OrderDto orderDto = this.shoppingCartService.checkoutMyUser(addressId);
+
+        URI location = ServletUriComponentsBuilder
+                .fromUriString("orders/me")
+                .path("/{id}")
+                .buildAndExpand(orderDto.id())
+                .toUri();
+
+        return ResponseEntity.created(location).body(orderDto);
     }
 
     @Override
