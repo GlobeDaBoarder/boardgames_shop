@@ -88,11 +88,9 @@ public class SessionServiceImpl implements SessionsService {
                 new UsernamePasswordAuthenticationToken(registerCustomerRequestDto.email(), registerCustomerRequestDto.password())
         ));
 
-        IntermediateRegisterResponseDto dto = IntermediateRegisterResponseDto.builder()
+        return IntermediateRegisterResponseDto.builder()
                 .token(new TokenDto(token))
                 .userId(user.getId())
                 .build();
-
-        return dto;
     }
 }

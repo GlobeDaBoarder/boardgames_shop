@@ -2,10 +2,10 @@ package ua.rivnegray.boardgames_shop.service;
 
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInCartCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
 
 import java.util.List;
 
@@ -16,22 +16,24 @@ public interface ShoppingCartService {
 
     // current user  operations
     @Transactional
-    ShoppingCartDto clearMyShoppingCart();
+    void clearMyShoppingCart();
 
     @Transactional
-    ShoppingCartDto addProductToMyShoppingCart(Long productId);
+    List<ProductInShoppingCartDto> addProductToMyShoppingCart(Long productId);
 
     @Transactional(readOnly = true)
     List<ProductInShoppingCartDto> getProductsInMyShoppingCart();
 
     @Transactional
-    ShoppingCartDto removeProductFromMyShoppingCart(Long productInCartId);
+    List<ProductInShoppingCartDto> removeProductFromMyShoppingCart(Long productInCartId);
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    ShoppingCartDto updateQuantityOfProductInMyShoppingCart(Long productInCartId,
+    List<ProductInShoppingCartDto> updateQuantityOfProductInMyShoppingCart(Long productInCartId,
                                      UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto);
 
-    
     @Transactional
     OrderDto checkoutMyUser(Long addressId);
+
+    @Transactional
+    List<ProductInShoppingCartDto> mapCart(List<MapProductInCartCartDto> mapShoppingCartDto);
 }

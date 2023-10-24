@@ -5,9 +5,43 @@ info:
 security:
   - bearerAuth: []
 paths:
+  /shoppingCart/map:
+    post:
+      summary: Map cart from one stored in local storage to one stored in database
+      operationId: mapCart
+      x-access-permission: shoppingCart:manageMe
+      description: "This operation is used when a decides to log in or register. 
+      Prior to registration or logging in all the shopping cart dat ais stored inside of localStorage.
+       Upon login,  this allows to save client's products in the database and clear the localStorage"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/MapProductInCartCartDto'
+      responses:
+        '200':
+          description: Cart mapped successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductInShoppingCartDto'
+        '400':
+          description: Invalid cart data
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorized
+
+
   # admin/moderator operations
   /shoppingCart/{cartId}:
     get:
+      deprecated: true
       summary: Get all products in the shopping cart
       operationId: getProductsInShoppingCart
       x-access-permission: shoppingCart:read
@@ -37,14 +71,11 @@ paths:
       operationId: clearMyShoppingCart
       x-access-permission: shoppingCart:manageMe
       responses:
-        '200':
+        '204':
           description: Shopping cart cleared successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ShoppingCartDto'
-        '400':
-          description: Invalid shopping cart ID
+        '401':
+          description: Unauthorized
+
     get:
       summary: Get all products in my shopping cart
       operationId: getProductsInMyShoppingCart
@@ -58,8 +89,9 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductInShoppingCartDto'
-        '400':
-          description: Invalid shopping cart ID
+        '401':
+          description: Unauthorized
+
   /shoppingCart/{productId}:
     post:
       summary: Adds a product to the shopping cart
@@ -73,14 +105,19 @@ paths:
             type: integer
             format: int64
       responses:
-        '201':
+        '200':
           description: Product added successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ShoppingCartDto'
-        '400':
-          description: Invalid product data
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductInShoppingCartDto'
+        '404':
+          description: Product not found
+        '401':
+          description: Unauthorized
+
   /shoppingCart/{productInCartId}:
     delete:
       summary: Remove a product from the shopping cart
@@ -99,9 +136,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ShoppingCartDto'
-        '400':
-          description: Invalid product or shopping cart ID
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductInShoppingCartDto'
+        '404':
+          description: ProductInCart not found
+        '401':
+          description: Unauthorized
 
     patch:
       summary: Update the quantity of a product in the shopping cart
@@ -126,9 +167,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ShoppingCartDto'
-        '400':
-          description: Invalid product data
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductInShoppingCartDto'
+        '404':
+          description: ProductInCartId not found
+        '401':
+          description: Unauthorized
 
   /shoppingCart/checkout/{addressId}:
     post:
@@ -162,140 +207,29 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
   schemas:
+    ProductInShoppingCartDto:
+      type: object
+      properties:
+        emptyValue:
+          type: string
 
     UpdateQuantityOfProductInShoppingCartDto:
       type: object
       properties:
-        quantity:
-          type: integer
-          format: int32
-      required:
-        - quantity
-
-    ProductInShoppingCartDto:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        productId:
-          type: integer
-          format: int64
-        quantity:
-          type: integer
-          format: int32
-      required:
-        - id
-        - productId
-        - quantity
-
-    ShoppingCartDto:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        productsInShoppingCart:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductInShoppingCartDto'
-      required:
-        - id
-        - products
+        emptyValue:
+          type: string
 
     OrderDto:
       type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.OrderDto
       properties:
-        id:
-          type: integer
-          format: int64
-        dateCreated:
-          type: string
-          format: date-time
-        dateUpdated:
-          type: string
-          format: date-time
-        userProfileId:
-          type: integer
-          format: int64
-        orderItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductInOrderDto'
-        status:
-          $ref: '#/components/schemas/OrderStatus'
-        orderDate:
-          type: string
-          format: date-time
-        totalPrice:
-          type: number
-          format: float
-        address:
-          $ref: '#/components/schemas/AddAndUpdateAddressDto'
-        dateOrderPlaced:
-          type: string
-          format: date-time
-        dateOrderDelivered:
-          type: string
-          format: date-time
-        paymentStatus:
-          $ref: '#/components/schemas/PaymentStatus'
-    ProductInOrderDto:
-      type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.ProductInOrderDto
-      properties:
-        id:
-          type: integer
-          format: int64
-        productId:
-          type: integer
-          format: int64
-        quantity:
-          type: integer
-          format: int32
-
-    AddAndUpdateAddressDto:
-      type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.response.AddAndUpdateAddressDto
-      properties:
-        street:
-          type: string
-        houseNumber:
-          type: string
-        postalCode:
-          type: string
-        city:
-          type: string
-        country:
+        emptyValue:
           type: string
 
-    OrderStatus:
+    MapProductInCartCartDto:
       type: object
-      x-java-type: ua.rivnegray.boardgames_shop.model.OrderStatus
       properties:
-        orderStatus:
+        emptyValue:
           type: string
-          enum:
-            - PLACED
-            - PROCESSING
-            - ACCEPTED
-            - IN_DELIVERY
-            - DONE
-            - CANCELLED
-      required:
-        - orderStatus
-
-    PaymentStatus:
-      type: object
-      x-java-type: ua.rivnegray.boardgames_shop.model.PaymentStatus
-      properties:
-        paymentStatus:
-          type: string
-          enum:
-            - PAID
-            - UNPAID
-      required:
-        - paymentStatus
 

@@ -26,7 +26,7 @@ import java.net.URI;
 import java.util.List;
 
 @Service
-public class    BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
+public class BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
 
     private final BoardGameService boardGameService;
 
@@ -186,5 +186,10 @@ public class    BoardgamesApiDelegateImpl implements BoardgamesApiDelegate {
     @Override
     public ResponseEntity<FilterDataDto> getFilteringData() {
         return ResponseEntity.ok(this.boardGameService.getFilteringData());
+    }
+
+    @Override
+    public ResponseEntity<List<BoardGameSummaryDto>> getNewestFiveBoardGames() {
+        return ResponseEntity.ok(this.boardGameService.getNewestFiveBoardGames());
     }
 }
