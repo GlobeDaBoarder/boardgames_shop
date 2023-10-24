@@ -45,7 +45,8 @@ public class User extends BaseEntity{
     private String nickname;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRegistrationStatus registrationStatus;
+    @Builder.Default
+    private UserRegistrationStatus registrationStatus = UserRegistrationStatus.NOT_REGISTERED;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @Setter(AccessLevel.NONE)
@@ -57,7 +58,9 @@ public class User extends BaseEntity{
     @Setter(AccessLevel.NONE)
     @Singular
     private Set<Address> addresses = new HashSet<>();
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Builder.Default
     private ShoppingCart shoppingCart = new ShoppingCart();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
