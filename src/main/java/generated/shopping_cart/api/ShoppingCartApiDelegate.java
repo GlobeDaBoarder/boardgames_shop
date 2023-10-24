@@ -5,10 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInCartCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,15 +28,16 @@ public interface ShoppingCartApiDelegate {
      * POST /shoppingCart/{productId} : Adds a product to the shopping cart
      *
      * @param productId  (required)
-     * @return Product added successfully (status code 201)
-     *         or Invalid product data (status code 400)
+     * @return Product added successfully (status code 200)
+     *         or Product not found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see ShoppingCartApi#addProductToMyShoppingCart
      */
-    default ResponseEntity<ShoppingCartDto> addProductToMyShoppingCart(Long productId) {
+    default ResponseEntity<List<ProductInShoppingCartDto>> addProductToMyShoppingCart(Long productId) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"id\" : 0 }";
+                    String exampleString = "[ { \"emptyValue\" : \"emptyValue\" }, { \"emptyValue\" : \"emptyValue\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -60,7 +61,7 @@ public interface ShoppingCartApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"dateCreated\" : \"2000-01-23T04:56:07.000+00:00\", \"address\" : { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\" }, \"totalPrice\" : 2.302136, \"dateOrderDelivered\" : \"2000-01-23T04:56:07.000+00:00\", \"userProfileId\" : 6, \"dateOrderPlaced\" : \"2000-01-23T04:56:07.000+00:00\", \"id\" : 0, \"orderItems\" : [ { \"quantity\" : 5, \"productId\" : 5, \"id\" : 1 }, { \"quantity\" : 5, \"productId\" : 5, \"id\" : 1 } ], \"orderDate\" : \"2000-01-23T04:56:07.000+00:00\", \"paymentStatus\" : { \"paymentStatus\" : \"PAID\" }, \"dateUpdated\" : \"2000-01-23T04:56:07.000+00:00\", \"status\" : { \"orderStatus\" : \"PLACED\" } }";
+                    String exampleString = "{ \"emptyValue\" : \"emptyValue\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -73,20 +74,11 @@ public interface ShoppingCartApiDelegate {
     /**
      * DELETE /shoppingCart/ : Clear all items from my shopping cart
      *
-     * @return Shopping cart cleared successfully (status code 200)
-     *         or Invalid shopping cart ID (status code 400)
+     * @return Shopping cart cleared successfully (status code 204)
+     *         or Unauthorized (status code 401)
      * @see ShoppingCartApi#clearMyShoppingCart
      */
-    default ResponseEntity<ShoppingCartDto> clearMyShoppingCart() {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"id\" : 0 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
+    default ResponseEntity<Void> clearMyShoppingCart() {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -95,14 +87,14 @@ public interface ShoppingCartApiDelegate {
      * GET /shoppingCart/ : Get all products in my shopping cart
      *
      * @return Products in the shopping cart (status code 200)
-     *         or Invalid shopping cart ID (status code 400)
+     *         or Unauthorized (status code 401)
      * @see ShoppingCartApi#getProductsInMyShoppingCart
      */
     default ResponseEntity<List<ProductInShoppingCartDto>> getProductsInMyShoppingCart() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ]";
+                    String exampleString = "[ { \"emptyValue\" : \"emptyValue\" }, { \"emptyValue\" : \"emptyValue\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -118,13 +110,40 @@ public interface ShoppingCartApiDelegate {
      * @param cartId  (required)
      * @return Products in the shopping cart (status code 200)
      *         or Invalid shopping cart ID (status code 400)
+     * @deprecated
      * @see ShoppingCartApi#getProductsInShoppingCart
      */
+    @Deprecated
     default ResponseEntity<List<ProductInShoppingCartDto>> getProductsInShoppingCart(Long cartId) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ]";
+                    String exampleString = "[ { \"emptyValue\" : \"emptyValue\" }, { \"emptyValue\" : \"emptyValue\" } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * POST /shoppingCart/map : Map cart from one stored in local storage to one stored in database
+     * This operation is used when a decides to log in or register. Prior to registration or logging in all the shopping cart dat ais stored inside of localStorage. Upon login,  this allows to save client&#39;s products in the database and clear the localStorage
+     *
+     * @param mapProductInCartCartDto  (required)
+     * @return Cart mapped successfully (status code 200)
+     *         or Invalid cart data (status code 400)
+     *         or Product not found (status code 404)
+     *         or Unauthorized (status code 401)
+     * @see ShoppingCartApi#mapCart
+     */
+    default ResponseEntity<List<ProductInShoppingCartDto>> mapCart(List<MapProductInCartCartDto> mapProductInCartCartDto) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"emptyValue\" : \"emptyValue\" }, { \"emptyValue\" : \"emptyValue\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -139,14 +158,15 @@ public interface ShoppingCartApiDelegate {
      *
      * @param productInCartId  (required)
      * @return Product removed successfully (status code 200)
-     *         or Invalid product or shopping cart ID (status code 400)
+     *         or ProductInCart not found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see ShoppingCartApi#removeProductFromMyShoppingCart
      */
-    default ResponseEntity<ShoppingCartDto> removeProductFromMyShoppingCart(Long productInCartId) {
+    default ResponseEntity<List<ProductInShoppingCartDto>> removeProductFromMyShoppingCart(Long productInCartId) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"id\" : 0 }";
+                    String exampleString = "[ { \"emptyValue\" : \"emptyValue\" }, { \"emptyValue\" : \"emptyValue\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -162,15 +182,16 @@ public interface ShoppingCartApiDelegate {
      * @param productInCartId  (required)
      * @param updateQuantityOfProductInShoppingCartDto  (required)
      * @return Product quantity updated successfully (status code 200)
-     *         or Invalid product data (status code 400)
+     *         or ProductInCartId not found (status code 404)
+     *         or Unauthorized (status code 401)
      * @see ShoppingCartApi#updateQuantityOfProductInMyShoppingCart
      */
-    default ResponseEntity<ShoppingCartDto> updateQuantityOfProductInMyShoppingCart(Long productInCartId,
+    default ResponseEntity<List<ProductInShoppingCartDto>> updateQuantityOfProductInMyShoppingCart(Long productInCartId,
         UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"productsInShoppingCart\" : [ { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 }, { \"quantity\" : 1, \"productId\" : 6, \"id\" : 0 } ], \"id\" : 0 }";
+                    String exampleString = "[ { \"emptyValue\" : \"emptyValue\" }, { \"emptyValue\" : \"emptyValue\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

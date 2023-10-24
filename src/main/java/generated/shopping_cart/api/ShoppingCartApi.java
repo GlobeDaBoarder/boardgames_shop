@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInCartCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
 
 import java.util.List;
 
@@ -43,17 +43,19 @@ public interface ShoppingCartApi {
      * POST /shoppingCart/{productId} : Adds a product to the shopping cart
      *
      * @param productId  (required)
-     * @return Product added successfully (status code 201)
-     *         or Invalid product data (status code 400)
+     * @return Product added successfully (status code 200)
+     *         or Product not found (status code 404)
+     *         or Unauthorized (status code 401)
      */
     @Operation(
         operationId = "addProductToMyShoppingCart",
         summary = "Adds a product to the shopping cart",
         responses = {
-            @ApiResponse(responseCode = "201", description = "Product added successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ShoppingCartDto.class))
+            @ApiResponse(responseCode = "200", description = "Product added successfully", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ProductInShoppingCartDto.class)))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid product data", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Product not found", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
         },
         security = {
             @SecurityRequirement(name = "bearerAuth")
@@ -65,7 +67,7 @@ public interface ShoppingCartApi {
         value = "/shoppingCart/{productId}",
         produces = { "application/json" }
     )
-    default ResponseEntity<ShoppingCartDto> addProductToMyShoppingCart(
+    default ResponseEntity<List<ProductInShoppingCartDto>> addProductToMyShoppingCart(
         @Parameter(name = "productId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("productId") Long productId
     ) {
         return getDelegate().addProductToMyShoppingCart(productId);
@@ -112,17 +114,15 @@ public interface ShoppingCartApi {
     /**
      * DELETE /shoppingCart/ : Clear all items from my shopping cart
      *
-     * @return Shopping cart cleared successfully (status code 200)
-     *         or Invalid shopping cart ID (status code 400)
+     * @return Shopping cart cleared successfully (status code 204)
+     *         or Unauthorized (status code 401)
      */
     @Operation(
         operationId = "clearMyShoppingCart",
         summary = "Clear all items from my shopping cart",
         responses = {
-            @ApiResponse(responseCode = "200", description = "Shopping cart cleared successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ShoppingCartDto.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid shopping cart ID", content = @Content)
+            @ApiResponse(responseCode = "204", description = "Shopping cart cleared successfully", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
         },
         security = {
             @SecurityRequirement(name = "bearerAuth")
@@ -131,10 +131,9 @@ public interface ShoppingCartApi {
     @PreAuthorize("hasAuthority('SCOPE_shoppingCart:manageMe')")
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/shoppingCart/",
-        produces = { "application/json" }
+        value = "/shoppingCart/"
     )
-    default ResponseEntity<ShoppingCartDto> clearMyShoppingCart(
+    default ResponseEntity<Void> clearMyShoppingCart(
         
     ) {
         return getDelegate().clearMyShoppingCart();
@@ -145,7 +144,7 @@ public interface ShoppingCartApi {
      * GET /shoppingCart/ : Get all products in my shopping cart
      *
      * @return Products in the shopping cart (status code 200)
-     *         or Invalid shopping cart ID (status code 400)
+     *         or Unauthorized (status code 401)
      */
     @Operation(
         operationId = "getProductsInMyShoppingCart",
@@ -154,7 +153,7 @@ public interface ShoppingCartApi {
             @ApiResponse(responseCode = "200", description = "Products in the shopping cart", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ProductInShoppingCartDto.class)))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid shopping cart ID", content = @Content)
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
         },
         security = {
             @SecurityRequirement(name = "bearerAuth")
@@ -179,10 +178,13 @@ public interface ShoppingCartApi {
      * @param cartId  (required)
      * @return Products in the shopping cart (status code 200)
      *         or Invalid shopping cart ID (status code 400)
+     * @deprecated
      */
+    @Deprecated
     @Operation(
         operationId = "getProductsInShoppingCart",
         summary = "Get all products in the shopping cart",
+        deprecated = true,
         responses = {
             @ApiResponse(responseCode = "200", description = "Products in the shopping cart", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ProductInShoppingCartDto.class)))
@@ -207,20 +209,62 @@ public interface ShoppingCartApi {
 
 
     /**
+     * POST /shoppingCart/map : Map cart from one stored in local storage to one stored in database
+     * This operation is used when a decides to log in or register. Prior to registration or logging in all the shopping cart dat ais stored inside of localStorage. Upon login,  this allows to save client&#39;s products in the database and clear the localStorage
+     *
+     * @param mapProductInCartCartDto  (required)
+     * @return Cart mapped successfully (status code 200)
+     *         or Invalid cart data (status code 400)
+     *         or Product not found (status code 404)
+     *         or Unauthorized (status code 401)
+     */
+    @Operation(
+        operationId = "mapCart",
+        summary = "Map cart from one stored in local storage to one stored in database",
+        description = "This operation is used when a decides to log in or register. Prior to registration or logging in all the shopping cart dat ais stored inside of localStorage. Upon login,  this allows to save client's products in the database and clear the localStorage",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Cart mapped successfully", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ProductInShoppingCartDto.class)))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid cart data", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Product not found", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @PreAuthorize("hasAuthority('SCOPE_shoppingCart:manageMe')")
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/shoppingCart/map",
+        produces = { "application/json" },
+        consumes = { "application/json" }
+    )
+    default ResponseEntity<List<ProductInShoppingCartDto>> mapCart(
+        @Parameter(name = "MapProductInCartCartDto", description = "", required = true) @Valid @RequestBody List<MapProductInCartCartDto> mapProductInCartCartDto
+    ) {
+        return getDelegate().mapCart(mapProductInCartCartDto);
+    }
+
+
+    /**
      * DELETE /shoppingCart/{productInCartId} : Remove a product from the shopping cart
      *
      * @param productInCartId  (required)
      * @return Product removed successfully (status code 200)
-     *         or Invalid product or shopping cart ID (status code 400)
+     *         or ProductInCart not found (status code 404)
+     *         or Unauthorized (status code 401)
      */
     @Operation(
         operationId = "removeProductFromMyShoppingCart",
         summary = "Remove a product from the shopping cart",
         responses = {
             @ApiResponse(responseCode = "200", description = "Product removed successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ShoppingCartDto.class))
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ProductInShoppingCartDto.class)))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid product or shopping cart ID", content = @Content)
+            @ApiResponse(responseCode = "404", description = "ProductInCart not found", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
         },
         security = {
             @SecurityRequirement(name = "bearerAuth")
@@ -232,7 +276,7 @@ public interface ShoppingCartApi {
         value = "/shoppingCart/{productInCartId}",
         produces = { "application/json" }
     )
-    default ResponseEntity<ShoppingCartDto> removeProductFromMyShoppingCart(
+    default ResponseEntity<List<ProductInShoppingCartDto>> removeProductFromMyShoppingCart(
         @Parameter(name = "productInCartId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("productInCartId") Long productInCartId
     ) {
         return getDelegate().removeProductFromMyShoppingCart(productInCartId);
@@ -245,16 +289,18 @@ public interface ShoppingCartApi {
      * @param productInCartId  (required)
      * @param updateQuantityOfProductInShoppingCartDto  (required)
      * @return Product quantity updated successfully (status code 200)
-     *         or Invalid product data (status code 400)
+     *         or ProductInCartId not found (status code 404)
+     *         or Unauthorized (status code 401)
      */
     @Operation(
         operationId = "updateQuantityOfProductInMyShoppingCart",
         summary = "Update the quantity of a product in the shopping cart",
         responses = {
             @ApiResponse(responseCode = "200", description = "Product quantity updated successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ShoppingCartDto.class))
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ProductInShoppingCartDto.class)))
             }),
-            @ApiResponse(responseCode = "400", description = "Invalid product data", content = @Content)
+            @ApiResponse(responseCode = "404", description = "ProductInCartId not found", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
         },
         security = {
             @SecurityRequirement(name = "bearerAuth")
@@ -267,7 +313,7 @@ public interface ShoppingCartApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<ShoppingCartDto> updateQuantityOfProductInMyShoppingCart(
+    default ResponseEntity<List<ProductInShoppingCartDto>> updateQuantityOfProductInMyShoppingCart(
         @Parameter(name = "productInCartId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("productInCartId") Long productInCartId,
         @Parameter(name = "UpdateQuantityOfProductInShoppingCartDto", description = "", required = true) @Valid @RequestBody UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto
     ) {

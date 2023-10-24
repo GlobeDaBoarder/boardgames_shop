@@ -6,16 +6,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInCartCartDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateQuantityOfProductInShoppingCartDto;
 import ua.rivnegray.boardgames_shop.DTO.response.OrderDto;
 import ua.rivnegray.boardgames_shop.DTO.response.ProductInShoppingCartDto;
-import ua.rivnegray.boardgames_shop.DTO.response.ShoppingCartDto;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.AddressIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.ShoppingCartIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.OrderMapper;
 import ua.rivnegray.boardgames_shop.mapper.ProductMapper;
-import ua.rivnegray.boardgames_shop.mapper.ShoppingCartMapper;
 import ua.rivnegray.boardgames_shop.model.Order;
 import ua.rivnegray.boardgames_shop.model.OrderStatus;
 import ua.rivnegray.boardgames_shop.model.PaymentStatus;
@@ -42,7 +41,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ProductInShoppingCartRepository productInShoppingCartRepository;
     private final ProductInOrderRepository productInOrderRepository;
-    private final ShoppingCartMapper shoppingCartMapper;
     private final ProductMapper productMapper;
     private final BoardGameRepository boardGameRepository;
     private final OrderRepository orderRepository;
@@ -62,15 +60,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     // current user operations
     @Override
-    public ShoppingCartDto clearMyShoppingCart() {
+    public void clearMyShoppingCart() {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
         shoppingCart.getProductsInShoppingCart().clear();
         this.shoppingCartRepository.save(shoppingCart);
-        return this.shoppingCartMapper.toShoppingCartDto(shoppingCart);
     }
 
     @Override
-    public ShoppingCartDto addProductToMyShoppingCart(Long productId) {
+    public List<ProductInShoppingCartDto> addProductToMyShoppingCart(Long productId) {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
 
         Optional<ProductInShoppingCart> existingProductInCart = shoppingCart.getProductsInShoppingCart().stream()
@@ -91,7 +88,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
 
         this.shoppingCartRepository.save(shoppingCart);
-        return this.shoppingCartMapper.toShoppingCartDto(shoppingCart);
+
+        return shoppingCart.getProductsInShoppingCart().stream()
+                .map(this.productMapper::toProductInShoppingCartDto)
+                .toList();
     }
 
 
@@ -105,22 +105,30 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 
     @Override
-    public ShoppingCartDto removeProductFromMyShoppingCart(Long productInCartId) {
+    public List<ProductInShoppingCartDto> removeProductFromMyShoppingCart(Long productInCartId) {
         ShoppingCart shoppingCart = getShoppingCartOfCurrentUser();
         Set<ProductInShoppingCart> productsInShoppingCart = shoppingCart.getProductsInShoppingCart();
         productsInShoppingCart.removeIf(productInShoppingCart -> productInShoppingCart.getId().equals(productInCartId));
+
         this.shoppingCartRepository.save(shoppingCart);
-        return this.shoppingCartMapper.toShoppingCartDto(shoppingCart);
+
+        return shoppingCart.getProductsInShoppingCart().stream()
+                .map(this.productMapper::toProductInShoppingCartDto)
+                .toList();
     }
 
     @Override
-    public ShoppingCartDto updateQuantityOfProductInMyShoppingCart(Long productInCartId,
+    public List<ProductInShoppingCartDto> updateQuantityOfProductInMyShoppingCart(Long productInCartId,
                                    UpdateQuantityOfProductInShoppingCartDto updateQuantityOfProductInShoppingCartDto) {
         ProductInShoppingCart productInShoppingCart = this.productInShoppingCartRepository.findById(productInCartId)
                 .orElseThrow(() -> new ShoppingCartIdNotFoundException(productInCartId));
         productInShoppingCart.setQuantity(updateQuantityOfProductInShoppingCartDto.quantity());
+
         this.productInShoppingCartRepository.save(productInShoppingCart);
-        return this.shoppingCartMapper.toShoppingCartDto(getShoppingCartOfCurrentUser());
+
+        return getShoppingCartOfCurrentUser().getProductsInShoppingCart().stream()
+                .map(this.productMapper::toProductInShoppingCartDto)
+                .toList();
     }
     @Override
     public OrderDto checkoutMyUser(Long addressId) {
@@ -165,6 +173,29 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         return this.orderMapper.orderToOrderDto(newOrder);
     }
+
+    @Override
+    public List<ProductInShoppingCartDto> mapCart(List<MapProductInCartCartDto> mapShoppingCartDto) {
+       ShoppingCart currentUserShoppingCart = getShoppingCartOfCurrentUser();
+
+       currentUserShoppingCart.getProductsInShoppingCart().addAll(mapShoppingCartDto.stream()
+                .map(simpleProductInShoppingCartDto -> ProductInShoppingCart.builder()
+                        .product(this.boardGameRepository.findById(simpleProductInShoppingCartDto.productId())
+                                .orElseThrow(() -> new BoardGameIdNotFoundException(simpleProductInShoppingCartDto.productId())))
+                        .shoppingCart(currentUserShoppingCart)
+                        .quantity(simpleProductInShoppingCartDto.quantity())
+                        .build()
+                )
+                .collect(Collectors.toSet())
+        );
+
+       this.shoppingCartRepository.save(currentUserShoppingCart);
+
+       return currentUserShoppingCart.getProductsInShoppingCart().stream()
+               .map(this.productMapper::toProductInShoppingCartDto)
+               .toList();
+    }
+
 
     private ShoppingCart getShoppingCartOfCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

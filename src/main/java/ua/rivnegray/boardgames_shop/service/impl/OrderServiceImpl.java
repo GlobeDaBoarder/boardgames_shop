@@ -83,11 +83,11 @@ public class OrderServiceImpl implements OrderService {
 
         this.userRepository.save(user);
 
-        Set<ProductInOrder> productInOrders = createOrderDto.mapShoppingCartDto().simpleProductInShoppingCartDtos().stream()
-                .map(simpleProductInShoppingCartDto -> ProductInOrder.builder()
-                        .product(this.boardGameRepository.findById(simpleProductInShoppingCartDto.productId())
-                                .orElseThrow(() -> new BoardGameIdNotFoundException(simpleProductInShoppingCartDto.productId())))
-                        .quantity(simpleProductInShoppingCartDto.quantity())
+        Set<ProductInOrder> productInOrders = createOrderDto.productsInShoppingCart().stream()
+                .map(productInShoppingCartDto -> ProductInOrder.builder()
+                        .product(this.boardGameRepository.findById(productInShoppingCartDto.productId())
+                                .orElseThrow(() -> new BoardGameIdNotFoundException(productInShoppingCartDto.productId())))
+                        .quantity(productInShoppingCartDto.quantity())
                         .build()
                 )
                 .collect(Collectors.toSet());
