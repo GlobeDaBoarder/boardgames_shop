@@ -113,13 +113,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         } else {
             ProductInShoppingCart newProductInShoppingCart = new ProductInShoppingCart();
 
-            validateIfRequestedQuantityIsInStock(1,
-                    newProductInShoppingCart.getProduct().getProductQuantityInStock());
-
             newProductInShoppingCart.setProduct(this.boardGameRepository.findById(productId)
                     .orElseThrow(() -> new BoardGameIdNotFoundException(productId)));
             newProductInShoppingCart.setShoppingCart(shoppingCart);
             newProductInShoppingCart.setQuantity(1);
+
+            validateIfRequestedQuantityIsInStock(1,
+                    newProductInShoppingCart.getProduct().getProductQuantityInStock());
 
             shoppingCart.getProductsInShoppingCart().add(newProductInShoppingCart);
         }
