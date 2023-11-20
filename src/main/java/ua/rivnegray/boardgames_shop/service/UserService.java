@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
@@ -62,4 +63,6 @@ public interface UserService {
 
     @Transactional(readOnly = true)
     UserPublicDto getMyUserInfo();
+
+    UserPublicDto updateMyNameAndSurname(UpdateNameAndSurnameDto updateNameAndSurnameDto);
 }

@@ -11,7 +11,7 @@ public class PhoneValidator implements ConstraintValidator<PhoneNumber, String> 
     private Pattern pattern;
     @Override
     public void initialize(PhoneNumber constraintAnnotation) {
-        pattern = Pattern.compile(ValidationConstants.phoneRegex);
+        pattern = Pattern.compile(ValidationConstants.PHONE);
     }
 
     @Override

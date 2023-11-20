@@ -204,7 +204,7 @@
 								<importMapping>UpdatePasswordDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto</importMapping>
 								<importMapping>UpdatePhoneDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto</importMapping>
 								<importMapping>UpdateRolesDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateRolesDto</importMapping>
-								<importMapping>UpdateUsernameDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto</importMapping>
+								<importMapping>UpdateNameAndSurnameDto=ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto</importMapping>
 								<importMapping>AddressDto=ua.rivnegray.boardgames_shop.DTO.response.AddressDto</importMapping>
 								<importMapping>UserPublicDto=ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto</importMapping>
 								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto</importMapping>

@@ -12,7 +12,7 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
     private Pattern pattern;
     @Override
     public void initialize(Password constraintAnnotation) {
-        pattern = Pattern.compile(ValidationConstants.passwordRegex);
+        pattern = Pattern.compile(ValidationConstants.PASSWORD);
     }
 
     @Override

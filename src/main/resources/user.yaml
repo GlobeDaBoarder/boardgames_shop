@@ -190,6 +190,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPublicDto'
+  /users/me/nameAndSurname:
+    patch:
+      summary: Update my name and surname
+      operationId: updateMyNameAndSurname
+      x-access-permission: user:updateMe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNameAndSurnameDto'
+      responses:
+        '200':
+          description: name and surname updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPublicDto'
   /users/me/address:
     post:
       summary: Add an address to me
@@ -242,6 +260,7 @@ paths:
                 $ref: '#/components/schemas/AddressDto'
     patch:
       summary: Update my address
+      description: Fields of the request body that are not specified will be ignored. So you can update only the fields you need.
       operationId: updateMyAddress
       x-access-permission: user:updateMe
       parameters:
@@ -322,11 +341,11 @@ components:
       properties:
         phone:
           type: string
-    UpdateUsernameDto:
+    UpdateNicknameDto:
       type: object
-      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdateUsernameDto
+      x-java-type: ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNickNameDto
       properties:
-        username:
+        NickName:
           type: string
     AddAndUpdateAddressDto:
       type: object
@@ -402,6 +421,11 @@ components:
         - user:write
         - admin:read
         - admin:write
+
+    UpdateNameAndSurnameDto:
+      properties:
+        emptyValue:
+          type: boolean
 
   securitySchemes:
     bearerAuth:
