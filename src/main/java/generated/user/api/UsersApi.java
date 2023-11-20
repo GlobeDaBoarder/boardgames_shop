@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
@@ -417,6 +418,7 @@ public interface UsersApi {
 
     /**
      * PATCH /users/me/address/{addressId} : Update my address
+     * Fields of the request body that are not specified will be ignored. So you can update only the fields you need.
      *
      * @param addressId  (required)
      * @param addAndUpdateAddressDto  (required)
@@ -425,6 +427,7 @@ public interface UsersApi {
     @Operation(
         operationId = "updateMyAddress",
         summary = "Update my address",
+        description = "Fields of the request body that are not specified will be ignored. So you can update only the fields you need.",
         responses = {
             @ApiResponse(responseCode = "200", description = "address updated", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
@@ -478,6 +481,38 @@ public interface UsersApi {
         @Parameter(name = "UpdateEmailDto", description = "", required = true) @Valid @RequestBody UpdateEmailDto updateEmailDto
     ) {
         return getDelegate().updateMyEmail(updateEmailDto);
+    }
+
+
+    /**
+     * PATCH /users/me/nameAndSurname : Update my name and surname
+     *
+     * @param updateNameAndSurnameDto  (required)
+     * @return name and surname updated (status code 200)
+     */
+    @Operation(
+        operationId = "updateMyNameAndSurname",
+        summary = "Update my name and surname",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "name and surname updated", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserPublicDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
+    @RequestMapping(
+        method = RequestMethod.PATCH,
+        value = "/users/me/nameAndSurname",
+        produces = { "application/json" },
+        consumes = { "application/json" }
+    )
+    default ResponseEntity<UserPublicDto> updateMyNameAndSurname(
+        @Parameter(name = "UpdateNameAndSurnameDto", description = "", required = true) @Valid @RequestBody UpdateNameAndSurnameDto updateNameAndSurnameDto
+    ) {
+        return getDelegate().updateMyNameAndSurname(updateNameAndSurnameDto);
     }
 
 

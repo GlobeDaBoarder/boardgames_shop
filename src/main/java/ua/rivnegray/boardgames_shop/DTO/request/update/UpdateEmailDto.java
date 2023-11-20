@@ -8,5 +8,5 @@ import java.io.Serializable;
 /**
  * DTO for {@link ua.rivnegray.boardgames_shop.model.User}
  */
-public record UpdateEmailDto(@Email(regexp = ValidationConstants.emailRegex) String email) implements Serializable {
+public record UpdateEmailDto(@Email(regexp = ValidationConstants.EMAIL) String email) implements Serializable {
 }

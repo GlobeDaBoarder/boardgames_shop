@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
@@ -193,5 +194,13 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public UserPublicDto updateMyNameAndSurname(UpdateNameAndSurnameDto updateNameAndSurnameDto) {
+        User userToUpdate = this.getCurrentUser();
 
+        userToUpdate.setFirstName(updateNameAndSurnameDto.nameAndSurname().trim().split(" ")[0]);
+        userToUpdate.setLastName(updateNameAndSurnameDto.nameAndSurname().trim().split(" ")[1]);
+
+        return this.userMapper.toUserPublicDto(this.userRepository.save(userToUpdate));
+    }
 }
