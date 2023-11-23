@@ -8,6 +8,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
@@ -256,6 +257,7 @@ public interface UsersApiDelegate {
 
     /**
      * PATCH /users/me/address/{addressId} : Update my address
+     * Fields of the request body that are not specified will be ignored. So you can update only the fields you need.
      *
      * @param addressId  (required)
      * @param addAndUpdateAddressDto  (required)
@@ -285,6 +287,27 @@ public interface UsersApiDelegate {
      * @see UsersApi#updateMyEmail
      */
     default ResponseEntity<UserPublicDto> updateMyEmail(UpdateEmailDto updateEmailDto) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"addresses\" : [ { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 }, { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 } ], \"phone\" : \"phone\", \"roles\" : [ { \"permissions\" : [ null, null ], \"roleName\" : \"roleName\", \"id\" : 0 }, { \"permissions\" : [ null, null ], \"roleName\" : \"roleName\", \"id\" : 0 } ], \"email\" : \"email\", \"username\" : \"username\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * PATCH /users/me/nameAndSurname : Update my name and surname
+     *
+     * @param updateNameAndSurnameDto  (required)
+     * @return name and surname updated (status code 200)
+     * @see UsersApi#updateMyNameAndSurname
+     */
+    default ResponseEntity<UserPublicDto> updateMyNameAndSurname(UpdateNameAndSurnameDto updateNameAndSurnameDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

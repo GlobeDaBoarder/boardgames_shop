@@ -9,7 +9,7 @@ import ua.rivnegray.boardgames_shop.utils.validation.ValidationConstants;
 
 public record LoginRequestDto(
         @NotBlank(message = "email is required")
-        @Email(regexp = ValidationConstants.emailRegex)
+        @Email(regexp = ValidationConstants.EMAIL)
         @Schema(example = "admin@rivnegray.ua")
         String email,
 

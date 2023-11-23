@@ -14,7 +14,7 @@ import java.util.Set;
  * DTO for {@link ua.rivnegray.boardgames_shop.model.User }
  */
 public record CreateAnyUserDto(
-        @Email(regexp = ValidationConstants.emailRegex)
+        @Email(regexp = ValidationConstants.EMAIL)
         @NotNull
         String email,
         @Password

@@ -9,6 +9,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
@@ -131,5 +132,10 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     @Override
     public ResponseEntity<List<UserRoleDto>> getAllUserRoles() {
         return ResponseEntity.ok(this.userService.getAllUserRoles());
+    }
+
+    @Override
+    public ResponseEntity<UserPublicDto> updateMyNameAndSurname(UpdateNameAndSurnameDto updateNameAndSurnameDto) {
+        return ResponseEntity.ok(this.userService.updateMyNameAndSurname(updateNameAndSurnameDto));
     }
 }

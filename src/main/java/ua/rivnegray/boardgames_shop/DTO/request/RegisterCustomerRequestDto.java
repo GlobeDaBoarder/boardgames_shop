@@ -12,7 +12,7 @@ import java.io.Serializable;
  * DTO for {@link ua.rivnegray.boardgames_shop.model.User
  */
 public record RegisterCustomerRequestDto(
-        @Email(regexp = ValidationConstants.emailRegex)
+        @Email(regexp = ValidationConstants.EMAIL)
         @NotBlank
         String email,
         @NotBlank
