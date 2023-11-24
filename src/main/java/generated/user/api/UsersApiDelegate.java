@@ -3,6 +3,8 @@ package generated.user.api;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
@@ -45,6 +47,30 @@ public interface UsersApiDelegate {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"addresses\" : [ { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 }, { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 } ], \"phone\" : \"phone\", \"roles\" : [ { \"permissions\" : [ null, null ], \"roleName\" : \"roleName\", \"id\" : 0 }, { \"permissions\" : [ null, null ], \"roleName\" : \"roleName\", \"id\" : 0 } ], \"email\" : \"email\", \"username\" : \"username\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * POST /users/me/favourites/{productId} : Add a product to my favourites
+     *
+     * @param productId  (required)
+     * @return product added to favourites (status code 201)
+     *         or product not found (status code 404)
+     *         or product already in favourites (status code 409)
+     *         or Unauthorized (status code 401)
+     * @see UsersApi#addProductToFavourites
+     */
+    default ResponseEntity<FavouriteProductCreationResponseDto> addProductToFavourites(Long productId) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"emptyValue\" : true }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -99,6 +125,27 @@ public interface UsersApiDelegate {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "[ { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 }, { \"country\" : \"country\", \"city\" : \"city\", \"street\" : \"street\", \"postalCode\" : \"postalCode\", \"houseNumber\" : \"houseNumber\", \"id\" : 6 } ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /users/me/favourites : Get all my favourite products
+     *
+     * @return All favourite products were retrieved successfully (status code 200)
+     *         or Unauthorized (status code 401)
+     * @see UsersApi#getAllMyFavouriteProducts
+     */
+    default ResponseEntity<List<FavouriteProductDto>> getAllMyFavouriteProducts() {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ { \"emptyValue\" : true }, { \"emptyValue\" : true } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -255,6 +302,20 @@ public interface UsersApiDelegate {
      * @see UsersApi#removeAddress
      */
     default ResponseEntity<Void> removeAddress(Long addressId) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * DELETE /users/me/favourites/{favoriteId} : Remove a product from my favourites
+     *
+     * @param favoriteId  (required)
+     * @return product removed from favourites (status code 204)
+     *         or product not found in favourites (status code 404)
+     *         or Unauthorized (status code 401)
+     * @see UsersApi#removeProductFromFavourites
+     */
+    default ResponseEntity<Void> removeProductFromFavourites(Long favoriteId) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

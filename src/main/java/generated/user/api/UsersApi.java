@@ -8,6 +8,8 @@ package generated.user.api;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
@@ -75,6 +77,43 @@ public interface UsersApi {
         @Parameter(name = "AddAndUpdateAddressDto", description = "", required = true) @Valid @RequestBody AddAndUpdateAddressDto addAndUpdateAddressDto
     ) {
         return getDelegate().addAddress(addAndUpdateAddressDto);
+    }
+
+
+    /**
+     * POST /users/me/favourites/{productId} : Add a product to my favourites
+     *
+     * @param productId  (required)
+     * @return product added to favourites (status code 201)
+     *         or product not found (status code 404)
+     *         or product already in favourites (status code 409)
+     *         or Unauthorized (status code 401)
+     */
+    @Operation(
+        operationId = "addProductToFavourites",
+        summary = "Add a product to my favourites",
+        responses = {
+            @ApiResponse(responseCode = "201", description = "product added to favourites", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = FavouriteProductCreationResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "product not found", content = @Content),
+            @ApiResponse(responseCode = "409", description = "product already in favourites", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/users/me/favourites/{productId}",
+        produces = { "application/json" }
+    )
+    default ResponseEntity<FavouriteProductCreationResponseDto> addProductToFavourites(
+        @Parameter(name = "productId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("productId") Long productId
+    ) {
+        return getDelegate().addProductToFavourites(productId);
     }
 
 
@@ -168,6 +207,38 @@ public interface UsersApi {
         
     ) {
         return getDelegate().getAllMyAddresses();
+    }
+
+
+    /**
+     * GET /users/me/favourites : Get all my favourite products
+     *
+     * @return All favourite products were retrieved successfully (status code 200)
+     *         or Unauthorized (status code 401)
+     */
+    @Operation(
+        operationId = "getAllMyFavouriteProducts",
+        summary = "Get all my favourite products",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "All favourite products were retrieved successfully", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FavouriteProductDto.class)))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @PreAuthorize("hasAuthority('SCOPE_user:readMe')")
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/users/me/favourites",
+        produces = { "application/json" }
+    )
+    default ResponseEntity<List<FavouriteProductDto>> getAllMyFavouriteProducts(
+        
+    ) {
+        return getDelegate().getAllMyFavouriteProducts();
     }
 
 
@@ -415,6 +486,38 @@ public interface UsersApi {
         @Parameter(name = "addressId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("addressId") Long addressId
     ) {
         return getDelegate().removeAddress(addressId);
+    }
+
+
+    /**
+     * DELETE /users/me/favourites/{favoriteId} : Remove a product from my favourites
+     *
+     * @param favoriteId  (required)
+     * @return product removed from favourites (status code 204)
+     *         or product not found in favourites (status code 404)
+     *         or Unauthorized (status code 401)
+     */
+    @Operation(
+        operationId = "removeProductFromFavourites",
+        summary = "Remove a product from my favourites",
+        responses = {
+            @ApiResponse(responseCode = "204", description = "product removed from favourites", content = @Content),
+            @ApiResponse(responseCode = "404", description = "product not found in favourites", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/users/me/favourites/{favoriteId}"
+    )
+    default ResponseEntity<Void> removeProductFromFavourites(
+        @Parameter(name = "favoriteId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("favoriteId") Long favoriteId
+    ) {
+        return getDelegate().removeProductFromFavourites(favoriteId);
     }
 
 

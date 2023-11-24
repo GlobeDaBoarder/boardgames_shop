@@ -216,7 +216,9 @@
 								<importMapping>UserPublicDto=ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto</importMapping>
 								<importMapping>UserRoleDto=ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto</importMapping>
 								<importMapping>UserPermission=ua.rivnegray.boardgames_shop.model.UserPermission</importMapping>
-
+								<importMapping>BoardGameSummaryDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto</importMapping>
+								<importMapping>FavouriteProductDto=ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto</importMapping>
+								<importMapping>FavouriteProductCreationResponseDto=ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto</importMapping>
 							</importMappings>
 
 							<configOptions>

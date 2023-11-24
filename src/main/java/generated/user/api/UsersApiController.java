@@ -3,6 +3,8 @@ package generated.user.api;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
