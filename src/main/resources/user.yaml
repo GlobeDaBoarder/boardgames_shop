@@ -299,7 +299,66 @@ paths:
           description: address deleted
         '404':
           description: address not found
-
+  /users/me/favourites:
+    get:
+      summary: Get all my favourite products
+      operationId: getAllMyFavouriteProducts
+      x-access-permission: user:readMe
+      responses:
+        '200':
+          description: All favourite products were retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FavouriteProductDto'
+        '401':
+          description: Unauthorized
+  /users/me/favourites/{productId}:
+    post:
+      summary: Add a product to my favourites
+      operationId: addProductToFavourites
+      x-access-permission: user:updateMe
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '201':
+          description: product added to favourites
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavouriteProductCreationResponseDto'
+        '404':
+          description: product not found
+        '409':
+          description: product already in favourites
+        '401':
+          description: Unauthorized
+  /users/me/favourites/{favoriteId}:
+    delete:
+      summary: Remove a product from my favourites
+      operationId: removeProductFromFavourites
+      x-access-permission: user:updateMe
+      parameters:
+        - name: favoriteId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: product removed from favourites
+        '404':
+          description: product not found in favourites
+        '401':
+          description: Unauthorized
 components:
   schemas:
     CreateAnyUserDto:
@@ -423,6 +482,18 @@ components:
         - admin:write
 
     UpdateNameAndSurnameDto:
+      properties:
+        emptyValue:
+          type: boolean
+    BoardGameSummaryDto:
+      properties:
+        emptyValue:
+          type: boolean
+    FavouriteProductCreationResponseDto:
+      properties:
+        emptyValue:
+          type: boolean
+    FavouriteProductDto:
       properties:
         emptyValue:
           type: boolean

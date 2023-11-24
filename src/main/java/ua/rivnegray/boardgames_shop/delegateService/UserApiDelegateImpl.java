@@ -13,6 +13,9 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
 import ua.rivnegray.boardgames_shop.service.UserService;
@@ -137,5 +140,29 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
     @Override
     public ResponseEntity<UserPublicDto> updateMyNameAndSurname(UpdateNameAndSurnameDto updateNameAndSurnameDto) {
         return ResponseEntity.ok(this.userService.updateMyNameAndSurname(updateNameAndSurnameDto));
+    }
+
+    @Override
+    public ResponseEntity<FavouriteProductCreationResponseDto> addProductToFavourites(Long productId) {
+        FavouriteProductCreationResponseDto favouriteProductCreationResponseDto = this.userService.addProductToFavourites(productId);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(favouriteProductCreationResponseDto.id())
+                .toUri();
+
+        return ResponseEntity.created(location).body(favouriteProductCreationResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<List<FavouriteProductDto>> getAllMyFavouriteProducts() {
+        return ResponseEntity.ok(this.userService.getAllMyFavouriteProducts());
+    }
+
+    @Override
+    public ResponseEntity<Void> removeProductFromFavourites(Long favoriteId) {
+        this.userService.removeProductFromFavourites(favoriteId);
+
+        return ResponseEntity.noContent().build();
     }
 }

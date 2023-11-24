@@ -68,4 +68,10 @@ public class User extends BaseEntity{
     @Setter(AccessLevel.NONE)
     @Singular
     private Set<Order> orders = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @Setter(AccessLevel.NONE)
+    @Singular
+    private Set<FavouriteProduct> favouriteProducts = new HashSet<>();
 }
