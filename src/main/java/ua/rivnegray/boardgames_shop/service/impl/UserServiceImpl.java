@@ -13,17 +13,28 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
+import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.FavouriteProductAlreadyExistsException;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.PasswordMissMatchException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.AddressIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.FavouriteProductNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserNotFoundException;
+import ua.rivnegray.boardgames_shop.mapper.BoardGameMapperService;
+import ua.rivnegray.boardgames_shop.mapper.FavouriteProductMapper;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
 import ua.rivnegray.boardgames_shop.model.Address;
+import ua.rivnegray.boardgames_shop.model.BoardGame;
+import ua.rivnegray.boardgames_shop.model.FavouriteProduct;
 import ua.rivnegray.boardgames_shop.model.User;
 import ua.rivnegray.boardgames_shop.model.UserRegistrationStatus;
 import ua.rivnegray.boardgames_shop.repository.AddressRepository;
+import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
+import ua.rivnegray.boardgames_shop.repository.FavouriteProductRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRepository;
 import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
 import ua.rivnegray.boardgames_shop.service.UserService;
@@ -40,6 +51,10 @@ public class UserServiceImpl implements UserService {
     private final AddressRepository userAddressRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final BoardGameRepository boardGameRepository;
+    private final FavouriteProductRepository favouriteProductRepository;
+    private final FavouriteProductMapper favouriteProductMapper;
+    private final BoardGameMapperService boardGameMapper;
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -202,5 +217,37 @@ public class UserServiceImpl implements UserService {
         userToUpdate.setLastName(updateNameAndSurnameDto.nameAndSurname().trim().split(" ")[1]);
 
         return this.userMapper.toUserPublicDto(this.userRepository.save(userToUpdate));
+    }
+
+    @Override
+    public FavouriteProductCreationResponseDto addProductToFavourites(Long productId) {
+        BoardGame boardGame = this.boardGameRepository.findById(productId)
+                .orElseThrow(() -> new BoardGameIdNotFoundException(productId));
+
+        User me = this.getCurrentUser();
+
+        if(this.favouriteProductRepository.existsByUserIdAndBoardGameId(me.getId(), productId))
+            throw new FavouriteProductAlreadyExistsException(productId);
+
+        return this.favouriteProductMapper.toFavouriteProductCreationResponseDto(this.favouriteProductRepository.save(FavouriteProduct.builder()
+                .user(me)
+                .boardGame(boardGame)
+                .build()));
+    }
+
+    @Override
+    public List<FavouriteProductDto> getAllMyFavouriteProducts() {
+        return this.favouriteProductRepository.findAllByUserId(this.getCurrentUser().getId()).stream()
+                .map(this.favouriteProductMapper::toFavouriteProductDto)
+                .toList();
+
+    }
+
+    @Override
+    public void removeProductFromFavourites(Long favoriteId) {
+        if(!this.favouriteProductRepository.existsById(favoriteId))
+            throw new FavouriteProductNotFoundException(favoriteId);
+
+        this.favouriteProductRepository.deleteById(favoriteId);
     }
 }

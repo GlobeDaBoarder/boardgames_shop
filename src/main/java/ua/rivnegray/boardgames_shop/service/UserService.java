@@ -9,6 +9,9 @@ import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
 import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
+import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto;
+import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
 import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
 
@@ -64,5 +67,15 @@ public interface UserService {
     @Transactional(readOnly = true)
     UserPublicDto getMyUserInfo();
 
+    @Transactional
     UserPublicDto updateMyNameAndSurname(UpdateNameAndSurnameDto updateNameAndSurnameDto);
+
+    @Transactional
+    FavouriteProductCreationResponseDto addProductToFavourites(Long productId);
+
+    @Transactional(readOnly = true)
+    List<FavouriteProductDto> getAllMyFavouriteProducts();
+
+    @Transactional
+    void removeProductFromFavourites(Long favoriteId);
 }
