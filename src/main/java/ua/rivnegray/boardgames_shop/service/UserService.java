@@ -78,4 +78,7 @@ public interface UserService {
 
     @Transactional
     void removeProductFromFavourites(Long favoriteId);
+
+    @Transactional
+    void removeAllMyFavouriteProducts();
 }

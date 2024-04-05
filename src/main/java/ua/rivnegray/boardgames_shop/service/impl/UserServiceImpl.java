@@ -250,4 +250,9 @@ public class UserServiceImpl implements UserService {
 
         this.favouriteProductRepository.deleteById(favoriteId);
     }
+
+    @Override
+    public void removeAllMyFavouriteProducts() {
+        this.favouriteProductRepository.deleteAllByUserId(this.getCurrentUser().getId());
+    }
 }

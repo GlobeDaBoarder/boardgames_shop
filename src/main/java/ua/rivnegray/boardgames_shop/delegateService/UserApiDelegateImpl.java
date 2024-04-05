@@ -165,4 +165,11 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
 
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<Void> removeAllMyFavouriteProducts() {
+        this.userService.removeAllMyFavouriteProducts();
+
+        return ResponseEntity.noContent().build();
+    }
 }
