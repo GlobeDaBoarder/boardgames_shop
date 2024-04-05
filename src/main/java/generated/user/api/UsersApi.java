@@ -490,6 +490,37 @@ public interface UsersApi {
 
 
     /**
+     * DELETE /users/me/favourites : Remove all my favourite products
+     *
+     * @return all favourite products removed (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or Forbidden (status code 403)
+     */
+    @Operation(
+        operationId = "removeAllMyFavouriteProducts",
+        summary = "Remove all my favourite products",
+        responses = {
+            @ApiResponse(responseCode = "204", description = "all favourite products removed", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/users/me/favourites"
+    )
+    default ResponseEntity<Void> removeAllMyFavouriteProducts(
+        
+    ) {
+        return getDelegate().removeAllMyFavouriteProducts();
+    }
+
+
+    /**
      * DELETE /users/me/favourites/{favoriteId} : Remove a product from my favourites
      *
      * @param favoriteId  (required)

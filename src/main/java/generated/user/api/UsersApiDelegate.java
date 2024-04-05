@@ -307,6 +307,19 @@ public interface UsersApiDelegate {
     }
 
     /**
+     * DELETE /users/me/favourites : Remove all my favourite products
+     *
+     * @return all favourite products removed (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or Forbidden (status code 403)
+     * @see UsersApi#removeAllMyFavouriteProducts
+     */
+    default ResponseEntity<Void> removeAllMyFavouriteProducts() {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
      * DELETE /users/me/favourites/{favoriteId} : Remove a product from my favourites
      *
      * @param favoriteId  (required)
