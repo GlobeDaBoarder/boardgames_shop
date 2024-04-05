@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  * A delegate to be called by the {@link ShoppingCartApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.4.0")
 public interface ShoppingCartApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -143,7 +143,7 @@ public interface ShoppingCartApiDelegate {
      *         or Unauthorized (status code 401)
      * @see ShoppingCartApi#mapCart
      */
-    default ResponseEntity<List<ProductInShoppingCartDto>> mapCart(List<MapProductInCartCartDto> mapProductInCartCartDto) {
+    default ResponseEntity<List<ProductInShoppingCartDto>> mapCart(List<@Valid MapProductInCartCartDto> mapProductInCartCartDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
