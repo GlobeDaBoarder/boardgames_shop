@@ -332,11 +332,28 @@
 							</configOptions>
 						</configuration>
 					</execution>
+
+					<execution>
+						<id>generate-favourites-spring-controllers</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>src/main/resources/favourites.yaml</inputSpec>
+
+							<importMappings>
+								<importMapping>MapProductInFavouritesDto=ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInFavouritesDto</importMapping>
+							</importMappings>
+
+							<configOptions>
+								<modelPackage>generated.favourites.model</modelPackage>
+								<apiPackage>generated.favourites.api</apiPackage>
+							</configOptions>
+						</configuration>
+					</execution>
 				</executions>
-
 			</plugin>
-
 		</plugins>
 	</build>
-
 </project>
