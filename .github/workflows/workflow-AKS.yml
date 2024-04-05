@@ -49,7 +49,7 @@ jobs:
           resource-group: rivnegray-AKS-resource-group
 
       - name: Install and set up kubectl
-        uses: azure/setup-kubectl@v1
+        uses: azure/setup-kubectl@v3
 
       - name: Replace image references
         run: |
