@@ -315,6 +315,17 @@ paths:
                   $ref: '#/components/schemas/FavouriteProductDto'
         '401':
           description: Unauthorized
+    delete:
+      summary: Remove all my favourite products
+      operationId: removeAllMyFavouriteProducts
+      x-access-permission: user:updateMe
+      responses:
+        '204':
+          description: all favourite products removed
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
   /users/me/favourites/{productId}:
     post:
       summary: Add a product to my favourites

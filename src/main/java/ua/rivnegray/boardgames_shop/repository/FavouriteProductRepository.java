@@ -9,4 +9,6 @@ public interface FavouriteProductRepository extends JpaRepository<FavouriteProdu
     List<FavouriteProduct> findAllByUserId(Long userId);
 
     boolean existsByUserIdAndBoardGameId(Long id, Long productId);
+
+    void deleteAllByUserId(Long id);
 }

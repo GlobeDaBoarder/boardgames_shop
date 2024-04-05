@@ -28,7 +28,7 @@ import jakarta.annotation.Generated;
  * A delegate to be called by the {@link UsersApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.4.0")
 public interface UsersApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -302,6 +302,19 @@ public interface UsersApiDelegate {
      * @see UsersApi#removeAddress
      */
     default ResponseEntity<Void> removeAddress(Long addressId) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * DELETE /users/me/favourites : Remove all my favourite products
+     *
+     * @return all favourite products removed (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or Forbidden (status code 403)
+     * @see UsersApi#removeAllMyFavouriteProducts
+     */
+    default ResponseEntity<Void> removeAllMyFavouriteProducts() {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
