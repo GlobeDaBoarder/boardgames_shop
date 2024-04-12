@@ -15,7 +15,6 @@ services:
 
   app:
     image: gl0be/app:__TAG__
-
     ports:
       - "8080:8080"
     volumes:
@@ -30,6 +29,16 @@ services:
       WAIT_HOSTS: db:3306
       SPRING_PROFILES_ACTIVE: dev-remote-VM
     restart: always
+
+  frontend:
+    image: gl0be/frontend:__FRONT_TAG__
+    ports:
+      - "80:80"
+    container_name: frontend
+    networks:
+      - app-network
+    depends_on:
+      - app
 
 networks:
   app-network:
