@@ -30,6 +30,17 @@ services:
       WAIT_HOSTS: db:3306
       SPRING_PROFILES_ACTIVE: dev-local-dockerfile
 
+  frontend:
+    image: gl0be/frontend:0.0.1
+    ports:
+      - "80:80"
+    container_name: frontend
+    networks:
+      - app-network
+    depends_on:
+      - app
+
+
 networks:
   app-network:
     driver: bridge
