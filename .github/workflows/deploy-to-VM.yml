@@ -50,6 +50,7 @@ jobs:
           passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
           source: "docker-compose.app.yml"
           target: "~/rivnegray/"
+          overwrite: true
 
       - name: replace image tag in docker-compose file via SSH
         uses: appleboy/ssh-action@master

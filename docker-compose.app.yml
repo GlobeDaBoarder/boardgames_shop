@@ -31,7 +31,7 @@ services:
     restart: always
 
   frontend:
-    image: gl0be/frontend:__FRONT_TAG__
+    image: gl0be/frontend:0.0.1
     ports:
       - "80:80"
     container_name: frontend
