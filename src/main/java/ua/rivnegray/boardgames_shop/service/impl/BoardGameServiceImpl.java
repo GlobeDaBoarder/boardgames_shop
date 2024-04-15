@@ -19,13 +19,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ua.rivnegray.boardgames_shop.DTO.request.FilterBoardGamesRequestDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
-import ua.rivnegray.boardgames_shop.DTO.response.CatalogResponseDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FilterArrayCategoriesDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FilterCategoryWithArrayDataDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FilterDataDto;
-import ua.rivnegray.boardgames_shop.DTO.response.MinMaxDto;
+import ua.rivnegray.boardgames_shop.DTO.response.*;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.ImageProperties;
 import ua.rivnegray.boardgames_shop.config.custom_configuration_properties.PaginationProperties;
 import ua.rivnegray.boardgames_shop.exceptions.badRequestExceptions.FilterRequestDeserializationException;
@@ -35,13 +29,7 @@ import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.Unsuppor
 import ua.rivnegray.boardgames_shop.exceptions.internalServerExceptions.UnsupportedFilenameException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMapperService;
-import ua.rivnegray.boardgames_shop.model.BoardGame;
-import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
-import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
-import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
-import ua.rivnegray.boardgames_shop.model.BoardGameType;
-import ua.rivnegray.boardgames_shop.model.ProductImage;
-import ua.rivnegray.boardgames_shop.model.SortType;
+import ua.rivnegray.boardgames_shop.model.*;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
@@ -343,7 +331,7 @@ public class BoardGameServiceImpl implements BoardGameService {
                 .boardGameLanguages(FilterCategoryWithArrayDataDto.builder()
                         .nameCategory("Мова")
                         .nameFilters(Arrays.stream(BoardGameLanguage.values())
-                                .map(BoardGameLanguage::getLanguageNameInUkrainianForFiltering)
+                                .map(BoardGameLanguage::getLanguageNameInUkrainian)
                                 .toList())
                         .build())
                 .build();

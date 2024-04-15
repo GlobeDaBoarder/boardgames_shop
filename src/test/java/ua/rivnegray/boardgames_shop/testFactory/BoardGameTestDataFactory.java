@@ -5,11 +5,7 @@ import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameD
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameGenreDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameMechanicDto;
-import ua.rivnegray.boardgames_shop.model.BoardGame;
-import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
-import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
-import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
-import ua.rivnegray.boardgames_shop.model.ProductCategory;
+import ua.rivnegray.boardgames_shop.model.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -59,7 +55,7 @@ public class BoardGameTestDataFactory {
                 .maxPlayers(6)
                 .minGameDuration(30)
                 .maxGameDuration(60)
-                .gameLanguage(BoardGameLanguage.ENGLISH)
+                .gameLanguage(BoardGameLanguage.ENGLISH.getLanguageNameInUkrainian())
                 .BGGLink("https://boardgamegeek.com/boardgame/13/catan")
                 .build();
     }
@@ -81,7 +77,7 @@ public class BoardGameTestDataFactory {
                 .maxPlayers(6)
                 .minGameDuration(30)
                 .maxGameDuration(60)
-                .gameLanguage(BoardGameLanguage.ENGLISH)
+                .gameLanguage(BoardGameLanguage.ENGLISH.getLanguageNameInUkrainian())
                 .BGGLink("https://boardgamegeek.com/boardgame/13/catan")
                 .build();
     }
