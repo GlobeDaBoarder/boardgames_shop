@@ -68,6 +68,13 @@ public abstract class BoardGameMapperService {
     @Named("mapLanguageEnumToUkrString")
     String mapLanguageEnumToUkrString(BoardGameLanguage boardGameLanguage){return boardGameLanguage.getLanguageNameInUkrainian();}
 
+    @Named("gameGameTypesToTypeNames")
+    Set<String> gameGameTypesToTypeNames(Set<BoardGameType> boardGameTypes){
+        return boardGameTypes.stream()
+                .map(BoardGameType::getBoardGameTypeNameInUkrainian)
+                .collect(Collectors.toSet());
+    }
+
     @Mapping(target = "gameTypes", source = "gameTypeNames", qualifiedByName = "gameTypeNamesToGameTypes")
     @Mapping(target = "gameMechanics", source = "gameMechanicIds", qualifiedByName = "mechanicIdsToMechanics")
     @Mapping(target = "gameGenres", source = "gameGenreIds", qualifiedByName = "genreIdsToGenres")
@@ -83,6 +90,7 @@ public abstract class BoardGameMapperService {
 
     @Mapping(source = "productImages", target = "productImageURLs", qualifiedByName = "mapProductImagesToImageURLs")
     @Mapping(source = "gameLanguage", target = "gameLanguage", qualifiedByName = "mapLanguageEnumToUkrString")
+    @Mapping(source = "gameTypes", target = "gameTypes", qualifiedByName = "gameGameTypesToTypeNames")
     public abstract BoardGameDto boardGameToBoardGameDto(BoardGame boardGame);
 
     @Mapping(source = "productImages", target = "productImageURL", qualifiedByName = "pickFirstImageURL")
