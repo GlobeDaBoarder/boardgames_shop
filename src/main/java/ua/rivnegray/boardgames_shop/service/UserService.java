@@ -4,16 +4,12 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInFavouritesDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
-import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
+import ua.rivnegray.boardgames_shop.DTO.response.*;
 
 import java.util.List;
 
@@ -81,4 +77,7 @@ public interface UserService {
 
     @Transactional
     void removeAllMyFavouriteProducts();
+
+    @jakarta.transaction.Transactional
+    void mapFavourites(List<MapProductInFavouritesDto> productInFavouritesDtos);
 }

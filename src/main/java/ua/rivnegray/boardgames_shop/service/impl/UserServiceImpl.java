@@ -8,39 +8,27 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInFavouritesDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
-import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
+import ua.rivnegray.boardgames_shop.DTO.response.*;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.FavouriteProductAlreadyExistsException;
 import ua.rivnegray.boardgames_shop.exceptions.conflictExceptions.PasswordMissMatchException;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.AddressIdNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameIdNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.FavouriteProductNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserIdNotFoundException;
-import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.UserNotFoundException;
+import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.*;
 import ua.rivnegray.boardgames_shop.mapper.BoardGameMapperService;
 import ua.rivnegray.boardgames_shop.mapper.FavouriteProductMapper;
 import ua.rivnegray.boardgames_shop.mapper.UserMapper;
-import ua.rivnegray.boardgames_shop.model.Address;
-import ua.rivnegray.boardgames_shop.model.BoardGame;
-import ua.rivnegray.boardgames_shop.model.FavouriteProduct;
-import ua.rivnegray.boardgames_shop.model.User;
-import ua.rivnegray.boardgames_shop.model.UserRegistrationStatus;
-import ua.rivnegray.boardgames_shop.repository.AddressRepository;
-import ua.rivnegray.boardgames_shop.repository.BoardGameRepository;
-import ua.rivnegray.boardgames_shop.repository.FavouriteProductRepository;
-import ua.rivnegray.boardgames_shop.repository.UserRepository;
-import ua.rivnegray.boardgames_shop.repository.UserRoleRepository;
+import ua.rivnegray.boardgames_shop.model.*;
+import ua.rivnegray.boardgames_shop.repository.*;
+import ua.rivnegray.boardgames_shop.service.TokenExtractorService;
 import ua.rivnegray.boardgames_shop.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,6 +43,7 @@ public class UserServiceImpl implements UserService {
     private final FavouriteProductRepository favouriteProductRepository;
     private final FavouriteProductMapper favouriteProductMapper;
     private final BoardGameMapperService boardGameMapper;
+    private final TokenExtractorService tokenExtractorService;
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -254,5 +243,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public void removeAllMyFavouriteProducts() {
         this.favouriteProductRepository.deleteAllByUserId(this.getCurrentUser().getId());
+    }
+
+    @Override
+    public void mapFavourites(List<MapProductInFavouritesDto> productInFavouritesDtos) {
+        Set<Long> favouritesIds = getCurrentUserFavourites()
+                .stream().map(FavouriteProduct::getBoardGame)
+                .map(BaseEntity::getId)
+                .collect(Collectors.toUnmodifiableSet());
+
+        List<FavouriteProduct> newFavourites = productInFavouritesDtos.stream()
+                .map(MapProductInFavouritesDto::productId)
+                .filter(id -> !favouritesIds.contains(id))
+                .map(boardGameRepository::findById)
+                .flatMap(Optional::stream)
+                .map(boardGame -> FavouriteProduct.builder()
+                        .boardGame(boardGame)
+                        .user(tokenExtractorService.extractCurrentUser())
+                        .build())
+                .toList();
+
+        favouriteProductRepository.saveAll(newFavourites);
+    }
+
+    private List<FavouriteProduct> getCurrentUserFavourites() {
+        return favouriteProductRepository.findAllByUserId(tokenExtractorService.extractCurrentUserId());
     }
 }

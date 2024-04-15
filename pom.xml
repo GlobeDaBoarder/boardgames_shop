@@ -219,6 +219,7 @@
 								<importMapping>BoardGameSummaryDto=ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto</importMapping>
 								<importMapping>FavouriteProductDto=ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto</importMapping>
 								<importMapping>FavouriteProductCreationResponseDto=ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto</importMapping>
+								<importMapping>MapProductInFavouritesDto=ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInFavouritesDto</importMapping>
 							</importMappings>
 
 							<configOptions>
@@ -329,26 +330,6 @@
 							<configOptions>
 								<modelPackage>generated.session.model</modelPackage>
 								<apiPackage>generated.session.api</apiPackage>
-							</configOptions>
-						</configuration>
-					</execution>
-
-					<execution>
-						<id>generate-favourites-spring-controllers</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<inputSpec>src/main/resources/favourites.yaml</inputSpec>
-
-							<importMappings>
-								<importMapping>MapProductInFavouritesDto=ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInFavouritesDto</importMapping>
-							</importMappings>
-
-							<configOptions>
-								<modelPackage>generated.favourites.model</modelPackage>
-								<apiPackage>generated.favourites.api</apiPackage>
 							</configOptions>
 						</configuration>
 					</execution>

@@ -5,39 +5,34 @@
  */
 package generated.user.api;
 
-import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
-import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
-import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto;
-import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
-import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
-import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
-import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
-import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
 import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInFavouritesDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
+import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
+import ua.rivnegray.boardgames_shop.DTO.response.*;
+
+import java.util.List;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.4.0")
 @Validated
@@ -456,6 +451,43 @@ public interface UsersApi {
         @Parameter(name = "userId", description = "", required = true, in = ParameterIn.PATH) @PathVariable("userId") Long userId
     ) {
         return getDelegate().hardDeleteUser(userId);
+    }
+
+
+    /**
+     * POST /users/me/favourites/map : Map favourites from one stored in local storage to one stored in database
+     * This operation is used when a user decides to log in or register. Mapping of favourites from local storage to database should occur automatically upon login.
+     *
+     * @param mapProductInFavouritesDto  (required)
+     * @return Favourites mapped successfully (status code 200)
+     *         or Invalid favourites data (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or Forbidden (status code 403)
+     */
+    @Operation(
+        operationId = "mapFavourites",
+        summary = "Map favourites from one stored in local storage to one stored in database",
+        description = "This operation is used when a user decides to log in or register. Mapping of favourites from local storage to database should occur automatically upon login.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Favourites mapped successfully", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Invalid favourites data", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
+        },
+        security = {
+            @SecurityRequirement(name = "bearerAuth")
+        }
+    )
+    @PreAuthorize("hasAuthority('SCOPE_user:updateMe')")
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/users/me/favourites/map",
+        consumes = { "application/json" }
+    )
+    default ResponseEntity<Void> mapFavourites(
+        @Parameter(name = "MapProductInFavouritesDto", description = "", required = true) @Valid @RequestBody List<@Valid MapProductInFavouritesDto> mapProductInFavouritesDto
+    ) {
+        return getDelegate().mapFavourites(mapProductInFavouritesDto);
     }
 
 
