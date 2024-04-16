@@ -14,7 +14,7 @@ services:
     restart: always
 
   app:
-    image: gl0be/app:__TAG__
+    image: gl0be/app:${IMAGE_TAG}
     ports:
       - "8080:8080"
     volumes:
