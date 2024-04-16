@@ -46,7 +46,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:${{ env.VERSION }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend:${{ env.VERSION }}
 
       - name: Create app deirectory if doesn't exist yet
         uses: appleboy/ssh-action@master
