@@ -12,10 +12,11 @@ services:
     networks:
       - app-network
 
-  app:
+  backend:
     build:
       context: .
-      dockerfile: dockerfile-app
+      dockerfile: Dockerfile
+    container_name: backend_local
     ports:
       - "8080:8080"
     volumes:
@@ -32,13 +33,13 @@ services:
 
   frontend:
     image: gl0be/frontend:0.0.1
+    container_name: frontend_local
     ports:
       - "80:80"
-    container_name: frontend
     networks:
       - app-network
     depends_on:
-      - app
+      - backend
 
 
 networks:
