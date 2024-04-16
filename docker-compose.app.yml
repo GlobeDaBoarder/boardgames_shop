@@ -13,8 +13,9 @@ services:
       MYSQL_DATABASE: shop
     restart: always
 
-  app:
-    image: gl0be/app:${IMAGE_TAG}
+  backend:
+    image: ${DOCKERHUB_USERNAME}/backend:${BACKEND_IMAGE_TAG}
+    container_name: backend
     ports:
       - "8080:8080"
     volumes:
@@ -31,14 +32,14 @@ services:
     restart: always
 
   frontend:
-    image: gl0be/frontend:0.0.1
+    image: ${DOCKERHUB_USERNAME}/frontend:0.0.1
+    container_name: frontend
     ports:
       - "80:80"
-    container_name: frontend
     networks:
       - app-network
     depends_on:
-      - app
+      - backend
 
 networks:
   app-network:

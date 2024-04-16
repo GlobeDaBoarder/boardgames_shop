@@ -44,7 +44,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./dockerfile-app
+          file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/app:${{ env.VERSION }}
 
@@ -77,7 +77,7 @@ jobs:
           key: ${{ secrets.VM_PRIVATE_KEY }}
           passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
           script: |
-            export IMAGE_TAG=${{ env.VERSION }}
+            export BACKEND_IMAGE_TAG=${{ env.VERSION }}
             cd ~/rivnegray/
             docker-compose -f docker-compose.app.yml down
             docker-compose -f docker-compose.app.yml up -d

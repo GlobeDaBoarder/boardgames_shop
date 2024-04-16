@@ -37,7 +37,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./dockerfile-app
+          file: ./Dockerfile
           push: true
           tags: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/app:${{ github.sha }}
 
