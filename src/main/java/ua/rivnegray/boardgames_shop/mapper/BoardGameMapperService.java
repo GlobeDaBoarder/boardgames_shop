@@ -1,21 +1,13 @@
 package ua.rivnegray.boardgames_shop.mapper;
 
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAndUpdateBoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameDto;
 import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameGenreIdNotFoundException;
 import ua.rivnegray.boardgames_shop.exceptions.notFoundExceptions.BoardGameMechanicIdNotFoundException;
-import ua.rivnegray.boardgames_shop.model.BoardGame;
-import ua.rivnegray.boardgames_shop.model.BoardGameGenre;
-import ua.rivnegray.boardgames_shop.model.BoardGameMechanic;
-import ua.rivnegray.boardgames_shop.model.BoardGameType;
-import ua.rivnegray.boardgames_shop.model.ProductImage;
+import ua.rivnegray.boardgames_shop.model.*;
 import ua.rivnegray.boardgames_shop.repository.BoardGameGenreRepository;
 import ua.rivnegray.boardgames_shop.repository.BoardGameMechanicRepository;
 
@@ -73,6 +65,16 @@ public abstract class BoardGameMapperService {
         return productImages.iterator().next().getImageURL();
     }
 
+    @Named("mapLanguageEnumToUkrString")
+    String mapLanguageEnumToUkrString(BoardGameLanguage boardGameLanguage){return boardGameLanguage.getLanguageNameInUkrainian();}
+
+    @Named("gameGameTypesToTypeNames")
+    Set<String> gameGameTypesToTypeNames(Set<BoardGameType> boardGameTypes){
+        return boardGameTypes.stream()
+                .map(BoardGameType::getBoardGameTypeNameInUkrainian)
+                .collect(Collectors.toSet());
+    }
+
     @Mapping(target = "gameTypes", source = "gameTypeNames", qualifiedByName = "gameTypeNamesToGameTypes")
     @Mapping(target = "gameMechanics", source = "gameMechanicIds", qualifiedByName = "mechanicIdsToMechanics")
     @Mapping(target = "gameGenres", source = "gameGenreIds", qualifiedByName = "genreIdsToGenres")
@@ -87,6 +89,8 @@ public abstract class BoardGameMapperService {
     public abstract void updateBoardGame(@MappingTarget BoardGame boardGame, CreateAndUpdateBoardGameDto createBoardGameDto);
 
     @Mapping(source = "productImages", target = "productImageURLs", qualifiedByName = "mapProductImagesToImageURLs")
+    @Mapping(source = "gameLanguage", target = "gameLanguage", qualifiedByName = "mapLanguageEnumToUkrString")
+    @Mapping(source = "gameTypes", target = "gameTypes", qualifiedByName = "gameGameTypesToTypeNames")
     public abstract BoardGameDto boardGameToBoardGameDto(BoardGame boardGame);
 
     @Mapping(source = "productImages", target = "productImageURL", qualifiedByName = "pickFirstImageURL")

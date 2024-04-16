@@ -3,7 +3,6 @@ package ua.rivnegray.boardgames_shop.DTO.request.create;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import org.hibernate.validator.constraints.URL;
-import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -37,7 +36,7 @@ public record CreateAndUpdateBoardGameDto(
         Integer maxGameDuration,
         String author,
         String illustrator,
-        BoardGameLanguage gameLanguage,
+        String gameLanguage,
         @URL
         @Schema(example = "https://boardgamegeek.com/boardgame/13/catan")
         String BGGLink) implements Serializable {

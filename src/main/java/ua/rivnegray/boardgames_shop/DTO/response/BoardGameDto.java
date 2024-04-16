@@ -2,8 +2,6 @@ package ua.rivnegray.boardgames_shop.DTO.response;
 
 import lombok.Builder;
 import org.hibernate.validator.constraints.URL;
-import ua.rivnegray.boardgames_shop.model.BoardGameLanguage;
-import ua.rivnegray.boardgames_shop.model.BoardGameType;
 import ua.rivnegray.boardgames_shop.model.ProductCategory;
 
 import java.io.Serializable;
@@ -29,7 +27,7 @@ public record BoardGameDto(Long id,
                            ProductCategory productCategory,
                            String productCode,
                            String gameSet,
-                           Set<BoardGameType> gameTypes,
+                               Set<String> gameTypes,
                            Set<BoardGameGenreDto> gameGenres,
                            Set<BoardGameMechanicDto> gameMechanics,
                            Integer minAge,
@@ -39,6 +37,6 @@ public record BoardGameDto(Long id,
                            Integer maxGameDuration,
                            String author,
                            String illustrator,
-                           BoardGameLanguage gameLanguage,
+                           String gameLanguage,
                            @URL String BGGLink) implements Serializable {
 }

@@ -1,4 +1,7 @@
-src/main/java/generated/favourites/api/ApiUtil.java
-src/main/java/generated/favourites/api/FavouritesApi.java
-src/main/java/generated/favourites/api/FavouritesApiController.java
-src/main/java/generated/favourites/api/FavouritesApiDelegate.java
+src/main/java/generated/session/api/ApiUtil.java
+src/main/java/generated/session/api/LoginApi.java
+src/main/java/generated/session/api/LoginApiController.java
+src/main/java/generated/session/api/LoginApiDelegate.java
+src/main/java/generated/session/api/RegisterApi.java
+src/main/java/generated/session/api/RegisterApiController.java
+src/main/java/generated/session/api/RegisterApiDelegate.java

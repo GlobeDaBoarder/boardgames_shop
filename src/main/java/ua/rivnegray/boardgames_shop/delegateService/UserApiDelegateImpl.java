@@ -1,6 +1,7 @@
 package ua.rivnegray.boardgames_shop.delegateService;
 
 import generated.user.api.UsersApiDelegate;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -8,16 +9,12 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.rivnegray.boardgames_shop.DTO.request.AddAndUpdateAddressDto;
 import ua.rivnegray.boardgames_shop.DTO.request.create.CreateAnyUserDto;
+import ua.rivnegray.boardgames_shop.DTO.request.create.MapProductInFavouritesDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateEmailDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdateNameAndSurnameDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePasswordDto;
 import ua.rivnegray.boardgames_shop.DTO.request.update.UpdatePhoneDto;
-import ua.rivnegray.boardgames_shop.DTO.response.AddressDto;
-import ua.rivnegray.boardgames_shop.DTO.response.BoardGameSummaryDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductCreationResponseDto;
-import ua.rivnegray.boardgames_shop.DTO.response.FavouriteProductDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserPublicDto;
-import ua.rivnegray.boardgames_shop.DTO.response.UserRoleDto;
+import ua.rivnegray.boardgames_shop.DTO.response.*;
 import ua.rivnegray.boardgames_shop.service.UserService;
 
 import java.net.URI;
@@ -171,5 +168,11 @@ public class UserApiDelegateImpl implements UsersApiDelegate {
         this.userService.removeAllMyFavouriteProducts();
 
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> mapFavourites(List<@Valid MapProductInFavouritesDto> mapProductInFavouritesDto) {
+        userService.mapFavourites(mapProductInFavouritesDto);
+        return ResponseEntity.ok().build();
     }
 }

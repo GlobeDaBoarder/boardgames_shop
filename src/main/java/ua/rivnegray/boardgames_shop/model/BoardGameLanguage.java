@@ -18,12 +18,12 @@ public enum BoardGameLanguage {
     FRENCH("Французька"),
     OTHER("Інша");
 
-    private final String languageNameInUkrainianForFiltering;
+    private final String languageNameInUkrainian;
     private static final Map<String, BoardGameLanguage> languageNameInUkrainianToBoardGameLanguageMap = new HashMap<>();
 
     static {
         for(BoardGameLanguage boardGameLanguage : BoardGameLanguage.values()){
-            languageNameInUkrainianToBoardGameLanguageMap.put(boardGameLanguage.getLanguageNameInUkrainianForFiltering(), boardGameLanguage);
+            languageNameInUkrainianToBoardGameLanguageMap.put(boardGameLanguage.getLanguageNameInUkrainian(), boardGameLanguage);
         }
     }
 
