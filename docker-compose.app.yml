@@ -32,7 +32,7 @@ services:
     restart: always
 
   frontend:
-    image: ${DOCKERHUB_USERNAME}/frontend:0.0.1
+    image: ${DOCKERHUB_USERNAME}/frontend:${FRONTEND_IMAGE_TAG}
     container_name: frontend
     ports:
       - "80:80"
