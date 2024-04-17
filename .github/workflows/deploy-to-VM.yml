@@ -81,3 +81,18 @@ jobs:
             cd ~/rivnegray/
             docker-compose -f docker-compose.app.yml down
             docker-compose -f docker-compose.app.yml up -d
+
+      - name: Update .env with backend version
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_PRIVATE_KEY }}
+          passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
+          script: |
+            if grep -q 'BACKEND_IMAGE_TAG=' .env; then
+              sed -i 's|BACKEND_IMAGE_TAG=.*|BACKEND_IMAGE_TAG=${{ env.VERSION }}|' .env
+            else
+              echo "BACKEND_IMAGE_TAG=${{ env.VERSION }}" >> .env
+            fi
+
