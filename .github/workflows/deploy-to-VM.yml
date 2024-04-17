@@ -91,7 +91,7 @@ jobs:
           passphrase: ${{ secrets.VM_SSH_PASSPHRASE }}
           script: |
             pwd
-            cd /rivnegray/
+            cd ~/rivnegray/
             if grep -q 'BACKEND_IMAGE_TAG=' .env; then
               sed -i 's|BACKEND_IMAGE_TAG=.*|BACKEND_IMAGE_TAG=${{ env.VERSION }}|' .env
             else
